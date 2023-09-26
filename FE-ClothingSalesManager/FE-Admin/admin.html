@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body ng-app="admin_module">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 text-center" style=" position: fixed; top: 0; left: 0; height: 100%;">
+                <div class="row mt-5">
+                    <h2>Admin</h2>
+                </div>
+
+                <ul class="list-group mt-5">
+                    <li class="list-group-item"><a class="nav-link" href="#admin/orders"
+                            style="font-size: 1.5em;">Orders</a></li>
+                    <li class="list-group-item"><a class="nav-link" href="#admin/products"
+                            style="font-size: 1.5em;">Products</a></li>
+                    <li class="list-group-item"><a class="nav-link" href="#admin/categories"
+                            style="font-size: 1.5em;">Categories</a></li>
+                    <li class="list-group-item"><a class="nav-link" href="#admin/accounts"
+                            style="font-size: 1.5em;">Accounts</a></li>
+                    <li class="list-group-item"> <a class="nav-link" href="#admin/roles"
+                            style="font-size: 1.5em;">Role</a></li>
+                </ul>
+            </div>
+
+
+            <!-- Nội dung chính -->
+            <div ng-view class=" row col-md-9 col-lg-10 col-8 offset-2 container-fluid"></div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/jquery.min.js"></script>
+
+
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.js"></script>
+
+
+
+
+
+    <script src="controllers/AccountContoller.js"></script>
+    <script src="controllers/AuthorityController.js"></script>
+    <script src="controllers/CategoryController.js"></script>
+    <script src="controllers/OrderController.js"></script>
+    <script src="controllers/ProductController.js"></script>
+    <script src="controllers/RoleController.js"></script>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>

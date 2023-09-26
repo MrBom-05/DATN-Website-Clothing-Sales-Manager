@@ -1,0 +1,37 @@
+<div ng-controller="account_controller">
+    <h2 class="text-center mt-3">Manage Accounts</h2>
+    <form>
+        <div class="col-6 offset-3">
+            <label class="form-label">User name<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" ng-model="account.username">
+        </div>
+        <div class="col-6 offset-3 mt-3">
+            <label class="form-label">Full name<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" ng-model="account.fullname">
+        </div>
+        <div class="col-6 offset-3 mt-3">
+            <label class="form-label">Email<span class="text-danger">*</span></label>
+            <input type="email" class="form-control" ng-model="account.email">
+        </div>
+        <div class="col-6 offset-3 mt-3">
+            <label class="form-label">Password<span class="text-danger">*</span></label>
+            <input type="password" class="form-control" ng-model="account.password">
+        </div>
+        <div class="col-6 offset-3 mt-3">
+            <label class="form-label">Photo<span class="text-danger">*</span></label>
+            <input type="file" class="form-control" ng-model="account.photo">
+        </div>
+        <div class="col-2 offset-5 mt-3">
+            <label class="form-label">Roles<span class="text-danger">*</span></label>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="role in listRole">
+                    <input class="form-check-input me-1" type="checkbox" ng-model="role.selected" ng-change="updateSelectedRoles(role)">
+                    <label class="form-check-label">{{role.name}}</label>
+                </li>
+            </ul>
+        </div>        
+        <div class="col-6 offset-3 mt-5">
+            <button class="btn btn-primary col-4 offset-4" ng-click="save($event)">Save</button>
+        </div>
+    </form>
+</div>
