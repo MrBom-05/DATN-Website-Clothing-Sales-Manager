@@ -3,201 +3,218 @@ GO
 USE DB_Clothing_Sales_Manager
 GO
 
-CREATE TABLE categories
+CREATE TABLE loai
 (
-    id   INT IDENTITY (1, 1) PRIMARY KEY,
-    name NVARCHAR(50) NOT NULL
+    id  INT IDENTITY (1, 1) PRIMARY KEY,
+    ten NVARCHAR(50) NOT NULL
 )
 
-CREATE TABLE colors
+CREATE TABLE mau_sac
 (
     id         INT IDENTITY (1, 1) PRIMARY KEY,
-    name       NVARCHAR(50) NOT NULL,
-    code_color VARCHAR(10)  NOT NULL
+    ten        NVARCHAR(50) NOT NULL,
+    ma_mau_sac VARCHAR(10)  NOT NULL
 )
 
-CREATE TABLE products
+CREATE TABLE san_pham
+(
+    id         UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ten        NVARCHAR(MAX) NOT NULL,
+    ngay_tao   DATETIME                     DEFAULT GETDATE(),
+    id_loai    INT           NOT NULL,
+    id_mau_sac INT           NOT NULL,
+)
+
+CREATE TABLE anh_san_pham
 (
     id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    name        NVARCHAR(MAX) NOT NULL,
-    create_date DATETIME                     DEFAULT GETDATE(),
-    id_category INT           NOT NULL,
-    id_color    INT           NOT NULL,
+    id_san_pham UNIQUEIDENTIFIER NOT NULL,
+    duong_dan   NVARCHAR(MAX)    NOT NULL
 )
 
-CREATE TABLE product_images
+CREATE TABLE kich_co
 (
-    id         UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_product UNIQUEIDENTIFIER NOT NULL,
-    url        NVARCHAR(MAX)    NOT NULL
+    id  INT IDENTITY (1, 1) PRIMARY KEY,
+    ten NVARCHAR(50) NOT NULL
 )
 
-CREATE TABLE sizes
+CREATE TABLE san_pham_chi_tiet
 (
-    id   INT IDENTITY (1, 1) PRIMARY KEY,
-    name NVARCHAR(50) NOT NULL
+    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma_san_pham VARCHAR(20),
+    id_san_pham UNIQUEIDENTIFIER,
+    id_kich_co  INT,
+    gia_nhap    DECIMAL(20, 0)               DEFAULT 0,
+    gia_ban     DECIMAL(20, 0)               DEFAULT 0,
+    so_luong    INT,
+    mo_ta       NVARCHAR(MAX),
+    trang_thai  int
 )
 
-CREATE TABLE product_details
+CREATE TABLE khach_hang
 (
-    id           UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    code_product VARCHAR(20),
-    id_product   UNIQUEIDENTIFIER,
-    id_size      INT,
-    input_price  DECIMAL(20, 0)               DEFAULT 0,
-    output_price DECIMAL(20, 0)               DEFAULT 0,
-    quantity     INT,
-    describe     NVARCHAR(MAX),
-    status       int
+    id             UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ho_va_ten      NVARCHAR(100),
+    email          NVARCHAR(50),
+    so_dien_thoai  NVARCHAR(15),
+    mat_khau       NVARCHAR(50),
+    dia_chi        NVARCHAR(100),
+    xa_phuong      NVARCHAR(80),
+    quan_huyen     NVARCHAR(80),
+    tinh_thanh_pho NVARCHAR(80),
 )
 
-CREATE TABLE accounts
+CREATE TABLE nhan_vien
 (
-    id           UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    code_account VARCHAR(20),
-    full_name    NVARCHAR(100),
-    email        NVARCHAR(50),
-    number_phone NVARCHAR(15),
-    password     NVARCHAR(50),
-    role         INT,
-    address      NVARCHAR(100),
-    ward         NVARCHAR(80),
-    distric      NVARCHAR(80),
-    provice      NVARCHAR(80),
+    id             UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma             VARCHAR(20),
+    ho_va_ten      NVARCHAR(100),
+    email          NVARCHAR(50),
+    so_dien_thoai  NVARCHAR(15),
+    mat_khau       NVARCHAR(50),
+    dia_chi        NVARCHAR(100),
+    xa_phuong      NVARCHAR(80),
+    quan_huyen     NVARCHAR(80),
+    tinh_thanh_pho NVARCHAR(80),
+    role           INT
 )
 
-CREATE TABLE carts
+CREATE TABLE gio_hang
 (
-    id         UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_account UNIQUEIDENTIFIER
+    id            UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id_khach_hang UNIQUEIDENTIFIER,
+    id_nhan_vien  UNIQUEIDENTIFIER
 )
 
-CREATE TABLE cart_details
+CREATE TABLE gio_hang_chi_tiet
 (
-    id         UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_cart    UNIQUEIDENTIFIER,
-    id_product UNIQUEIDENTIFIER,
-    price      DECIMAL(20, 0)               DEFAULT 0,
-    quantity   INT
+    id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id_gio_hang          UNIQUEIDENTIFIER,
+    id_san_pham_chi_tiet UNIQUEIDENTIFIER,
+    gia                  DECIMAL(20, 0)               DEFAULT 0,
+    so_luong             INT
 )
 
-CREATE TABLE promotions
+CREATE TABLE khuyen_mai
 (
-    id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    code            VARCHAR(10),
-    decrease_number INT,
-    start_date      DATE,
-    end_date        DATE,
-    status          INT
+    id                UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma                VARCHAR(10),
+    so_pham_tram_giam INT,
+    ngay_bat_dau      DATE,
+    ngay_ket_thuc     DATE,
+    trang_thai        INT
 )
 
-CREATE TABLE promotion_details
+CREATE TABLE khuyen_mai_chi_tiet
 (
-    id           UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_promotion UNIQUEIDENTIFIER,
-    id_product   UNIQUEIDENTIFIER,
+    id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id_khuyen_mai        UNIQUEIDENTIFIER,
+    id_san_pham_chi_tiet UNIQUEIDENTIFIER,
 )
 
 
-CREATE TABLE vouchers
+CREATE TABLE giam_gia
 (
-    id              UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    coupon_code     INT,
-    coupon_point    INT,
-    expiration_date DATE,
+    id                UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma                INT,
+    so_pham_tram_giam INT,
+    ngay_ket_thuc     DATE,
 )
 
-CREATE TABLE bills
+CREATE TABLE hoa_don
 (
-    id                 UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    code               VARCHAR(50),
+    id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma                   VARCHAR(50) UNIQUE NOT NULL,
     -- Ngày tạo hoá đơn
-    create_date        DATETIME                     DEFAULT GETDATE(),
+    ngay_tao             DATETIME                     DEFAULT GETDATE(),
     -- Ngày thanh toán
-    payment_date       DATETIME,
+    ngay_thanh_toan      DATETIME,
     -- Ngày vận chuyển
-    delyvery_date      DATETIME,
+    ngay_van_chuyen      DATETIME,
     -- Ngày nhận hàng
-    expected_date      DATETIME,
+    ngay_nhan            DATETIME,
     -- id người mua
-    id_account         UNIQUEIDENTIFIER,
+    id_khach_hang        UNIQUEIDENTIFIER,
     -- id người duyệt
-    id_account_browser UNIQUEIDENTIFIER,
+    id_nhan_vien         UNIQUEIDENTIFIER,
 
-    id_promotion       UNIQUEIDENTIFIER,
-    id_voucher         UNIQUEIDENTIFIER,
-    pecipient_name     NVARCHAR(100),
-    email              NVARCHAR(50),
-    number_phone       NVARCHAR(15),
-    payment_method     INT,
-    address            NVARCHAR(100),
-    ward               NVARCHAR(80),
-    distric            NVARCHAR(80),
-    provice            NVARCHAR(80),
-    status             INT
+    id_khuyen_mai        UNIQUEIDENTIFIER,
+    id_giam_gia          UNIQUEIDENTIFIER,
+    nguoi_nhan           NVARCHAR(100),
+    email                NVARCHAR(50),
+    so_dien_thoai        NVARCHAR(15),
+    hinh_thuc_thanh_toan INT,
+    dia_chi              NVARCHAR(100),
+    xa_phuong            NVARCHAR(80),
+    quan_huyen           NVARCHAR(80),
+    tinh_thanh_pho       NVARCHAR(80),
+    trang_thai           INT
 )
 
-CREATE TABLE bill_details
+CREATE TABLE hoa_don_chi_tiet
 (
-    id         UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_bill    UNIQUEIDENTIFIER,
-    id_product UNIQUEIDENTIFIER,
-    price      DECIMAL(20, 0)               DEFAULT 0,
-    quantity   INT
+    id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id_hoa_don           UNIQUEIDENTIFIER,
+    id_san_pham_chi_tiet UNIQUEIDENTIFIER,
+    gia                  DECIMAL(20, 0)               DEFAULT 0,
+    so_luong             INT
 )
 
--- category - product
-ALTER TABLE products
-    ADD FOREIGN KEY (id_category) REFERENCES categories (id)
--- colols - products
-ALTER TABLE products
-    ADD FOREIGN KEY (id_color) REFERENCES colors (id)
--- product - product_images
-ALTER TABLE product_images
-    ADD FOREIGN KEY (id_product) REFERENCES products (id)
--- sizes - product_details
-ALTER TABLE product_details
-    ADD FOREIGN KEY (id_size) REFERENCES sizes (id)
--- product - product_details
-ALTER TABLE product_details
-    ADD FOREIGN KEY (id_product) REFERENCES products (id)
+-- loai - san_pham
+ALTER TABLE san_pham
+    ADD FOREIGN KEY (id_loai) REFERENCES loai (id)
+-- mau_sac - san_pham
+ALTER TABLE san_pham
+    ADD FOREIGN KEY (id_mau_sac) REFERENCES mau_sac (id)
+-- san_pham - anh_san_pham
+ALTER TABLE anh_san_pham
+    ADD FOREIGN KEY (id_san_pham) REFERENCES san_pham (id)
+-- kich_co - san_pham_chi_tiet
+ALTER TABLE san_pham_chi_tiet
+    ADD FOREIGN KEY (id_kich_co) REFERENCES kich_co (id)
+-- san_pham - san_pham_chi_tiet
+ALTER TABLE san_pham_chi_tiet
+    ADD FOREIGN KEY (id_san_pham) REFERENCES san_pham (id)
 
 
--- accounts - carts
-ALTER TABLE carts
-    ADD FOREIGN KEY (id_account) REFERENCES accounts (id)
--- carts - cart_details
-ALTER TABLE cart_details
-    ADD FOREIGN KEY (id_cart) REFERENCES carts (id)
--- product_details - cart_details
-ALTER TABLE cart_details
-    ADD FOREIGN KEY (id_product) REFERENCES product_details (id)
--- promotions - promotion_details
-ALTER TABLE promotion_details
-    ADD FOREIGN KEY (id_promotion) REFERENCES promotions (id)
--- product_details - promotion_details
-ALTER TABLE promotion_details
-    ADD FOREIGN KEY (id_product) REFERENCES product_details (id)
+-- khach_hang - gio_hang
+ALTER TABLE gio_hang
+    ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_hang (id)
+-- nhan_vien - gio_hang
+ALTER TABLE gio_hang
+    ADD FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien (id)
+-- gio_hang - gio_hang_chi_tiet
+ALTER TABLE gio_hang_chi_tiet
+    ADD FOREIGN KEY (id_gio_hang) REFERENCES gio_hang (id)
+-- san_pham - gio_hang_chi_tiet
+ALTER TABLE gio_hang_chi_tiet
+    ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
+-- khuyen_mai - khuyen_mai_chi_tiet
+ALTER TABLE khuyen_mai_chi_tiet
+    ADD FOREIGN KEY (id_khuyen_mai) REFERENCES khuyen_mai_chi_tiet (id)
+-- san_pham_chi_tiet - khuyen_mai_chi_tiet
+ALTER TABLE khuyen_mai_chi_tiet
+    ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
 
--- accounts - bills
-ALTER TABLE bills
-    ADD FOREIGN KEY (id_account) REFERENCES accounts (id)
--- accounts - bills
-ALTER TABLE bills
-    ADD FOREIGN KEY (id_account_browser) REFERENCES accounts (id)
--- promotions - bills
-ALTER TABLE bills
-    ADD FOREIGN KEY (id_promotion) REFERENCES promotions (id)
--- vouchers - bills
-ALTER TABLE bills
-    ADD FOREIGN KEY (id_voucher) REFERENCES vouchers (id)
+-- khach_hang - hoa_don
+ALTER TABLE hoa_don
+    ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_hang (id)
+-- nhanh_vien - hoa_don
+ALTER TABLE hoa_don
+    ADD FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien (id)
+-- khuyen_mai - hoa_don
+ALTER TABLE hoa_don
+    ADD FOREIGN KEY (id_khuyen_mai) REFERENCES khuyen_mai (id)
+-- giam_gia - hoa_don
+ALTER TABLE hoa_don
+    ADD FOREIGN KEY (id_giam_gia) REFERENCES giam_gia (id)
 
--- bills - bill_details
-ALTER TABLE bill_details
-    ADD FOREIGN KEY (id_bill) REFERENCES promotions (id)
--- product_details - bill_details
-ALTER TABLE bill_details
-    ADD FOREIGN KEY (id_product) REFERENCES product_details (id)
+-- hoa_don - hoa_don_chi_tiet
+ALTER TABLE hoa_don_chi_tiet
+    ADD FOREIGN KEY (id_hoa_don) REFERENCES hoa_don (id)
+-- san_pham_chi_tiet - hoa_don_chi_tiet
+ALTER TABLE hoa_don_chi_tiet
+    ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
 
 
 
