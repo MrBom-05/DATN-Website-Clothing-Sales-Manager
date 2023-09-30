@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoaiReponse {
+public class KichCoResponse {
     private Integer id;
     private String ten;
 

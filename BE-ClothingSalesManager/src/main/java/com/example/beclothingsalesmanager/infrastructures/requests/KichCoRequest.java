@@ -1,4 +1,4 @@
-package com.example.beclothingsalesmanager.infrastructures.responses;
+package com.example.beclothingsalesmanager.infrastructures.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MauSacReponse {
-    private Integer id;
+public class KichCoRequest {
     private String ten;
 }

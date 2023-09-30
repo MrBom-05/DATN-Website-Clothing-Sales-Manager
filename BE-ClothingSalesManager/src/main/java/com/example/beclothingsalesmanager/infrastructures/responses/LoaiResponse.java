@@ -1,4 +1,4 @@
-package com.example.beclothingsalesmanager.infrastructures.requests;
+package com.example.beclothingsalesmanager.infrastructures.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoaiRequest {
+public class LoaiResponse {
+    private Integer id;
     private String ten;
+
 }

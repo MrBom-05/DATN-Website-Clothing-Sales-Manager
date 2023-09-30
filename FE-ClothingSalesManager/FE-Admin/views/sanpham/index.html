@@ -1,0 +1,238 @@
+<div ng-controller="san_pham_controller">
+    <style>
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .image-input {
+            display: none;
+        }
+
+        .image-preview-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            border: 1px dashed #ccc;
+            /* Đổi border thành nét đứt */
+            text-align: center;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            /* Đặt kích thước lớn hơn */
+            color: #333;
+        }
+
+        .image-input-label {
+            display: block;
+            cursor: pointer;
+        }
+
+        .image-input-label::before {
+            font-size: 36px;
+            color: #333;
+        }
+
+        .image-input-label input[type="file"] {
+            display: none;
+        }
+    </style>
+    <h2 class="text-center mt-3">Quản Lý Sản Phẩm</h2>
+
+    <!-- <a class="btn btn-success mt-3" href="#admin/products/add">Add</a> -->
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Thêm Mới
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm Mới Sản Phẩm</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        
+                        <div class="col-6">
+                            <div class="col-auto">
+                                <label class="col-form-label">Mã Sản Phẩm:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-auto">
+                                <label class="col-form-label">Chọn Loại:</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <select class="form-select">
+                                        <option selected></option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-danger">+</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="col-auto">
+                                <label class="col-form-label">Tên Sản Phẩm:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="col-auto">
+                                <label class="col-form-label">Chọn Màu Sắc:</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <select class="form-select">
+                                        <option selected></option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-danger">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row mt-5">
+                        <div class="col-2 offset-1">
+                            <label for="imageInput1" class="image-preview-container">
+                                <img id="imageDisplay1" class="image-preview" src="" alt="Image 1">
+                                <span class="image-placeholder" id="placeholder1">+</span>
+                                <label class="image-input-label" for="imageInput1"></label>
+                            </label>
+                            <input type="file" id="imageInput1" class="image-input" accept="image/*"
+                                onchange="displayImage(1, 'placeholder1')">
+                        </div>
+                        <div class="col-2">
+                            <label for="imageInput2" class="image-preview-container">
+                                <img id="imageDisplay2" class="image-preview" src="" alt="Image 2">
+                                <span class="image-placeholder" id="placeholder2">+</span>
+                                <label class="image-input-label" for="imageInput2"></label>
+                            </label>
+                            <input type="file" id="imageInput2" class="image-input" accept="image/*"
+                                onchange="displayImage(2, 'placeholder2')">
+                        </div>
+                        <div class="col-2">
+                            <label for="imageInput3" class="image-preview-container">
+                                <img id="imageDisplay3" class="image-preview" src="" alt="Image 3">
+                                <span class="image-placeholder" id="placeholder3">+</span>
+                                <label class="image-input-label" for="imageInput3"></label>
+                            </label>
+                            <input type="file" id="imageInput3" class="image-input" accept="image/*"
+                                onchange="displayImage(3, 'placeholder3')">
+                        </div>
+                        <div class="col-2">
+                            <label for="imageInput4" class="image-preview-container">
+                                <img id="imageDisplay4" class="image-preview" src="" alt="Image 4">
+                                <span class="image-placeholder" id="placeholder4">+</span>
+                                <label class="image-input-label" for="imageInput4"></label>
+                            </label>
+                            <input type="file" id="imageInput4" class="image-input" accept="image/*"
+                                onchange="displayImage(4, 'placeholder4')">
+                        </div>
+                        <div class="col-2">
+                            <label for="imageInput5" class="image-preview-container">
+                                <img id="imageDisplay5" class="image-preview" src="" alt="Image 5">
+                                <span class="image-placeholder" id="placeholder5">+</span>
+                                <label class="image-input-label" for="imageInput5"></label>
+                            </label>
+                            <input type="file" id="imageInput5" class="image-input" accept="image/*"
+                                onchange="displayImage(5, 'placeholder5')">
+                        </div>
+
+
+
+                        <script>
+                            function displayImage(inputNumber, placeholderId) {
+                                const input = document.getElementById(`imageInput${inputNumber}`);
+                                const imageDisplay = document.getElementById(`imageDisplay${inputNumber}`);
+                                const imagePlaceholder = document.getElementById(placeholderId); // Lấy dấu cộng dựa vào ID
+
+                                if (input.files && input.files[0]) {
+                                    const reader = new FileReader();
+
+                                    reader.onload = function (e) {
+                                        imageDisplay.src = e.target.result;
+                                        imageDisplay.style.display = 'block'; // Hiển thị ảnh trong hình vuông
+                                        imagePlaceholder.style.display = 'none'; // Ẩn dấu cộng
+                                    };
+
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary">Làm Mới</button>
+                    <button type="button" class="btn btn-primary">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+
+        <table class="table table-hover table-bordered text-center align-middle">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>Ngày Tạo</th>
+                    <th>Loại</th>
+                    <th>Màu Sắc</th>
+                    <th colspan="2">Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="sanpham in listSanPham" ng-click="btnUpdateOnClick($event, $index)">
+                    <td>{{ $index+1 }}</td>
+                    <td>{{ sanpham.id }}</td>
+                    <td>{{ sanpham.ten }}</td>
+                    <!--                    <td><img src="img/{{ product.image }}" width="100px" height="100px"></td>-->
+                    <td>{{ sanpham.ngayTao }}</td>
+                    <td>{{ sanpham.tenLoai }}</td>
+                    <td>{{ sanpham.tenMauSac }}</td>
+                    <td class="col-2">
+                        <button class="btn btn-danger" ng-click="delete($event, $index)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

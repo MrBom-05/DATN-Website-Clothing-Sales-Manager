@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoaiRequest {
+public class SanPhamRequest {
     private String ten;
+    private Integer idLoai;
+    private Integer idMauSac;
 }

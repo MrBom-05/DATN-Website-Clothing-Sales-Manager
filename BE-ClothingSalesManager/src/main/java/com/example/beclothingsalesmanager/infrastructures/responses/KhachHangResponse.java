@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class KhachHangReponse {
+public class KhachHangResponse {
     private UUID id;
     private String hoVaTen;
     private String email;
