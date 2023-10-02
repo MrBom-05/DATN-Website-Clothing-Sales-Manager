@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoaiRequest {
+public class KichCoRequest {
     private String ten;
 }

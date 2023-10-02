@@ -9,27 +9,19 @@ CREATE TABLE loai
     ten NVARCHAR(50) NOT NULL
 )
 
+CREATE TABLE san_pham
+(
+    id       UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ten      NVARCHAR(MAX) NOT NULL,
+    ngay_tao DATETIME                     DEFAULT GETDATE(),
+    id_loai  INT           NOT NULL,
+)
+
 CREATE TABLE mau_sac
 (
     id         INT IDENTITY (1, 1) PRIMARY KEY,
     ten        NVARCHAR(50) NOT NULL,
     ma_mau_sac VARCHAR(10)  NOT NULL
-)
-
-CREATE TABLE san_pham
-(
-    id         UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ten        NVARCHAR(MAX) NOT NULL,
-    ngay_tao   DATETIME                     DEFAULT GETDATE(),
-    id_loai    INT           NOT NULL,
-    id_mau_sac INT           NOT NULL,
-)
-
-CREATE TABLE anh_san_pham
-(
-    id          UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_san_pham UNIQUEIDENTIFIER NOT NULL,
-    duong_dan   NVARCHAR(MAX)    NOT NULL
 )
 
 CREATE TABLE kich_co
@@ -44,11 +36,18 @@ CREATE TABLE san_pham_chi_tiet
     ma_san_pham VARCHAR(20),
     id_san_pham UNIQUEIDENTIFIER,
     id_kich_co  INT,
-    gia_nhap    DECIMAL(20, 0)               DEFAULT 0,
-    gia_ban     DECIMAL(20, 0)               DEFAULT 0,
+    id_mau_sac  INT,
+    gia         DECIMAL(20, 0)               DEFAULT 0,
     so_luong    INT,
     mo_ta       NVARCHAR(MAX),
-    trang_thai  int
+    trang_thai  INT
+)
+
+CREATE TABLE anh_san_pham
+(
+    id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id_san_pham_chi_tiet UNIQUEIDENTIFIER,
+    duong_dan            NVARCHAR(MAX) NOT NULL
 )
 
 CREATE TABLE khach_hang
@@ -67,7 +66,7 @@ CREATE TABLE khach_hang
 CREATE TABLE nhan_vien
 (
     id             UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ma             VARCHAR(20),
+    ma             VARCHAR(20) UNIQUE NOT NULL,
     ho_va_ten      NVARCHAR(100),
     email          NVARCHAR(50),
     so_dien_thoai  NVARCHAR(15),
@@ -76,6 +75,7 @@ CREATE TABLE nhan_vien
     xa_phuong      NVARCHAR(80),
     quan_huyen     NVARCHAR(80),
     tinh_thanh_pho NVARCHAR(80),
+    trang_thai     INT,
     role           INT
 )
 
@@ -98,8 +98,8 @@ CREATE TABLE gio_hang_chi_tiet
 CREATE TABLE khuyen_mai
 (
     id                UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ma                VARCHAR(10),
-    so_pham_tram_giam INT,
+    ma                VARCHAR(10) UNIQUE NOT NULL,
+    so_phan_tram_giam INT,
     ngay_bat_dau      DATE,
     ngay_ket_thuc     DATE,
     trang_thai        INT
@@ -116,8 +116,10 @@ CREATE TABLE khuyen_mai_chi_tiet
 CREATE TABLE giam_gia
 (
     id                UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ma                INT,
-    so_pham_tram_giam INT,
+    ma                INT UNIQUE NOT NULL,
+    so_phan_tram_giam INT,
+    so_luong          INT,
+    ngay_bat_dau      DATE,
     ngay_ket_thuc     DATE,
 )
 
@@ -160,21 +162,33 @@ CREATE TABLE hoa_don_chi_tiet
     so_luong             INT
 )
 
+CREATE TABLE doi_tra
+(
+    id            UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    id_khach_hang UNIQUEIDENTIFIER,
+    id_hoa_don    UNIQUEIDENTIFIER,
+    id_nhan_vien  UNIQUEIDENTIFIER,
+    ngay_doi_tra  DATETIME                     DEFAULT GETDATE(),
+    ghi_chu       NVARCHAR(MAX),
+
+    trang_thai    INT
+)
+
 -- loai - san_pham
 ALTER TABLE san_pham
     ADD FOREIGN KEY (id_loai) REFERENCES loai (id)
--- mau_sac - san_pham
-ALTER TABLE san_pham
-    ADD FOREIGN KEY (id_mau_sac) REFERENCES mau_sac (id)
--- san_pham - anh_san_pham
-ALTER TABLE anh_san_pham
-    ADD FOREIGN KEY (id_san_pham) REFERENCES san_pham (id)
--- kich_co - san_pham_chi_tiet
-ALTER TABLE san_pham_chi_tiet
-    ADD FOREIGN KEY (id_kich_co) REFERENCES kich_co (id)
 -- san_pham - san_pham_chi_tiet
 ALTER TABLE san_pham_chi_tiet
     ADD FOREIGN KEY (id_san_pham) REFERENCES san_pham (id)
+-- mau_sac - san_pham_chi_tiet
+ALTER TABLE san_pham_chi_tiet
+    ADD FOREIGN KEY (id_mau_sac) REFERENCES mau_sac (id)
+-- kich_co - san_pham_chi_tiet
+ALTER TABLE san_pham_chi_tiet
+    ADD FOREIGN KEY (id_kich_co) REFERENCES kich_co (id)
+-- san_pham_chi_tiet - anh_san_pham
+ALTER TABLE anh_san_pham
+    ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
 
 
 -- khach_hang - gio_hang
@@ -191,7 +205,7 @@ ALTER TABLE gio_hang_chi_tiet
     ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
 -- khuyen_mai - khuyen_mai_chi_tiet
 ALTER TABLE khuyen_mai_chi_tiet
-    ADD FOREIGN KEY (id_khuyen_mai) REFERENCES khuyen_mai_chi_tiet (id)
+    ADD FOREIGN KEY (id_khuyen_mai) REFERENCES khuyen_mai (id)
 -- san_pham_chi_tiet - khuyen_mai_chi_tiet
 ALTER TABLE khuyen_mai_chi_tiet
     ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
@@ -215,6 +229,14 @@ ALTER TABLE hoa_don_chi_tiet
 -- san_pham_chi_tiet - hoa_don_chi_tiet
 ALTER TABLE hoa_don_chi_tiet
     ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
-
+-- khach_hang - doi_tra
+ALTER TABLE doi_tra
+    ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_hang (id)
+-- nhan_vien - doi_tra
+ALTER TABLE doi_tra
+    ADD FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien (id)
+-- hoa_don - doi_tra
+ALTER TABLE doi_tra
+    ADD FOREIGN KEY (id_hoa_don) REFERENCES hoa_don (id)
 
 

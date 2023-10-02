@@ -1,6 +1,6 @@
 package com.example.beclothingsalesmanager.controllers.admins;
 
-import com.example.beclothingsalesmanager.infrastructures.responses.KhachHangReponse;
+import com.example.beclothingsalesmanager.infrastructures.responses.KhachHangResponse;
 import com.example.beclothingsalesmanager.services.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +28,26 @@ public class KhachHangController {
 
     @GetMapping
     public ResponseEntity<?> findPage(@RequestParam(defaultValue = "0", name = "page") int page){
-        Page<KhachHangReponse> khachHangReponses = khachHangService.findAllPage(page);
+        Page<KhachHangResponse> khachHangReponses = khachHangService.findAllPage(page);
         return ResponseEntity.ok().body(khachHangReponses.getContent());
     }
 
     @PostMapping
-    public ResponseEntity<?> add(@Valid @RequestBody KhachHangReponse khachHangReponse, BindingResult bindingResult) {
+    public ResponseEntity<?> add(@Valid @RequestBody KhachHangResponse khachHangResponse, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         } else {
-            khachHangService.add(khachHangReponse);
+            khachHangService.add(khachHangResponse);
             return ResponseEntity.ok().body("Thêm thành công");
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody KhachHangReponse khachHangReponse, BindingResult bindingResult, @PathVariable("id") UUID id) {
+    public ResponseEntity<?> update(@Valid @RequestBody KhachHangResponse khachHangResponse, BindingResult bindingResult, @PathVariable("id") UUID id) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         } else {
-            khachHangService.update(khachHangReponse, id);
+            khachHangService.update(khachHangResponse, id);
             return ResponseEntity.ok().body("Sửa thành công");
         }
     }
