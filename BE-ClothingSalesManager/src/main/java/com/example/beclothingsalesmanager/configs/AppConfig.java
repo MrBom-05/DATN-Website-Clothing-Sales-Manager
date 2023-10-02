@@ -4,23 +4,22 @@ package com.example.beclothingsalesmanager.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class AppConfig {
-
-    // This is the configuration for CORS (Cross-Origin Resource Sharing)
+    // Cấu hình với react js
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://127.0.0.1:3500"); // Đặt địa chỉ của ứng dụng Angular JS
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**") // Áp dụng cấu hình cho tất cả các endpoint
+                        .allowedOrigins("http://localhost:3000") // Tên miền của ứng dụng React
+                        .allowedMethods("GET", "POST", "PUT", "DELETE") // Cho phép tất cả các phương thức
+                        .allowCredentials(true);
+            }
+        };
     }
 }
