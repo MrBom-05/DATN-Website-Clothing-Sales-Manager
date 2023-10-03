@@ -1,7 +1,8 @@
 package com.example.beclothingsalesmanager.services;
 
 import com.example.beclothingsalesmanager.entities.GiamGia;
-import com.example.beclothingsalesmanager.infrastructures.converts.GiamGiaConvert;
+import com.example.beclothingsalesmanager.entities.NhanVien;
+import com.example.beclothingsalesmanager.infrastructures.requests.GiamGiaRequest;
 import com.example.beclothingsalesmanager.infrastructures.responses.GiamGiaResponse;
 import com.example.beclothingsalesmanager.repositories.GiamGiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,27 +19,48 @@ public class GiamGiaService {
     @Autowired
     private GiamGiaRepository giamGiaRepository;
 
-    @Autowired
-    private GiamGiaConvert giamGiaConvert;
-
-    public Page<GiamGiaResponse> findAllPage(int page) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<GiamGia> giamGiaPage = giamGiaRepository.findAll(pageable);
-        Page<GiamGiaResponse> giamGiaResponsePage = giamGiaPage.map(giamGiaConvert::mapToViewModel);
-        return giamGiaResponsePage;
+    public List<GiamGiaResponse> getAll() {
+        return giamGiaRepository.getAll();
     }
 
-    public void add(GiamGiaResponse giamGiaResponse) {
-        giamGiaRepository.save(giamGiaConvert.mapToEntity(giamGiaResponse));
+    public void add(GiamGiaRequest giamGiaRequest) {
+        GiamGia giamGia = new GiamGia();
+        giamGia.setMa(giamGiaRequest.getMa());
+        giamGia.setSoPhanTramGiam(giamGiaRequest.getSoPhanTramGiam());
+        giamGia.setSoLuong(giamGiaRequest.getSoLuong());
+        giamGia.setNgayBatDau(giamGiaRequest.getNgayBatDau());
+        giamGia.setNgayKetThuc(giamGiaRequest.getNgayKetThuc());
+
+        giamGiaRepository.save(giamGia);
+
+        System.out.println("GiamGiaService.add: " + giamGia.getMa());
+    }
+
+    public void update(GiamGiaRequest giamGiaRequest, UUID id) {
+        GiamGia giamGia = giamGiaRepository.findById(id).orElse(null);
+        if (giamGia != null) {
+            giamGia.setMa(giamGiaRequest.getMa());
+            giamGia.setSoPhanTramGiam(giamGiaRequest.getSoPhanTramGiam());
+            giamGia.setSoLuong(giamGiaRequest.getSoLuong());
+            giamGia.setNgayBatDau(giamGiaRequest.getNgayBatDau());
+            giamGia.setNgayKetThuc(giamGiaRequest.getNgayKetThuc());
+
+            giamGiaRepository.save(giamGia);
+
+            System.out.println("GiamGiaService.update: " + giamGia.getMa());
+        } else {
+            System.out.println("GiamGiaService.update: null");
+        }
     }
 
     public void delete(UUID id) {
-        giamGiaRepository.deleteById(id);
-    }
+        GiamGia giamGia = giamGiaRepository.findById(id).orElse(null);
+        if (giamGia != null) {
+            giamGiaRepository.deleteById(id);
 
-    public void update(GiamGiaResponse giamGiaResponse, UUID id){
-        giamGiaResponse.setId(id);
-        giamGiaRepository.save(giamGiaConvert.mapToEntity(giamGiaResponse));
+            System.out.println("GiamGiaService.delete: " + id);
+        } else {
+            System.out.println("GiamGiaService.delete: null");
+        }
     }
-
 }

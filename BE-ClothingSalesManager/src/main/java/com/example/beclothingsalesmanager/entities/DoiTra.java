@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -15,37 +15,31 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "san_pham_chi_tiet")
-public class SanPhamChiTiet {
+@Table(name = "doi_tra")
+public class DoiTra {
     @Id
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "ma_san_pham", length = 20)
-    private String maSanPham;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_khach_hang")
+    private KhachHang idKhachHang;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_san_pham")
-    private SanPham idSanPham;
+    @JoinColumn(name = "id_hoa_don")
+    private HoaDon idHoaDon;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_kich_co")
-    private KichCo idKichCo;
+    @JoinColumn(name = "id_nhan_vien")
+    private NhanVien idNhanVien;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_mau_sac")
-    private MauSac idMauSac;
-
-    @Column(name = "gia", precision = 20)
-    private BigDecimal gia;
-
-    @Column(name = "so_luong")
-    private Integer soLuong;
+    @Column(name = "ngay_doi_tra")
+    private Instant ngayDoiTra;
 
     @Nationalized
     @Lob
-    @Column(name = "mo_ta")
-    private String moTa;
+    @Column(name = "ghi_chu")
+    private String ghiChu;
 
     @Column(name = "trang_thai")
     private Integer trangThai;

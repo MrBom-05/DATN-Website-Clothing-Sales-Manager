@@ -17,13 +17,12 @@ import java.util.UUID;
 @Table(name = "anh_san_pham")
 public class AnhSanPham {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_san_pham", nullable = false)
-    private SanPham idSanPham;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_san_pham_chi_tiet")
+    private SanPhamChiTiet idSanPhamChiTiet;
 
     @Nationalized
     @Lob

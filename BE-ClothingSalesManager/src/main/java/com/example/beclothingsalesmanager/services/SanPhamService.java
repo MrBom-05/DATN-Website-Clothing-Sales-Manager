@@ -1,7 +1,5 @@
 package com.example.beclothingsalesmanager.services;
 
-import com.example.beclothingsalesmanager.entities.Loai;
-import com.example.beclothingsalesmanager.entities.MauSac;
 import com.example.beclothingsalesmanager.entities.SanPham;
 import com.example.beclothingsalesmanager.infrastructures.requests.SanPhamRequest;
 import com.example.beclothingsalesmanager.infrastructures.responses.SanPhamResponse;
@@ -22,37 +20,35 @@ public class SanPhamService {
     }
 
     public void add(SanPhamRequest sanPhamRequest) {
-        Loai loai = new Loai();
-        loai.setId(sanPhamRequest.getIdLoai());
-
-        MauSac mauSac = new MauSac();
-        mauSac.setId(sanPhamRequest.getIdMauSac());
-
         SanPham sanPham = new SanPham();
         sanPham.setTen(sanPhamRequest.getTen());
-        sanPham.setIdLoai(loai);
-        sanPham.setIdMauSac(mauSac);
 
         sanPhamRepository.save(sanPham);
+
+        System.out.println("SanPhamService.add: " + sanPham.getTen());
     }
 
     public void update(SanPhamRequest sanPhamRequest, UUID id) {
-        Loai loai = new Loai();
-        loai.setId(sanPhamRequest.getIdLoai());
+        SanPham sanPham = sanPhamRepository.findById(id).orElse(null);
+        if (sanPham != null) {
+            sanPham.setTen(sanPhamRequest.getTen());
 
-        MauSac mauSac = new MauSac();
-        mauSac.setId(sanPhamRequest.getIdMauSac());
+            sanPhamRepository.save(sanPham);
 
-        SanPham sanPham = new SanPham();
-        sanPham.setId(id);
-        sanPham.setTen(sanPhamRequest.getTen());
-        sanPham.setIdLoai(loai);
-        sanPham.setIdMauSac(mauSac);
-
-        sanPhamRepository.save(sanPham);
+            System.out.println("SanPhamService.update: " + sanPham.getTen());
+        } else {
+            System.out.println("SanPhamService.update: null");
+        }
     }
 
     public void delete(UUID id) {
-        sanPhamRepository.deleteById(id);
+        SanPham sanPham = sanPhamRepository.findById(id).orElse(null);
+        if (sanPham != null) {
+            sanPhamRepository.delete(sanPham);
+
+            System.out.println("SanPhamService.delete: " + sanPham.getTen());
+        } else {
+            System.out.println("SanPhamService.delete: null");
+        }
     }
 }

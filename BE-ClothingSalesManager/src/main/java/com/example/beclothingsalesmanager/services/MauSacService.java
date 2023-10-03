@@ -24,9 +24,18 @@ public class MauSacService {
         mauSac.setTen(mauSacRequest.getTen());
         mauSac.setMaMauSac(mauSacRequest.getMaMauSac());
         mauSacRepository.save(mauSac);
+
+        System.out.println("MauSacService.add: " + mauSac.getTen());
     }
 
-    public void delete(Integer id) {
-        mauSacRepository.deleteById(id);
+    public void delete(int id) {
+        MauSac mauSac = mauSacRepository.findById(id).orElse(null);
+        if (mauSac != null) {
+            mauSacRepository.deleteById(id);
+
+            System.out.println("MauSacService.delete: " + id);
+        } else {
+            System.out.println("MauSacService.delete: null");
+        }
     }
 }

@@ -22,18 +22,15 @@ public class SanPhamController {
     @PostMapping("")
     public void add(@RequestBody SanPhamRequest sanPhamRequest) {
         sanPhamService.add(sanPhamRequest);
-        System.out.println("Thêm thành công " + sanPhamRequest.getTen());
     }
 
     @PutMapping("/{id}")
     public void update(@RequestBody SanPhamRequest sanPhamRequest, @PathVariable("id") UUID id) {
         sanPhamService.update(sanPhamRequest, id);
-        System.out.println("Cập nhật thành công " + sanPhamRequest.getTen());
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") UUID id) {
         sanPhamService.delete(id);
-        System.out.println("Xóa thành công " + id);
     }
 }

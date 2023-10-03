@@ -1,12 +1,14 @@
 package com.example.beclothingsalesmanager.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.time.Instant;
 import java.util.UUID;
 
 @Getter
@@ -15,11 +17,10 @@ import java.util.UUID;
 @Table(name = "nhan_vien")
 public class NhanVien {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "ma", length = 20)
+    @Column(name = "ma", nullable = false, length = 20)
     private String ma;
 
     @Nationalized
@@ -54,13 +55,13 @@ public class NhanVien {
     @Column(name = "tinh_thanh_pho", length = 80)
     private String tinhThanhPho;
 
-    @Column(name = "role")
-    private Integer role;
+    @Column(name = "ngay_vao_lam")
+    private Instant ngayVaoLam;
 
-    @OneToMany(mappedBy = "idNhanVien")
-    private Set<GioHang> gioHangs = new LinkedHashSet<>();
+    @Column(name = "trang_thai")
+    private Integer trangThai;
 
-    @OneToMany(mappedBy = "idNhanVien")
-    private Set<HoaDon> hoaDons = new LinkedHashSet<>();
+    @Column(name = "chuc_vu")
+    private Integer chucVu;
 
 }
