@@ -19,6 +19,7 @@ import java.util.UUID;
 public class HoaDon {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "ma", nullable = false, length = 50)

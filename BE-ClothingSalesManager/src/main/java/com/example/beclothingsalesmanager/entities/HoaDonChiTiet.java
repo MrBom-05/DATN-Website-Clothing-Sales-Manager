@@ -18,6 +18,7 @@ import java.util.UUID;
 public class HoaDonChiTiet {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
