@@ -1,6 +1,6 @@
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-import Navbar from "./components/layouts/Navbar";
+import Navbar from "./components/layouts/NavBar";
 import BanHang from "./components/banhang/BanHang";
 import HoaDon from "./components/hoadon/HoaDon";
 import KhachHang from "./components/khachhang/KhachHang";

@@ -19,6 +19,7 @@ import java.util.UUID;
 public class SanPham {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Nationalized

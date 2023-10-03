@@ -19,6 +19,7 @@ import java.util.UUID;
 public class SanPhamChiTiet {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "ma_san_pham", length = 20)
