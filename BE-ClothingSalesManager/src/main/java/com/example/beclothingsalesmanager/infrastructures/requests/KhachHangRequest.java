@@ -1,6 +1,5 @@
 package com.example.beclothingsalesmanager.infrastructures.requests;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class KhachHangRequest {
-    @NotNull(message = "Mã giảm giá không được để trống")
     private String hoVaTen;
+    private String email;
+    private String soDienThoai;
+    private String matKhau;
+    private String diaChi;
+    private String xaPhuong;
+    private String quanHuyen;
+    private String tinhThanhPho;
 }

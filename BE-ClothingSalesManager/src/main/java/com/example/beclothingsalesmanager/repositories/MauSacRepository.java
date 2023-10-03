@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MauSacRepository extends JpaRepository<MauSac, Integer> {
-    @Query("select new com.example.beclothingsalesmanager.infrastructures.responses.MauSacReponse(m.id, m.ten, m.maMauSac) from MauSac m")
+    @Query("select new com.example.beclothingsalesmanager.infrastructures.responses.MauSacResponse(m.id, m.ten, m.maMauSac) from MauSac m")
     public List<MauSacResponse> getAll();
 }

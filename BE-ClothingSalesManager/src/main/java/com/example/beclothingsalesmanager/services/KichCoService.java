@@ -1,6 +1,7 @@
 package com.example.beclothingsalesmanager.services;
 
 import com.example.beclothingsalesmanager.entities.KichCo;
+import com.example.beclothingsalesmanager.entities.NhanVien;
 import com.example.beclothingsalesmanager.infrastructures.requests.KichCoRequest;
 import com.example.beclothingsalesmanager.infrastructures.responses.KichCoResponse;
 import com.example.beclothingsalesmanager.repositories.KichCoRepository;
@@ -22,9 +23,18 @@ public class KichCoService {
         KichCo kichCo = new KichCo();
         kichCo.setTen(kichCoRequest.getTen());
         kichCoRepository.save(kichCo);
+
+        System.out.println("KichCoService.add: " + kichCo.getTen());
     }
 
     public void delete(Integer id) {
-        kichCoRepository.deleteById(id);
+        KichCo kichCo = kichCoRepository.findById(id).orElse(null);
+        if (kichCo != null) {
+            kichCoRepository.deleteById(id);
+
+            System.out.println("KichCoService.delete: " + id);
+        } else {
+            System.out.println("KichCoService.delete: null");
+        }
     }
 }

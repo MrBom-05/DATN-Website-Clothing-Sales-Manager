@@ -15,6 +15,8 @@ import java.util.UUID;
 public class GiamGiaResponse {
     private UUID id;
     private Integer ma;
-    private Integer soPhamTramGiam;
+    private Integer soPhanTramGiam;
+    private Integer soLuong;
+    private LocalDate ngayBatDau;
     private LocalDate ngayKetThuc;
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin/mau-sac")
+@RequestMapping("/api/admin/mau-sac")
 public class MauSacController {
     @Autowired
     private MauSacService mauSacService;
@@ -26,13 +26,11 @@ public class MauSacController {
     @PostMapping
     public void add(@RequestBody MauSacRequest mauSacRequest) {
         mauSacService.add(mauSacRequest);
-        System.out.println("Thêm thành công " + mauSacRequest.getTen());
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         mauSacService.delete(id);
-        System.out.println("Xoá thành công " + id);
     }
 
 }

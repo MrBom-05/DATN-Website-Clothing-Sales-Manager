@@ -75,8 +75,9 @@ CREATE TABLE nhan_vien
     xa_phuong      NVARCHAR(80),
     quan_huyen     NVARCHAR(80),
     tinh_thanh_pho NVARCHAR(80),
+    ngay_vao_lam   DATETIME                     DEFAULT GETDATE(),
     trang_thai     INT,
-    role           INT
+    chuc_vu        INT
 )
 
 CREATE TABLE gio_hang
@@ -99,6 +100,7 @@ CREATE TABLE khuyen_mai
 (
     id                UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     ma                VARCHAR(10) UNIQUE NOT NULL,
+    ten               NVARCHAR(50),
     so_phan_tram_giam INT,
     ngay_bat_dau      DATE,
     ngay_ket_thuc     DATE,
