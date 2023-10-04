@@ -18,8 +18,7 @@ public class NhanVienController {
 
     @GetMapping("")
     public ResponseEntity<?> findAll(){
-        List<NhanVienResponse> nhanVienResponses = nhanVienService.getAll();
-        return ResponseEntity.ok().body(nhanVienResponses);
+        return ResponseEntity.ok().body(nhanVienService.getAll());
     }
     @PostMapping("")
     public void create(@RequestBody NhanVienRequest nhanVienRequest) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Grid,
     TextField,
@@ -11,15 +11,13 @@ import {
     TableCell,
     TableBody,
     Select,
-    MenuItem,
     Alert,
     AlertTitle,
 } from '@mui/material';
-import { Pagination, PaginationItem } from '@mui/lab';
+import {Pagination, PaginationItem} from '@mui/lab';
 
 
-
-const App = () => {
+export default function NhanVien() {
     const [employeeList, setEmployeeList] = useState([]);
     const [employee, setEmployee] = useState({
         id: '',
@@ -238,12 +236,12 @@ const App = () => {
 
             <div className="row mt-3">
                 <div className="col-6">
-                    <Button variant="contained" color="primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <Button variant="contained" color="success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Thêm Nhân Viên
                     </Button>
 
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center' }} className='col-2 offset-4'>
+                <div style={{display: 'flex', alignItems: 'center'}} className='col-2 offset-4'>
                     <i className="fas fa-filter"></i>
                     <Select
                         native
@@ -253,7 +251,7 @@ const App = () => {
                             name: 'filter',
                             id: 'filter',
                         }}
-                        style={{ width: '100%', height: '30px', padding: '4px' }}
+                        style={{width: '100%', height: '30px', padding: '4px', marginLeft: '10px'}}
                     >
                         <option value="">Tất cả</option>
                         <option value="0">Đang làm</option>
@@ -276,7 +274,7 @@ const App = () => {
                             <TableCell>Thành phố/Tỉnh</TableCell>
                             <TableCell>Chức vụ</TableCell>
                             <TableCell>Trạng thái</TableCell>
-                            <TableCell >Hành động</TableCell>
+                            <TableCell className="text-center">Hành động</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -294,7 +292,15 @@ const App = () => {
                                 <TableCell>{emp.trangThai == '1' ? 'Đã nghỉ' : 'Đang làm'}</TableCell>
                                 <TableCell>
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"
+                                        onClick={() => handleUpdateEmployee(index)}
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        className="btn btn-danger ms-2"
                                         onClick={() => {
                                             if (window.confirm('Bạn có chắc chắn muốn xoá nhân viên ' + emp.hoVaTen + ' không?')) {
                                                 handleDeleteEmployee(emp.id);
@@ -303,14 +309,6 @@ const App = () => {
                                     >
                                         Delete
                                     </button>
-                                    <button
-                                        className="btn btn-danger ms-2"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal"
-                                        onClick={() => handleUpdateEmployee(index)}
-                                    >
-                                        Update
-                                    </button>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -318,7 +316,8 @@ const App = () => {
                 </Table>
             </TableContainer>
 
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 {isAlertOpen && (
                     <Alert severity="error" onClose={() => setIsAlertOpen(false)}>
                         <AlertTitle>Error</AlertTitle>
@@ -331,9 +330,10 @@ const App = () => {
                             <h1 className="modal-title fs-5 justify-content-center" id="exampleModalLabel">
                                 {isUpdating ? 'Cập Nhật Nhân Viên' : 'Thêm Nhân Viên'}
                             </h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleModalClose}></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                    onClick={handleModalClose}></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body text-center">
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -342,7 +342,7 @@ const App = () => {
                                         label="Mã"
                                         required
                                         value={employee.ma}
-                                        onChange={(e) => setEmployee({ ...employee, ma: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, ma: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -353,7 +353,7 @@ const App = () => {
                                         required
                                         label="Họ và tên"
                                         value={employee.hoVaTen}
-                                        onChange={(e) => setEmployee({ ...employee, hoVaTen: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, hoVaTen: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -364,7 +364,7 @@ const App = () => {
                                         required
                                         label="Số điện thoại"
                                         value={employee.soDienThoai}
-                                        onChange={(e) => setEmployee({ ...employee, soDienThoai: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, soDienThoai: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -375,7 +375,7 @@ const App = () => {
                                         required
                                         label="Email"
                                         value={employee.email}
-                                        onChange={(e) => setEmployee({ ...employee, email: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, email: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -386,7 +386,7 @@ const App = () => {
                                         required
                                         label="Địa chỉ"
                                         value={employee.diaChi}
-                                        onChange={(e) => setEmployee({ ...employee, diaChi: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, diaChi: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -396,7 +396,7 @@ const App = () => {
                                         name="xaPhuong"
                                         label="Xã/Phường"
                                         value={employee.xaPhuong}
-                                        onChange={(e) => setEmployee({ ...employee, xaPhuong: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, xaPhuong: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -406,7 +406,7 @@ const App = () => {
                                         name="quanHuyen"
                                         label="Quận/Huyện"
                                         value={employee.quanHuyen}
-                                        onChange={(e) => setEmployee({ ...employee, quanHuyen: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, quanHuyen: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -417,7 +417,7 @@ const App = () => {
                                         label="Thành phố/Tỉnh"
                                         required
                                         value={employee.tinhThanhPho}
-                                        onChange={(e) => setEmployee({ ...employee, tinhThanhPho: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, tinhThanhPho: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -425,7 +425,7 @@ const App = () => {
                                     <Select
                                         native
                                         value={employee.chucVu}
-                                        onChange={(e) => setEmployee({ ...employee, chucVu: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, chucVu: e.target.value})}
                                         inputProps={{
                                             name: 'chucVu',
                                             id: 'chucVu',
@@ -443,7 +443,7 @@ const App = () => {
                                         name="matKhau"
                                         label="Mật khẩu"
                                         value={employee.matKhau}
-                                        onChange={(e) => setEmployee({ ...employee, matKhau: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, matKhau: e.target.value})}
                                         fullWidth
                                     />
                                 </Grid>
@@ -451,7 +451,7 @@ const App = () => {
                                     <Select
                                         native
                                         value={employee.trangThai}
-                                        onChange={(e) => setEmployee({ ...employee, trangThai: e.target.value })}
+                                        onChange={(e) => setEmployee({...employee, trangThai: e.target.value})}
                                         inputProps={{
                                             name: 'trangThai',
                                             id: 'trangThai',
@@ -464,7 +464,8 @@ const App = () => {
                                     </Select>
                                 </Grid>
                             </Grid>
-                            <Button variant="contained" color="primary" onClick={handleAddEmployee} className="mt-3 text-center">
+                            <Button variant="contained" color="success" onClick={handleAddEmployee}
+                                    className="mt-3 text-center">
                                 Save
                             </Button>
                         </div>
@@ -491,5 +492,3 @@ const App = () => {
         </div>
     );
 };
-
-export default App;
