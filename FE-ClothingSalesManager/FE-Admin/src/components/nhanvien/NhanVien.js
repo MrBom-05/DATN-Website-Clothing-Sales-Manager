@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Grid,
     TextField,
@@ -14,12 +14,12 @@ import {
     Alert,
     AlertTitle,
 } from '@mui/material';
-import {Pagination, PaginationItem} from '@mui/lab';
+import { Pagination, PaginationItem } from '@mui/lab';
 
 
 export default function NhanVien() {
-    const [employeeList, setEmployeeList] = useState([]);
-    const [employee, setEmployee] = useState({
+    const [listNhanVien, setlistNhanVien] = useState([]);
+    const [nhanVien, setnhanVien] = useState({
         id: '',
         ma: '',
         email: '',
@@ -29,14 +29,15 @@ export default function NhanVien() {
         xaPhuong: '',
         quanHuyen: '',
         tinhThanhPho: '',
-        chucVu: '',
-        trangThai: 0,
+        chucVu: '0',
+        trangThai: '0',
         matKhau: '',
     });
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isAdd, setIsAdd] = useState(false);
     const [filter, setFilter] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-
+    const [successMessage, setSuccessMessage] = useState('');
     const [errors, setErrors] = useState({});
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -47,7 +48,7 @@ export default function NhanVien() {
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data)) {
-                    setEmployeeList(data);
+                    setlistNhanVien(data);
                 } else {
                     console.error('Data from API is not an array:', data);
                 }
@@ -58,67 +59,71 @@ export default function NhanVien() {
     }, []);
     const validateForm = () => {
         const newErrors = {};
-        if (!employee.ma.trim()) {
-            newErrors.ma = 'Mã is required';
+        if (!nhanVien.ma.trim()) {
+            newErrors.ma = 'Mã nhân viên là bắt buộc';
         }
-        if (!employee.hoVaTen.trim()) {
-            newErrors.hoVaTen = 'Họ và tên is required';
+        if (!nhanVien.hoVaTen.trim()) {
+            newErrors.hoVaTen = 'Họ và tên là bắt buộc';
         }
-        if (!employee.soDienThoai.trim()) {
-            newErrors.soDienThoai = 'Số điện thoại is required';
+        if (!nhanVien.soDienThoai.trim()) {
+            newErrors.soDienThoai = 'Số điện thoại là bắt buộc';
         }
-        if (!employee.email.trim()) {
-            newErrors.email = 'Email is required';
+        if (!nhanVien.email.trim()) {
+            newErrors.email = 'Email là bắt buộc';
         }
-        if (!employee.diaChi.trim()) {
-            newErrors.diaChi = 'Địa chỉ is required';
+        if (!nhanVien.diaChi.trim()) {
+            newErrors.diaChi = 'Địa chỉ là bắt buộc';
         }
-        if (!employee.xaPhuong.trim()) {
-            newErrors.xaPhuong = 'Xã/Phường is required';
+        if (!nhanVien.xaPhuong.trim()) {
+            newErrors.xaPhuong = 'Xã/Phường là bắt buộc';
         }
-        if (!employee.quanHuyen.trim()) {
-            newErrors.quanHuyen = 'Quận/Huyện is required';
+        if (!nhanVien.quanHuyen.trim()) {
+            newErrors.quanHuyen = 'Quận/Huyện là bắt buộc';
         }
-        if (!employee.tinhThanhPho.trim()) {
-            newErrors.tinhThanhPho = 'Thành phố/Tỉnh is required';
+        if (!nhanVien.tinhThanhPho.trim()) {
+            newErrors.tinhThanhPho = 'Thành phố/Tỉnh là bắt buộc';
         }
-        if (!employee.matKhau.trim()) {
-            newErrors.matKhau = 'Mật khẩu is required';
-        }
-
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+
+        // Kiểm tra xem có lỗi nào không
+        const hasErrors = Object.keys(newErrors).length > 0;
+
+        // Trả về true nếu không có lỗi và ngược lại
+        return !hasErrors;
     };
 
-    const showAlert = (message) => {
-        setAlertMessage(message);
-        setIsAlertOpen(true);
+    const showSuccessMessage = (message) => {
+        setSuccessMessage(message);
     };
-    const handleAddEmployee = () => {
+    const handleAddnhanVien = () => {
         if (!validateForm()) {
-            showAlert('Vui lòng điền đầy đủ thông tin');
             return;
         } else {
             let method = 'POST';
-            if (employee.id) {
+            if (nhanVien.id) {
                 method = 'PUT';
+                // Không cho phép thay đổi mật khẩu khi cập nhật
+                delete nhanVien.matKhau;
+            } else {
+                // Thiết lập giá trị mặc định cho trường trangThai
+                nhanVien.trangThai = '0'; // Đang làm
             }
 
-            fetch(`http://localhost:8080/api/admin/nhan-vien${employee.id ? `/${employee.id}` : ''}`, {
+            fetch(`http://localhost:8080/api/admin/nhan-vien${nhanVien.id ? `/${nhanVien.id}` : ''}`, {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(employee),
+                body: JSON.stringify(nhanVien),
             })
                 .then(() => {
                     fetch('http://localhost:8080/api/admin/nhan-vien')
                         .then((res) => res.json())
                         .then((data) => {
                             if (Array.isArray(data)) {
-                                setEmployeeList(data);
+                                setlistNhanVien(data);
                                 document.querySelector('#exampleModal .btn-close').click();
-                                setEmployee({
+                                setnhanVien({
                                     id: '',
                                     ma: '',
                                     email: '',
@@ -128,16 +133,17 @@ export default function NhanVien() {
                                     xaPhuong: '',
                                     quanHuyen: '',
                                     tinhThanhPho: '',
-                                    chucVu: '',
-                                    trangThai: 0,
+                                    chucVu: '0',
+                                    trangThai: '1',
                                     matKhau: '',
                                 });
+                                showSuccessMessage(`Đã ${nhanVien.id ? 'cập nhật' : 'thêm'} thành công!`);
                             } else {
                                 console.error('Data from API is not an array:', data);
                             }
                         })
                         .catch((error) => {
-                            console.error(`Lỗi khi lấy danh sách nhân viên sau khi ${employee.id ? 'cập nhật' : 'thêm'}:`, error);
+                            console.error(`Lỗi khi lấy danh sách nhân viên sau khi ${nhanVien.id ? 'cập nhật' : 'thêm'}:`, error);
                         });
                 })
                 .catch((error) => {
@@ -146,7 +152,7 @@ export default function NhanVien() {
         }
     };
 
-    const handleDeleteEmployee = (id) => {
+    const handleDeletenhanVien = (id) => {
         fetch(`http://localhost:8080/api/admin/nhan-vien/${id}`, {
             method: 'DELETE',
         })
@@ -155,7 +161,8 @@ export default function NhanVien() {
                     .then((res) => res.json())
                     .then((data) => {
                         if (Array.isArray(data)) {
-                            setEmployeeList(data);
+                            setlistNhanVien(data);
+                            showSuccessMessage('Đã xoá thành công!');
                         } else {
                             console.error('Data from API is not an array:', data);
                         }
@@ -169,22 +176,22 @@ export default function NhanVien() {
             });
     };
 
-    const handleUpdateEmployee = (index) => {
-        const selectedEmployee = employeeList[index];
+    const handleUpdatenhanVien = (index) => {
+        const selectednhanVien = listNhanVien[index];
 
-        setEmployee({
-            id: selectedEmployee.id,
-            ma: selectedEmployee.ma,
-            email: selectedEmployee.email,
-            hoVaTen: selectedEmployee.hoVaTen,
-            soDienThoai: selectedEmployee.soDienThoai,
-            diaChi: selectedEmployee.diaChi,
-            xaPhuong: selectedEmployee.xaPhuong,
-            quanHuyen: selectedEmployee.quanHuyen,
-            tinhThanhPho: selectedEmployee.tinhThanhPho,
-            chucVu: selectedEmployee.chucVu,
-            trangThai: selectedEmployee.trangThai,
-            matKhau: selectedEmployee.matKhau,
+        setnhanVien({
+            id: selectednhanVien.id,
+            ma: selectednhanVien.ma,
+            email: selectednhanVien.email,
+            hoVaTen: selectednhanVien.hoVaTen,
+            soDienThoai: selectednhanVien.soDienThoai,
+            diaChi: selectednhanVien.diaChi,
+            xaPhuong: selectednhanVien.xaPhuong,
+            quanHuyen: selectednhanVien.quanHuyen,
+            tinhThanhPho: selectednhanVien.tinhThanhPho,
+            chucVu: selectednhanVien.chucVu,
+            trangThai: selectednhanVien.trangThai,
+            matKhau: selectednhanVien.matKhau,
         });
 
         const modal = document.getElementById('exampleModal');
@@ -193,13 +200,14 @@ export default function NhanVien() {
         }
 
         setIsUpdating(true);
+        setIsAdd(false);
     };
 
     const handleModalClose = () => {
         const modal = document.getElementById('exampleModal');
         if (modal) {
             document.querySelector('#exampleModal .btn-close').click();
-            setEmployee({
+            setnhanVien({
                 id: '',
                 ma: '',
                 email: '',
@@ -209,12 +217,13 @@ export default function NhanVien() {
                 xaPhuong: '',
                 quanHuyen: '',
                 tinhThanhPho: '',
-                chucVu: '',
-                trangThai: '',
+                chucVu: '0',
+                trangThai: '1',
                 matKhau: '',
             });
 
             setIsUpdating(false);
+            setErrors({});
         }
     };
 
@@ -225,7 +234,7 @@ export default function NhanVien() {
     const itemsPerPage = 5;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const filteredData = employeeList
+    const filteredData = listNhanVien
         .filter((emp) => filter === '' || emp.trangThai == filter)
         .slice(startIndex, endIndex);
 
@@ -236,12 +245,17 @@ export default function NhanVien() {
 
             <div className="row mt-3">
                 <div className="col-6">
-                    <Button variant="contained" color="success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <Button variant="contained" color="success" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    onClick={() => {
+                        setIsUpdating(false);
+                        setIsAdd(true);
+                    }}
+                    >
                         Thêm Nhân Viên
                     </Button>
 
                 </div>
-                <div style={{display: 'flex', alignItems: 'center'}} className='col-2 offset-4'>
+                <div style={{ display: 'flex', alignItems: 'center' }} className='col-2 offset-4'>
                     <i className="fas fa-filter"></i>
                     <Select
                         native
@@ -251,7 +265,7 @@ export default function NhanVien() {
                             name: 'filter',
                             id: 'filter',
                         }}
-                        style={{width: '100%', height: '30px', padding: '4px', marginLeft: '10px'}}
+                        style={{ width: '100%', height: '30px', padding: '4px', marginLeft: '10px' }}
                     >
                         <option value="">Tất cả</option>
                         <option value="0">Đang làm</option>
@@ -261,6 +275,12 @@ export default function NhanVien() {
             </div>
 
             <TableContainer component={Paper} className="text-center mt-2">
+                {successMessage && (
+                    <Alert severity="success" onClose={() => setSuccessMessage('')}>
+                        <AlertTitle>Success</AlertTitle>
+                        {successMessage}
+                    </Alert>
+                )}
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -295,7 +315,7 @@ export default function NhanVien() {
                                         className="btn btn-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
-                                        onClick={() => handleUpdateEmployee(index)}
+                                        onClick={() => handleUpdatenhanVien(index)}
                                     >
                                         Update
                                     </button>
@@ -303,7 +323,7 @@ export default function NhanVien() {
                                         className="btn btn-danger ms-2"
                                         onClick={() => {
                                             if (window.confirm('Bạn có chắc chắn muốn xoá nhân viên ' + emp.hoVaTen + ' không?')) {
-                                                handleDeleteEmployee(emp.id);
+                                                handleDeletenhanVien(emp.id);
                                             }
                                         }}
                                     >
@@ -317,7 +337,7 @@ export default function NhanVien() {
             </TableContainer>
 
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
+                aria-hidden="true">
                 {isAlertOpen && (
                     <Alert severity="error" onClose={() => setIsAlertOpen(false)}>
                         <AlertTitle>Error</AlertTitle>
@@ -331,7 +351,7 @@ export default function NhanVien() {
                                 {isUpdating ? 'Cập Nhật Nhân Viên' : 'Thêm Nhân Viên'}
                             </h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                    onClick={handleModalClose}></button>
+                                onClick={handleModalClose}></button>
                         </div>
                         <div className="modal-body text-center">
                             <Grid container spacing={2}>
@@ -341,9 +361,11 @@ export default function NhanVien() {
                                         name="ma"
                                         label="Mã"
                                         required
-                                        value={employee.ma}
-                                        onChange={(e) => setEmployee({...employee, ma: e.target.value})}
+                                        value={nhanVien.ma}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, ma: e.target.value })}
                                         fullWidth
+                                        error={!!errors.ma}
+                                        helperText={errors.ma}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -352,9 +374,11 @@ export default function NhanVien() {
                                         name="hoVaTen"
                                         required
                                         label="Họ và tên"
-                                        value={employee.hoVaTen}
-                                        onChange={(e) => setEmployee({...employee, hoVaTen: e.target.value})}
+                                        value={nhanVien.hoVaTen}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, hoVaTen: e.target.value })}
                                         fullWidth
+                                        error={!!errors.hoVaTen}
+                                        helperText={errors.hoVaTen}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -363,9 +387,11 @@ export default function NhanVien() {
                                         name="soDienThoai"
                                         required
                                         label="Số điện thoại"
-                                        value={employee.soDienThoai}
-                                        onChange={(e) => setEmployee({...employee, soDienThoai: e.target.value})}
+                                        value={nhanVien.soDienThoai}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, soDienThoai: e.target.value })}
                                         fullWidth
+                                        error={!!errors.soDienThoai}
+                                        helperText={errors.soDienThoai}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -374,9 +400,12 @@ export default function NhanVien() {
                                         name="email"
                                         required
                                         label="Email"
-                                        value={employee.email}
-                                        onChange={(e) => setEmployee({...employee, email: e.target.value})}
+                                        value={nhanVien.email}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, email: e.target.value })}
                                         fullWidth
+                                        error={!!errors.email}
+                                        helperText={errors.email}
+
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -385,9 +414,11 @@ export default function NhanVien() {
                                         name="diaChi"
                                         required
                                         label="Địa chỉ"
-                                        value={employee.diaChi}
-                                        onChange={(e) => setEmployee({...employee, diaChi: e.target.value})}
+                                        value={nhanVien.diaChi}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, diaChi: e.target.value })}
                                         fullWidth
+                                        error={!!errors.diaChi}
+                                        helperText={errors.diaChi}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -395,9 +426,11 @@ export default function NhanVien() {
                                         type="text"
                                         name="xaPhuong"
                                         label="Xã/Phường"
-                                        value={employee.xaPhuong}
-                                        onChange={(e) => setEmployee({...employee, xaPhuong: e.target.value})}
+                                        value={nhanVien.xaPhuong}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, xaPhuong: e.target.value })}
                                         fullWidth
+                                        error={!!errors.xaPhuong}
+                                        helperText={errors.xaPhuong}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -405,9 +438,11 @@ export default function NhanVien() {
                                         type="text"
                                         name="quanHuyen"
                                         label="Quận/Huyện"
-                                        value={employee.quanHuyen}
-                                        onChange={(e) => setEmployee({...employee, quanHuyen: e.target.value})}
+                                        value={nhanVien.quanHuyen}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, quanHuyen: e.target.value })}
                                         fullWidth
+                                        error={!!errors.quanHuyen}
+                                        helperText={errors.quanHuyen}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -416,16 +451,18 @@ export default function NhanVien() {
                                         name="tinhThanhPho"
                                         label="Thành phố/Tỉnh"
                                         required
-                                        value={employee.tinhThanhPho}
-                                        onChange={(e) => setEmployee({...employee, tinhThanhPho: e.target.value})}
+                                        value={nhanVien.tinhThanhPho}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, tinhThanhPho: e.target.value })}
                                         fullWidth
+                                        error={!!errors.tinhThanhPho}
+                                        helperText={errors.tinhThanhPho}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <Select
                                         native
-                                        value={employee.chucVu}
-                                        onChange={(e) => setEmployee({...employee, chucVu: e.target.value})}
+                                        value={nhanVien.chucVu}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, chucVu: e.target.value })}
                                         inputProps={{
                                             name: 'chucVu',
                                             id: 'chucVu',
@@ -442,30 +479,46 @@ export default function NhanVien() {
                                         type="password"
                                         name="matKhau"
                                         label="Mật khẩu"
-                                        value={employee.matKhau}
-                                        onChange={(e) => setEmployee({...employee, matKhau: e.target.value})}
+                                        value={nhanVien.matKhau}
+                                        onChange={(e) => {
+                                            // Kiểm tra nếu đang cập nhật thì không cho phép thay đổi mật khẩu
+                                            if (!isUpdating) {
+                                                setnhanVien({ ...nhanVien, matKhau: e.target.value });
+                                            }
+                                        }}
                                         fullWidth
+                                        disabled={isUpdating} // Vô hiệu hóa input khi isUpdating là true
                                     />
                                 </Grid>
+
                                 <Grid item xs={12} sm={6}>
                                     <Select
                                         native
-                                        value={employee.trangThai}
-                                        onChange={(e) => setEmployee({...employee, trangThai: e.target.value})}
+                                        value={nhanVien.trangThai}
+                                        onChange={(e) => setnhanVien({ ...nhanVien, trangThai: e.target.value })}
                                         inputProps={{
                                             name: 'trangThai',
                                             id: 'trangThai',
                                         }}
                                         fullWidth
                                     >
-
-                                        <option value="0">Đang làm</option>
-                                        <option value="1">Đã nghỉ</option>
+                                        {isAdd ? (
+                                            <>
+                                                <option value="0">Đang làm</option>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <option value="0">Đang làm</option>
+                                                <option value="1">Đã nghỉ</option>
+                                            </>
+                                        )}
                                     </Select>
                                 </Grid>
+
+
                             </Grid>
-                            <Button variant="contained" color="success" onClick={handleAddEmployee}
-                                    className="mt-3 text-center">
+                            <Button variant="contained" color="success" onClick={handleAddnhanVien}
+                                className="mt-3 text-center">
                                 Save
                             </Button>
                         </div>
@@ -474,7 +527,7 @@ export default function NhanVien() {
             </div>
 
             <Pagination
-                count={Math.ceil(employeeList.length / itemsPerPage)}
+                count={Math.ceil(listNhanVien.length / itemsPerPage)}
                 page={currentPage}
                 onChange={handlePageChange}
                 renderItem={(item) => (
