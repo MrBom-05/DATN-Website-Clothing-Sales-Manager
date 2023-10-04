@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Grid,
     TextField,
@@ -10,14 +10,12 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Select,
-    MenuItem,
     Alert,
     AlertTitle,
 } from '@mui/material';
-import { Pagination, PaginationItem } from '@mui/lab';
+import {Pagination, PaginationItem} from '@mui/lab';
 
-const App = () => {
+export default function KhachHang() {
     const [listKhachHang, setListKhachHang] = useState([]);
     const [khachHang, setKhachHang] = useState({
         id: '',
@@ -92,8 +90,8 @@ const App = () => {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setKhachHang({ ...khachHang, [name]: value });
+        const {name, value} = e.target;
+        setKhachHang({...khachHang, [name]: value});
     };
 
     const handleAddKhachHang = () => {
@@ -250,7 +248,7 @@ const App = () => {
                             <TableCell>Xã Phường</TableCell>
                             <TableCell>Quận Huyện</TableCell>
                             <TableCell>Tỉnh Thành Phố</TableCell>
-                            <TableCell>Hành động</TableCell>
+                            <TableCell className="text-center">Hành động</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -264,9 +262,9 @@ const App = () => {
                                 <TableCell>{khachHang.xaPhuong}</TableCell>
                                 <TableCell>{khachHang.quanHuyen}</TableCell>
                                 <TableCell>{khachHang.tinhThanhPho}</TableCell>
-                                <TableCell>
+                                <TableCell className="text-center">
                                     <button
-                                        className="btn btn-primary me-2"
+                                        className="btn btn-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
                                         onClick={() => handleUpdateKhahHang(index)}
@@ -274,9 +272,9 @@ const App = () => {
                                         Update
                                     </button>
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-danger ms-2"
                                         onClick={() => {
-                                            if (window.confirm('Bạn có chắc chắn muốn xoá Mã  ' + khachHang.ma + ' không?')) {
+                                            if (window.confirm('Bạn có chắc chắn muốn xoá ' + khachHang.hoVaTen + ' không?')) {
                                                 handleDeleteKhachHang(khachHang.id);
                                             }
                                         }}
@@ -289,16 +287,18 @@ const App = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5 justify-content-center" id="exampleModalLabel">
                                 {isUpdating ? 'Cập Nhật Khách Hàng' : 'Thêm Khách Hàng'}
                             </h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleModalClose}></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                    onClick={handleModalClose}></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body text-center">
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -338,7 +338,7 @@ const App = () => {
                                         error={!!errors.soDienThoai}
                                         helperText={errors.soDienThoai}
                                     />
-                                  </Grid>  
+                                </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
@@ -351,7 +351,7 @@ const App = () => {
                                         error={!!errors.diaChi}
                                         helperText={errors.diaChi}
                                     />
-                                    </Grid>
+                                </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
@@ -364,7 +364,7 @@ const App = () => {
                                         error={!!errors.xaPhuong}
                                         helperText={errors.xaPhuong}
                                     />
-                                    </Grid>
+                                </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
@@ -377,7 +377,7 @@ const App = () => {
                                         error={!!errors.quanHuyen}
                                         helperText={errors.quanHuyen}
                                     />
-                                    </Grid>
+                                </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
@@ -390,10 +390,11 @@ const App = () => {
                                         error={!!errors.tinhThanhPho}
                                         helperText={errors.tinhThanhPho}
                                     />
-                                    </Grid>
+                                </Grid>
 
                             </Grid>
-                            <Button variant="contained" color="primary" onClick={handleAddKhachHang} className="mt-3 text-center">
+                            <Button variant="contained" color="success" onClick={handleAddKhachHang}
+                                    className="mt-3 text-center">
                                 Save
                             </Button>
                         </div>
@@ -419,5 +420,3 @@ const App = () => {
         </div>
     );
 };
-
-export default App;

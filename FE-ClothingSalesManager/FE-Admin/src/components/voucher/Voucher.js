@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Grid,
     TextField,
@@ -10,14 +10,12 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    Select,
-    MenuItem,
     Alert,
     AlertTitle,
 } from '@mui/material';
-import { Pagination, PaginationItem } from '@mui/lab';
+import {Pagination, PaginationItem} from '@mui/lab';
 
-const App = () => {
+export default function Voucher() {
     const [listGiamGia, setListGiamGia] = useState([]);
     const [giamGia, setGiamGia] = useState({
         id: '',
@@ -67,13 +65,15 @@ const App = () => {
         } else {
             const today = new Date();
             const startDate = new Date(giamGia.ngayBatDau);
-
-            if (startDate < today) {
+            // So sánh ngày và tháng của ngày bắt đầu và ngày hiện tại
+            if (startDate.getUTCDate() !== today.getUTCDate() || startDate.getUTCMonth() !== today.getUTCMonth()) {
                 newErrors.ngayBatDau = 'Ngày bắt đầu phải là ngày hiện tại hoặc sau ngày hiện tại';
             }
         }
         if (!giamGia.ngayKetThuc) {
             newErrors.ngayKetThuc = 'Vui lòng nhập ngày kết thúc';
+        } else if (giamGia.ngayKetThuc <= giamGia.ngayBatDau) {
+            newErrors.ngayKetThuc = 'Ngày kết thúc phải sau ngày bắt đầu';
         }
 
         setErrors(newErrors);
@@ -90,8 +90,8 @@ const App = () => {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setGiamGia({ ...giamGia, [name]: value });
+        const {name, value} = e.target;
+        setGiamGia({...giamGia, [name]: value});
     };
 
     const handleAddGiamGia = () => {
@@ -238,7 +238,7 @@ const App = () => {
                             <TableCell>Số Lượng</TableCell>
                             <TableCell>Ngày Bắt Đầu</TableCell>
                             <TableCell>Ngày Kết Thúc</TableCell>
-                            <TableCell>Hành Động</TableCell>
+                            <TableCell className="text-center">Hành Động</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -250,9 +250,9 @@ const App = () => {
                                 <TableCell>{giamGia.soLuong}</TableCell>
                                 <TableCell>{giamGia.ngayBatDau}</TableCell>
                                 <TableCell>{giamGia.ngayKetThuc}</TableCell>
-                                <TableCell>
+                                <TableCell className="text-center">
                                     <button
-                                        className="btn btn-primary me-2"
+                                        className="btn btn-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
                                         onClick={() => handleUpdateGiamGia(index)}
@@ -260,7 +260,7 @@ const App = () => {
                                         Update
                                     </button>
                                     <button
-                                        className="btn btn-danger"
+                                        className="btn btn-danger ms-2"
                                         onClick={() => {
                                             if (window.confirm('Bạn có chắc chắn muốn xoá Mã  ' + giamGia.ma + ' không?')) {
                                                 handleDeleteGiamGia(giamGia.id);
@@ -275,18 +275,20 @@ const App = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5 justify-content-center" id="exampleModalLabel">
                                 {isUpdating ? 'Cập Nhật Voucher' : 'Thêm Voucher'}
                             </h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleModalClose}></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                    onClick={handleModalClose}></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body text-center">
                             <Grid container spacing={3}>
-                                <Grid item xs={6}>
+                                <Grid item xs={7}>
                                     <TextField
                                         type="number"
                                         name="ma"
@@ -297,13 +299,13 @@ const App = () => {
                                         label="Mã Voucher"
                                         InputLabelProps={{
                                             shrink: true,
-                                            style: { position: 'top' } // Hiển thị label phía trên
+                                            style: {position: 'top'} // Hiển thị label phía trên
                                         }}
                                         error={!!errors.ma}
                                         helperText={errors.ma}
                                     />
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={4}>
                                     <TextField
                                         type="number"
                                         name="soPhanTramGiam"
@@ -313,7 +315,7 @@ const App = () => {
                                         label="Số Phần Trăm Giảm"
                                         InputLabelProps={{
                                             shrink: true,
-                                            style: { position: 'top' } // Hiển thị label phía trên
+                                            style: {position: 'top'} // Hiển thị label phía trên
                                         }}
                                         error={!!errors.soPhanTramGiam}
                                         helperText={errors.soPhanTramGiam}
@@ -329,7 +331,7 @@ const App = () => {
                                         label="Số Lượng"
                                         InputLabelProps={{
                                             shrink: true,
-                                            style: { position: 'top' } // Hiển thị label phía trên
+                                            style: {position: 'top'} // Hiển thị label phía trên
                                         }}
                                         error={!!errors.soLuong}
                                         helperText={errors.soLuong}
@@ -345,7 +347,7 @@ const App = () => {
                                         label="Ngày Bắt Đầu"
                                         InputLabelProps={{
                                             shrink: true,
-                                            style: { position: 'top' } // Hiển thị label phía trên
+                                            style: {position: 'top'} // Hiển thị label phía trên
                                         }}
                                         error={!!errors.ngayBatDau}
                                         helperText={errors.ngayBatDau}
@@ -361,14 +363,15 @@ const App = () => {
                                         label="Ngày Kết Thúc"
                                         InputLabelProps={{
                                             shrink: true,
-                                            style: { position: 'top' } // Hiển thị label phía trên
+                                            style: {position: 'top'} // Hiển thị label phía trên
                                         }}
                                         error={!!errors.ngayKetThuc}
                                         helperText={errors.ngayKetThuc}
                                     />
                                 </Grid>
                             </Grid>
-                            <Button variant="contained" color="primary" onClick={handleAddGiamGia} className="mt-3 text-center">
+                            <Button variant="contained" color="success" onClick={handleAddGiamGia}
+                                    className="mt-3 text-center">
                                 Save
                             </Button>
                         </div>
@@ -394,5 +397,3 @@ const App = () => {
         </div>
     );
 };
-
-export default App;
