@@ -17,30 +17,26 @@ import {
 } from '@mui/material';
 import { Pagination, PaginationItem } from '@mui/lab';
 
-
-
 const App = () => {
     const [listKhachHang, setListKhachHang] = useState([]);
     const [khachHang, setKhachHang] = useState({
         id: '',
         hoVaTen: '',
+        email: '',
         soDienThoai: '',
         diaChi: '',
         xaPhuong: '',
         quanHuyen: '',
         tinhThanhPho: '',
-        matKhau: '',
     });
     const [isUpdating, setIsUpdating] = useState(false);
     const [errors, setErrors] = useState({});
-    const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState(''); // Thêm state mới cho thông báo thành công
     // Add pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
 
     useEffect(() => {
-
         fetch('http://localhost:8080/api/admin/khach-hang')
             .then((res) => res.json())
             .then((data) => {
@@ -53,38 +49,55 @@ const App = () => {
             .catch((err) => {
                 console.error(err);
             });
+
     }, []);
+
     const validateForm = () => {
         const newErrors = {};
+
         if (!khachHang.hoVaTen) {
-            newErrors.hoVaTen = 'Vui lòng nhập họ và tên';
+            newErrors.hoVaTen = 'Họ và tên không được để trống';
+        }
+        if (!khachHang.email) {
+            newErrors.email = 'Email không được để trống';
         }
         if (!khachHang.soDienThoai) {
-            newErrors.soDienThoai = 'Vui lòng nhập số điện thoại';
+            newErrors.soDienThoai = 'Số điện thoại không được để trống';
         }
         if (!khachHang.diaChi) {
-            newErrors.diaChi = 'Vui lòng nhập địa chỉ';
+            newErrors.diaChi = 'Địa chỉ không được để trống';
         }
         if (!khachHang.xaPhuong) {
-            newErrors.xaPhuong = 'Vui lòng nhập xã/phường';
+            newErrors.xaPhuong = 'Xã phường không được để trống';
         }
         if (!khachHang.quanHuyen) {
-            newErrors.quanHuyen = 'Vui lòng nhập quận/huyện';
+            newErrors.quanHuyen = 'Quận huyện không được để trống';
         }
         if (!khachHang.tinhThanhPho) {
-            newErrors.tinhThanhPho = 'Vui lòng nhập thành phố/tỉnh';
+            newErrors.tinhThanhPho = 'Tỉnh thành phố không được để trống';
         }
+
+
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+
+        // Kiểm tra xem có lỗi nào không
+        const hasErrors = Object.keys(newErrors).length > 0;
+
+        // Trả về true nếu không có lỗi và ngược lại
+        return !hasErrors;
     };
 
-    const showAlert = (message) => {
-        setAlertMessage(message);
-        setIsAlertOpen(true);
+    const showSuccessMessage = (message) => {
+        setSuccessMessage(message);
     };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setKhachHang({ ...khachHang, [name]: value });
+    };
+
     const handleAddKhachHang = () => {
         if (!validateForm()) {
-            showAlert('Vui lòng điền đầy đủ thông tin');
             return;
         } else {
             let method = 'POST';
@@ -109,19 +122,20 @@ const App = () => {
                                 setKhachHang({
                                     id: '',
                                     hoVaTen: '',
+                                    email: '',
                                     soDienThoai: '',
                                     diaChi: '',
                                     xaPhuong: '',
                                     quanHuyen: '',
                                     tinhThanhPho: '',
-                                    matKhau: '',
                                 });
+                                showSuccessMessage(`Đã ${khachHang.id ? 'cập nhật' : 'thêm'} thành công!`); // Hiển thị thông báo thành công
                             } else {
                                 console.error('Data from API is not an array:', data);
                             }
                         })
                         .catch((error) => {
-                            console.error(`Lỗi khi lấy danh sách Khách hàng sau khi ${khachHang.id ? 'cập nhật' : 'thêm'}:`, error);
+                            console.error(`Lỗi khi lấy danh sách Voucher sau khi ${khachHang.id ? 'cập nhật' : 'thêm'}:`, error);
                         });
                 })
                 .catch((error) => {
@@ -140,6 +154,7 @@ const App = () => {
                     .then((data) => {
                         if (Array.isArray(data)) {
                             setListKhachHang(data);
+                            showSuccessMessage('Xoá thành công!'); // Hiển thị thông báo thành công
                         } else {
                             console.error('Data from API is not an array:', data);
                         }
@@ -184,19 +199,20 @@ const App = () => {
             document.querySelector('#exampleModal .btn-close').click();
             setKhachHang({
                 id: '',
-                email: '',
                 hoVaTen: '',
+                email: '',
                 soDienThoai: '',
                 diaChi: '',
                 xaPhuong: '',
                 quanHuyen: '',
                 tinhThanhPho: '',
-                matKhau: '',
             });
 
             setIsUpdating(false);
+            setErrors({});
         }
     };
+
     // Create a function to handle page changes
     const handlePageChange = (event, value) => {
         setCurrentPage(value);
@@ -207,43 +223,47 @@ const App = () => {
     const endIndex = startIndex + itemsPerPage;
 
     return (
-
         <div className='px-3'>
             <h1 className="text-center mt-3">Quản Lý Khách Hàng</h1>
-
             <div className="row mt-3">
                 <div className="col-6">
                     <Button variant="contained" color="success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         Thêm Khách Hàng
                     </Button>
-
                 </div>
             </div>
-
             <TableContainer component={Paper} className="text-center mt-2">
+                {successMessage && (
+                    <Alert severity="success" onClose={() => setSuccessMessage('')}>
+                        <AlertTitle>Success</AlertTitle>
+                        {successMessage}
+                    </Alert>
+                )}
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>STT</TableCell>
-                            <TableCell>Tên</TableCell>
+                            <TableCell>Họ Và Tên</TableCell>
+                            <TableCell>Email</TableCell>
                             <TableCell>Số Điện Thoại</TableCell>
                             <TableCell>Địa Chỉ</TableCell>
-                            <TableCell>Xã/Phường</TableCell>
-                            <TableCell>Quận/Huyện</TableCell>
-                            <TableCell>Thành phố/Tỉnh</TableCell>
-                            <TableCell >Hành động</TableCell>
+                            <TableCell>Xã Phường</TableCell>
+                            <TableCell>Quận Huyện</TableCell>
+                            <TableCell>Tỉnh Thành Phố</TableCell>
+                            <TableCell>Hành động</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {listKhachHang.slice(startIndex, endIndex).map((kh, index) => (
-                            <TableRow key={kh.id}>
+                        {listKhachHang.slice(startIndex, endIndex).map((khachHang, index) => (
+                            <TableRow key={khachHang.id}>
                                 <TableCell>{index + 1}</TableCell>
-                                <TableCell>{kh.hoVaTen}</TableCell>
-                                <TableCell>{kh.soDienThoai}</TableCell>
-                                <TableCell>{kh.diaChi}</TableCell>
-                                <TableCell>{kh.xaPhuong}</TableCell>
-                                <TableCell>{kh.quanHuyen}</TableCell>
-                                <TableCell>{kh.tinhThanhPho}</TableCell>
+                                <TableCell>{khachHang.hoVaTen}</TableCell>
+                                <TableCell>{khachHang.email}</TableCell>
+                                <TableCell>{khachHang.soDienThoai}</TableCell>
+                                <TableCell>{khachHang.diaChi}</TableCell>
+                                <TableCell>{khachHang.xaPhuong}</TableCell>
+                                <TableCell>{khachHang.quanHuyen}</TableCell>
+                                <TableCell>{khachHang.tinhThanhPho}</TableCell>
                                 <TableCell>
                                     <button
                                         className="btn btn-primary me-2"
@@ -256,8 +276,8 @@ const App = () => {
                                     <button
                                         className="btn btn-danger"
                                         onClick={() => {
-                                            if (window.confirm('Bạn có chắc chắn muốn xoá Khách Hàng ' + kh.hoVaTen + ' không?')) {
-                                                handleDeleteKhachHang(kh.id);
+                                            if (window.confirm('Bạn có chắc chắn muốn xoá Mã  ' + khachHang.ma + ' không?')) {
+                                                handleDeleteKhachHang(khachHang.id);
                                             }
                                         }}
                                     >
@@ -269,14 +289,7 @@ const App = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                {isAlertOpen && (
-                    <Alert severity="error" onClose={() => setIsAlertOpen(false)}>
-                        <AlertTitle>Error</AlertTitle>
-                        {alertMessage}
-                    </Alert>
-                )}
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -294,19 +307,10 @@ const App = () => {
                                         required
                                         label="Họ và tên"
                                         value={khachHang.hoVaTen}
-                                        onChange={(e) => setKhachHang({ ...khachHang, hoVaTen: e.target.value })}
+                                        onChange={handleInputChange}
                                         fullWidth
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        type="text"
-                                        name="soDienThoai"
-                                        required
-                                        label="Số điện thoại"
-                                        value={khachHang.soDienThoai}
-                                        onChange={(e) => setKhachHang({ ...khachHang, soDienThoai: e.target.value })}
-                                        fullWidth
+                                        error={!!errors.hoVaTen}
+                                        helperText={errors.hoVaTen}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -316,10 +320,25 @@ const App = () => {
                                         required
                                         label="Email"
                                         value={khachHang.email}
-                                        onChange={(e) => setKhachHang({ ...khachHang, email: e.target.value })}
+                                        onChange={handleInputChange}
                                         fullWidth
+                                        error={!!errors.email}
+                                        helperText={errors.email}
                                     />
                                 </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        type="text"
+                                        name="soDienThoai"
+                                        required
+                                        label="Số điện thoại"
+                                        value={khachHang.soDienThoai}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        error={!!errors.soDienThoai}
+                                        helperText={errors.soDienThoai}
+                                    />
+                                  </Grid>  
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
@@ -327,53 +346,52 @@ const App = () => {
                                         required
                                         label="Địa chỉ"
                                         value={khachHang.diaChi}
-                                        onChange={(e) => setKhachHang({ ...khachHang, diaChi: e.target.value })}
+                                        onChange={handleInputChange}
                                         fullWidth
+                                        error={!!errors.diaChi}
+                                        helperText={errors.diaChi}
                                     />
-                                </Grid>
+                                    </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
                                         name="xaPhuong"
-                                        label="Xã/Phường"
+                                        required
+                                        label="Xã phường"
                                         value={khachHang.xaPhuong}
-                                        onChange={(e) => setKhachHang({ ...khachHang, xaPhuong: e.target.value })}
+                                        onChange={handleInputChange}
                                         fullWidth
+                                        error={!!errors.xaPhuong}
+                                        helperText={errors.xaPhuong}
                                     />
-                                </Grid>
+                                    </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
                                         name="quanHuyen"
-                                        label="Quận/Huyện"
+                                        required
+                                        label="Quận huyện"
                                         value={khachHang.quanHuyen}
-                                        onChange={(e) => setKhachHang({ ...khachHang, quanHuyen: e.target.value })}
+                                        onChange={handleInputChange}
                                         fullWidth
+                                        error={!!errors.quanHuyen}
+                                        helperText={errors.quanHuyen}
                                     />
-                                </Grid>
+                                    </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         type="text"
                                         name="tinhThanhPho"
-                                        label="Thành phố/Tỉnh"
                                         required
+                                        label="Tỉnh thành phố"
                                         value={khachHang.tinhThanhPho}
-                                        onChange={(e) => setKhachHang({ ...khachHang, tinhThanhPho: e.target.value })}
+                                        onChange={handleInputChange}
                                         fullWidth
+                                        error={!!errors.tinhThanhPho}
+                                        helperText={errors.tinhThanhPho}
                                     />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        type="password"
-                                        name="matKhau"
-                                        label="Mật khẩu"
-                                        value={khachHang.matKhau}
-                                        onChange={(e) => setKhachHang({ ...khachHang, matKhau: e.target.value })}
-                                        fullWidth
-                                        // Disable the input if in update mode
-                                        disabled={isUpdating}
-                                    />
-                                </Grid>
+                                    </Grid>
+
                             </Grid>
                             <Button variant="contained" color="primary" onClick={handleAddKhachHang} className="mt-3 text-center">
                                 Save
