@@ -53,7 +53,7 @@ public class NhanVien {
     @Column(name = "tinh_thanh_pho", length = 80)
     private String tinhThanhPho;
 
-    @Column(name = "ngay_vao_lam")
+    @Column(name = "ngay_vao_lam", columnDefinition = "DATETIME DEFAULT GETDATE()")
     private Instant ngayVaoLam;
 
     @Column(name = "trang_thai")

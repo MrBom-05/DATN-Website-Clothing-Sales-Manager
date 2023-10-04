@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface LoaiRepository extends JpaRepository<Loai, Integer> {
-    @Query("SELECT new com.example.beclothingsalesmanager.infrastructures.responses.LoaiResponse(l.id, l.ten) FROM Loai l")
+    @Query("SELECT new com.example.beclothingsalesmanager.infrastructures.responses.LoaiResponse(l.id, l.ten) FROM Loai l ORDER BY l.ten")
     public List<LoaiResponse> getAll();
 }

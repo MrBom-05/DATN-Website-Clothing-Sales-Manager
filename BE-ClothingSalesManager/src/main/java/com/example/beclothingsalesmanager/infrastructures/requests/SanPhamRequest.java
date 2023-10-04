@@ -11,4 +11,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SanPhamRequest {
     private String ten;
+    private Integer idLoai;
 }

@@ -1,5 +1,6 @@
 package com.example.beclothingsalesmanager.services;
 
+import com.example.beclothingsalesmanager.entities.Loai;
 import com.example.beclothingsalesmanager.entities.SanPham;
 import com.example.beclothingsalesmanager.infrastructures.requests.SanPhamRequest;
 import com.example.beclothingsalesmanager.infrastructures.responses.SanPhamResponse;
@@ -23,6 +24,10 @@ public class SanPhamService {
         SanPham sanPham = new SanPham();
         sanPham.setTen(sanPhamRequest.getTen());
 
+        Loai loai = new Loai();
+        loai.setId(sanPhamRequest.getIdLoai());
+
+        sanPham.setIdLoai(loai);
         sanPhamRepository.save(sanPham);
 
         System.out.println("SanPhamService.add: " + sanPham.getTen());
@@ -32,6 +37,11 @@ public class SanPhamService {
         SanPham sanPham = sanPhamRepository.findById(id).orElse(null);
         if (sanPham != null) {
             sanPham.setTen(sanPhamRequest.getTen());
+
+            Loai loai = new Loai();
+            loai.setId(sanPhamRequest.getIdLoai());
+
+            sanPham.setIdLoai(loai);
 
             sanPhamRepository.save(sanPham);
 
