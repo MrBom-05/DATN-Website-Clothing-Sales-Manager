@@ -23,9 +23,6 @@ export default function KichCo() {
     });
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState(''); // Thêm state mới cho thông báo thành công
-    // Add pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
     useEffect(() => {
         fetch(api)
@@ -68,6 +65,14 @@ export default function KichCo() {
         setKichCo({...kichCo, [name]: value});
     };
 
+    const clearForm = () => {
+        setKichCo({
+            id: '',
+            ten: ''
+        });
+        setErrors({});
+    }
+
     const handleAddKichCo = () => {
         if (!validateForm()) {
             return;
@@ -90,11 +95,6 @@ export default function KichCo() {
                         .then((data) => {
                             if (Array.isArray(data)) {
                                 setListKichCo(data);
-                                document.querySelector('#exampleModal .btn-close').click();
-                                setKichCo({
-                                    id: '',
-                                    ten: ''
-                                });
                                 showSuccessMessage(`Đã ${kichCo.id ? 'cập nhật' : 'thêm'} thành công!`); // Hiển thị thông báo thành công
                             } else {
                                 console.error('Data from API is not an array:', data);
@@ -107,6 +107,7 @@ export default function KichCo() {
                 .catch((error) => {
                     console.error(`Lỗi khi gửi yêu cầu ${method}:`, error);
                 });
+            clearForm();
         }
     };
 
@@ -134,13 +135,9 @@ export default function KichCo() {
             });
     };
 
-    // Calculate startIndex and endIndex
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
     return (
         <div className='px-3'>
-            <h1 className="text-center mt-3">Quản Lý Màu Sắc</h1>
+            <h1 className="text-center mt-3">Quản Lý Kích Cỡ</h1>
             <Grid container spacing={2} className="mt-3">
                 <Grid item xs={8}>
                     <TableContainer component={Paper} className="text-center mt-2">
@@ -159,7 +156,7 @@ export default function KichCo() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {listKichCo.slice(startIndex, endIndex).map((kichCo, index) => (
+                                {listKichCo.map((kichCo, index) => (
                                     <TableRow key={kichCo.id}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{kichCo.ten}</TableCell>
@@ -193,7 +190,7 @@ export default function KichCo() {
                                 value={kichCo.ten}
                                 onChange={handleInputChange}
                                 fullWidth
-                                label="Tên Loại"
+                                label="Tên Kích Cỡ"
                                 InputLabelProps={{
                                     shrink: true,
                                     style: {position: 'top'} // Hiển thị label phía trên

@@ -24,9 +24,6 @@ export default function MauSac() {
     });
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState(''); // Thêm state mới cho thông báo thành công
-    // Add pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
     useEffect(() => {
         fetch(api)
@@ -73,6 +70,15 @@ export default function MauSac() {
         setMauSac({...mauSac, [name]: value});
     };
 
+    const clearForm = () => {
+        setMauSac({
+            id: '',
+            ten: '',
+            maMauSac: ''
+        });
+        setErrors({});
+    }
+
     const handleAddMauSac = () => {
         if (!validateForm()) {
             return;
@@ -95,12 +101,6 @@ export default function MauSac() {
                         .then((data) => {
                             if (Array.isArray(data)) {
                                 setListMauSac(data);
-                                document.querySelector('#exampleModal .btn-close').click();
-                                setMauSac({
-                                    id: '',
-                                    ten: '',
-                                    maMauSac: ''
-                                });
                                 showSuccessMessage(`Đã ${mauSac.id ? 'cập nhật' : 'thêm'} thành công!`); // Hiển thị thông báo thành công
                             } else {
                                 console.error('Data from API is not an array:', data);
@@ -113,6 +113,7 @@ export default function MauSac() {
                 .catch((error) => {
                     console.error(`Lỗi khi gửi yêu cầu ${method}:`, error);
                 });
+            clearForm();
         }
     };
 
@@ -140,10 +141,6 @@ export default function MauSac() {
             });
     };
 
-    // Calculate startIndex and endIndex
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
     return (
         <div className='px-3'>
             <h1 className="text-center mt-3">Quản Lý Màu Sắc</h1>
@@ -166,7 +163,7 @@ export default function MauSac() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {listMauSac.slice(startIndex, endIndex).map((mauSac, index) => (
+                                {listMauSac.map((mauSac, index) => (
                                     <TableRow key={mauSac.id}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{mauSac.ten}</TableCell>
