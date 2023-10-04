@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.Instant;
+import java.sql.Date;
 import java.util.UUID;
 
 @Getter
@@ -27,8 +27,8 @@ public class SanPham {
     @Column(name = "ten", nullable = false)
     private String ten;
 
-    @Column(name = "ngay_tao", columnDefinition = "DATETIME DEFAULT GETDATE()")
-    private Instant ngayTao;
+    @Column(name = "ngay_tao")
+    private Date ngayTao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_loai", nullable = false)

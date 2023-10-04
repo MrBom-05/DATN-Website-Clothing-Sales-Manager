@@ -11,12 +11,15 @@ import {
     TableCell,
     TableBody,
     Alert,
-    AlertTitle,
+    AlertTitle, FormControl, InputLabel, Select, FormHelperText,
 } from '@mui/material';
+import MenuItem from "@mui/material/MenuItem";
 
 export default function SanPham() {
     const api = "http://localhost:8080/api/admin/san-pham";
+    const apiLoai = "http://localhost:8080/api/admin/loai";
     const [listSanPham, setListSanPham] = useState([]);
+    const [listLoai, setListLoai] = useState([]);
     const [sanPham, setSanPham] = useState({
         id: '',
         ten: '',
@@ -24,9 +27,6 @@ export default function SanPham() {
     });
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState(''); // Thêm state mới cho thông báo thành công
-    // Add pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
     useEffect(() => {
         fetch(api)
@@ -34,6 +34,22 @@ export default function SanPham() {
             .then((data) => {
                 if (Array.isArray(data)) {
                     setListSanPham(data);
+                } else {
+                    console.error('Data from API is not an array:', data);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
+    }, []);
+
+    useEffect(() => {
+        fetch(apiLoai)
+            .then((res) => res.json())
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    setListLoai(data);
                 } else {
                     console.error('Data from API is not an array:', data);
                 }
@@ -56,10 +72,8 @@ export default function SanPham() {
         }
 
         setErrors(newErrors);
-
         // Kiểm tra xem có lỗi nào không
         const hasErrors = Object.keys(newErrors).length > 0;
-
         // Trả về true nếu không có lỗi và ngược lại
         return !hasErrors;
     };
@@ -72,6 +86,14 @@ export default function SanPham() {
         const {name, value} = e.target;
         setSanPham({...sanPham, [name]: value});
     };
+
+    const clearForm = () => {
+        setSanPham({
+            id: '',
+            ten: '',
+            idLoai: ''
+        });
+    }
 
     const handleAddSanPham = () => {
         if (!validateForm()) {
@@ -94,13 +116,7 @@ export default function SanPham() {
                         .then((res) => res.json())
                         .then((data) => {
                             if (Array.isArray(data)) {
-                                listSanPham(data);
-                                document.querySelector('#exampleModal .btn-close').click();
-                                setSanPham({
-                                    id: '',
-                                    ten: '',
-                                    idLoai: ''
-                                });
+                                setListSanPham(data);
                                 showSuccessMessage(`Đã ${sanPham.id ? 'cập nhật' : 'thêm'} thành công!`); // Hiển thị thông báo thành công
                             } else {
                                 console.error('Data from API is not an array:', data);
@@ -113,6 +129,7 @@ export default function SanPham() {
                 .catch((error) => {
                     console.error(`Lỗi khi gửi yêu cầu ${method}:`, error);
                 });
+            clearForm();
         }
     };
 
@@ -140,9 +157,13 @@ export default function SanPham() {
             });
     };
 
-    // Calculate startIndex and endIndex
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const handleLoaiChange = (event) => {
+        const selectedLoaiId = event.target.value;
+        setSanPham({
+            ...sanPham,
+            idLoai: selectedLoaiId
+        });
+    };
 
     return (
         <div className='px-3'>
@@ -167,7 +188,7 @@ export default function SanPham() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {listSanPham.slice(startIndex, endIndex).map((sanPham, index) => (
+                                {listSanPham.map((sanPham, index) => (
                                     <TableRow key={sanPham.id}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{sanPham.ten}</TableCell>
@@ -202,7 +223,7 @@ export default function SanPham() {
                                 value={sanPham.ten}
                                 onChange={handleInputChange}
                                 fullWidth
-                                label="Tên Màu Sắc"
+                                label="Tên Sản Phẩm"
                                 InputLabelProps={{
                                     shrink: true,
                                     style: {position: 'top'} // Hiển thị label phía trên
@@ -212,21 +233,30 @@ export default function SanPham() {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField
-                                type="text"
-                                name="maMauSac"
-                                required
-                                value={sanPham.idLoai}
-                                onChange={handleInputChange}
-                                fullWidth
-                                label="Mã Màu Sắc"
-                                InputLabelProps={{
-                                    shrink: true,
-                                    style: {position: 'top'} // Hiển thị label phía trên
-                                }}
-                                error={!!errors.maMauSac}
-                                helperText={errors.maMauSac}
-                            />
+                            <FormControl fullWidth error={!!errors.idLoai}>
+                                <InputLabel id="demo-simple-select-label">Loại</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Loại"
+                                    value={sanPham.idLoai}
+                                    onChange={handleLoaiChange}
+                                    required // Yêu cầu người dùng chọn một mục
+                                >
+                                    {listLoai.length === 0 ? (
+                                        <MenuItem disabled>
+                                            Không có loại nào
+                                        </MenuItem>
+                                    ) : (
+                                        listLoai.map((loai) => (
+                                            <MenuItem value={loai.id} key={loai.id}>
+                                                {loai.ten}
+                                            </MenuItem>
+                                        ))
+                                    )}
+                                </Select>
+                                <FormHelperText>{errors.idLoai}</FormHelperText>
+                            </FormControl>
                         </Grid>
                     </Grid>
                     <Button variant="contained" color="success" onClick={handleAddSanPham}

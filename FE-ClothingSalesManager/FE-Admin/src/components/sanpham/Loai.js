@@ -24,8 +24,6 @@ export default function Loai() {
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState(''); // Thêm state mới cho thông báo thành công
     // Add pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
     useEffect(() => {
         fetch(api)
@@ -68,6 +66,14 @@ export default function Loai() {
         setLoai({...loai, [name]: value});
     };
 
+    const clearForm = () => {
+        setLoai({
+            id: '',
+            ten: ''
+        });
+        setErrors({});
+    }
+
     const handleAddLoai = () => {
         if (!validateForm()) {
             return;
@@ -90,11 +96,6 @@ export default function Loai() {
                         .then((data) => {
                             if (Array.isArray(data)) {
                                 setListLoai(data);
-                                document.querySelector('#exampleModal .btn-close').click();
-                                setLoai({
-                                    id: '',
-                                    ten: ''
-                                });
                                 showSuccessMessage(`Đã ${loai.id ? 'cập nhật' : 'thêm'} thành công!`); // Hiển thị thông báo thành công
                             } else {
                                 console.error('Data from API is not an array:', data);
@@ -107,6 +108,7 @@ export default function Loai() {
                 .catch((error) => {
                     console.error(`Lỗi khi gửi yêu cầu ${method}:`, error);
                 });
+            clearForm();
         }
     };
 
@@ -134,10 +136,6 @@ export default function Loai() {
             });
     };
 
-    // Calculate startIndex and endIndex
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
     return (
         <div className='px-3'>
             <h1 className="text-center mt-3">Quản Lý Loại</h1>
@@ -159,7 +157,7 @@ export default function Loai() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {listLoai.slice(startIndex, endIndex).map((loai, index) => (
+                                {listLoai.map((loai, index) => (
                                     <TableRow key={loai.id}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{loai.ten}</TableCell>

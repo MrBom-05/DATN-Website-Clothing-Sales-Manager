@@ -24,6 +24,10 @@ public class SanPhamService {
         SanPham sanPham = new SanPham();
         sanPham.setTen(sanPhamRequest.getTen());
 
+        long millis = System.currentTimeMillis();
+        java.sql.Date date = new java.sql.Date(millis);
+        sanPham.setNgayTao(date);
+
         Loai loai = new Loai();
         loai.setId(sanPhamRequest.getIdLoai());
 
