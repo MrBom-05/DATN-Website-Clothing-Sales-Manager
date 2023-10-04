@@ -27,7 +27,7 @@ public class SanPham {
     @Column(name = "ten", nullable = false)
     private String ten;
 
-    @Column(name = "ngay_tao")
+    @Column(name = "ngay_tao", columnDefinition = "DATETIME DEFAULT GETDATE()")
     private Instant ngayTao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
