@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Grid,
     TextField,
@@ -13,7 +13,7 @@ import {
     Alert,
     AlertTitle,
 } from '@mui/material';
-import {Pagination, PaginationItem} from '@mui/lab';
+import { Pagination, PaginationItem } from '@mui/lab';
 
 export default function KhachHang() {
     const [listKhachHang, setListKhachHang] = useState([]);
@@ -26,6 +26,7 @@ export default function KhachHang() {
         xaPhuong: '',
         quanHuyen: '',
         tinhThanhPho: '',
+        matKhau: '',
     });
     const [isUpdating, setIsUpdating] = useState(false);
     const [errors, setErrors] = useState({});
@@ -90,8 +91,8 @@ export default function KhachHang() {
     };
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setKhachHang({...khachHang, [name]: value});
+        const { name, value } = e.target;
+        setKhachHang({ ...khachHang, [name]: value });
     };
 
     const handleAddKhachHang = () => {
@@ -126,6 +127,7 @@ export default function KhachHang() {
                                     xaPhuong: '',
                                     quanHuyen: '',
                                     tinhThanhPho: '',
+                                    matKhau: '',
                                 });
                                 showSuccessMessage(`Đã ${khachHang.id ? 'cập nhật' : 'thêm'} thành công!`); // Hiển thị thông báo thành công
                             } else {
@@ -204,6 +206,7 @@ export default function KhachHang() {
                 xaPhuong: '',
                 quanHuyen: '',
                 tinhThanhPho: '',
+                matKhau: '',
             });
 
             setIsUpdating(false);
@@ -288,7 +291,7 @@ export default function KhachHang() {
                 </Table>
             </TableContainer>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
+                aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -296,7 +299,7 @@ export default function KhachHang() {
                                 {isUpdating ? 'Cập Nhật Khách Hàng' : 'Thêm Khách Hàng'}
                             </h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                                    onClick={handleModalClose}></button>
+                                onClick={handleModalClose}></button>
                         </div>
                         <div className="modal-body text-center">
                             <Grid container spacing={2}>
@@ -391,10 +394,25 @@ export default function KhachHang() {
                                         helperText={errors.tinhThanhPho}
                                     />
                                 </Grid>
-
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        type="password"
+                                        name="matKhau"
+                                        label="Mật khẩu"
+                                        value={khachHang.matKhau}
+                                        onChange={(e) => {
+                                            // Kiểm tra nếu đang cập nhật thì không cho phép thay đổi mật khẩu
+                                            if (!isUpdating) {
+                                                handleInputChange(e);
+                                            }
+                                        }}
+                                        fullWidth
+                                        disabled={isUpdating} // Vô hiệu hóa input khi isUpdating là true
+                                    />
+                                </Grid>
                             </Grid>
                             <Button variant="contained" color="success" onClick={handleAddKhachHang}
-                                    className="mt-3 text-center">
+                                className="mt-3 text-center">
                                 Save
                             </Button>
                         </div>

@@ -66,8 +66,8 @@ export default function Voucher() {
             const today = new Date();
             const startDate = new Date(giamGia.ngayBatDau);
             // So sánh ngày và tháng của ngày bắt đầu và ngày hiện tại
-            if (startDate.getUTCDate() !== today.getUTCDate() || startDate.getUTCMonth() !== today.getUTCMonth()) {
-                newErrors.ngayBatDau = 'Ngày bắt đầu phải là ngày hiện tại hoặc sau ngày hiện tại';
+            if (startDate.getDate() < today.getDate() && startDate.getMonth() <= today.getMonth()) {
+                newErrors.ngayBatDau = 'Ngày bắt đầu phải sau ngày hiện tại';
             }
         }
         if (!giamGia.ngayKetThuc) {
