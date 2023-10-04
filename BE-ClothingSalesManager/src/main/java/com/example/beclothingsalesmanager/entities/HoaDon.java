@@ -25,7 +25,7 @@ public class HoaDon {
     @Column(name = "ma", nullable = false, length = 50)
     private String ma;
 
-    @Column(name = "ngay_tao")
+    @Column(name = "ngay_tao", columnDefinition = "DATETIME DEFAULT GETDATE()")
     private Instant ngayTao;
 
     @Column(name = "ngay_thanh_toan")

@@ -11,6 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
-    @Query("select new com.example.beclothingsalesmanager.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao) from SanPham sp")
+    @Query("select new com.example.beclothingsalesmanager.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public List<SanPhamResponse> getAll();
 }

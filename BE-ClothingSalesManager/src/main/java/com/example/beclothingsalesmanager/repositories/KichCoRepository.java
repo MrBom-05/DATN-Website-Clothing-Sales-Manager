@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface KichCoRepository extends JpaRepository<KichCo, Integer> {
-    @Query("SELECT new com.example.beclothingsalesmanager.infrastructures.responses.KichCoResponse(k.id, k.ten) FROM KichCo k")
+    @Query("SELECT new com.example.beclothingsalesmanager.infrastructures.responses.KichCoResponse(k.id, k.ten) FROM KichCo k ORDER BY k.ten")
     public List<KichCoResponse> getAll();
 }

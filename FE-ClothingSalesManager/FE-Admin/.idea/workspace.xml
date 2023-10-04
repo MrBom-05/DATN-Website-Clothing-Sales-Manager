@@ -5,11 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6035aad6-2ae3-491a-9746-29e45ec9f3b8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/controllers/admins/NhanVienController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/controllers/admins/NhanVienController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/entities/NhanVien.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/entities/NhanVien.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/entities/SanPham.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/entities/SanPham.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/infrastructures/responses/NhanVienResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/infrastructures/responses/NhanVienResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/infrastructures/responses/SanPhamResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/infrastructures/responses/SanPhamResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/services/NhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/services/NhanVienService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/services/SanPhamService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../BE-ClothingSalesManager/src/main/java/com/example/beclothingsalesmanager/services/SanPhamService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../DB-Clothing-Sales-Manager.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../DB-Clothing-Sales-Manager.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/khachhang/KhachHang.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/khachhang/KhachHang.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/nhanvien/NhanVien.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/nhanvien/NhanVien.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/voucher/Voucher.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/voucher/Voucher.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sanpham/KichCo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sanpham/KichCo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sanpham/Loai.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sanpham/Loai.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sanpham/MauSac.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sanpham/MauSac.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sanpham/SanPham.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sanpham/SanPham.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

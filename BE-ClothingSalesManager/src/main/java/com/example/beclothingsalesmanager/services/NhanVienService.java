@@ -7,6 +7,8 @@ import com.example.beclothingsalesmanager.repositories.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +34,10 @@ public class NhanVienService {
         nhanVien.setTinhThanhPho(nhanVienRequest.getTinhThanhPho());
         nhanVien.setChucVu(nhanVienRequest.getChucVu());
         nhanVien.setTrangThai(nhanVienRequest.getTrangThai());
+
+        long millis = System.currentTimeMillis();
+        java.sql.Date date = new java.sql.Date(millis);
+        nhanVien.setNgayVaoLam(date);
 
         nhanVienRepository.save(nhanVien);
 

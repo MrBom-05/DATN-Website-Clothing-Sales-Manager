@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.sql.Date;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class NhanVien {
     private String tinhThanhPho;
 
     @Column(name = "ngay_vao_lam")
-    private Instant ngayVaoLam;
+    private Date ngayVaoLam;
 
     @Column(name = "trang_thai")
     private Integer trangThai;

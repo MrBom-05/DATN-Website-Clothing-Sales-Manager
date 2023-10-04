@@ -132,7 +132,7 @@ export default function Voucher() {
                             }
                         })
                         .catch((error) => {
-                            console.error(`Lỗi khi lấy danh sách Voucher sau khi ${giamGia.id ? 'cập nhật' : 'thêm'}:`, error);
+                            console.error(`Lỗi khi lấy danh sách sau khi ${giamGia.id ? 'cập nhật' : 'thêm'}:`, error);
                         });
                 })
                 .catch((error) => {
@@ -157,7 +157,7 @@ export default function Voucher() {
                         }
                     })
                     .catch((error) => {
-                        console.error('Lỗi khi lấy danh sách nhân viên sau khi xoá:', error);
+                        console.error('Lỗi khi lấy danh sách sau khi xoá:', error);
                     });
             })
             .catch((error) => {

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.sql.Date;
 import java.util.UUID;
 
 @Getter
@@ -22,7 +22,7 @@ public class NhanVienResponse {
     private String xaPhuong;
     private String quanHuyen;
     private String tinhThanhPho;
-    private Instant ngayVaoLam;
+    private Date ngayVaoLam;
     private Integer chucVu;
     private Integer trangThai;
 
