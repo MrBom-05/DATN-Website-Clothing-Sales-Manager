@@ -1,18 +1,16 @@
 package com.example.beclothingsalesmanager.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "giam_gia")
 public class GiamGia {
@@ -35,5 +33,8 @@ public class GiamGia {
 
     @Column(name = "ngay_ket_thuc")
     private LocalDate ngayKetThuc;
+
+    @OneToMany(mappedBy = "idGiamGia")
+    private Set<HoaDon> hoaDons = new LinkedHashSet<>();
 
 }

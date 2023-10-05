@@ -1,17 +1,15 @@
 package com.example.beclothingsalesmanager.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "gio_hang")
 public class GioHang {
@@ -27,5 +25,8 @@ public class GioHang {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_nhan_vien")
     private NhanVien idNhanVien;
+
+    @OneToMany(mappedBy = "idGioHang")
+    private Set<GioHangChiTiet> gioHangChiTiets = new LinkedHashSet<>();
 
 }

@@ -1,15 +1,10 @@
 package com.example.beclothingsalesmanager.services;
 
 import com.example.beclothingsalesmanager.entities.KhachHang;
-import com.example.beclothingsalesmanager.entities.NhanVien;
 import com.example.beclothingsalesmanager.infrastructures.requests.KhachHangRequest;
-import com.example.beclothingsalesmanager.infrastructures.requests.NhanVienRequest;
 import com.example.beclothingsalesmanager.infrastructures.responses.KhachHangResponse;
 import com.example.beclothingsalesmanager.repositories.KhachHangRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

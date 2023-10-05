@@ -6,7 +6,9 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.sql.Date;
-import java.time.Instant;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -62,5 +64,14 @@ public class NhanVien {
 
     @Column(name = "chuc_vu")
     private Integer chucVu;
+
+    @OneToMany(mappedBy = "idNhanVien")
+    private Set<DoiTra> doiTras = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idNhanVien")
+    private Set<GioHang> gioHangs = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idNhanVien")
+    private Set<HoaDon> hoaDons = new LinkedHashSet<>();
 
 }

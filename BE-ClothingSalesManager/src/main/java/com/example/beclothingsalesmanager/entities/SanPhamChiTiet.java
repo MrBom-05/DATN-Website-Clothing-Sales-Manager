@@ -1,19 +1,17 @@
 package com.example.beclothingsalesmanager.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "san_pham_chi_tiet")
 public class SanPhamChiTiet {
@@ -50,5 +48,17 @@ public class SanPhamChiTiet {
 
     @Column(name = "trang_thai")
     private Integer trangThai;
+
+    @OneToMany(mappedBy = "idSanPhamChiTiet")
+    private Set<AnhSanPham> anhSanPhams = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idSanPhamChiTiet")
+    private Set<GioHangChiTiet> gioHangChiTiets = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idSanPhamChiTiet")
+    private Set<HoaDonChiTiet> hoaDonChiTiets = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idSanPhamChiTiet")
+    private Set<KhuyenMaiChiTiet> khuyenMaiChiTiets = new LinkedHashSet<>();
 
 }

@@ -1,18 +1,16 @@
 package com.example.beclothingsalesmanager.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "khach_hang")
 public class KhachHang {
@@ -52,5 +50,14 @@ public class KhachHang {
     @Nationalized
     @Column(name = "tinh_thanh_pho", length = 80)
     private String tinhThanhPho;
+
+    @OneToMany(mappedBy = "idKhachHang")
+    private Set<DoiTra> doiTras = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idKhachHang")
+    private Set<GioHang> gioHangs = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idKhachHang")
+    private Set<HoaDon> hoaDons = new LinkedHashSet<>();
 
 }
