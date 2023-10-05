@@ -1,14 +1,10 @@
 package com.example.beclothingsalesmanager.services;
 
 import com.example.beclothingsalesmanager.entities.GiamGia;
-import com.example.beclothingsalesmanager.entities.NhanVien;
 import com.example.beclothingsalesmanager.infrastructures.requests.GiamGiaRequest;
 import com.example.beclothingsalesmanager.infrastructures.responses.GiamGiaResponse;
 import com.example.beclothingsalesmanager.repositories.GiamGiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

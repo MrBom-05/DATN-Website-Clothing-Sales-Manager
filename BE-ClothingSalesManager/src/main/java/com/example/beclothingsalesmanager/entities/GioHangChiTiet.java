@@ -1,9 +1,7 @@
 package com.example.beclothingsalesmanager.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -11,8 +9,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "gio_hang_chi_tiet")
 public class GioHangChiTiet {

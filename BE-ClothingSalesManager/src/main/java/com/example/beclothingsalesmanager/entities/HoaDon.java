@@ -1,19 +1,17 @@
 package com.example.beclothingsalesmanager.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "hoa_don")
 public class HoaDon {
@@ -25,7 +23,7 @@ public class HoaDon {
     @Column(name = "ma", nullable = false, length = 50)
     private String ma;
 
-    @Column(name = "ngay_tao", columnDefinition = "DATETIME DEFAULT GETDATE()")
+    @Column(name = "ngay_tao")
     private Instant ngayTao;
 
     @Column(name = "ngay_thanh_toan")
@@ -86,5 +84,11 @@ public class HoaDon {
 
     @Column(name = "trang_thai")
     private Integer trangThai;
+
+    @OneToMany(mappedBy = "idHoaDon")
+    private Set<DoiTra> doiTras = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idHoaDon")
+    private Set<HoaDonChiTiet> hoaDonChiTiets = new LinkedHashSet<>();
 
 }
