@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
     Button,
     Select,
-    TextField,
-    Grid,
     Table,
     TableContainer,
     TableHead,
@@ -12,19 +10,11 @@ import {
     TableBody,
     Paper,
     Alert,
-    FormControl,
-    InputLabel,
-    FormHelperText,
-    MenuItem,
     AlertTitle,
 } from '@mui/material';
 import { Pagination, PaginationItem } from '@mui/lab';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-
 
 export default function ChiTietSanPham() {
     const api = 'http://localhost:8080/api/admin/san-pham-chi-tiet';
@@ -133,35 +123,9 @@ export default function ChiTietSanPham() {
 
     const validateForm = () => {
         const newErrors = {};
-        const isEmpty = (value) => value == undefined || value == null || value == '';
-        if (isEmpty(chiTietSanPham.maSanPham)) {
-            newErrors.maSanPham = 'Không được để trống';
+        if (!chiTietSanPham.maSanPham.trim()) {
+            newErrors.maSanPham = 'Mã sản phẩm là bắt buộc';
         }
-        if (isEmpty(chiTietSanPham.idSanPham)) {
-            newErrors.idSanPham = 'Không được để trống';
-        }
-        if (isEmpty(chiTietSanPham.idKichCo)) {
-            newErrors.idKichCo = 'Không được để trống';
-        }
-        if (isEmpty(chiTietSanPham.idMauSac)) {
-            newErrors.idMauSac = 'Không được để trống';
-        }
-        if (isEmpty(chiTietSanPham.gia)) {
-            newErrors.gia = 'Không được để trống';
-        }
-        if (isEmpty(chiTietSanPham.soLuong)) {
-            newErrors.soLuong = 'Không được để trống';
-        }
-        if (isEmpty(chiTietSanPham.moTa)) {
-            newErrors.moTa = 'Không được để trống';
-        }
-        if (isEmpty(chiTietSanPham.trangThai)) {
-            newErrors.trangThai = 'Không được để trống';
-        }
-
-
-        // Add validation rules for other fields here...
-
         setErrors(newErrors);
 
         const hasErrors = Object.keys(newErrors).length > 0;
@@ -286,14 +250,10 @@ export default function ChiTietSanPham() {
             duongDan: selectedChiTietSanPham.duongDan,
         });
 
-        // open modal
         const modal = document.getElementById('exampleModal');
         if (modal) {
             modal.style.display = 'block';
         }
-
-        setIsUpdating(true);
-        setIsAdd(false);
     };
 
     const handleModalClose = () => {
@@ -378,8 +338,8 @@ export default function ChiTietSanPham() {
                         style={{ width: '100%', height: '30px', padding: '4px', marginLeft: '10px' }}
                     >
                         <option value="">Tất cả</option>
-                        <option value="0">Đang bán</option>
-                        <option value="1">Ngừng bán</option>
+                        <option value="0">Hoạt động</option>
+                        <option value="1">Ngừng hoạt động</option>
                     </Select>
                 </div>
             </div>
@@ -418,16 +378,15 @@ export default function ChiTietSanPham() {
                                 <TableCell>{item.soLuong}</TableCell>
                                 <TableCell>{item.moTa}</TableCell>
                                 <TableCell>
-                                    {item.trangThai === 1 ? 'Ngừng Bán' : 'Đang bán'}
-                                    
+                                    {item.trangThai === 1 ? 'Ngừng hoạt động' : 'Hoạt động'}
                                 </TableCell>
                                 <TableCell>
                                     <Button
                                         variant="contained"
                                         color="primary"
+                                        onClick={() => handleUpdateChiTietSanPham(index)}
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
-                                        onClick={() => handleUpdateChiTietSanPham(index)}
                                     >
                                         Sửa
                                     </Button>
@@ -460,214 +419,201 @@ export default function ChiTietSanPham() {
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5 justify-content-center" id="exampleModalLabel">
+                            <h1 className="modal-title fs-5 text-center" id="exampleModalLabel">
                                 {isUpdating ? 'Cập Nhật Chi Tiết Sản Phẩm' : 'Thêm Chi Tiết Sản Phẩm'}
                             </h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleModalClose}></button>
                         </div>
                         <div className="modal-body text-center">
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        type="text"
-                                        name="maSanPham"
-                                        label="Mã Sản Phẩm"
-                                        required
-                                        value={chiTietSanPham.maSanPham}
-                                        onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, maSanPham: e.target.value })}
-                                        fullWidth
-                                        error={!!errors.maSanPham}
-                                        helperText={errors.maSanPham}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth error={!!errors.idSanPham}>
-                                        <InputLabel id="demo-simple-select-label">Sản Phẩm</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Sản Phẩm"
-                                            value={chiTietSanPham.idSanPham}
-                                            onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, idSanPham: e.target.value })}
-                                            required // Yêu cầu người dùng chọn một mục
-                                        >
-                                            {listSanPham.length === 0 ? (
-                                                <MenuItem disabled>
-                                                    Không có loại nào
-                                                </MenuItem>
-                                            ) : (
-                                                listSanPham.map((loai) => (
-                                                    <MenuItem value={loai.id} key={loai.id}>
-                                                        {loai.ten}
-                                                    </MenuItem>
-                                                ))
-                                            )}
-                                        </Select>
-                                        <FormHelperText>{errors.idSanPham}</FormHelperText>
-                                    </FormControl>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth error={!!errors.idKichCo}>
-                                        <InputLabel id="demo-simple-select-label">Kích Cỡ</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Kích Cỡ"
-                                            value={chiTietSanPham.idKichCo}
-                                            onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, idKichCo: e.target.value })}
-                                            required // Yêu cầu người dùng chọn một mục
-                                        >
-                                            {listKichCo.length === 0 ? (
-                                                <MenuItem disabled>
-                                                    Không có loại nào
-                                                </MenuItem>
-                                            ) : (
-                                                listKichCo.map((loai) => (
-                                                    <MenuItem value={loai.id} key={loai.id}>
-                                                        {loai.ten}
-                                                    </MenuItem>
-                                                ))
-                                            )}
-                                        </Select>
-                                        <FormHelperText>{errors.idKichCo}</FormHelperText>
-                                    </FormControl>
+                            <div className="container">
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <input
+                                                type="text"
+                                                className={`form-control ${errors.maSanPham ? 'is-invalid' : ''}`}
+                                                name="maSanPham"
+                                                placeholder="Mã Sản Phẩm"
+                                                required
+                                                value={chiTietSanPham.maSanPham}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, maSanPham: e.target.value })}
+                                            />
+                                            {errors.maSanPham && <div className="invalid-feedback">{errors.maSanPham}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <select
+                                                className={`form-select ${errors.idSanPham ? 'is-invalid' : ''}`}
+                                                name="idSanPham"
+                                                value={chiTietSanPham.idSanPham}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, idSanPham: e.target.value })}
+                                                required
+                                            >
+                                                <option value="" disabled hidden>Chọn sản phẩm</option>
+                                                {listSanPham.length === 0 ? (
+                                                    <option value="" disabled>Không có sản phẩm nào</option>
+                                                ) : (
+                                                    listSanPham.map((loai) => (
+                                                        <option value={loai.id} key={loai.id}>
+                                                            {loai.ten}
+                                                        </option>
+                                                    ))
+                                                )}
+                                            </select>
+                                            {errors.idSanPham && <div className="invalid-feedback">{errors.idSanPham}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <select
+                                                className={`form-select ${errors.idKichCo ? 'is-invalid' : ''}`}
+                                                name="idKichCo"
+                                                value={chiTietSanPham.idKichCo}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, idKichCo: e.target.value })}
+                                                required
+                                            >
+                                                <option value="" disabled hidden>Chọn kích cỡ</option>
+                                                {listKichCo.length === 0 ? (
+                                                    <option value="" disabled>Không có kích cỡ nào</option>
+                                                ) : (
+                                                    listKichCo.map((loai) => (
+                                                        <option value={loai.id} key={loai.id}>
+                                                            {loai.ten}
+                                                        </option>
+                                                    ))
+                                                )}
+                                            </select>
+                                            {errors.idKichCo && <div className="invalid-feedback">{errors.idKichCo}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <select
+                                                className={`form-select ${errors.idMauSac ? 'is-invalid' : ''}`}
+                                                name="idMauSac"
+                                                value={chiTietSanPham.idMauSac}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, idMauSac: e.target.value })}
+                                                required
+                                            >
+                                                <option value="" disabled hidden>Chọn màu sắc</option>
+                                                {listMauSac.length === 0 ? (
+                                                    <option value="" disabled>Không có màu sắc nào</option>
+                                                ) : (
+                                                    listMauSac.map((loai) => (
+                                                        <option value={loai.id} key={loai.id}>
+                                                            {loai.ten}
+                                                        </option>
+                                                    ))
+                                                )}
+                                            </select>
+                                            {errors.idMauSac && <div className="invalid-feedback">{errors.idMauSac}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <input
+                                                type="number"
+                                                className={`form-control ${errors.gia ? 'is-invalid' : ''}`}
+                                                name="gia"
+                                                placeholder="Giá"
+                                                required
+                                                value={chiTietSanPham.gia}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, gia: e.target.value })}
+                                            />
+                                            {errors.gia && <div className="invalid-feedback">{errors.gia}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <input
+                                                type="number"
+                                                className={`form-control ${errors.soLuong ? 'is-invalid' : ''}`}
+                                                name="soLuong"
+                                                placeholder="Số Lượng"
+                                                required
+                                                value={chiTietSanPham.soLuong}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, soLuong: e.target.value })}
+                                            />
+                                            {errors.soLuong && <div className="invalid-feedback">{errors.soLuong}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <div className="mb-3">
+                                            <input
+                                                type="text"
+                                                className={`form-control ${errors.moTa ? 'is-invalid' : ''}`}
+                                                name="moTa"
+                                                placeholder="Mô Tả"
+                                                required
+                                                value={chiTietSanPham.moTa}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, moTa: e.target.value })}
+                                            />
+                                            {errors.moTa && <div className="invalid-feedback">{errors.moTa}</div>}
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="mb-3">
+                                            <select
+                                                className="form-select"
+                                                name="trangThai"
+                                                value={chiTietSanPham.trangThai}
+                                                onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, trangThai: e.target.value })}
+                                            >
+                                                {isAdd ? (
+                                                    <>
+                                                        <option value="0">Đang bán</option>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <option value="0">Đang bán</option>
+                                                        <option value="1">Ngừng bán</option>
+                                                    </>
+                                                )}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            style={{ display: 'none' }}
+                                            id="image-upload-input"
+                                            onChange={(e) => {
+                                                // Kiểm tra nếu đang cập nhật thì không cho phép thay đổi mật khẩu
+                                                if (!isUpdating) {
+                                                    handleFileChange(e);
+                                                }
+                                            }}
+                                            fullWidth
+                                            disabled={isUpdating} // Vô hiệu hóa input khi isUpdating là true
+                                        />
+                                        <label htmlFor="image-upload-input">
+                                            <Button
+                                                variant="contained"
+                                                component="span"
+                                                color="primary"
+                                                startIcon={<CloudUploadIcon />}
+                                            >
+                                                Tải lên ảnh
+                                            </Button>
 
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth error={!!errors.idMauSac}>
-                                        <InputLabel id="demo-simple-select-label">Màu Sắc</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Màu Sắc"
-                                            value={chiTietSanPham.idMauSac}
-                                            onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, idMauSac: e.target.value })}
-                                            required // Yêu cầu người dùng chọn một mục
-                                        >
-                                            {listMauSac.length === 0 ? (
-                                                <MenuItem disabled>
-                                                    Không có loại nào
-                                                </MenuItem>
-                                            ) : (
-                                                listMauSac.map((loai) => (
-                                                    <MenuItem value={loai.id} key={loai.id}>
-                                                        {loai.ten}
-                                                    </MenuItem>
-                                                ))
-                                            )}
-                                        </Select>
-                                        <FormHelperText>{errors.idMauSac}</FormHelperText>
-                                    </FormControl>
-
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        type="number"
-                                        name="gia"
-                                        label="Giá"
-                                        required
-                                        value={chiTietSanPham.gia}
-                                        onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, gia: e.target.value })}
-                                        fullWidth
-                                        error={!!errors.gia}
-                                        helperText={errors.gia}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        type="number"
-                                        name="soLuong"
-                                        label="Số Lượng"
-                                        required
-                                        value={chiTietSanPham.soLuong}
-                                        onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, soLuong: e.target.value })}
-                                        fullWidth
-                                        error={!!errors.soLuong}
-                                        helperText={errors.soLuong}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        type="text"
-                                        name="moTa"
-                                        label="Mô Tả"
-                                        required
-                                        value={chiTietSanPham.moTa}
-                                        onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, moTa: e.target.value })}
-                                        fullWidth
-                                        error={!!errors.moTa}
-                                        helperText={errors.moTa}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Select
-                                        native
-                                        value={chiTietSanPham.trangThai}
-                                        onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, trangThai: e.target.value })}
-                                        inputProps={{
-                                            name: 'trangThai',
-                                            id: 'trangThai',
-                                        }}
-                                        fullWidth
-                                    >
-                                        {isAdd ? (
-                                            <>
-                                                <option value="0">Đang bán</option>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <option value="0">Đang bán</option>
-                                                <option value="1">Ngừng bán</option>
-                                            </>
-                                        )}
-                                    </Select>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        multiple
-                                        style={{ display: 'none' }}
-                                        id="image-upload-input"
-                                        onChange={(e) => {
-                                            // Kiểm tra nếu đang cập nhật thì không cho phép thay đổi mật khẩu
-                                            if (!isUpdating) {
-                                                handleFileChange(e);
-                                            }
-                                        }}
-                                        fullWidth
-                                        disabled={isUpdating} // Vô hiệu hóa input khi isUpdating là true
-                                    />
-                                    <label htmlFor="image-upload-input">
-                                        <Button
-                                            variant="contained"
-                                            component="span"
-                                            color="primary"
-                                            startIcon={<CloudUploadIcon />}
-                                        >
-                                            Tải lên ảnh
-                                        </Button>
-                                        
-                                    </label>
-                                    {/* Hiển thị các URL đã chọn */}
-                                    {/* <div>
-                                        {productImages.length > 0 ? (
-                                            productImages.map((url, index) => (
-                                                <img key={index} src={url} alt={`Image ${index}`} width={100} />
-                                            ))
-                                        ) : (
-                                            <p>Không có ảnh nào được chọn.</p>
-                                        )}
-                                    </div> */}
-                                </Grid>
-
-                            </Grid>
-                            <Button variant="contained" color="success" onClick={handleAddChiTietSanPham} className="mt-3 text-center">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                className="btn btn-success mt-3"
+                                onClick={handleAddChiTietSanPham}
+                            >
                                 Lưu
-                            </Button>
+                            </button>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div className="modal fade" id="imageModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -681,25 +627,9 @@ export default function ChiTietSanPham() {
                         </div>
                         <div className="modal-body text-center">
                             <div className="row">
-                                {productImages.map((image, index) => (
-                                    <div key={index} className="col-md-6 mb-3">
-                                        <div className="position-relative">
-                                            <img src={`data:image/jpeg;base64,${image.duongDan}`} alt={image.duongDan} className="img-fluid" />
-                                            <div className="image-controls">
-                                                <IconButton
-                                                    color="secondary"
-                                                    // onClick={() => handleDeleteImage(index)}
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                                <IconButton
-                                                    color="primary"
-                                                    // onClick={() => handleEditImage(index)}
-                                                >
-                                                    <EditIcon />
-                                                </IconButton>
-                                            </div>
-                                        </div>
+                                {productImages.map((image) => (
+                                    <div key={image.id} className="col-md-6 mb-3">
+                                        <img src={`data:image/jpeg;base64,${image.duongDan}`} alt={image.duongDan} className="img-fluid" />
                                     </div>
                                 ))}
                             </div>
@@ -707,7 +637,6 @@ export default function ChiTietSanPham() {
                     </div>
                 </div>
             </div>
-
             <Pagination
                 count={Math.ceil(listChiTietSanPham.length / itemsPerPage)}
                 page={currentPage}
