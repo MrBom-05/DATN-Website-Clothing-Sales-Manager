@@ -21,6 +21,10 @@ import {
 import { Pagination, PaginationItem } from '@mui/lab';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 export default function ChiTietSanPham() {
     const api = 'http://localhost:8080/api/admin/san-pham-chi-tiet';
@@ -129,9 +133,33 @@ export default function ChiTietSanPham() {
 
     const validateForm = () => {
         const newErrors = {};
-        if (!chiTietSanPham.maSanPham.trim()) {
-            newErrors.maSanPham = 'Mã sản phẩm là bắt buộc';
+        const isEmpty = (value) => value == undefined || value == null || value == '';
+        if (isEmpty(chiTietSanPham.maSanPham)) {
+            newErrors.maSanPham = 'Không được để trống';
         }
+        if (isEmpty(chiTietSanPham.idSanPham)) {
+            newErrors.idSanPham = 'Không được để trống';
+        }
+        if (isEmpty(chiTietSanPham.idKichCo)) {
+            newErrors.idKichCo = 'Không được để trống';
+        }
+        if (isEmpty(chiTietSanPham.idMauSac)) {
+            newErrors.idMauSac = 'Không được để trống';
+        }
+        if (isEmpty(chiTietSanPham.gia)) {
+            newErrors.gia = 'Không được để trống';
+        }
+        if (isEmpty(chiTietSanPham.soLuong)) {
+            newErrors.soLuong = 'Không được để trống';
+        }
+        if (isEmpty(chiTietSanPham.moTa)) {
+            newErrors.moTa = 'Không được để trống';
+        }
+        if (isEmpty(chiTietSanPham.trangThai)) {
+            newErrors.trangThai = 'Không được để trống';
+        }
+
+
         // Add validation rules for other fields here...
 
         setErrors(newErrors);
@@ -258,10 +286,14 @@ export default function ChiTietSanPham() {
             duongDan: selectedChiTietSanPham.duongDan,
         });
 
+        // open modal
         const modal = document.getElementById('exampleModal');
         if (modal) {
             modal.style.display = 'block';
         }
+
+        setIsUpdating(true);
+        setIsAdd(false);
     };
 
     const handleModalClose = () => {
@@ -346,8 +378,8 @@ export default function ChiTietSanPham() {
                         style={{ width: '100%', height: '30px', padding: '4px', marginLeft: '10px' }}
                     >
                         <option value="">Tất cả</option>
-                        <option value="0">Hoạt động</option>
-                        <option value="1">Ngừng hoạt động</option>
+                        <option value="0">Đang bán</option>
+                        <option value="1">Ngừng bán</option>
                     </Select>
                 </div>
             </div>
@@ -386,12 +418,15 @@ export default function ChiTietSanPham() {
                                 <TableCell>{item.soLuong}</TableCell>
                                 <TableCell>{item.moTa}</TableCell>
                                 <TableCell>
-                                    {item.trangThai === 1 ? 'Ngừng hoạt động' : 'Hoạt động'}
+                                    {item.trangThai === 1 ? 'Ngừng Bán' : 'Đang bán'}
+                                    
                                 </TableCell>
                                 <TableCell>
                                     <Button
                                         variant="contained"
                                         color="primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"
                                         onClick={() => handleUpdateChiTietSanPham(index)}
                                     >
                                         Sửa
@@ -446,7 +481,7 @@ export default function ChiTietSanPham() {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <FormControl fullWidth error={!!errors.idLoai}>
+                                    <FormControl fullWidth error={!!errors.idSanPham}>
                                         <InputLabel id="demo-simple-select-label">Sản Phẩm</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
@@ -468,7 +503,7 @@ export default function ChiTietSanPham() {
                                                 ))
                                             )}
                                         </Select>
-                                        <FormHelperText>{errors.idLoai}</FormHelperText>
+                                        <FormHelperText>{errors.idSanPham}</FormHelperText>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -565,21 +600,27 @@ export default function ChiTietSanPham() {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <FormControl fullWidth error={!!errors.trangThai}>
-                                        <InputLabel id="demo-simple-select-label">Trạng Thái</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Trạng Thái"
-                                            value={chiTietSanPham.trangThai}
-                                            onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, trangThai: e.target.value })}
-                                            required // Yêu cầu người dùng chọn một mục
-                                        >
-                                            <MenuItem value={0}>Hoạt động</MenuItem>
-                                            <MenuItem value={1}>Ngừng hoạt động</MenuItem>
-                                        </Select>
-                                        <FormHelperText>{errors.trangThai}</FormHelperText>
-                                    </FormControl>
+                                    <Select
+                                        native
+                                        value={chiTietSanPham.trangThai}
+                                        onChange={(e) => setChiTietSanPham({ ...chiTietSanPham, trangThai: e.target.value })}
+                                        inputProps={{
+                                            name: 'trangThai',
+                                            id: 'trangThai',
+                                        }}
+                                        fullWidth
+                                    >
+                                        {isAdd ? (
+                                            <>
+                                                <option value="0">Đang bán</option>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <option value="0">Đang bán</option>
+                                                <option value="1">Ngừng bán</option>
+                                            </>
+                                        )}
+                                    </Select>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <input
@@ -588,7 +629,14 @@ export default function ChiTietSanPham() {
                                         multiple
                                         style={{ display: 'none' }}
                                         id="image-upload-input"
-                                        onChange={handleFileChange}
+                                        onChange={(e) => {
+                                            // Kiểm tra nếu đang cập nhật thì không cho phép thay đổi mật khẩu
+                                            if (!isUpdating) {
+                                                handleFileChange(e);
+                                            }
+                                        }}
+                                        fullWidth
+                                        disabled={isUpdating} // Vô hiệu hóa input khi isUpdating là true
                                     />
                                     <label htmlFor="image-upload-input">
                                         <Button
@@ -599,6 +647,7 @@ export default function ChiTietSanPham() {
                                         >
                                             Tải lên ảnh
                                         </Button>
+                                        
                                     </label>
                                     {/* Hiển thị các URL đã chọn */}
                                     {/* <div>
@@ -632,9 +681,25 @@ export default function ChiTietSanPham() {
                         </div>
                         <div className="modal-body text-center">
                             <div className="row">
-                                {productImages.map((image) => (
-                                    <div key={image.id} className="col-md-6 mb-3">
-                                        <img src={`data:image/jpeg;base64,${image.duongDan}`} alt={image.duongDan} className="img-fluid" />
+                                {productImages.map((image, index) => (
+                                    <div key={index} className="col-md-6 mb-3">
+                                        <div className="position-relative">
+                                            <img src={`data:image/jpeg;base64,${image.duongDan}`} alt={image.duongDan} className="img-fluid" />
+                                            <div className="image-controls">
+                                                <IconButton
+                                                    color="secondary"
+                                                    // onClick={() => handleDeleteImage(index)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                                <IconButton
+                                                    color="primary"
+                                                    // onClick={() => handleEditImage(index)}
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -642,6 +707,7 @@ export default function ChiTietSanPham() {
                     </div>
                 </div>
             </div>
+
             <Pagination
                 count={Math.ceil(listChiTietSanPham.length / itemsPerPage)}
                 page={currentPage}
