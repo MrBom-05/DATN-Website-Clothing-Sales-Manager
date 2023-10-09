@@ -5,6 +5,9 @@ import com.example.websitebanquanao.infrastructures.requests.KichCoRequest;
 import com.example.websitebanquanao.infrastructures.responses.KichCoResponse;
 import com.example.websitebanquanao.repositories.KichCoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +29,17 @@ public class KichCoService {
         System.out.println("KichCoService.add: " + kichCo.getTen());
     }
 
+    public void update(KichCoRequest kichCoRequest, Integer id){
+        KichCo kichCo = kichCoRepository.findById(id).orElse(null);
+        if (kichCo != null){
+            kichCo.setTen(kichCoRequest.getTen());
+            kichCoRepository.save(kichCo);
+            System.out.println("kichCoService.update: " + kichCo.getTen());
+        } else {
+            System.out.println("kichCoService.update: null");
+        }
+    }
+
     public void delete(Integer id) {
         KichCo kichCo = kichCoRepository.findById(id).orElse(null);
         if (kichCo != null) {
@@ -35,5 +49,18 @@ public class KichCoService {
         } else {
             System.out.println("KichCoService.delete: null");
         }
+    }
+
+    public KichCo findById(Integer id) {
+        if (kichCoRepository.findById(id).isPresent()) {
+            return kichCoRepository.findById(id).get();
+        }else {
+            return null;
+        }
+    }
+
+    public Page<KichCo> getAllWithPagination(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return kichCoRepository.findAll(pageable);
     }
 }
