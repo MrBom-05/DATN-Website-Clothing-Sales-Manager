@@ -1,12 +1,13 @@
 package com.example.websitebanquanao.services;
-
 import com.example.websitebanquanao.entities.GiamGia;
 import com.example.websitebanquanao.infrastructures.requests.GiamGiaRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.repositories.GiamGiaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,6 @@ import java.util.UUID;
 public class GiamGiaService {
     @Autowired
     private GiamGiaRepository giamGiaRepository;
-
     public List<GiamGiaResponse> getAll() {
         return giamGiaRepository.getAll();
     }
@@ -58,5 +58,16 @@ public class GiamGiaService {
         } else {
             System.out.println("GiamGiaService.delete: null");
         }
+    }
+    public GiamGia findById(UUID id) {
+        if (giamGiaRepository.findById(id).isPresent()) {
+            return giamGiaRepository.findById(id).get();
+        }else {
+            return null;
+        }
+    }
+    public Page<GiamGia> getAllWithPagination(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return giamGiaRepository.findAll(pageable);
     }
 }
