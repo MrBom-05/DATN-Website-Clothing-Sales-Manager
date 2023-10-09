@@ -39,9 +39,9 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach varStatus="index" items="${list}" var="kh">
+        <c:forEach varStatus="index" items="${khachHangPage.content}" var="kh">
             <tr>
-                <td>${index.count}</td>
+                <td>${index.index + khachHangPage.number * khachHangPage.size + 1}</td>
                 <td>${kh.hoVaTen}</td>
                 <td>${kh.email}</td>
                 <td>${kh.soDienThoai}</td>
@@ -67,7 +67,8 @@
     </table>
 
     <!-- Modal Thêm và Cập Nhật -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+         data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -80,7 +81,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="hoVaTen">Họ và tên</label>
-                                    <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control" required="true"/>
+                                    <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control"
+                                                required="true"/>
                                     <form:errors path="hoVaTen" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -89,14 +91,16 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="soDienThoai">Số điện thoại</label>
-                                    <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control" required="true"/>
+                                    <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control"
+                                                required="true"/>
                                     <form:errors path="soDienThoai" cssClass="text-danger"/>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <form:input type="email" path="email" id="email" class="form-control" required="true"/>
+                                    <form:input type="email" path="email" id="email" class="form-control"
+                                                required="true"/>
                                     <form:errors path="email" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -105,14 +109,16 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="diaChi">Địa chỉ</label>
-                                    <form:input type="text" path="diaChi" id="diaChi" class="form-control" required="true"/>
+                                    <form:input type="text" path="diaChi" id="diaChi" class="form-control"
+                                                required="true"/>
                                     <form:errors path="diaChi" cssClass="text-danger"/>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="xaPhuong">Xã/Phường</label>
-                                    <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control" required="true"/>
+                                    <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control"
+                                                required="true"/>
                                     <form:errors path="xaPhuong" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -121,7 +127,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="quanHuyen">Quận/Huyện</label>
-                                    <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control" required="true"/>
+                                    <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control"
+                                                required="true"/>
                                     <form:errors path="quanHuyen" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -138,7 +145,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="matKhau">Mật khẩu</label>
-                                    <form:input type="password" path="matKhau" id="matKhau" class="form-control" required="true"/>
+                                    <form:input type="password" path="matKhau" id="matKhau" class="form-control"
+                                                required="true"/>
                                     <form:errors path="matKhau" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -147,6 +155,26 @@
                     </form:form>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <div class="text-center">
+            <c:if test="${khachHangPage.totalPages > 1}">
+                <ul class="pagination">
+                    <li class="page-item <c:if test="${khachHangPage.number == 0}">disabled</c:if>">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <c:forEach var="i" begin="1" end="${khachHangPage.totalPages}">
+                        <li class="page-item <c:if test="${khachHangPage.number + 1 == i}">active</c:if>">
+                            <a class="page-link" href="?page=${i}">${i}</a>
+                        </li>
+                    </c:forEach>
+                    <li class="page-item <c:if test="${khachHangPage.number == khachHangPage.totalPages - 1}">disabled</c:if>">
+                        <a class="page-link" href="?page=${khachHangPage.totalPages - 1}">Last</a>
+                    </li>
+                </ul>
+            </c:if>
         </div>
     </div>
 
