@@ -1,32 +1,7 @@
-<!-- //                  _oo0oo_
-//                      o8888888o
-//                      88" . "88
-//                      (| -_- |)
-//                      0\  =  /0
-//                    ___/`---'\___
-//                  .' \\|     |// '.
-//                 / \\|||  :  |||// \
-//                / _||||| -:- |||||- \
-//               |   | \\\  -  /// |   |
-//               | \_|  ''\---/''  |_/ |
-//               \  .-\__  '-'  ___/-. /
-//             ___'. .'  /--.--\  `. .'___
-//          ."" '<  `.___\_<|>_/___.' >' "".
-//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
-//         \  \ `_.   \_ __\ /__ _/   .-` /  /
-//     =====`-.____`.___ \_____/___.-`___.-'=====
-//                       `=---='
-//
-//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//            Phật phù hộ, không bao giờ BUG
-//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Assignment_SOF3021_Java5</title>
-    <!-- Favicon-->
-    <!-- Core theme CSS (includes Bootstrap)-->
+    <title>Admin</title>
     <link href="/../views/admin/css/styles.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
 </head>
@@ -39,7 +14,7 @@
             <a class="list-group-item list-group-item-action list-group-item-light p-3"
                href="/admin/san-pham/index">Sản phẩm</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3"
-               href="/admin/ctsp/index">Chi tiết Sản phẩm</a>
+               href="/admin/san-pham-chi-tiet">Sản Phẩm Chi Tiết</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3"
                href="/admin/dong-sp/index">Dòng sản phẩm</a>
             <a class="list-group-item list-group-item-action list-group-item-light p-3"
@@ -91,34 +66,15 @@
         <div class="container-fluid">
             <h1></h1>
             <jsp:include page="${ view }"/>
-<%--            <jsp:include page="${ view_sanPham }"/>--%>
-<%--            <jsp:include page="${ view_nSX }"/>--%>
-<%--            <jsp:include page="${ view_nhanVien }"/>--%>
-<%--            <jsp:include page="${ view_mauSac }"/>--%>
-<%--            <jsp:include page="${ view_khachHang }"/>--%>
-<%--            <jsp:include page="${ view_dongSP }"/>--%>
-<%--            <jsp:include page="${ view_cuaHang }"/>--%>
-<%--            <jsp:include page="${ view_chucVu }"/>--%>
-<%--            <jsp:include page="${ view_hoaDon }"/>--%>
-
         </div>
 
     </div>
 
 </div>
-<div class="bg-success" style="min-height: 200px">
-    <div class="row">
-        <p>
-        <h1 class="text-center text-white">Footer</h1>
-
-        </p>
-    </div>
-</div>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/../js/bootstrap.min.js"></script>
 <!-- Core theme JS-->
-<script src="/../js/scripts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <script>
