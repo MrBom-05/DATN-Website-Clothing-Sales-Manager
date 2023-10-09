@@ -5,6 +5,9 @@ import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.KhachHangRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +39,8 @@ public class KhachHangService {
         System.out.println("KhachHangService.add: " + khachHang.getHoVaTen());
     }
 
+
+
     public void update(KhachHangRequest khachHangRequest, UUID id) {
         KhachHang khachHang = khachHangRepository.findById(id).orElse(null);
         if (khachHang != null) {
@@ -64,5 +69,18 @@ public class KhachHangService {
         } else {
             System.out.println("KhachHangService.delete: null");
         }
+    }
+
+    public KhachHang findById(UUID id) {
+        if (khachHangRepository.findById(id).isPresent()) {
+            return khachHangRepository.findById(id).get();
+        } else {
+            return null;
+        }
+    }
+
+    public Page<KhachHang> getAllWithPagination(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return khachHangRepository.findAll(pageable);
     }
 }

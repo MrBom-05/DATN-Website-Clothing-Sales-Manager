@@ -5,6 +5,9 @@ import com.example.websitebanquanao.infrastructures.requests.LoaiRequest;
 import com.example.websitebanquanao.infrastructures.responses.LoaiResponse;
 import com.example.websitebanquanao.repositories.LoaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +29,17 @@ public class LoaiService {
         System.out.println("LoaiService.add: " + loai.getTen());
     }
 
+    public void update(LoaiRequest loaiRequest, Integer id){
+        Loai loai = loaiRepository.findById(id).orElse(null);
+        if (loai != null){
+            loai.setTen(loaiRequest.getTen());
+            loaiRepository.save(loai);
+            System.out.println("loaiService.update: " + loai.getTen());
+        } else {
+            System.out.println("loaiService.update: null");
+        }
+    }
+
     public void delete(Integer id) {
         Loai loai = loaiRepository.findById(id).orElse(null);
         if (loai != null) {
@@ -35,5 +49,18 @@ public class LoaiService {
         } else {
             System.out.println("LoaiService.delete: null");
         }
+    }
+
+    public Loai findById(Integer id) {
+        if (loaiRepository.findById(id).isPresent()) {
+            return loaiRepository.findById(id).get();
+        }else {
+            return null;
+        }
+    }
+
+    public Page<Loai> getAllWithPagination(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return loaiRepository.findAll(pageable);
     }
 }
