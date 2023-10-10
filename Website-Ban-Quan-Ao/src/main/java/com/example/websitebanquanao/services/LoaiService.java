@@ -21,6 +21,11 @@ public class LoaiService {
         return loaiRepository.getAll();
     }
 
+    public Page<LoaiResponse> getPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return loaiRepository.getPage(pageable);
+    }
+
     public void add(LoaiRequest loaiRequest) {
         Loai loai = new Loai();
         loai.setTen(loaiRequest.getTen());
@@ -51,16 +56,14 @@ public class LoaiService {
         }
     }
 
-    public Loai findById(Integer id) {
-        if (loaiRepository.findById(id).isPresent()) {
-            return loaiRepository.findById(id).get();
-        }else {
+    public LoaiResponse getById(Integer id) {
+        LoaiResponse loaiResponse = loaiRepository.getByIdResponse(id);
+        if (loaiResponse != null) {
+            System.out.println("LoaiService.findById: " + loaiResponse.getTen());
+            return loaiResponse;
+        } else {
+            System.out.println("LoaiService.findById: null");
             return null;
         }
-    }
-
-    public Page<Loai> getAllWithPagination(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return loaiRepository.findAll(pageable);
     }
 }

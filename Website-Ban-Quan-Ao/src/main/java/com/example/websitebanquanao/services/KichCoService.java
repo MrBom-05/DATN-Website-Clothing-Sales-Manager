@@ -21,6 +21,11 @@ public class KichCoService {
         return kichCoRepository.getAll();
     }
 
+    public Page<KichCoResponse> getPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return kichCoRepository.getPage(pageable);
+    }
+
     public void add(KichCoRequest kichCoRequest) {
         KichCo kichCo = new KichCo();
         kichCo.setTen(kichCoRequest.getTen());
@@ -51,16 +56,14 @@ public class KichCoService {
         }
     }
 
-    public KichCo findById(Integer id) {
-        if (kichCoRepository.findById(id).isPresent()) {
-            return kichCoRepository.findById(id).get();
-        }else {
+    public KichCoResponse getById(Integer id) {
+        KichCoResponse kichCoResponse = kichCoRepository.getByIdResponse(id);
+        if (kichCoResponse != null) {
+            System.out.println("KichCoService.getById: " + kichCoResponse.getTen());
+            return kichCoResponse;
+        } else {
+            System.out.println("KichCoService.getById: null");
             return null;
         }
-    }
-
-    public Page<KichCo> getAllWithPagination(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return kichCoRepository.findAll(pageable);
     }
 }

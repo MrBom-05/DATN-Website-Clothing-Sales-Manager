@@ -2,15 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Màu Sắc</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
 <div class="container mt-5">
     <h1 class="text-center">Quản Lý Màu Sắc</h1>
     <c:if test="${not empty successMessage}">
@@ -18,29 +9,34 @@
     </c:if>
 
     <div class="row mt-3">
-        <div class="col-9">
-            <table class="table mt-3">
+        <div class="col-7">
+            <table class="table table-bordered mt-3 text-center">
                 <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã Màu Sắc</th>
                     <th>Tên Màu</th>
+                    <th>Mã Màu Sắc</th>
+                    <th>Thao Tác</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach varStatus="index" items="${mauSacPage.content}" var="ms">
                     <tr>
                         <td>${index.index + mauSacPage.number * mauSacPage.size + 1}</td>
-                        <td>${ms.maMauSac}</td>
                         <td>${ms.ten}</td>
                         <td>
-                            <a href="/admin/mau-sac/delete/${ms.id}" class="btn btn-danger"
-                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
-                            <a href="#" class="btn btn-success update-button"
+                            <div
+                                    style="width: 70px; height: 20px; background-color: ${ms.maMauSac};">
+                            </div>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-primary update-button"
                                data-bs-toggle="modal" data-bs-target="#exampleModal"
                                data-id="${ms.id}" data-maMauSac="${ms.maMauSac}" data-ten="${ms.ten}">
                                 Cập Nhật
                             </a>
+                            <a href="/admin/mau-sac/delete/${ms.id}" class="btn btn-danger"
+                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -48,21 +44,23 @@
             </table>
         </div>
 
-        <div class="col-3 mt-4 ">
+        <div class="col-5 mt-4">
             <form:form id="edit-form" modelAttribute="ms" method="post" action="/admin/mau-sac/store">
                 <div class="row mb-3">
-                    <div class="form-group">
-                        <label for="maMauSac">Mã Màu</label>
-                        <form:input type="text" path="maMauSac" id="maMauSac" class="form-control" required="true"/>
-                        <form:errors path="maMauSac" cssClass="text-danger"/>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label for="ten" class="form-label">Tên Màu</label>
+                            <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
+                            <form:errors path="ten" cssClass="text-danger"/>
+                        </div>
+                        <div class="col-6">
+                            <label for="maMauSac" class="form-label">Mã Màu</label>
+                            <form:input type="text" path="maMauSac" id="maMauSac" class="form-control" required="true"/>
+                            <form:errors path="maMauSac" cssClass="text-danger"/>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="ten">Tên Màu</label>
-                        <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
-                        <form:errors path="ten" cssClass="text-danger"/>
-                    </div>
+                    <button type="submit" class="btn btn-success mt-3 col-2 offset-5">Lưu</button>
                 </div>
-                <button type="submit" class="btn btn-success mt-3">Lưu</button>
             </form:form>
         </div>
     </div>
@@ -91,7 +89,6 @@
 
 <!-- Bao gồm các tập lệnh Spring form và các tập lệnh khác -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
     $(".update-button").click(function () {
         let id = $(this).data("id");

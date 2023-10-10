@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.KichCo;
 import com.example.websitebanquanao.infrastructures.requests.KichCoRequest;
+import com.example.websitebanquanao.infrastructures.responses.KichCoResponse;
 import com.example.websitebanquanao.services.KichCoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,66 +29,50 @@ public class KichCoController {
     @Autowired
     private KichCoRequest kichCoRequest;
 
-    @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page,
-                        Model model,
-                        @ModelAttribute("successMessage") String successMessage){
+    private static final String redirect = "redirect:/admin/kich-co/index";
 
-        Page<KichCo> kichCoPage = kichCoService.getAllWithPagination(page, 5);
+    @GetMapping("index")
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+        Page<KichCoResponse> kichCoPage = kichCoService.getPage(page, 5);
         model.addAttribute("kichCoPage", kichCoPage);
-        model.addAttribute("list", kichCoService.getAll());
         model.addAttribute("kc", kichCoRequest);
-        model.addAttribute("view", "/views/admin/kich-co/index.jsp");
         model.addAttribute("successMessage", successMessage);
+        model.addAttribute("view", "/views/admin/kich-co/index.jsp");
         return "admin/layout";
     }
 
     @GetMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes){
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         kichCoService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Xoá kích cỡ thành công");
-        return "redirect:/admin/kich-co/index";
+        return redirect;
     }
 
     @PostMapping("store")
-    public String store(
-            @Valid @ModelAttribute("kc") KichCoRequest kichCoRequest, BindingResult result,
-            Model model, RedirectAttributes redirectAttributes
-    )
-    {
-        if(kichCoRequest.getTen().trim().isEmpty()){
-            result.rejectValue("ten", "error.l", "Kích cỡ không được để trống");
-            return "admin/layout";
-        }
+    public String store(@Valid @ModelAttribute("kc") KichCoRequest kichCoRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("list", kichCoService.getAll());
             model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
         kichCoService.add(kichCoRequest);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm kích cỡ thành công");
-        return "redirect:/admin/kich-co/index";
+        return redirect;
     }
 
     @PostMapping("update/{id}")
-    public String update(@PathVariable("id") Integer id,
-                         @Valid @ModelAttribute("l") KichCoRequest kichCoRequest, BindingResult result,
-                         Model model, RedirectAttributes redirectAttributes
-    )
-    {
+    public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("l") KichCoRequest kichCoRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("list", kichCoService.getAll());
             model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
-        kichCoService.update(kichCoRequest,id);
+        kichCoService.update(kichCoRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật kích cỡ thành công");
-        return "redirect:/admin/kich-co/index";
+        return redirect;
     }
+
     @GetMapping("get/{id}")
     @ResponseBody
-    public ResponseEntity<KichCo> getLoai(@PathVariable("id") Integer id) {
-        KichCo kc = kichCoService.findById(id);
-        return ResponseEntity.ok(kc);
+    public ResponseEntity<KichCoResponse> getLoai(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(kichCoService.getById(id));
     }
 }

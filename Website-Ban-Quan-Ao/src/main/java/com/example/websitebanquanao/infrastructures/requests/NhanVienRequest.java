@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NhanVienRequest {
-    private UUID id;
     private String ma;
     private String hoVaTen;
     private String email;

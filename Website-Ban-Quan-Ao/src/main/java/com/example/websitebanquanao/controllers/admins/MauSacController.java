@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.MauSac;
 import com.example.websitebanquanao.infrastructures.requests.MauSacRequest;
+import com.example.websitebanquanao.infrastructures.responses.MauSacResponse;
 import com.example.websitebanquanao.services.MauSacService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,67 +29,51 @@ public class MauSacController {
     @Autowired
     private MauSacRequest mauSacRequest;
 
-    @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page,
-                        Model model,
-                        @ModelAttribute("successMessage") String successMessage){
-        Page<MauSac> mauSacPage = mauSacService.getAllWithPagination(page, 5);
-        model.addAttribute("mauSacPage", mauSacPage);
+    private static final String redirect = "redirect:/admin/mau-sac/index";
 
-        model.addAttribute("list", mauSacService.getAll());
+    @GetMapping("index")
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+        Page<MauSacResponse> mauSacPage = mauSacService.getPage(page, 5);
+        model.addAttribute("mauSacPage", mauSacPage);
         model.addAttribute("ms", mauSacRequest);
-        model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
         model.addAttribute("successMessage", successMessage);
+        model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
         return "admin/layout";
     }
+
     @GetMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes){
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         mauSacService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Xoá màu sắc thành công");
-        return "redirect:/admin/mau-sac/index";
+        return redirect;
     }
 
     @PostMapping("store")
-    public String store(
-            @Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result,
-            Model model, RedirectAttributes redirectAttributes
-    )
-    {
-        if(mauSacRequest.getMaMauSac().trim().isEmpty()){
-            result.rejectValue("maMauSac", "error.ms", "Mã màu không được để trống");
-            return "admin/layout";
-        }
+    public String store(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("list", mauSacService.getAll());
             model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
             return "admin/layout";
         }
         mauSacService.add(mauSacRequest);
         // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm màu sắc thành công");
-        return "redirect:/admin/mau-sac/index";
+        return redirect;
     }
 
     @PostMapping("update/{id}")
-    public String update(@PathVariable("id") Integer id,
-                         @Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result,
-                         Model model, RedirectAttributes redirectAttributes
-    )
-    {
+    public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("list", mauSacService.getAll());
             model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
             return "admin/layout";
         }
-        mauSacService.update(mauSacRequest,id);
+        mauSacService.update(mauSacRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật màu sắc thành công");
-        return "redirect:/admin/mau-sac/index";
+        return redirect;
     }
 
     @GetMapping("get/{id}")
     @ResponseBody
-    public ResponseEntity<MauSac> getMauSac(@PathVariable("id") Integer id) {
-        MauSac ms = mauSacService.findById(id);
-        return ResponseEntity.ok(ms);
+    public ResponseEntity<MauSacResponse> getMauSac(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(mauSacService.getById(id));
     }
 }

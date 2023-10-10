@@ -16,5 +16,6 @@ public class SanPhamResponse {
     private UUID id;
     private String ten;
     private Date ngayTao;
+    private String anh;
     private String tenLoai;
 }

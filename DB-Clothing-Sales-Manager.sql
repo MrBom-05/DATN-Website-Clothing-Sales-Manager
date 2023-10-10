@@ -15,6 +15,7 @@ CREATE TABLE san_pham
     id       UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     ten      NVARCHAR( MAX) NOT NULL,
     ngay_tao DATE,
+    anh      NVARCHAR( MAX),
     id_loai  INT NOT NULL,
 )
 
