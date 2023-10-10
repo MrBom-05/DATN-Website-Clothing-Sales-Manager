@@ -5,6 +5,9 @@ import com.example.websitebanquanao.infrastructures.requests.NhanVienRequest;
 import com.example.websitebanquanao.infrastructures.responses.NhanVienResponse;
 import com.example.websitebanquanao.repositories.NhanVienRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,11 @@ public class NhanVienService {
 
     public List<NhanVienResponse> getAll() {
         return nhanVienRepository.getAll();
+    }
+
+    public Page<NhanVienResponse> getPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return nhanVienRepository.getPage(pageable);
     }
 
     public void add(NhanVienRequest nhanVienRequest) {
@@ -72,6 +80,17 @@ public class NhanVienService {
             System.out.println("NhanVienService.delete: " + id);
         } else {
             System.out.println("NhanVienService.delete: null");
+        }
+    }
+
+    public NhanVienResponse getById(UUID id) {
+        NhanVienResponse nhanVienResponse = nhanVienRepository.getByIdResponse(id);
+        if (nhanVienResponse != null) {
+            System.out.println("SanPhamService.findById: " + nhanVienResponse.getHoVaTen());
+            return nhanVienResponse;
+        } else {
+            System.out.println("SanPhamService.findById: null");
+            return null;
         }
     }
 }
