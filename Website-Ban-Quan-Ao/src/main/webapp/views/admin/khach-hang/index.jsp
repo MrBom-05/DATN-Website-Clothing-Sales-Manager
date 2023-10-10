@@ -2,15 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Khách Hàng</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body>
 <div class="container mt-5">
     <h1 class="text-center">Quản Lý Khách Hàng</h1>
     <c:if test="${not empty successMessage}">
@@ -18,7 +9,7 @@
     </c:if>
     <div class="row mt-3">
         <div class="col-6">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Thêm Khách Hàng
             </button>
         </div>
@@ -53,7 +44,7 @@
                 <td>
                     <a href="/admin/khach-hang/delete/${kh.id}" class="btn btn-danger"
                        onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
-                    <a href="#" class="btn btn-success update-button"
+                    <a href="#" class="btn btn-primary update-button"
                        data-bs-toggle="modal" data-bs-target="#exampleModal"
                        data-id="${kh.id}" data-hoVaTen="${kh.hoVaTen}" data-soDienThoai="${kh.soDienThoai}"
                        data-email="${kh.email}" data-diaChi="${kh.diaChi}" data-xaPhuong="${kh.xaPhuong}"
@@ -80,7 +71,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="hoVaTen">Họ và tên</label>
+                                    <label for="hoVaTen" class="form-label">Họ và tên</label>
                                     <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control"
                                                 required="true"/>
                                     <form:errors path="hoVaTen" cssClass="text-danger"/>
@@ -90,7 +81,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="soDienThoai">Số điện thoại</label>
+                                    <label for="soDienThoai" class="form-label">Số điện thoại</label>
                                     <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control"
                                                 required="true"/>
                                     <form:errors path="soDienThoai" cssClass="text-danger"/>
@@ -98,7 +89,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email" class="form-label">Email</label>
                                     <form:input type="email" path="email" id="email" class="form-control"
                                                 required="true"/>
                                     <form:errors path="email" cssClass="text-danger"/>
@@ -108,7 +99,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="diaChi">Địa chỉ</label>
+                                    <label for="diaChi" class="form-label">Địa chỉ</label>
                                     <form:input type="text" path="diaChi" id="diaChi" class="form-control"
                                                 required="true"/>
                                     <form:errors path="diaChi" cssClass="text-danger"/>
@@ -116,7 +107,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="xaPhuong">Xã/Phường</label>
+                                    <label for="xaPhuong" class="form-label">Xã/Phường</label>
                                     <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control"
                                                 required="true"/>
                                     <form:errors path="xaPhuong" cssClass="text-danger"/>
@@ -126,7 +117,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="quanHuyen">Quận/Huyện</label>
+                                    <label for="quanHuyen" class="form-label">Quận/Huyện</label>
                                     <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control"
                                                 required="true"/>
                                     <form:errors path="quanHuyen" cssClass="text-danger"/>
@@ -134,7 +125,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="tinhThanhPho">Thành phố/Tỉnh</label>
+                                    <label for="tinhThanhPho" class="form-label">Thành phố/Tỉnh</label>
                                     <form:input type="text" path="tinhThanhPho" id="tinhThanhPho" class="form-control"
                                                 required="true"/>
                                     <form:errors path="tinhThanhPho" cssClass="text-danger"/>
@@ -144,7 +135,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="matKhau">Mật khẩu</label>
+                                    <label for="matKhau" class="form-label">Mật khẩu</label>
                                     <form:input type="password" path="matKhau" id="matKhau" class="form-control"
                                                 required="true"/>
                                     <form:errors path="matKhau" cssClass="text-danger"/>
@@ -180,9 +171,7 @@
 
 </div>
 
-<!-- Bao gồm các tập lệnh Spring form và các tập lệnh khác -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
     $(".update-button").click(function () {
         let id = $(this).data("id");
@@ -242,5 +231,3 @@
         });
     });
 </script>
-</body>
-</html>

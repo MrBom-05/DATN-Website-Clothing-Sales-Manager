@@ -13,7 +13,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 public class GiamGiaResponse {
     private UUID id;
     private Integer ma;

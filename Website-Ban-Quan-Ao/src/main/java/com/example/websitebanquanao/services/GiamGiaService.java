@@ -1,4 +1,5 @@
 package com.example.websitebanquanao.services;
+
 import com.example.websitebanquanao.entities.GiamGia;
 import com.example.websitebanquanao.infrastructures.requests.GiamGiaRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -15,8 +17,10 @@ import java.util.UUID;
 public class GiamGiaService {
     @Autowired
     private GiamGiaRepository giamGiaRepository;
-    public List<GiamGiaResponse> getAll() {
-        return giamGiaRepository.getAll();
+
+    public Page<GiamGiaResponse> getPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return giamGiaRepository.getPage(pageable);
     }
 
     public void add(GiamGiaRequest giamGiaRequest) {
@@ -59,15 +63,15 @@ public class GiamGiaService {
             System.out.println("GiamGiaService.delete: null");
         }
     }
-    public GiamGia findById(UUID id) {
-        if (giamGiaRepository.findById(id).isPresent()) {
-            return giamGiaRepository.findById(id).get();
-        }else {
+
+    public GiamGiaResponse getById(UUID id) {
+        GiamGiaResponse giamGiaResponse = giamGiaRepository.getByIdResponse(id);
+        if (giamGiaResponse != null) {
+            System.out.println("GiamGiaService.findById: " + giamGiaResponse.getMa());
+            return giamGiaResponse;
+        } else {
+            System.out.println("GiamGiaService.findById: null");
             return null;
         }
-    }
-    public Page<GiamGia> getAllWithPagination(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return giamGiaRepository.findAll(pageable);
     }
 }

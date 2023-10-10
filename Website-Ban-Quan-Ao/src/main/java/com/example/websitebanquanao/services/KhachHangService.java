@@ -19,8 +19,9 @@ public class KhachHangService {
     @Autowired
     private KhachHangRepository khachHangRepository;
 
-    public List<KhachHangResponse> getAll() {
-        return khachHangRepository.getAll();
+    public Page<KhachHangResponse> getPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return khachHangRepository.getPage(pageable);
     }
 
     public void add(KhachHangRequest khachHangRequest) {
@@ -38,7 +39,6 @@ public class KhachHangService {
 
         System.out.println("KhachHangService.add: " + khachHang.getHoVaTen());
     }
-
 
 
     public void update(KhachHangRequest khachHangRequest, UUID id) {
@@ -71,16 +71,14 @@ public class KhachHangService {
         }
     }
 
-    public KhachHang findById(UUID id) {
-        if (khachHangRepository.findById(id).isPresent()) {
-            return khachHangRepository.findById(id).get();
+    public KhachHangResponse getById(UUID id) {
+        KhachHangResponse khachHangResponse = khachHangRepository.getByIdResponse(id);
+        if (khachHangResponse != null) {
+            System.out.println("KhachHangService.findById: " + khachHangResponse.getHoVaTen());
+            return khachHangResponse;
         } else {
+            System.out.println("KhachHangService.findById: null");
             return null;
         }
-    }
-
-    public Page<KhachHang> getAllWithPagination(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return khachHangRepository.findAll(pageable);
     }
 }

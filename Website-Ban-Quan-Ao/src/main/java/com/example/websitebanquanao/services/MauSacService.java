@@ -22,6 +22,11 @@ public class MauSacService {
         return mauSacRepository.getAll();
     }
 
+    public Page<MauSacResponse> getPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return mauSacRepository.getPage(pageable);
+    }
+
     public void add(MauSacRequest mauSacRequest) {
         MauSac mauSac = new MauSac();
         mauSac.setTen(mauSacRequest.getTen());
@@ -55,16 +60,14 @@ public class MauSacService {
         }
     }
 
-    public MauSac findById(Integer id) {
-        if (mauSacRepository.findById(id).isPresent()) {
-            return mauSacRepository.findById(id).get();
-        }else {
+    public MauSacResponse getById(Integer id) {
+        MauSacResponse mauSacResponse = mauSacRepository.getByIdResponse(id);
+        if (mauSacResponse != null) {
+            System.out.println("MauSacService.getById: " + mauSacResponse.getTen());
+            return mauSacResponse;
+        } else {
+            System.out.println("MauSacService.getById: null");
             return null;
         }
-    }
-
-    public Page<MauSac> getAllWithPagination(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return mauSacRepository.findAll(pageable);
     }
 }

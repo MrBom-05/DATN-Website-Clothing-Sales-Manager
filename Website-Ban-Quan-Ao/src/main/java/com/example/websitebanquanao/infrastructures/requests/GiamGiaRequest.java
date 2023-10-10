@@ -15,7 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Component
 public class GiamGiaRequest {
-    private UUID id;
     private Integer ma;
     private Integer soPhanTramGiam;
     private Integer soLuong;

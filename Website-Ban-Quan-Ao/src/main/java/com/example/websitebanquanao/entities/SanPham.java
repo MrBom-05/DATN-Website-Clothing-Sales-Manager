@@ -30,6 +30,11 @@ public class SanPham {
     @Column(name = "ngay_tao")
     private Date ngayTao;
 
+    @Nationalized
+    @Lob
+    @Column(name = "anh", nullable = false)
+    private String anh;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_loai", nullable = false)
     private Loai idLoai;

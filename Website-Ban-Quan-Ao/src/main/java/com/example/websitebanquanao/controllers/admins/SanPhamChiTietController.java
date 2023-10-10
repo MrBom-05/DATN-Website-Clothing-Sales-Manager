@@ -1,5 +1,6 @@
 package com.example.websitebanquanao.controllers.admins;
 
+import com.example.websitebanquanao.infrastructures.requests.SanPhamChiTietRequest;
 import com.example.websitebanquanao.services.KichCoService;
 import com.example.websitebanquanao.services.MauSacService;
 import com.example.websitebanquanao.services.SanPhamChiTietService;
@@ -33,6 +34,8 @@ public class SanPhamChiTietController {
         model.addAttribute("listKichCo", kichCoService.getAll());
 
         model.addAttribute("list", sanPhamChiTietService.getAll());
+
+        model.addAttribute("sanPhamChiTiet", new SanPhamChiTietRequest());
         model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
         return "admin/layout";
     }

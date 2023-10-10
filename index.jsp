@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="f" uri="jakarta.tags.functions" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
 <style>
-
     .image-input {
         display: none;
     }
@@ -32,8 +31,29 @@
         color: #333;
     }
 
+    .image-input-label {
+        display: block;
+        cursor: pointer;
+    }
+
+    .image-input-label::before {
+        font-size: 36px;
+        color: #333;
+    }
+
     .image-input-label input[type="file"] {
         display: none;
+    }
+
+    /* Ẩn label khi đã chọn ảnh */
+    .image-input-label.selected {
+        display: none;
+    }
+
+    /* Hiển thị label khi chưa chọn ảnh */
+    .image-input-label {
+        display: block;
+        cursor: pointer;
     }
 
 </style>
@@ -58,52 +78,50 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <%--@elvariable id="sanPhamChiTiet" type="java"--%>
-                            <form:form action="/admin/san-pham-chi-tiet/add" method="post"
-                                       modelAttribute="sanPhamChiTiet">
+                            <sf:form action="/admin/san-pham-chi-tiet/add" method="post" modelAttribute="ctsp">
                             <div class="row">
                                 <div class="col-4">
                                     <label class="form-label">Mã Sản Phẩm</label>
-                                    <form:input type="text" class="form-control" path="maSanPham"/>
+                                    <sf:input type="text" class="form-control" path="maSanPham"/>
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label">Sản Phẩm</label>
-                                    <form:select class="form-select" path="idSanPham">
+                                    <sf:select class="form-select" path="idSanPham">
                                         <c:forEach items="${listSanPham}" var="sanPham">
                                             <option value="${sanPham.id}">${sanPham.ten}</option>
                                         </c:forEach>
-                                    </form:select>
+                                    </sf:select>
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label">Màu Sắc</label>
-                                    <form:select class="form-select" path="idMauSac">
+                                    <sf:select class="form-select" path="idMauSac">
                                         <c:forEach items="${listMauSac}" var="mauSac">
                                             <option value="${mauSac.id}">${mauSac.ten}</option>
                                         </c:forEach>
-                                    </form:select>
+                                    </sf:select>
                                 </div>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-4">
                                     <label class="form-label">Kích Cỡ</label>
-                                    <form:select class="form-select" path="idKichCo">
+                                    <sf:select class="form-select" path="idKichCo">
                                         <c:forEach items="${listKichCo}" var="kichCo">
                                             <option value="${kichCo.id}">${kichCo.ten}</option>
                                         </c:forEach>
-                                    </form:select>
+                                    </sf:select>
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label">Giá Bán</label>
-                                    <form:input type="number" class="form-control" path="gia"/>
+                                    <sf:input type="number" class="form-control" path="gia"/>
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label">Số lượng</label>
-                                    <form:input type="number" class="form-control" path="soLuong"/>
+                                    <sf:input type="number" class="form-control" path="soLuong"/>
                                 </div>
                             </div>
                             <div class="mt-3">
                                 <label class="form-label">Mô tả</label>
-                                <form:textarea class="form-control" style="height: 130px" path="moTa"/>
+                                <sf:textarea class="form-control" style="height: 130px" path="moTa"/>
                             </div>
                             <div class="mt-3">
                                 <label class="form-label">Ảnh sản phẩm</label>
@@ -113,49 +131,55 @@
                                         <img id="imageDisplay1" class="image-preview" src="" alt="Image 1">
                                         <span class="image-placeholder" id="placeholder1">+</span>
                                     </label>
-                                    <input path="duongDan[0]" type="file" id="imageInput1" class="image-input"
-                                           accept="image/*" onchange="displayImage(1, 'placeholder1')"/>
+                                    <sf:input path="duongDan[0]" type="file" id="imageInput1" class="image-input"
+                                              accept="image/*" onchange="displayImage(1, 'placeholder1')"/>
+                                    <label class="image-input-label selected" for="imageInput1">Chọn ảnh</label>
+
 
                                     <!-- Ô input 2 -->
                                     <label for="imageInput2" class="image-preview-container">
                                         <img id="imageDisplay2" class="image-preview" src="" alt="Image 2">
                                         <span class="image-placeholder" id="placeholder2">+</span>
                                     </label>
-                                    <input path="duongDan[1]" type="file" id="imageInput2" class="image-input"
-                                           accept="image/*" onchange="displayImage(2, 'placeholder2')"/>
+                                    <sf:input path="duongDan[1]" type="file" id="imageInput2" class="image-input"
+                                              accept="image/*" onchange="displayImage(2, 'placeholder2')"/>
+                                    <label class="image-input-label selected" for="imageInput2">Chọn ảnh</label>
 
                                     <!-- Ô input 3 -->
                                     <label for="imageInput3" class="image-preview-container">
                                         <img id="imageDisplay3" class="image-preview" src="" alt="Image 3">
                                         <span class="image-placeholder" id="placeholder3">+</span>
                                     </label>
-                                    <input path="duongDan[2]" type="file" id="imageInput3" class="image-input"
-                                           accept="image/*" onchange="displayImage(3, 'placeholder3')"/>
+                                    <sf:input path="duongDan[2]" type="file" id="imageInput3" class="image-input"
+                                              accept="image/*" onchange="displayImage(3, 'placeholder3')"/>
+                                    <label class="image-input-label selected" for="imageInput3">Chọn ảnh</label>
 
                                     <!-- Ô input 4 -->
                                     <label for="imageInput4" class="image-preview-container">
                                         <img id="imageDisplay4" class="image-preview" src="" alt="Image 4">
                                         <span class="image-placeholder" id="placeholder4">+</span>
                                     </label>
-                                    <input path="duongDan[3]" type="file" id="imageInput4" class="image-input"
-                                           accept="image/*" onchange="displayImage(4, 'placeholder4')"/>
+                                    <sf:input path="duongDan[3]" type="file" id="imageInput4" class="image-input"
+                                              accept="image/*" onchange="displayImage(4, 'placeholder4')"/>
+                                    <label class="image-input-label selected" for="imageInput4">Chọn ảnh</label>
 
                                     <!-- Ô input 5 -->
                                     <label for="imageInput5" class="image-preview-container">
                                         <img id="imageDisplay5" class="image-preview" src="" alt="Image 5">
                                         <span class="image-placeholder" id="placeholder5">+</span>
                                     </label>
-                                    <input path="duongDan[4]" type="file" id="imageInput5" class="image-input"
-                                           accept="image/*" onchange="displayImage(5, 'placeholder5')"/>
+                                    <sf:input path="duongDan[4]" type="file" id="imageInput5" class="image-input"
+                                              accept="image/*" onchange="displayImage(5, 'placeholder5')"/>
+                                    <label class="image-input-label selected" for="imageInput5">Chọn ảnh</label>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary">Làm Mới</button>
-                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                <%--<button type="button" class="btn btn-secondary">Làm Mới</button>--%>
+                            <button type="submit"  class="btn btn-primary">Lưu</button>
 
                         </div>
-                        </form:form>
+                        </sf:form>
                     </div>
                 </div>
             </div>
@@ -204,24 +228,25 @@
         </table>
     </div>
 </div>
-<%--<div class="row">--%>
-<%--    <c:forEach items="${list_anh}" var="sanPhamChiTiet">--%>
-<%--        <div class="col-md-4">--%>
-<%--            <div class="card mb-3">--%>
-<%--                <img src="data:image/jpeg;base64,${sanPhamChiTiet.duongDanAnh}" class="card-img-top" alt="Ảnh sản phẩm">--%>
-<%--                <div class="card-body">--%>
-<%--                    <h5 class="card-title">${sanPhamChiTiet.tenSanPham}</h5>--%>
-<%--                    <p class="card-text">Màu Sắc: ${sanPhamChiTiet.tenMauSac}</p>--%>
-<%--                    <p class="card-text">Kích Cỡ: ${sanPhamChiTiet.tenKichCo}</p>--%>
-<%--                    <p class="card-text">Giá: ${sanPhamChiTiet.gia}</p>--%>
-<%--                    <p class="card-text">Số Lượng: ${sanPhamChiTiet.soLuong}</p>--%>
-<%--                    <p class="card-text">Mô Tả: ${sanPhamChiTiet.moTa}</p>--%>
-<%--                    <p class="card-text">Trạng Thái: ${sanPhamChiTiet.trangThai}</p>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </c:forEach>--%>
-<%--</div>--%>
+<div class="row">
+    111111
+    <c:forEach items="${list_anh}" var="sanPhamChiTiet">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img src="data:image/jpeg;base64,${sanPhamChiTiet.duongDanAnh}" class="card-img-top" alt="Ảnh sản phẩm">
+                <div class="card-body">
+                    <h5 class="card-title">${sanPhamChiTiet.tenSanPham}</h5>
+                    <p class="card-text">Màu Sắc: ${sanPhamChiTiet.tenMauSac}</p>
+                    <p class="card-text">Kích Cỡ: ${sanPhamChiTiet.tenKichCo}</p>
+                    <p class="card-text">Giá: ${sanPhamChiTiet.gia}</p>
+                    <p class="card-text">Số Lượng: ${sanPhamChiTiet.soLuong}</p>
+                    <p class="card-text">Mô Tả: ${sanPhamChiTiet.moTa}</p>
+                    <p class="card-text">Trạng Thái: ${sanPhamChiTiet.trangThai}</p>
+                </div>
+            </div>
+        </div>
+    </c:forEach>
+</div>
 <script>
     function displayImage(inputNumber, placeholderId) {
         var input = document.getElementById('imageInput' + inputNumber);

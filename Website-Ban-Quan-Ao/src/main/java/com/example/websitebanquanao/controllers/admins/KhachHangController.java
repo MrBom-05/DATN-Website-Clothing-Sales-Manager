@@ -1,7 +1,7 @@
 package com.example.websitebanquanao.controllers.admins;
 
-import com.example.websitebanquanao.entities.KhachHang;
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
+import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +26,19 @@ import java.util.UUID;
 public class KhachHangController {
     @Autowired
     private KhachHangService khachHangService;
+
     @Autowired
     private KhachHangRequest khachHangRequest;
 
+    private static final String redirect = "redirect:/admin/khach-hang/index";
+
     @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model,
-                        @ModelAttribute("successMessage") String successMessage) {
-        Page<KhachHang> khachHangPage = khachHangService.getAllWithPagination(page, 5);
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+        Page<KhachHangResponse> khachHangPage = khachHangService.getPage(page, 5);
         model.addAttribute("khachHangPage", khachHangPage);
-        model.addAttribute("list", khachHangService.getAll());
         model.addAttribute("kh", khachHangRequest);
-        model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
         model.addAttribute("successMessage", successMessage);
+        model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
         return "admin/layout";
     }
 
@@ -45,48 +46,39 @@ public class KhachHangController {
     public String delete(@PathVariable("id") UUID id, RedirectAttributes redirectAttributes) {
         khachHangService.delete(id);
         redirectAttributes.addFlashAttribute("successMessage", "Xoá khách hàng thành công");
-        return "redirect:/admin/khach-hang/index";
+        return redirect;
     }
 
     @PostMapping("store")
-    public String store(
-            @Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result,
-            Model model, RedirectAttributes redirectAttributes
-    ) {
+    public String store(@Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (khachHangRequest.getHoVaTen().trim().isEmpty()) {
             result.rejectValue("hoVaTen", "error.kh", "Họ và tên không được để trống");
             return "admin/layout";
         }
         if (result.hasErrors()) {
-            model.addAttribute("list", khachHangService.getAll());
             model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";
         }
         khachHangService.add(khachHangRequest);
         // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm khách hàng thành công");
-        return "redirect:/admin/khach-hang/index";
+        return redirect;
     }
 
     @PostMapping("update/{id}")
-    public String update(@PathVariable("id") UUID id,
-                         @Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result,
-                         Model model, RedirectAttributes redirectAttributes
-    ) {
+    public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("list", khachHangService.getAll());
             model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";
         }
         khachHangService.update(khachHangRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khách hàng thành công");
-        return "redirect:/admin/khach-hang/index";
+        return redirect;
     }
 
     @GetMapping("get/{id}")
     @ResponseBody
-    public ResponseEntity<KhachHang> getKhachHang(@PathVariable("id") UUID id) {
-        KhachHang kh = khachHangService.findById(id);
-        return ResponseEntity.ok(kh);
+    public ResponseEntity<KhachHangResponse> getKhachHang(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(khachHangService.getById(id));
     }
 }

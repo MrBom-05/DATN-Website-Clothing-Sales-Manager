@@ -9,13 +9,13 @@
     </c:if>
     <div class="row mt-3">
         <div class="col-6">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Thêm Giảm Giá
             </button>
         </div>
     </div>
 
-    <table class="table mt-3">
+    <table class="table table-bordered mt-3">
         <thead>
         <tr>
             <th>STT</th>
@@ -40,7 +40,7 @@
                 <td>
                     <a href="/admin/giam-gia/delete/${gg.id}" class="btn btn-danger"
                        onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
-                    <a href="#" class="btn btn-success update-button"
+                    <a href="#" class="btn btn-primary update-button"
                        data-bs-toggle="modal" data-bs-target="#exampleModal"
                        data-id="${gg.id}" data-hoVaTen="${gg.ma}" data-soDienThoai="${gg.soPhanTramGiam}"
                        data-email="${gg.soLuong}" data-diaChi="${gg.ngayBatDau}" data-xaPhuong="${gg.ngayKetThuc}">
@@ -53,7 +53,8 @@
     </table>
 
     <!-- Modal Thêm và Cập Nhật -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+         data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -61,6 +62,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <%--@elvariable id="gg" type="java"--%>
                     <form:form id="edit-form" modelAttribute="gg" method="post" action="/admin/giam-gia/store">
                         <div class="row mb-3">
                             <div class="col">
@@ -76,7 +78,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="soPhanTramGiam">Số phần trăm</label>
-                                    <form:input type="text" path="soPhanTramGiam" id="soPhanTramGiam" class="form-control" required="true"/>
+                                    <form:input type="text" path="soPhanTramGiam" id="soPhanTramGiam"
+                                                class="form-control" required="true"/>
                                     <form:errors path="soPhanTramGiam" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -84,7 +87,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="soLuong">Số lượng</label>
-                                    <form:input type="text" path="soLuong" id="soLuong" class="form-control" required="true"/>
+                                    <form:input type="text" path="soLuong" id="soLuong" class="form-control"
+                                                required="true"/>
                                     <form:errors path="soLuong" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -93,14 +97,16 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="ngayBatDau">Ngày Bắt Đầu</label>
-                                    <form:input type="date" path="ngayBatDau" id="ngayBatDau" class="form-control" required="true"/>
+                                    <form:input type="date" path="ngayBatDau" id="ngayBatDau" class="form-control"
+                                                required="true"/>
                                     <form:errors path="ngayBatDau" cssClass="text-danger"/>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="ngayKetThuc">Ngày Kết Thúc</label>
-                                    <form:input type="date" path="ngayKetThuc" id="ngayKetThuc" class="form-control" required="true"/>
+                                    <form:input type="date" path="ngayKetThuc" id="ngayKetThuc" class="form-control"
+                                                required="true"/>
                                     <form:errors path="ngayKetThuc" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -129,11 +135,7 @@
     </div>
 </div>
 
-
-
-<!-- Bao gồm các tập lệnh Spring form và các tập lệnh khác -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
     $(".update-button").click(function () {
         let id = $(this).data("id");
