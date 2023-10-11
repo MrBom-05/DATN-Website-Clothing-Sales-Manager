@@ -17,7 +17,7 @@
 
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Tỉnh/Thành Phố (*)</div>
-                <select class="w-100 form-control" name="" id="">
+                <select class="w-100 form-control" name="" >
                     <option value="">Bắc Giang</option>
                     <option value="">Hà Nội</option>
                 </select>
@@ -25,7 +25,7 @@
 
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Quận/Huyện (*)</div>
-                <select class="w-100 form-control" name="" id="">
+                <select class="w-100 form-control" name="">
                     <option value="">Bắc Giang</option>
                     <option value="">Hà Nội</option>
                 </select>
@@ -33,7 +33,7 @@
 
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Xã/Phường (*)</div>
-                <select class="w-100 form-control" name="" id="">
+                <select class="w-100 form-control" name="">
                     <option value="">Bắc Giang</option>
                     <option value="">Hà Nội</option>
                 </select>
@@ -41,7 +41,7 @@
 
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Địa chỉ (*)</div>
-                <textarea class="w-100 form-control" placeholder="..." name="" id="" cols="30" rows="3"></textarea>
+                <textarea class="w-100 form-control" placeholder="..." name="" cols="30" rows="3"></textarea>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-group">
@@ -57,14 +57,14 @@
             <div class="px-md-5 px-3 py-2 form-check  border-bottom">
                 <div class="form-label ">Phương thức thanh toán (*)</div>
                 <label class="form-check-label text-sm-left fw-bold ">
-                    <input class="" type="radio" value="1" name="payment_method" id="" checked>
+                    <input class="" type="radio" value="1" name="payment_method"  checked>
                     THANH TOÁN KHI NHẬN HÀNG
                 </label>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-check">
                 <label class="form-check-label text-sm-left fw-bold ">
-                    <input class="" type="radio" value="2" name="payment_method" id="" checked>
+                    <input class="" type="radio" value="2" name="payment_method"  checked>
                     CHUYỂN KHOẢN NGÂN HÀNG
                 </label>
             </div>
@@ -81,7 +81,7 @@
 
             <div class="px-md-5 px-3 py-2 form-group mb-5">
                 <div class="form-label ">Ghi chú (*)</div>
-                <textarea class="w-100 form-control" placeholder="..." name="" id="" cols="30" rows="5"></textarea>
+                <textarea class="w-100 form-control" placeholder="..." name=""  cols="30" rows="5"></textarea>
             </div>
 
         </div>
