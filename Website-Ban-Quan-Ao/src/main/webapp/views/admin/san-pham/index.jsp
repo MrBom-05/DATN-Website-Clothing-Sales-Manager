@@ -222,6 +222,7 @@
                     // Lưu base64Image vào một biến hoặc gửi nó điều kiện cần thiết
                 });
             };
+            console.log(input.files[0]);
 
             reader.readAsDataURL(input.files[0]);
         } else {
