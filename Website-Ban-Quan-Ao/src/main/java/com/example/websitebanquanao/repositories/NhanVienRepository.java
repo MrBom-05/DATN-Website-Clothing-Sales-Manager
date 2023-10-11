@@ -2,7 +2,6 @@ package com.example.websitebanquanao.repositories;
 
 import com.example.websitebanquanao.entities.NhanVien;
 import com.example.websitebanquanao.infrastructures.responses.NhanVienResponse;
-import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,8 +19,7 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, UUID> {
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.NhanVienResponse(nv.id, nv.ma, nv.hoVaTen, nv.soDienThoai, nv.email, nv.diaChi, nv.xaPhuong, nv.quanHuyen, nv.tinhThanhPho, nv.ngayVaoLam, nv.chucVu, nv.trangThai) from NhanVien nv")
     public Page<NhanVienResponse> getPage(Pageable pageable);
+
     @Query("select new com.example.websitebanquanao.infrastructures.responses.NhanVienResponse(nv.id, nv.ma, nv.hoVaTen, nv.soDienThoai, nv.email, nv.diaChi, nv.xaPhuong, nv.quanHuyen, nv.tinhThanhPho, nv.ngayVaoLam, nv.chucVu, nv.trangThai) from NhanVien nv where nv.id = :id")
     public NhanVienResponse getByIdResponse(@Param("id") UUID id);
-
-
 }
