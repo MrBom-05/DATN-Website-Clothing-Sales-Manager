@@ -5,7 +5,7 @@
 
 <div>
     <h1 class="text-center mt-3">Quản lý chi tiết sản phẩm</h1>
-    <div class="row col-2 ms-2 float-start">
+    <div class="row col-2 float-start">
         <a href="/admin/san-pham-chi-tiet/create">
             <button class="btn btn-success ">Thêm sản phẩm</button>
         </a>
