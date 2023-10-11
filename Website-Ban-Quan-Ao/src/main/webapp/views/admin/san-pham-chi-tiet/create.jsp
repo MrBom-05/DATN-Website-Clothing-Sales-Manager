@@ -132,7 +132,7 @@
                 <div class="mt-3">
                     <label class="form-label">Ảnh sản phẩm</label>
                     <div>
-                        <c:forEach var="i" begin="0" end="4">
+                        <c:forEach var="i" begin="0" end="2">
                             <label for="imageInput${i}" class="image-preview-container">
                                 <img id="imageDisplay${i}" class="image-preview" src="" alt="Image ${i + 1}">
                                 <span class="image-placeholder" id="placeholder${i}">+</span>
