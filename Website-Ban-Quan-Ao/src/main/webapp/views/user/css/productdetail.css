@@ -9,7 +9,7 @@
     padding: 25px 150px;
     position: relative;
   }
-  
+
   .menu-div {
     display: flex;
     width: auto;
@@ -18,7 +18,7 @@
     position: relative;
     flex: 0 0 auto;
   }
-  
+
   .menu-text-wrapper {
     position: relative;
     width: fit-content;
@@ -30,7 +30,7 @@
     line-height: var(--header-heading-5-line-height);
     font-style: var(--header-heading-5-font-style);
   }
-  
+
   .menu-navbar {
     display: flex;
     width: 538px;
@@ -38,7 +38,7 @@
     gap: 24px;
     position: relative;
   }
-  
+
   .menu-text-wrapper-2 {
     position: relative;
     width: fit-content;
@@ -51,7 +51,7 @@
     line-height: var(--subtitle-regular-line-height);
     font-style: var(--subtitle-regular-font-style);
   }
-  
+
   .menu-div-2 {
     display: inline-flex;
     align-items: flex-start;
@@ -59,20 +59,20 @@
     position: relative;
     flex: 0 0 auto;
   }
-  
+
   .menu-img {
     position: relative;
     width: 24px;
     height: 24px;
   }
-  
+
   .menu-overlap-group {
     position: relative;
     width: 23px;
     height: 22px;
     left: 1px;
   }
-  
+
   .menu-vector {
     position: absolute;
     width: 20px;
@@ -80,7 +80,7 @@
     top: 2px;
     left: 0;
   }
-  
+
   .menu-div-wrapper {
     display: flex;
     flex-direction: column;
@@ -96,7 +96,7 @@
     background-color: #ff3737;
     border-radius: 20px;
   }
-  
+
   .menu-text-wrapper-3 {
     position: relative;
     width: fit-content;

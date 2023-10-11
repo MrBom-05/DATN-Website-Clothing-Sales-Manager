@@ -6,32 +6,39 @@
         <section class="col-lg-8">
             <div class="row mb-3">
                 <div class="col-lg-8">
-                    <div class="img" id="large-image">
-                        <img src="/img/lenin-00021aa-l3X1P0_800x800.jfif" alt="" class="img-fluid w-100">
-                    </div>
-                    <div class="slide-container mt-3">
-                        <div class="slide-wrapper">
-                            <div class="slide">
-                                <img src="../../img/quan.png" alt=""
-                                     onclick="changeLargeImage(0)" class="img-fluid w-75">
+                    <div id="carouselExampleIndicators" class="carousel slide">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://picsum.photos/600/400?random=2" class="d-block w-100" alt="...">
                             </div>
-                            <div class="slide">
-                                <img src="https://picsum.photos/600/400?random=2" alt=""
-                                     onclick="changeLargeImage(1)">
+                            <div class="carousel-item">
+                                <img src="https://picsum.photos/600/400?random=2" class="d-block w-100" alt="...">
                             </div>
-                            <div class="slide">
-                                <img src="https://picsum.photos/600/400?random=3" alt=""
-                                     onclick="changeLargeImage(2)">
+                            <div class="carousel-item">
+                                <img src="https://picsum.photos/600/400?random=2" class="d-block w-100" alt="...">
                             </div>
-                            <div class="slide">
-                                <img src="https://picsum.photos/600/400?random=4" alt=""
-                                     onclick="changeLargeImage(3)">
+                            <div class="carousel-item">
+                                <img src="https://picsum.photos/600/400?random=2" class="d-block w-100" alt="...">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://picsum.photos/600/400?random=2" class="d-block w-100" alt="...">
                             </div>
                         </div>
-                        <div class="slide-button slide-button-prev" onclick="prevSlide()"><i
-                                class="fas fa-long-arrow-alt-left"></i></div>
-                        <div class="slide-button slide-button-next" onclick="nextSlide()"><i
-                                class="fas fa-long-arrow-alt-right"></i></div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
                 <div class="col-8">
@@ -173,53 +180,6 @@
     </div>
 </div>
 <script>
-    let currentIndex = 0;
-    const slides = document.querySelectorAll('.slide');
-    const slideWrapper = document.querySelector('.slide-wrapper');
-    const numSlides = slides.length;
-    const numVisibleSlides = 3; // Số lượng ảnh hiển thị trên giao diện
-
-    function updateButtons() {
-        if (numSlides <= numVisibleSlides) {
-            document.querySelector('.slide-button-prev').style.display = 'none';
-            document.querySelector('.slide-button-next').style.display = 'none';
-        } else {
-            document.querySelector('.slide-button-prev').style.display = 'block';
-            document.querySelector('.slide-button-next').style.display = 'block';
-        }
-    }
-
-    function showSlide(index) {
-        if (index < 0) {
-            index = numSlides - 1;
-        } else if (index >= numSlides) {
-            index = 0;
-        }
-
-        currentIndex = index;
-
-        const offset = -currentIndex * 33.33 + '%';
-        slideWrapper.style.transform = `translateX(${offset})`;
-    }
-
-    function prevSlide() {
-        showSlide(currentIndex - 1);
-        updateButtons();
-    }
-
-    function nextSlide() {
-        showSlide(currentIndex + 1);
-        updateButtons();
-    }
-
-    function changeLargeImage(index) {
-        const largeImage = document.getElementById('large-image');
-        const imageToDisplay = slides[index].querySelector('img').cloneNode(true);
-
-        // Xóa nội dung của ảnh lớn và thêm ảnh mới
-        largeImage.innerHTML = '';
-        largeImage.appendChild(imageToDisplay);
-    }
 
     function toggleContent() {
         var contentMota = document.getElementById("content-mota");
@@ -239,9 +199,6 @@
             toggleButton.textContent = "Mô tả";
         }
     }
-
-    updateButtons();
-    showSlide(currentIndex);
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
