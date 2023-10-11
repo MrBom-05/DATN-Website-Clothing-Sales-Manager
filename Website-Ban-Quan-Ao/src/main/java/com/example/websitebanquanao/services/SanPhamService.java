@@ -4,6 +4,7 @@ import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.entities.SanPham;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
+import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
 import com.example.websitebanquanao.repositories.SanPhamRepository;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import java.util.UUID;
 public class SanPhamService {
     @Autowired
     private SanPhamRepository sanPhamRepository;
+
+    // admin
 
     public List<SanPhamResponse> getAll() {
         return sanPhamRepository.getAll();
@@ -104,5 +107,11 @@ public class SanPhamService {
             System.out.println("SanPhamService.findById: null");
             return null;
         }
+    }
+
+
+    // user
+    public List<TrangChuResponse> getListTrangChu() {
+        return sanPhamRepository.getListTrangChu();
     }
 }

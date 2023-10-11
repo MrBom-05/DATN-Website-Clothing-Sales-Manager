@@ -3,11 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <style>
-
-    .image-input {
-        display: none;
-    }
-
     .image-preview-container {
         position: relative;
         width: 100px;
@@ -35,7 +30,6 @@
     .image-input-label input[type="file"] {
         display: none;
     }
-
 </style>
 
 
@@ -47,7 +41,7 @@
     </button>
 
     <c:if test="${not empty successMessage}">
-        <div class="alert alert-success">${successMessage}</div>
+        <div class="alert alert-success mt-2">${successMessage}</div>
     </c:if>
 
     <div class="row mt-3">

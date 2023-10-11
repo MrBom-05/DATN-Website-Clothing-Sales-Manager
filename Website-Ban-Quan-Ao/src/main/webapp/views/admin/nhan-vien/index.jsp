@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-
-<body>
 <div class="container">
     <h1 class="text-center">Quản Lý Nhân Viên </h1>
     <c:if test="${not empty successMessage}">
@@ -11,13 +9,13 @@
     </c:if>
     <div class="row mt-3">
         <div class="col-6">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Thêm nhân viên
             </button>
         </div>
     </div>
 
-    <table class="table mt-3">
+    <table class="table table-bordered text-center mt-3">
         <thead>
         <tr>
             <th>STT</th>
@@ -58,9 +56,7 @@
                 </td>
 
                 <td>
-                    <a href="/admin/nhan-vien/delete/${nv.id}" class="btn btn-danger"
-                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
-                    <a href="#" class="btn btn-success update-button"
+                    <a href="#" class="btn btn-primary update-button col-10"
                        data-bs-toggle="modal" data-bs-target="#exampleModal"
                        data-id="${nv.id}" data-ma="${nv.ma}" data-hoVaTen="${nv.hoVaTen}"
                        data-email="${nv.email}" data-soDienThoai="${nv.soDienThoai}"
@@ -69,6 +65,8 @@
                        data-trangThai="${nv.trangThai}" data-chucVu="${nv.chucVu}">
                         Cập Nhật
                     </a>
+                    <a href="/admin/nhan-vien/delete/${nv.id}" class="btn btn-danger mt-1 col-10"
+                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
                 </td>
             </tr>
         </c:forEach>
@@ -96,7 +94,8 @@
     </div>
 
     <!-- Modal Thêm và Cập Nhật -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+         data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,35 +107,37 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="ma">Mã</label>
+                                    <label for="ma" class="form-label">Mã</label>
                                     <form:input type="text" path="ma" id="ma" class="form-control"/>
                                     <form:errors path="ma" cssClass="text-danger"/>
                                 </div>
                             </div>
-                              <div class="col">
-                                  <div class="form-group">
-                                      <label for="hoVaTen">Họ Và Tên</label>
-                                      <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control" required="true"/>
-                                      <form:errors path="hoVaTen" cssClass="text-danger"/>
-                                  </div>
-                              </div>
-
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="hoVaTen" class="form-label">Họ Và Tên</label>
+                                    <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control"
+                                                required="true"/>
+                                    <form:errors path="hoVaTen" cssClass="text-danger"/>
+                                </div>
+                            </div>
 
 
                         </div>
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <form:input type="text" path="email" id="email" class="form-control" required="true"/>
+                                    <label for="email" class="form-label">Email</label>
+                                    <form:input type="text" path="email" id="email" class="form-control"
+                                                required="true"/>
                                     <form:errors path="email" cssClass="text-danger"/>
                                 </div>
                             </div>
 
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="soDienThoai">Số điện thoại</label>
-                                    <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control" required="true"/>
+                                    <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                                    <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control"
+                                                required="true"/>
                                     <form:errors path="soDienThoai" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -145,8 +146,9 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="matKhau">Mật Khẩu</label>
-                                    <form:input type="password" path="matKhau" id="matKhau" class="form-control" required="true"/>
+                                    <label for="matKhau" class="form-label">Mật Khẩu</label>
+                                    <form:input type="password" path="matKhau" id="matKhau" class="form-control"
+                                                required="true"/>
                                     <form:errors path="matKhau" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -154,15 +156,17 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="diaChi">Địa chỉ</label>
-                                    <form:input type="text" path="diaChi" id="diaChi" class="form-control" required="true"/>
+                                    <label for="diaChi" class="form-label">Địa chỉ</label>
+                                    <form:input type="text" path="diaChi" id="diaChi" class="form-control"
+                                                required="true"/>
                                     <form:errors path="diaChi" cssClass="text-danger"/>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="xaPhuong">Xã/Phường</label>
-                                    <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control" required="true"/>
+                                    <label for="xaPhuong" class="form-label">Xã/Phường</label>
+                                    <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control"
+                                                required="true"/>
                                     <form:errors path="xaPhuong" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -170,37 +174,39 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="quanHuyen">Quận/Huyện</label>
-                                    <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control" required="true"/>
+                                    <label for="quanHuyen" class="form-label">Quận/Huyện</label>
+                                    <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control"
+                                                required="true"/>
                                     <form:errors path="quanHuyen" cssClass="text-danger"/>
                                 </div>
                             </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="quanHuyen">Tỉnh</label>
-                                        <form:input type="text" path="tinhThanhPho" id="tinhThanhPho" class="form-control" required="true"/>
-                                        <form:errors path="tinhThanhPho" cssClass="text-danger"/>
-                                    </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="quanHuyen" class="form-label">Tỉnh</label>
+                                    <form:input type="text" path="tinhThanhPho" id="tinhThanhPho" class="form-control"
+                                                required="true"/>
+                                    <form:errors path="tinhThanhPho" cssClass="text-danger"/>
                                 </div>
+                            </div>
 
                         </div>
                         <div class="row mb-3">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="trangThai">Trạng thái</label>
-                                        <form:select path="trangThai" id="trangThai" class="form-control" required="true">
-                                            <option value="0">Đang làm</option>
-                                            <option value="1">Đã nghỉ</option>
-                                        </form:select>
-                                    </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="trangThai" class="form-label">Trạng thái</label>
+                                    <form:select path="trangThai" id="trangThai" class="form-control" required="true">
+                                        <option value="0">Đang làm</option>
+                                        <option value="1">Đã nghỉ</option>
+                                    </form:select>
                                 </div>
+                            </div>
 
 
                             <div class="col">
                                 <div class="form-group">
-                                    <label>Chức vụ</label>
+                                    <label class="form-label">Chức vụ</label>
                                     <form:select path="chucVu" id="chucVu" class="form-control">
-                                        <option value="0">Quản lí</option>
+                                        <option value="0">Quản lý</option>
                                         <option value="1">Nhân Viên</option>
                                     </form:select>
                                 </div>
@@ -217,7 +223,6 @@
 
 <!-- Bao gồm các tập lệnh Spring form và các tập lệnh khác -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
     $(".update-button").click(function () {
         let id = $(this).data("id");
@@ -258,8 +263,8 @@
                 var modalTitle = document.querySelector(".modal-title");
                 var matKhauInput = document.querySelector("#matKhau");
 
-                // Đặt tiêu đề modal thành "Cập Nhật Khách Hàng"
-                modalTitle.textContent = "Cập Nhật Nhân ";
+                // Đặt tiêu đề modal thành "Cập Nhật Nhân Viên"
+                modalTitle.textContent = "Cập Nhật Nhân Viên";
 
                 // Vô hiệu hoá ô input mật khẩu
                 matKhauInput.setAttribute("disabled", "disabled");
