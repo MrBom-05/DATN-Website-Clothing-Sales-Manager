@@ -5,9 +5,14 @@ import com.example.websitebanquanao.entities.MauSac;
 import com.example.websitebanquanao.entities.SanPham;
 import com.example.websitebanquanao.entities.SanPhamChiTiet;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamChiTietRequest;
+import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
+import com.example.websitebanquanao.infrastructures.responses.NhanVienResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse;
 import com.example.websitebanquanao.repositories.SanPhamChiTietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +27,10 @@ public class SanPhamChiTietService {
 
     public List<SanPhamChiTietResponse> getAll() {
         return sanPhamChiTietRepository.getAll();
+    }
+    public Page<BanHangTaiQuayResponse> findAllCtsp(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        return sanPhamChiTietRepository.findAllCtsp(pageable);
     }
 
 

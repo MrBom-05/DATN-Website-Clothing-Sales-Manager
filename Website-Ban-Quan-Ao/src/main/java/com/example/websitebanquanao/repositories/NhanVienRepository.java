@@ -1,6 +1,7 @@
 package com.example.websitebanquanao.repositories;
 
 import com.example.websitebanquanao.entities.NhanVien;
+import com.example.websitebanquanao.infrastructures.requests.NhanVienRequest;
 import com.example.websitebanquanao.infrastructures.responses.NhanVienResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,8 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, UUID> {
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.NhanVienResponse(nv.id, nv.ma, nv.hoVaTen, nv.email, nv.soDienThoai, nv.diaChi, nv.xaPhuong, nv.quanHuyen, nv.tinhThanhPho, nv.ngayVaoLam, nv.chucVu, nv.trangThai) from NhanVien nv where nv.id = :id")
     public NhanVienResponse getByIdResponse(@Param("id") UUID id);
+
+//    check login
+    @Query("select nv from NhanVien nv where nv.email = :email and nv.matKhau = :matKhau")
+    public NhanVien checkLogin(@Param("email") String email, @Param("matKhau") String matKhau);
 }
