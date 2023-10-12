@@ -93,4 +93,28 @@ public class NhanVienService {
             return null;
         }
     }
+//    check login
+    public NhanVienRequest checkLogin(String email, String matKhau) {;
+        NhanVien nhanVien = nhanVienRepository.checkLogin(email, matKhau);
+        if (nhanVien != null) {
+            NhanVienRequest nhanVienRequest = new NhanVienRequest();
+            nhanVienRequest.setId(nhanVien.getId());
+            nhanVienRequest.setMa(nhanVien.getMa());
+            nhanVienRequest.setHoVaTen(nhanVien.getHoVaTen());
+            nhanVienRequest.setEmail(nhanVien.getEmail());
+            nhanVienRequest.setSoDienThoai(nhanVien.getSoDienThoai());
+            nhanVienRequest.setDiaChi(nhanVien.getDiaChi());
+            nhanVienRequest.setXaPhuong(nhanVien.getXaPhuong());
+            nhanVienRequest.setQuanHuyen(nhanVien.getQuanHuyen());
+            nhanVienRequest.setTinhThanhPho(nhanVien.getTinhThanhPho());
+            nhanVienRequest.setChucVu(nhanVien.getChucVu());
+            nhanVienRequest.setTrangThai(nhanVien.getTrangThai());
+
+            System.out.println("NhanVienService.checkLogin: " + nhanVienRequest.getHoVaTen());
+            return nhanVienRequest;
+        } else {
+            System.out.println("NhanVienService.checkLogin: null");
+            return null;
+        }
+    }
 }

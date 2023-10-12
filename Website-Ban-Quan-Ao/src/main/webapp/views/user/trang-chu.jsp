@@ -4,7 +4,7 @@
 <section class="content">
     <div class="container ">
         <h3 class="fw-bold text-lg-start mt-4">NEWEST ARRIVALS</h3>
-        <div class="row row-cols-2 row-cols-md-4 g-4 ">
+        <div class="row row-cols-2 row-cols-md-4 g-4">
             <c:forEach items="${listTrangChu}" var="sanPham">
                 <div class="col">
                     <a href="/san-pham/${sanPham.id}" class="text-decoration-none text-dark">
