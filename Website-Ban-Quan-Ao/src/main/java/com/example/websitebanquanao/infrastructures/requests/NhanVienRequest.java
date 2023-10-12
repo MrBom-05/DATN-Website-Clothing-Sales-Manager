@@ -15,6 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Component
 public class NhanVienRequest {
+    private UUID id;
     private String ma;
     private String hoVaTen;
     private String email;
