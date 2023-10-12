@@ -1,16 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="f" uri="jakarta.tags.functions" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div>
     <h1 class="text-center mt-3">Quản lý chi tiết sản phẩm</h1>
-    <div class="row col-2 ms-2 float-start">
-        <a href="/admin/san-pham-chi-tiet/create">
-            <button class="btn btn-success ">Thêm sản phẩm</button>
-        </a>
+    <div class="row col-2 ms-1 float-start">
+        <a href="/admin/san-pham-chi-tiet/create" class="btn btn-success">Thêm chi tiết sản phẩm</a>
     </div>
-    <div class="mt-5">
+    <div class="ms-1 mt-5">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -59,58 +55,3 @@
         </table>
     </div>
 </div>
-
-<!-- Modal -->
-<div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img id="modalImage" class="modal-content">
-</div>
-
-<script>
-    function showModal(imageId) {
-        var modal = document.getElementById('imageModal');
-        var modalImage = document.getElementById('modalImage');
-
-        // Set the image source to the URL of the image you want to display
-        modalImage.src = '/admin/san-pham-chi-tiet/get-anh/' + imageId;
-        modal.style.display = 'block';
-        console.log(modalImage.src);
-        console.log(imageId);
-    }
-
-    function closeModal() {
-        var modal = document.getElementById('imageModal');
-        modal.style.display = 'none';
-    }
-</script>
-
-<style>
-    /* Add your modal styles here */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.9);
-    }
-
-    .modal-content {
-        display: block;
-        margin: 10% auto;
-        max-width: 80%;
-        max-height: 80%;
-    }
-
-    .close {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 10px;
-        color: #fff;
-        cursor: pointer;
-    }
-</style>
