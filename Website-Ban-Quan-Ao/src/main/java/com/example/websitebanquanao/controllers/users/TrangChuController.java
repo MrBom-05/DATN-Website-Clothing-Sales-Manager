@@ -31,4 +31,16 @@ public class TrangChuController {
         model.addAttribute("viewContent", "/views/user/san-pham-chi-tiet.jsp");
         return "user/layout";
     }
+
+    @GetMapping("/gio-hang")
+    public String gioHang(Model model) {
+        model.addAttribute("viewContent", "/views/user/gio-hang.jsp");
+        return "user/layout";
+    }
+
+    @GetMapping("thanh-toan")
+    public String thanhToan(Model model) {
+        model.addAttribute("viewContent", "/views/user/thanh-toan.jsp");
+        return "user/layout";
+    }
 }
