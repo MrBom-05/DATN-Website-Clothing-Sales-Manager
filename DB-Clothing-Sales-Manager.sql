@@ -154,7 +154,8 @@ CREATE TABLE hoa_don
     xa_phuong            NVARCHAR(80),
     quan_huyen           NVARCHAR(80),
     tinh_thanh_pho       NVARCHAR(80),
-    trang_thai           INT
+    trang_thai           INT,
+    loai_hoa_don         INT
 )
 
 CREATE TABLE hoa_don_chi_tiet

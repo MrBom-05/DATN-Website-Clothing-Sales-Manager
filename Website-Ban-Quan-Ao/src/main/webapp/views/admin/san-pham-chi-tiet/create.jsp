@@ -137,11 +137,12 @@
                                 <img id="imageDisplay${i}" class="image-preview" src="" alt="Image ${i + 1}">
                                 <span class="image-placeholder" id="placeholder${i}">+</span>
                             </label>
-                            <input type="file" id="imageInput${i}" class="image-input" accept="image/*" onchange="displayImage(${i}, 'imageDisplay${i}', 'placeholder${i}'); convertImageToBase64(${i});" />
+                            <input type="file" id="imageInput${i}" class="image-input" accept="image/*"
+                                   onchange="displayImage(${i}, 'imageDisplay${i}', 'placeholder${i}'); convertImageToBase64(${i});"/>
                             <label class="image-input-label selected" for="imageInput${i}">Chọn ảnh</label>
 
                             <!-- Thêm hidden input để lưu trữ giá trị base64Images -->
-                            <form:input path="duongDan[${i}]" type="hidden" id="base64Images${i}" />
+                            <form:input path="duongDan[${i}]" type="hidden" id="base64Images${i}"/>
                         </c:forEach>
                     </div>
                 </div>
