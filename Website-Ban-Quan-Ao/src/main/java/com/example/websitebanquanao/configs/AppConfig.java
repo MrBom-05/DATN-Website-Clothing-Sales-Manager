@@ -16,6 +16,7 @@ public class AppConfig {
         registrationBean.addUrlPatterns("/hoa-don/*");
         return registrationBean;
     }
+
     @Bean
     public FilterRegistrationBean<AdminFilter> sessionFilter() {
         FilterRegistrationBean<AdminFilter> registrationBean = new FilterRegistrationBean<>();

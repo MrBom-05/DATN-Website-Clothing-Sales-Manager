@@ -66,7 +66,7 @@ public class SanPhamChiTietController {
     @PostMapping("/add")
     public String add(@ModelAttribute("sanPhamChiTiet") SanPhamChiTietRequest sanPhamChiTietRequest) {
         sanPhamChiTietService.add(sanPhamChiTietRequest);
-        return "redirect:/admin/san-pham-chi-tiet";
+        return "redirect:/admin/san-pham-chi-tiet/index";
     }
 
     @GetMapping("/edit/{id}")

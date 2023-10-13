@@ -71,87 +71,91 @@
                 </div>
             </div>
             <hr/>
-            <div class="mt-3 row">
-                <div class="col-3">
-                    <div class="title">
-                        <p>Màu sắc:</p>
-                    </div>
-                    <select class="form-select w-75" aria-label="Color Select" id="mauSacSelect">
-                        <option selected>Chọn</option>
-                        <c:forEach items="${listMauSac}" var="mauSac">
-                            <option value="${mauSac.id}" ${mauSac.id == idMauSac ? "selected" : ""}
-                                    label="${mauSac.ten}"/>
-                        </c:forEach>
-                    </select>
-
-                    <script>
-                        // Lấy thẻ select
-                        var selectElement = document.getElementById("mauSacSelect");
-
-                        // Thêm sự kiện onchange để theo dõi khi người dùng thay đổi giá trị
-                        selectElement.addEventListener("change", function () {
-                            // Lấy giá trị value của select
-                            var selectedValue = selectElement.value;
-
-                            // Cập nhật đường link với giá trị mới
-                            var newURL = "http://localhost:8080/san-pham/${sanPham.id}/" + selectedValue;
-
-                            // Tải lại trang với đường link mới
-                            window.location.href = newURL;
-                        });
-                    </script>
-                </div>
-
-                <div class="col-3">
-                    <div class="title">
-                        <p>Kích cỡ:</p>
-                    </div>
-                    <select class="form-select w-75" aria-label="Size Select">
-                        <option selected>Chọn</option>
-                        <c:forEach items="${listKichCo}" var="kichCo">
-                            <option value="${kichCo.id}" label="${kichCo.ten}"/>
-                        </c:forEach>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <div class="quantity">
+            <form:form modelAttribute="gioHang" action="/gio-hang/${sanPham.id}" method="post">
+                <div class="mt-3 row">
+                    <div class="col-3">
                         <div class="title">
-                            <p>Số lượng:</p>
+                            <p>Màu sắc:</p>
                         </div>
-                        <div class="input-group">
-                            <button class="btn btn-outline-dark" type="button"
-                                    onclick="decrement()">-
-                            </button>
-                            <input type="number" class="form-control text-center w-50" id="quantity" name="quantity"
-                                   value="1" min="1">
-                            <button class="btn btn-outline-dark" type="button"
-                                    onclick="increment()">+
-                            </button>
-                        </div>
-                        <script>
-                            function decrement() {
-                                var quantityInput = document.getElementById("quantity");
-                                var currentValue = parseInt(quantityInput.value);
-                                if (currentValue > 1) {
-                                    quantityInput.value = currentValue - 1;
-                                }
-                            }
+                        <form:select path="idMauSac" class="form-select w-75" aria-label="Color Select"
+                                     id="mauSacSelect">
+                            <option selected>Chọn</option>
+                            <c:forEach items="${listMauSac}" var="mauSac">
+                                <option value="${mauSac.id}" ${mauSac.id == idMauSac ? "selected" : ""}
+                                        label="${mauSac.ten}"/>
+                            </c:forEach>
+                        </form:select>
 
-                            function increment() {
-                                var quantityInput = document.getElementById("quantity");
-                                var currentValue = parseInt(quantityInput.value);
-                                quantityInput.value = currentValue + 1;
-                            }
+                        <script>
+                            // Lấy thẻ select
+                            var selectElement = document.getElementById("mauSacSelect");
+
+                            // Thêm sự kiện onchange để theo dõi khi người dùng thay đổi giá trị
+                            selectElement.addEventListener("change", function () {
+                                // Lấy giá trị value của select
+                                var selectedValue = selectElement.value;
+
+                                // Cập nhật đường link với giá trị mới
+                                var newURL = "http://localhost:8080/san-pham/${sanPham.id}/" + selectedValue;
+
+                                // Tải lại trang với đường link mới
+                                window.location.href = newURL;
+                            });
                         </script>
                     </div>
-                </div>
-            </div>
 
-            <div class="mt-5">
-                <div class="justify-content-between">
-                    <button class="btn btn-success">Thêm vào giỏ hàng</button>
+                    <div class="col-3">
+                        <div class="title">
+                            <p>Kích cỡ:</p>
+                        </div>
+                        <form:select path="idKichCo" class="form-select w-75" aria-label="Size Select">
+                            <option selected>Chọn</option>
+                            <c:forEach items="${listKichCo}" var="kichCo">
+                                <option value="${kichCo.id}" label="${kichCo.ten}"/>
+                            </c:forEach>
+                        </form:select>
+                    </div>
+                    <div class="col-3">
+                        <div class="quantity">
+                            <div class="title">
+                                <p>Số lượng:</p>
+                            </div>
+                            <div class="input-group">
+                                <button class="btn btn-outline-dark" type="button"
+                                        onclick="decrement()">-
+                                </button>
+                                <form:input path="soLuong" type="number" class="form-control text-center w-50"
+                                            id="quantity" name="quantity"
+                                            value="1" min="1"/>
+                                <button class="btn btn-outline-dark" type="button"
+                                        onclick="increment()">+
+                                </button>
+                            </div>
+                            <script>
+                                function decrement() {
+                                    var quantityInput = document.getElementById("quantity");
+                                    var currentValue = parseInt(quantityInput.value);
+                                    if (currentValue > 1) {
+                                        quantityInput.value = currentValue - 1;
+                                    }
+                                }
+
+                                function increment() {
+                                    var quantityInput = document.getElementById("quantity");
+                                    var currentValue = parseInt(quantityInput.value);
+                                    quantityInput.value = currentValue + 1;
+                                }
+                            </script>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div class="mt-5">
+                    <div class="justify-content-between">
+                        <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+            </form:form>
         </section>
 
     </div>

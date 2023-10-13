@@ -1,6 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<style>
+    form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+
 <div class="row mt-5 col-6 offset-3">
     <div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -18,26 +29,27 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="login" role="tabpanel"
                  aria-labelledby="login-tab">
-                <form>
+                <%--@elvariable id="kh" type="java"--%>
+                <form:form modelAttribute="kh" action="/dang-nhap" method="post">
                     <div class="row">
                         <div class="col-6">
                             <label for="loginEmail"
                                    class="form-label">Email (*)</label>
-                            <input type="email" class="form-control" id="loginEmail"
-                                   aria-describedby="emailHelp">
+                            <form:input path="email" type="email" class="form-control" id="loginEmail"
+                                        aria-describedby="emailHelp"/>
 
                         </div>
                         <div class="col-6">
                             <label for="loginPassword" class="form-label">Mật
                                 Khẩu (*)</label>
-                            <input type="password" class="form-control"
-                                   id="loginPassword">
+                            <form:input path="matKhau" type="password" class="form-control"
+                                        id="loginPassword"/>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-9">
                             <input type="checkbox" class="form-check-input"
-                                   id="loginRemember">
+                                   id="loginRemember"/>
                             <label class="form-check-label" for="loginRemember">Ghi
                                 nhớ tài khoản</label>
                         </div>
@@ -48,7 +60,7 @@
                     </div>
                     <button type="submit" class="btn btn-dark mt-5">Đăng Nhập
                     </button>
-                </form>
+                </form:form>
             </div>
             <div class="tab-pane fade" id="register" role="tabpanel"
                  aria-labelledby="register-tab">
