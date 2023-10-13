@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class HoaDonService {
@@ -65,7 +66,25 @@ public class HoaDonService {
         hoaDon.setQuanHuyen(hoaDonRequest.getQuanHuyen());
         hoaDon.setTinhThanhPho(hoaDonRequest.getTinhThanhPho());
         hoaDon.setTrangThai(hoaDonRequest.getTrangThai());
+        hoaDon.setLoaiHoaDon(hoaDonRequest.getLoaiHoaDon());
         hoaDonRepository.save(hoaDon);
         System.out.println("HoaDonService.add: " + hoaDon.getMa());
+    }
+
+    public HoaDon getById(UUID idHoaDon) {
+        if (hoaDonRepository.findById(idHoaDon).isPresent()) {
+            return hoaDonRepository.findById(idHoaDon).get();
+        }else {
+            return null;
+        }
+    }
+    public HoaDon findHoaDonByHoaDonChiTietId(UUID idHoaDonChiTiet) {
+        return hoaDonRepository.findHoaDonByHoaDonChiTietId(idHoaDonChiTiet);
+    }
+
+    public void update(HoaDon hoaDon, UUID idHoaDon) {
+        if (hoaDon != null && idHoaDon != null) {
+            hoaDonRepository.save(hoaDon);
+        }
     }
 }
