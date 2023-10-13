@@ -14,20 +14,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/admin")
 public class LoginController {
     @Autowired
     private NhanVienService nhanVienService;
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/login")
+    @GetMapping("/login-admin")
     public String login(Model model) {
         model.addAttribute("nv", new LoginAdminRequest());
         return "admin/login/login";
     }
 
-    @PostMapping("/check-login")
+    @PostMapping("/check-login-admin")
     public String checkLogin(@ModelAttribute("nv") LoginAdminRequest loginAdminRequest, Model model) {
         String email = loginAdminRequest.getEmail();
         String matKhau = loginAdminRequest.getMatKhau();

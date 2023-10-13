@@ -29,38 +29,32 @@
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/san-pham/index">Sản phẩm</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/san-pham-chi-tiet">Sản Phẩm Chi Tiết</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/dong-sp/index">Dòng sản phẩm</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/khach-hang/index">Khách Hàng</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/nhan-vien/index">Nhân Viên</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/cua-hang/index">Cửa Hàng</a>
+                   href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/mau-sac/index">Màu sắc</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/nsx/index">Nhà sản xuất</a>
+                   href="/admin/khach-hang/index">Khách Hàng</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/chuc-vu/index">Chức vụ</a>
+                   href="/admin/loai/index">Loại</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/kich-co/index">Kích cỡ</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/nhan-vien/index">Nhân viên</a>
             </c:if>
             <c:if test="${admin.chucVu == 1}">
                 <!-- Hiển thị menu cho nhân viên -->
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/san-pham/index">Sản phẩm</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/san-pham-chi-tiet">Sản Phẩm Chi Tiết</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/dong-sp/index">Dòng sản phẩm</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/khach-hang/index">Khách Hàng</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/cua-hang/index">Cửa Hàng</a>
+                   href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/mau-sac/index">Màu sắc</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/nsx/index">Nhà sản xuất</a>
+                   href="/admin/khach-hang/index">Khách Hàng</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/loai/index">Loại</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/kich-co/index">Kích cỡ</a>
             </c:if>
         </div>
     </div>

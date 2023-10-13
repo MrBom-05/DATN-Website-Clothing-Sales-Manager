@@ -76,4 +76,13 @@ public class MauSacController {
     public ResponseEntity<MauSacResponse> getMauSac(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(mauSacService.getById(id));
     }
+    @PostMapping("/them-nhanh")
+    public String themNhanh(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
+            return "admin/layout";
+        }
+        mauSacService.add(mauSacRequest);
+        return "redirect:/admin/san-pham-chi-tiet/create";
+    }
 }

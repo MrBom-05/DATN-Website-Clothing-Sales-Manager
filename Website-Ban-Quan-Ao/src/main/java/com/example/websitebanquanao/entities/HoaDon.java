@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class HoaDon {
     private String ma;
 
     @Column(name = "ngay_tao")
-    private Instant ngayTao;
+    private LocalDate ngayTao;
 
     @Column(name = "ngay_thanh_toan")
     private Instant ngayThanhToan;
