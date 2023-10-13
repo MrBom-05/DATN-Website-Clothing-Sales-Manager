@@ -75,4 +75,14 @@ public class KichCoController {
     public ResponseEntity<KichCoResponse> getLoai(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(kichCoService.getById(id));
     }
+    @PostMapping("/them-nhanh")
+    public String themNhanh(@Valid @ModelAttribute("kc") KichCoRequest kichCoRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("view", "/views/admin/kich-co/index.jsp");
+            return "admin/layout";
+        }
+        kichCoService.add(kichCoRequest);
+        redirectAttributes.addFlashAttribute("successMessage", "Thêm kích cỡ thành công");
+        return "redirect:/admin/san-pham-chi-tiet/create";
+    }
 }

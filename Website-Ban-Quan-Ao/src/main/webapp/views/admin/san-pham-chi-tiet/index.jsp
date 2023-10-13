@@ -19,7 +19,6 @@
                 <th>Số lượng</th>
                 <th>Mô tả</th>
                 <th>Trạng thái</th>
-                <th>Ảnh sản phẩm</th>
                 <th colspan="2">Thao tác</th>
             </tr>
             </thead>
@@ -43,11 +42,7 @@
                         </c:if>
                     </td>
                     <td>
-                        <a href="javascript:void(0);" onclick="showModal('${sanPhamChiTiet.id}')">Xem ảnh</a>
-                    </td>
-                    <td>
                         <a href="edit-product?id=${product.id}" class="btn btn-warning">Sửa</a>
-                        <a href="delete-product?id=${product.id}" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
             </c:forEach>
