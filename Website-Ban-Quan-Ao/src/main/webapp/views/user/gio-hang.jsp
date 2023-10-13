@@ -3,7 +3,7 @@
 
 <div class="row col-10 offset-1 mt-3">
     <div class="col-8">
-        <table class="table">
+        <table class="table align-middle">
             <thead class="text-center">
             <tr>
                 <th colspan="2">Sản phẩm</th>
@@ -14,35 +14,39 @@
             </tr>
             </thead>
             <tbody class="text-center">
-            <tr>
-                <td>
-                    <img src="https://cdn.leninn.com/leninn/products/498f177033a33d6113cf701f95755bca/64ba4a44ec5e0d72ad2a1bc1/lennin-0180a-SfUwRA_100x100.png"
-                         alt="sanpham">
-                </td>
+            <c:forEach items="${listGioHang}" var="gioHang">
+                <tr>
+                    <td>
+                        <img src="${gioHang.anh}" style="width: 100px; height: 100px"
+                             alt="sanpham">
+                    </td>
 
-                <td>
-                    <a class="link-dark" style="text-decoration: none" href="/product/leninn-stone-washed-bucket-hat">LENINN
-                        STONE WASHED BUCKET HAT</a>
-                </td>
+                    <td>
+                        <a class="link-dark" style="text-decoration: none"
+                           href="/san-pham/${gioHang.id}/${gioHang.idMauSac}">${gioHang.tenSanPham}-${gioHang.tenMauSac}-${gioHang.tenKichCo}</a>
+                    </td>
 
-                <td class="">290,000&nbsp;₫</td>
+                    <td>${gioHang.gia} ₫</td>
 
-                <td>
-                    <div class="input-group">
-                        <button class="btn btn-outline-dark" type="button"
-                                onclick="decrement()">-
-                        </button>
-                        <input type="number" class="form-control text-center" style="width: 50px" id="quantity" name="quantity" value="1" min="1">
-                        <button class="btn btn-outline-dark" type="button"
-                                onclick="increment()">+
-                        </button>
-                    </div>
-                </td>
-                <td>290,000&nbsp;₫</td>
-                <td>
-                    <button type="button" class="btn-close" aria-label="Close"></button>
-                </td>
-            </tr>
+                    <td>
+                        <div class="input-group">
+                            <button class="btn btn-outline-dark" type="button"
+                                    onclick="decrement()">-
+                            </button>
+                            <input type="number" class="form-control text-center" style="width: 50px" id="quantity"
+                                   name="quantity" value="${gioHang.soLuong}" min="1">
+                            <button class="btn btn-outline-dark" type="button"
+                                    onclick="increment()">+
+                            </button>
+                        </div>
+                    </td>
+                    <td>${gioHang.soLuong * gioHang.gia} ₫</td>
+                    <td>
+                        <a href="/gio-hang/${gioHang.idSanPhamChiTiet}" type="button" class="btn-close"
+                           aria-label="Close"></a>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
         <div class="row">
