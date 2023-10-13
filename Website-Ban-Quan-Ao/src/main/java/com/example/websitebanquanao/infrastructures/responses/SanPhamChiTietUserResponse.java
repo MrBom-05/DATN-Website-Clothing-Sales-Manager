@@ -6,19 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TrangChuResponse {
+public class SanPhamChiTietUserResponse {
     private UUID id;
     private String ten;
-    private String anh;
     private BigDecimal giaNhoNhat;
     private BigDecimal giaLonNhat;
-    private Integer idMauSac;
-    private Date ngayTao;
+    private String moTa;
 }

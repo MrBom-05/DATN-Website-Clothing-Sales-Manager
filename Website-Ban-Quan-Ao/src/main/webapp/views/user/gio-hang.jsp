@@ -29,13 +29,13 @@
 
                 <td>
                     <div class="input-group">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-dark" onclick="decrement()">-</button>
-                        </span>
-                        <input type="number" class="form-control" style="width: 50px" id="quantity" name="quantity" value="1" min="1">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-dark" onclick="increment()">+</button>
-                        </span>
+                        <button class="btn btn-outline-dark" type="button"
+                                onclick="decrement()">-
+                        </button>
+                        <input type="number" class="form-control text-center" style="width: 50px" id="quantity" name="quantity" value="1" min="1">
+                        <button class="btn btn-outline-dark" type="button"
+                                onclick="increment()">+
+                        </button>
                     </div>
                 </td>
                 <td>290,000&nbsp;₫</td>
@@ -110,5 +110,4 @@
         var currentValue = parseInt(quantityInput.value);
         quantityInput.value = currentValue + 1;
     }
-
 </script>
