@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <style>
     .image-input {
         display: none;
@@ -37,6 +38,7 @@
     }
 </style>
 <script>
+<%--    ctsp--%>
     function displayImage(index, imageId, placeholderId) {
         var input = document.getElementById("imageInput" + index);
         var imageDisplay = document.getElementById(imageId);
@@ -59,8 +61,6 @@
 
         reader.readAsDataURL(file);
     }
-
-    // Function to convert an image file to base64
     function convertImageToBase64(index) {
         var input = document.getElementById("imageInput" + index);
         var base64ImagesInput = document.getElementById("base64Images" + index);
@@ -76,6 +76,44 @@
 
         reader.readAsDataURL(file);
     }
+//     sp
+function displayImageProduct() {
+    var input = document.getElementById('imageInput');
+    var imageDisplayProduct = document.getElementById('imageDisplayProduct');
+    var placeholder = document.getElementById('placeholder1'); // Đã thêm id vào placeholder
+
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            imageDisplayProduct.src = e.target.result;
+            imageDisplayProduct.style.display = 'block';
+            placeholder.style.display = 'none';
+            // Chuyển đổi ảnh thành base64 và hiển thị nó
+            convertToBase64(input.files[0], function (base64Image) {
+                // Lưu base64Image vào một biến hoặc gửi nó điều kiện cần thiết
+            });
+        };
+        console.log(input.files[0]);
+
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        imageDisplayProduct.src = ''; // Xóa ảnh nếu không có tệp được chọn
+        imageDisplayProduct.style.display = 'none';
+        placeholder.style.display = 'block';
+    }
+}
+function convertToBase64(file, callback) {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+        var base64Image = reader.result.split(',')[1];
+        callback(base64Image);
+    };
+    reader.onerror = function (error) {
+        console.error('Error reading file: ', error);
+    };
+}
 </script>
 
 <div class="container mt-3">
@@ -90,6 +128,7 @@
                     </div>
                     <div class="col-4">
                         <label for="idSanPham" class="form-label">Sản Phẩm</label>
+                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalSanPham" title="Thêm Sản phẩm"></i>
                         <form:select path="idSanPham" id="idSanPham" class="form-select">
                             <c:forEach items="${listSanPham}" var="sanPham">
                                 <form:option value="${sanPham.id}" label="${sanPham.ten}"/>
@@ -98,6 +137,7 @@
                     </div>
                     <div class="col-4">
                         <label for="idMauSac" class="form-label">Màu Sắc</label>
+                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Thêm màu sắc"></i>
                         <form:select path="idMauSac" id="idMauSac" class="form-select">
                             <c:forEach items="${listMauSac}" var="mauSac">
                                 <form:option value="${mauSac.id}" label="${mauSac.ten}"/>
@@ -108,6 +148,7 @@
                 <div class="row mt-2">
                     <div class="col-4">
                         <label for="idKichCo" class="form-label">Kích Cỡ</label>
+                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalKichCo" title="Thêm Kích cỡ"></i>
                         <form:select path="idKichCo" id="idKichCo" class="form-select">
                             <c:forEach items="${listKichCo}" var="kichCo">
                                 <form:option value="${kichCo.id}" label="${kichCo.ten}"/>
@@ -157,6 +198,96 @@
                 </div>
             </form:form>
 
+        </div>
+    </div>
+</div>
+<%--mau sac--%>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form:form modelAttribute="ms" method="post" action="/admin/mau-sac/them-nhanh">
+                    <div class="row mb-3">
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <label for="ten" class="form-label">Tên Màu</label>
+                                <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
+                                <form:errors path="ten" cssClass="text-danger"/>
+                            </div>
+                            <div class="col-6">
+                                <label for="maMauSac" class="form-label">Mã Màu</label>
+                                <form:input type="text" path="maMauSac" id="maMauSac" class="form-control" required="true"/>
+                                <form:errors path="maMauSac" cssClass="text-danger"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ... -->
+                    <button type="submit" class="btn btn-success mt-3 col-2 offset-5 save-button">Lưu</button>
+                </form:form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%--kich co--%>
+<div class="modal fade" id="modalKichCo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form:form id="edit-form" modelAttribute="kc" method="post" action="/admin/kich-co/them-nhanh">
+                    <div class="form-group text-center">
+                        <label for="ten" class="form-label">Kích cỡ</label>
+                        <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
+                        <form:errors path="ten" cssClass="text-danger"/>
+                        <button type="submit" class="btn btn-success mt-3">Lưu</button>
+                    </div>
+                </form:form>
+            </div>
+        </div>
+    </div>
+</div>
+<%--san pham--%>
+<div class="modal fade" id="modalSanPham" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form:form id="edit-form" modelAttribute="sp" method="post" action="/admin/san-pham/them-nhanh" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="ten" class="form-label">Tên Sản Phẩm</label>
+                                <form:input type="text" path="ten" id="ten" class="form-control"
+                                            required="true"/>
+                                <form:errors path="ten" cssClass="text-danger"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="form-label">Loại</label>
+                                <form:select class="form-select" path="idLoai">
+                                    <c:forEach items="${listLoai}" var="loai">
+                                        <option value="${loai.id}">${loai.ten}</option>
+                                    </c:forEach>
+                                </form:select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <label class="form-label">Ảnh sản phẩm</label>
+                        <div class="text-center">
+                            <label for="imageInput" class="image-preview-container">
+                                <img id="imageDisplayProduct" class="image-preview" src="" alt="Image">
+                                <span class="image-placeholder" id="placeholder1">+</span>
+                            </label>
+                            <form:input path="anh" type="file" id="imageInput" class="image-input" accept="image/*"
+                                        onchange="displayImageProduct()"/>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mt-3 col-2 offset-5">Lưu</button>
+                </form:form>
+            </div>
         </div>
     </div>
 </div>

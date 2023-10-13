@@ -65,5 +65,15 @@ public class SanPhamController {
         sanPhamService.update(sanPhamRequest, id, anh);
         return redirect;
     }
+    @PostMapping("/them-nhanh")
+    public String themNhanh(@Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
+        if (result.hasErrors()) {
+            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
+            return "admin/layout";
+        }
+        redirectAttributes.addFlashAttribute("successMessage", "Thêm mới sản phẩm thành công");
+        sanPhamService.add(sanPhamRequest, anh);
+        return "redirect:/admin/san-pham-chi-tiet/create";
+    }
 
 }

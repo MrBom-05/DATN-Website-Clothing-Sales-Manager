@@ -59,7 +59,7 @@
                     <div class="divider d-flex align-items-center my-4">
                         <p class="text-center fw-bold mx-3 mb-0">Hoặc</p>
                     </div>
-                <form:form modelAttribute="nv" action="/admin/check-login" method="post">
+                <form:form modelAttribute="nv" action="/check-login-admin" method="post">
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <form:input path="email" type="email" id="form3Example3" class="form-control form-control-lg" placeholder="Email là bắt buộc" required="true"/>
