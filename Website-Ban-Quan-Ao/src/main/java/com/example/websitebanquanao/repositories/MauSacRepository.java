@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface MauSacRepository extends JpaRepository<MauSac, Integer> {
@@ -22,4 +23,8 @@ public interface MauSacRepository extends JpaRepository<MauSac, Integer> {
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.MauSacResponse(m.id, m.ten, m.maMauSac) from MauSac m where m.id = :id")
     public MauSacResponse getByIdResponse(@Param("id") Integer id);
+
+    @Query("SELECT DISTINCT new com.example.websitebanquanao.infrastructures.responses.MauSacResponse(ms.id, ms.ten, ms.maMauSac) FROM MauSac ms INNER JOIN ms.sanPhamChiTiets spct INNER JOIN spct.idSanPham sp WHERE sp.id = :idSanPham")
+    public List<MauSacResponse> getListMauSacByIdSanPham(@Param("idSanPham") UUID idSanPham);
+
 }

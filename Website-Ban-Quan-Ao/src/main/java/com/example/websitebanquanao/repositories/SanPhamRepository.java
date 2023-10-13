@@ -1,6 +1,7 @@
 package com.example.websitebanquanao.repositories;
 
 import com.example.websitebanquanao.entities.SanPham;
+import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,9 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
 
 
     // user
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), max(spct.gia)) from SanPham s join s.sanPhamChiTiets spct group by s.id, s.ten, s.anh")
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), max(spct.gia), MIN(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListTrangChu();
+
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse(s.id, s.ten, min(spct.gia), max(spct.gia), spct.moTa) from SanPham s join s.sanPhamChiTiets spct where s.id = :idSanPham group by s.id, s.ten, spct.moTa")
+    public SanPhamChiTietUserResponse getByIdSanPham(@Param("idSanPham") UUID idSanPham);
 }

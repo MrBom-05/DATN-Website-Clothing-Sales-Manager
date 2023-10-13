@@ -8,15 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MauSacService {
     @Autowired
     private MauSacRepository mauSacRepository;
 
+    // admin
 
     public List<MauSacResponse> getAll() {
         return mauSacRepository.getAll();
@@ -36,9 +39,9 @@ public class MauSacService {
         System.out.println("MauSacService.add: " + mauSac.getTen());
     }
 
-    public void update(MauSacRequest mauSacRequest,Integer id) {
+    public void update(MauSacRequest mauSacRequest, Integer id) {
         MauSac mauSac = mauSacRepository.findById(id).orElse(null);
-        if(mauSac != null){
+        if (mauSac != null) {
             mauSac.setMaMauSac(mauSacRequest.getMaMauSac());
             mauSac.setTen(mauSacRequest.getTen());
             mauSacRepository.save(mauSac);
@@ -69,5 +72,10 @@ public class MauSacService {
             System.out.println("MauSacService.getById: null");
             return null;
         }
+    }
+
+    // user
+    public List<MauSacResponse> getListMauSacByIdSanPham(UUID idSanPham) {
+        return mauSacRepository.getListMauSacByIdSanPham(idSanPham);
     }
 }

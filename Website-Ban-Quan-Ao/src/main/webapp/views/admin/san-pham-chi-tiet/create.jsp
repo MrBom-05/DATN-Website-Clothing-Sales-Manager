@@ -35,8 +35,6 @@
     .image-input-label.selected {
         display: none;
     }
-
-
 </style>
 <script>
     function displayImage(index, imageId, placeholderId) {

@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class KichCoService {
@@ -65,5 +67,9 @@ public class KichCoService {
             System.out.println("KichCoService.getById: null");
             return null;
         }
+    }
+
+    public List<KichCoResponse> getListKichCoByIdSanPhamAndMauSac(UUID idSanPham, Integer idMauSac){
+        return kichCoRepository.getListKichCoByIdSanPhamAndMauSac(idSanPham, idMauSac);
     }
 }
