@@ -3,13 +3,18 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <style>
+    .image-input {
+        display: none;
+    }
+
     .image-preview-container {
         position: relative;
         width: 100px;
         height: 100px;
         margin: 10px;
-        border: 1px dashed #ccc; /* Đổi border thành nét đứt */
+        border: 1px dashed #ccc;
         text-align: center;
+        cursor: pointer; /* Sử dụng con trỏ kiểu tay khi di chuột vào */
     }
 
     .image-preview {
@@ -23,11 +28,12 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 36px; /* Đặt kích thước lớn hơn */
+        font-size: 36px;
         color: #333;
     }
 
-    .image-input-label input[type="file"] {
+    /* Ẩn label khi đã chọn ảnh */
+    .image-input-label.selected {
         display: none;
     }
 </style>

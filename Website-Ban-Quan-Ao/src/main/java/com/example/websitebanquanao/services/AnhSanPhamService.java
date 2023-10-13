@@ -6,6 +6,7 @@ import com.example.websitebanquanao.infrastructures.requests.AnhSanPhamRequest;
 import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
 import com.example.websitebanquanao.repositories.AnhSanPhamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class AnhSanPhamService {
     @Autowired
     private AnhSanPhamRepository anhSanPhamRepository;
 
+    // admin
     public List<AnhSanPhamResponse> getAll(UUID id) {
         return anhSanPhamRepository.getAll(id);
     }
@@ -49,4 +51,10 @@ public class AnhSanPhamService {
             System.out.println("AnhSanPhamService.delete: " + id);
         }
     }
+
+    // user
+    public List<AnhSanPhamResponse> getListAnhByIdSanPhamAndIdMauSac(UUID idSanPham, Integer idMauSac){
+        return anhSanPhamRepository.getListAnhByIdSanPhamAndIdMauSac(idSanPham, idMauSac);
+    }
+
 }

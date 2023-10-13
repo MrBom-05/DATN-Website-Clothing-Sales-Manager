@@ -14,4 +14,7 @@ import java.util.UUID;
 public interface AnhSanPhamRepository extends JpaRepository<AnhSanPham, UUID> {
     @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse(a.id, a.duongDan) FROM AnhSanPham a where a.idSanPhamChiTiet.id=:id")
     public List<AnhSanPhamResponse> getAll(@Param("id") UUID id);
+
+    @Query("SELECT NEW com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse(a.id, a.duongDan) FROM AnhSanPham a INNER JOIN a.idSanPhamChiTiet spct INNER JOIN spct.idSanPham sp INNER JOIN spct.idMauSac ms WHERE sp.id = :idSanPham AND ms.id = :idMauSac")
+    public List<AnhSanPhamResponse> getListAnhByIdSanPhamAndIdMauSac(@Param("idSanPham") UUID idSanPham, @Param("idMauSac") Integer idMauSac);
 }

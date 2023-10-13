@@ -88,6 +88,9 @@ public class HoaDon {
     @Column(name = "loai_hoa_don")
     private Integer loaiHoaDon;
 
+    @Column(name = "ghi_chu")
+    private String ghiChu;
+
     @OneToMany(mappedBy = "idHoaDon")
     private Set<DoiTra> doiTras = new LinkedHashSet<>();
 

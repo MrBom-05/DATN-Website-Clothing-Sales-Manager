@@ -3,11 +3,11 @@
 
 <section class="content">
     <div class="container ">
-        <h3 class="fw-bold text-lg-start mt-4">NEWEST ARRIVALS</h3>
+        <h3 class="fw-bold text-lg-start mt-4">Sản phẩm mới nhất</h3>
         <div class="row row-cols-2 row-cols-md-4 g-4">
             <c:forEach items="${listTrangChu}" var="sanPham">
                 <div class="col">
-                    <a href="/san-pham/${sanPham.id}" class="text-decoration-none text-dark">
+                    <a href="/san-pham/${sanPham.id}/${sanPham.idMauSac}" class="text-decoration-none text-dark">
                         <div class="card border-0">
                             <img src="${sanPham.anh}" class="card-img-top" alt="${sanPham.ten}">
                             <div class="card-body text-center">

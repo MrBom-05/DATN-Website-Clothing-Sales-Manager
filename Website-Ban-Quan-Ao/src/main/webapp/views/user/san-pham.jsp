@@ -8,48 +8,14 @@
                 <!-- card 1 -->
                 <div class="card border-0">
                     <div class="card-header border-0 bg-transparent">
-                        <span class="text-dark fw-bold">Department</span>
+                        <span class="text-dark fw-bold">Loại Sản Phẩm:</span>
                     </div>
-                    <div class="card-body d-flex align-items-center flex-wrap">
-                        <!-- Thêm class d-flex, align-items-center, và flex-wrap -->
-                        <!-- repeat -->
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <!--end repeat -->
+                    <div class="card-body align-items-center">
+                        <select class="form-select" path="idLoai">
+                            <c:forEach items="${listLoai}" var="loai">
+                                <option value="${loai.id}">${loai.ten}</option>
+                            </c:forEach>
+                        </select>
                     </div>
                 </div>
                 <!-- end card 1 -->
@@ -57,110 +23,30 @@
                 <!-- card 2 -->
                 <div class="card border-0">
                     <div class="card-header border-0 bg-transparent">
-                        <span class="text-dark fw-bold">Category</span>
+                        <span class="text-dark fw-bold">Màu Sắc:</span>
                     </div>
-                    <div class="card-body d-flex align-items-center flex-wrap">
-                        <!-- Thêm class d-flex, align-items-center, và flex-wrap -->
-                        <!-- repeat -->
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Men
-                                </label>
-                                <p class="float-end">123444444</p>
-                            </div>
-                        </div>
-                        <!--end repeat -->
+                    <div class="card-body align-items-center">
+                        <select path="idMauSac" id="idMauSac" class="form-select">
+                            <c:forEach items="${listMauSac}" var="mauSac">
+                                <option value="${mauSac.id}" label="${mauSac.ten}"/>
+                            </c:forEach>
+                        </select>
                     </div>
                 </div>
-                <!-- end card 2 -->
-                <hr>
-                <!-- card 3 -->
-                <div class="card border-0">
-                    <div class="card-header border-0 bg-transparent">
-                        <span class="text-dark fw-bold">Size</span>
-                    </div>
-                    <div class="card-body d-flex align-items-center flex-wrap">
-                        <!-- Thêm class d-flex, align-items-center, và flex-wrap -->
-                        <!-- repeat -->
-                        <div class="col-12 mb-2"> <!-- Sử dụng col-6 để chia đều cột con -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Size S
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Size S
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Size S
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Size S
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkbox">
-                                <label class="form-check-label" for="checkbox">
-                                    Size S
-                                </label>
-                            </div>
-                        </div>
-                        <!--end repeat -->
-                    </div>
-                </div>
-                <!-- end card 3 -->
             </div>
         </div>
         <div class="col-9 mt-2">
             <div class="input-group">
-                <label class="form-check-label" for="checkbox">
-                    <h2>Home/New Arrivals</h2>
+                <label class="form-label">
+                    <h3>Trang Chủ/Sản Phẩm</h3>
                 </label>
                 <div class="col-3 offset-4 ms-3 mb-3">
                     <select class="form-select" aria-label="Default select example">
-                        <option selected>Sort by</option>
-                        <option value="1">Price: Low to High</option>
-                        <option value="2">Price: High to Low</option>
-                        <option value="3">Product Name: A to Z</option>
-                        <option value="4">Product Name: Z to A</option>
+                        <option selected>Sắp xếp theo</option>
+                        <option value="1">Giá: thấp đến cao</option>
+                        <option value="2">Giá: cao đến thấp</option>
+                        <option value="3">Tên: A đến Z</option>
+                        <option value="4">Tên: Z đến A</option>
                     </select>
                 </div>
             </div>
