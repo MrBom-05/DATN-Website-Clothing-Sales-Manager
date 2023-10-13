@@ -38,7 +38,8 @@
     }
 </style>
 <script>
-<%--    ctsp--%>
+    <%--    ctsp--%>
+
     function displayImage(index, imageId, placeholderId) {
         var input = document.getElementById("imageInput" + index);
         var imageDisplay = document.getElementById(imageId);
@@ -61,6 +62,7 @@
 
         reader.readAsDataURL(file);
     }
+
     function convertImageToBase64(index) {
         var input = document.getElementById("imageInput" + index);
         var base64ImagesInput = document.getElementById("base64Images" + index);
@@ -76,44 +78,46 @@
 
         reader.readAsDataURL(file);
     }
-//     sp
-function displayImageProduct() {
-    var input = document.getElementById('imageInput');
-    var imageDisplayProduct = document.getElementById('imageDisplayProduct');
-    var placeholder = document.getElementById('placeholder1'); // Đã thêm id vào placeholder
 
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
+    //     sp
+    function displayImageProduct() {
+        var input = document.getElementById('imageInput');
+        var imageDisplayProduct = document.getElementById('imageDisplayProduct');
+        var placeholder = document.getElementById('placeholder1'); // Đã thêm id vào placeholder
 
-        reader.onload = function (e) {
-            imageDisplayProduct.src = e.target.result;
-            imageDisplayProduct.style.display = 'block';
-            placeholder.style.display = 'none';
-            // Chuyển đổi ảnh thành base64 và hiển thị nó
-            convertToBase64(input.files[0], function (base64Image) {
-                // Lưu base64Image vào một biến hoặc gửi nó điều kiện cần thiết
-            });
-        };
-        console.log(input.files[0]);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-        reader.readAsDataURL(input.files[0]);
-    } else {
-        imageDisplayProduct.src = ''; // Xóa ảnh nếu không có tệp được chọn
-        imageDisplayProduct.style.display = 'none';
-        placeholder.style.display = 'block';
+            reader.onload = function (e) {
+                imageDisplayProduct.src = e.target.result;
+                imageDisplayProduct.style.display = 'block';
+                placeholder.style.display = 'none';
+                // Chuyển đổi ảnh thành base64 và hiển thị nó
+                convertToBase64(input.files[0], function (base64Image) {
+                    // Lưu base64Image vào một biến hoặc gửi nó điều kiện cần thiết
+                });
+            };
+            console.log(input.files[0]);
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            imageDisplayProduct.src = ''; // Xóa ảnh nếu không có tệp được chọn
+            imageDisplayProduct.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
     }
-}
-function convertToBase64(file, callback) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-        var base64Image = reader.result.split(',')[1];
-        callback(base64Image);
-    };
-    reader.onerror = function (error) {
-        console.error('Error reading file: ', error);
-    };
-}
+
+    function convertToBase64(file, callback) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            var base64Image = reader.result.split(',')[1];
+            callback(base64Image);
+        };
+        reader.onerror = function (error) {
+            console.error('Error reading file: ', error);
+        };
+    }
 </script>
 
 <div class="container mt-3">
@@ -128,7 +132,8 @@ function convertToBase64(file, callback) {
                     </div>
                     <div class="col-4">
                         <label for="idSanPham" class="form-label">Sản Phẩm</label>
-                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalSanPham" title="Thêm Sản phẩm"></i>
+                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalSanPham"
+                           title="Thêm Sản phẩm"></i>
                         <form:select path="idSanPham" id="idSanPham" class="form-select">
                             <c:forEach items="${listSanPham}" var="sanPham">
                                 <form:option value="${sanPham.id}" label="${sanPham.ten}"/>
@@ -137,7 +142,8 @@ function convertToBase64(file, callback) {
                     </div>
                     <div class="col-4">
                         <label for="idMauSac" class="form-label">Màu Sắc</label>
-                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#staticBackdrop" title="Thêm màu sắc"></i>
+                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                           title="Thêm màu sắc"></i>
                         <form:select path="idMauSac" id="idMauSac" class="form-select">
                             <c:forEach items="${listMauSac}" var="mauSac">
                                 <form:option value="${mauSac.id}" label="${mauSac.ten}"/>
@@ -148,7 +154,8 @@ function convertToBase64(file, callback) {
                 <div class="row mt-2">
                     <div class="col-4">
                         <label for="idKichCo" class="form-label">Kích Cỡ</label>
-                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalKichCo" title="Thêm Kích cỡ"></i>
+                        <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalKichCo"
+                           title="Thêm Kích cỡ"></i>
                         <form:select path="idKichCo" id="idKichCo" class="form-select">
                             <c:forEach items="${listKichCo}" var="kichCo">
                                 <form:option value="${kichCo.id}" label="${kichCo.ten}"/>
@@ -202,7 +209,8 @@ function convertToBase64(file, callback) {
     </div>
 </div>
 <%--mau sac--%>
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -216,7 +224,8 @@ function convertToBase64(file, callback) {
                             </div>
                             <div class="col-6">
                                 <label for="maMauSac" class="form-label">Mã Màu</label>
-                                <form:input type="text" path="maMauSac" id="maMauSac" class="form-control" required="true"/>
+                                <form:input type="text" path="maMauSac" id="maMauSac" class="form-control"
+                                            required="true"/>
                                 <form:errors path="maMauSac" cssClass="text-danger"/>
                             </div>
                         </div>
@@ -230,7 +239,8 @@ function convertToBase64(file, callback) {
 </div>
 
 <%--kich co--%>
-<div class="modal fade" id="modalKichCo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalKichCo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -247,11 +257,13 @@ function convertToBase64(file, callback) {
     </div>
 </div>
 <%--san pham--%>
-<div class="modal fade" id="modalSanPham" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalSanPham" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                <form:form id="edit-form" modelAttribute="sp" method="post" action="/admin/san-pham/them-nhanh" enctype="multipart/form-data">
+                <form:form id="edit-form" modelAttribute="sp" method="post" action="/admin/san-pham/them-nhanh"
+                           enctype="multipart/form-data">
                     <div class="row">
                         <div class="col">
                             <div class="form-group">

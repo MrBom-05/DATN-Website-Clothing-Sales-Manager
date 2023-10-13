@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +27,12 @@ public class SanPhamChiTietService {
     @Autowired
     private AnhSanPhamService anhSanPhamService;
 
+    // admin
+
     public List<SanPhamChiTietResponse> getAll() {
         return sanPhamChiTietRepository.getAll();
     }
+
     public Page<BanHangTaiQuayResponse> findAllCtsp(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return sanPhamChiTietRepository.findAllCtsp(pageable);
@@ -104,13 +108,20 @@ public class SanPhamChiTietService {
             return null;
         }
     }
+
     public void updateSoLuong(SanPhamChiTiet sanPhamChiTiet) {
         sanPhamChiTietRepository.save(sanPhamChiTiet);
     }
+
     @Transactional
     public void updateSoLuongAfterDelete(UUID idSanPhamChiTiet, int currentSoLuong) {
         // Gọi phương thức tương ứng từ repository để thực hiện việc cập nhật số lượng
         sanPhamChiTietRepository.updateSoLuongAfterDelete(idSanPhamChiTiet, currentSoLuong);
     }
 
+    // user
+    public SanPhamChiTiet getByIdSanPhamAndIdMauSacAndIdKichCo(UUID idSanPham, Integer idMauSac, Integer idKichCo) {
+        System.out.println("SanPhamChiTietService.getByIdSanPhamAndIdMauSacAndIdKichCo: " + idSanPham + " " + idMauSac + " " + idKichCo);
+        return sanPhamChiTietRepository.getByIdSanPhamAndIdMauSacAndIdKichCo(idSanPham, idMauSac, idKichCo);
+    }
 }

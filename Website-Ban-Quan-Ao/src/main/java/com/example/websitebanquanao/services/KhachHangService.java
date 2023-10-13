@@ -19,6 +19,7 @@ public class KhachHangService {
     @Autowired
     private KhachHangRepository khachHangRepository;
 
+    //admin
     public Page<KhachHangResponse> getPage(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return khachHangRepository.getPage(pageable);
@@ -80,5 +81,11 @@ public class KhachHangService {
             System.out.println("KhachHangService.findById: null");
             return null;
         }
+    }
+
+    // user
+    public KhachHangResponse getByEmailAndMatKhau(String email, String matKhau) {
+        System.out.println("KhachHangService.getByEmailAndMatKhau: " + email + " " + matKhau);
+        return khachHangRepository.getByEmailAndMatKhau(email, matKhau);
     }
 }
