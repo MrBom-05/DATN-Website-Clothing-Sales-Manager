@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @Getter
@@ -13,7 +14,7 @@ import java.time.Instant;
 
 public class HoaDonRequest {
 
-    private Instant ngayTao;
+    private LocalDate ngayTao;
 
     private Instant ngayThanhToan;
 
@@ -46,4 +47,6 @@ public class HoaDonRequest {
     private String tinhThanhPho;
 
     private Integer trangThai;
+
+    private Integer loaiHoaDon;
 }

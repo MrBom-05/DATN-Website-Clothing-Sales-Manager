@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -95,4 +96,21 @@ public class SanPhamChiTietService {
             System.out.println("SanPhamChiTietService.delete: " + id);
         }
     }
+
+    public SanPhamChiTiet findById(UUID idSanPhamChiTiet) {
+        if (sanPhamChiTietRepository.findById(idSanPhamChiTiet).isPresent()) {
+            return sanPhamChiTietRepository.findById(idSanPhamChiTiet).get();
+        } else {
+            return null;
+        }
+    }
+    public void updateSoLuong(SanPhamChiTiet sanPhamChiTiet) {
+        sanPhamChiTietRepository.save(sanPhamChiTiet);
+    }
+    @Transactional
+    public void updateSoLuongAfterDelete(UUID idSanPhamChiTiet, int currentSoLuong) {
+        // Gọi phương thức tương ứng từ repository để thực hiện việc cập nhật số lượng
+        sanPhamChiTietRepository.updateSoLuongAfterDelete(idSanPhamChiTiet, currentSoLuong);
+    }
+
 }
