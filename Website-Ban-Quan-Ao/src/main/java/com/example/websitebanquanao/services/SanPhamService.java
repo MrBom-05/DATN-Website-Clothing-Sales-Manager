@@ -3,6 +3,7 @@ package com.example.websitebanquanao.services;
 import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.entities.SanPham;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
+import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
 import com.example.websitebanquanao.repositories.SanPhamRepository;
@@ -113,5 +114,9 @@ public class SanPhamService {
     // user
     public List<TrangChuResponse> getListTrangChu() {
         return sanPhamRepository.getListTrangChu();
+    }
+
+    public SanPhamChiTietUserResponse getByIdSanPham(UUID idSanPham) {
+        return sanPhamRepository.getByIdSanPham(idSanPham);
     }
 }
