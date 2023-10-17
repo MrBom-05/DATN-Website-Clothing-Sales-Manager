@@ -1,5 +1,6 @@
 package com.example.websitebanquanao.services;
 
+import com.example.websitebanquanao.configs.QRCodeGenerator;
 import com.example.websitebanquanao.entities.KichCo;
 import com.example.websitebanquanao.entities.MauSac;
 import com.example.websitebanquanao.entities.SanPham;
@@ -26,6 +27,8 @@ public class SanPhamChiTietService {
     private SanPhamChiTietRepository sanPhamChiTietRepository;
     @Autowired
     private AnhSanPhamService anhSanPhamService;
+    @Autowired
+    private QRCodeGenerator qrCodeGenerator;
 
     // admin
 
@@ -61,9 +64,13 @@ public class SanPhamChiTietService {
         sanPhamChiTiet.setIdKichCo(kichCo);
 
         SanPhamChiTiet sanPhamChiTietSaved = sanPhamChiTietRepository.save(sanPhamChiTiet);
+        String qrCodeData = String.valueOf(sanPhamChiTietSaved.getId());
+        String filePath = "src/main/java/com/example/websitebanquanao/images/" + sanPhamChiTietSaved.getMaSanPham() + ".png";
+        qrCodeGenerator.generateQRCode(qrCodeData, filePath);
         anhSanPhamService.add(sanPhamChiTietSaved, sanPhamChiTietRequest.getDuongDan());
 
         System.out.println("SanPhamChiTietService.add: " + sanPhamChiTietSaved.getId());
+        System.out.println("file đường dẫn: " + filePath);
     }
 
     public void update(SanPhamChiTietRequest sanPhamChiTietRequest, UUID id) {
