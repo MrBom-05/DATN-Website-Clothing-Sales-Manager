@@ -11,6 +11,8 @@ import com.example.websitebanquanao.services.SanPhamChiTietService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -167,5 +169,38 @@ public class BanHangController {
 
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
     }
+
+
+    @PostMapping("/add-gio-hang-qr-code/{idHoaDon}")
+    @ResponseBody
+    public ResponseEntity<String> addGioHangQRCode(@ModelAttribute("hdct") HoaDonChiTiet hoaDonChiTiet, @PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("idSanPhamChiTiet") UUID idSanPhamChiTiet, @RequestParam("gia") int gia, @RequestParam("soLuongMoi") int soLuongMoi) {
+        // Lấy chi tiết sản phẩm từ cơ sở dữ liệu dựa trên idSanPhamChiTiet
+        SanPhamChiTiet ctsp = ctspService.findById(idSanPhamChiTiet);
+
+        if (ctsp != null) {
+            // Trừ đi số lượng mới từ số lượng hiện tại
+            int soLuongConLai = ctsp.getSoLuong() - soLuongMoi;
+
+            if (soLuongConLai < 0) {
+                // Xử lý tình huống số lượng âm (tuỳ theo quy tắc của bạn)
+                soLuongConLai = 0;
+            }
+
+            // Cập nhật số lượng mới
+            ctsp.setSoLuong(soLuongConLai);
+            ctspService.updateSoLuong(ctsp); // Đảm bảo bạn có một phương thức update trong ctspService
+        }
+
+        // Sử dụng trường soLuongMoi thay vì soLuong
+        hoaDonChiTiet.setSoLuong(soLuongMoi);
+
+        // Thêm sản phẩm vào giỏ hàng
+        hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
+        hoaDonChiTietService.add(hoaDonChiTiet);
+
+        // Trả về một thông báo thành công (hoặc bất kỳ thông báo nào bạn muốn) trong dữ liệu JSON
+        return new ResponseEntity<>("Thêm sản phẩm vào giỏ hàng thành công", HttpStatus.OK);
+    }
+
 }
 

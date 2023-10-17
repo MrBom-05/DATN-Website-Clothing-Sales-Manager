@@ -35,10 +35,10 @@
                     <td>${sanPhamChiTiet.moTa}</td>
                     <td>
                         <c:if test="${sanPhamChiTiet.trangThai == 1}">
-                            <span class="badge bg-success">Còn hàng</span>
+                            <span class="badge bg-success">Đang bán</span>
                         </c:if>
                         <c:if test="${sanPhamChiTiet.trangThai == 0}">
-                            <span class="badge bg-danger">Hết hàng</span>
+                            <span class="badge bg-danger">Ngừng bán</span>
                         </c:if>
                     </td>
                     <td>
