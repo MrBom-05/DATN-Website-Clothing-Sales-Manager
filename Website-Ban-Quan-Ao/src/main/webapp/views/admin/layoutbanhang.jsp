@@ -193,9 +193,23 @@
 
     // Thêm sự kiện cho khi quét QR code thành công
     scanner.addListener('scan', function (content) {
-        // Xử lý kết quả quét tại đây (ví dụ: hiển thị nó trong một input)
-        if (content) {
+        if (content !== "") {
+            // Hiển thị kết quả quét được lên giao diện
             document.getElementById('qr-result').textContent = content;
+            $.ajax({
+                url: `/admin/ban-hang/add-gio-hang-qr-code/${idHoaDon}`,
+                method: "POST",
+                data: {
+                    idSanPhamChiTiet: content,
+                    gia: 0,
+                    soLuongMoi: 1
+                },
+                success: function(response) {
+                    // Xử lý khi thêm thành công
+                    alert("Đã thêm sản phẩm vào giỏ hàng!");
+                    location.reload();
+                }
+            });
         }
     });
 
@@ -253,6 +267,7 @@
         });
     });
 </script>
+
 
 </body>
 
