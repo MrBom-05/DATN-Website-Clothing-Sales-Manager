@@ -20,7 +20,7 @@ public class GiamGia {
     private UUID id;
 
     @Column(name = "ma", nullable = false)
-    private Integer ma;
+    private String ma;
 
     @Column(name = "so_phan_tram_giam")
     private Integer soPhanTramGiam;
