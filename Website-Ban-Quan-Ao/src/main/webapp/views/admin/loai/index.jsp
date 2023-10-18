@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<div class="container mt-5">
+<div class="container mt-3">
     <h1 class="text-center">Quản Lý Loại Sản Phẩm</h1>
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>

@@ -4,17 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 public class KhuyenMaiRequest {
     private String ma;
-    private Integer soPhamTramGiam;
-    private LocalDate ngayBatDau;
-    private LocalDate ngayKetThuc;
+    private String ten;
+    private Integer soPhanTramGiam;
+    private Date ngayBatDau;
+    private Date ngayKetThuc;
     private Integer trangThai;
 }
