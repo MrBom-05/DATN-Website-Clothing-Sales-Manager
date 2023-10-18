@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class GiamGiaResponse {
     private UUID id;
-    private Integer ma;
+    private String ma;
     private Integer soPhanTramGiam;
     private Integer soLuong;
     private LocalDate ngayBatDau;
