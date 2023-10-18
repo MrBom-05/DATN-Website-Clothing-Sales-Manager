@@ -1,5 +1,4 @@
-CREATE
-DATABASE DB_Clothing_Sales_Manager
+CREATE DATABASE DB_Clothing_Sales_Manager
 GO
 USE DB_Clothing_Sales_Manager
 GO
@@ -120,7 +119,7 @@ CREATE TABLE khuyen_mai_chi_tiet
 CREATE TABLE giam_gia
 (
     id                UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ma                INT UNIQUE NOT NULL,
+    ma                VARCHAR(10) NOT NULL,
     so_phan_tram_giam INT,
     so_luong          INT,
     ngay_bat_dau      DATE,
