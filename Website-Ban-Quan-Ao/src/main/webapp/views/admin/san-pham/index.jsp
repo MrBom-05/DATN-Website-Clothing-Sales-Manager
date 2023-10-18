@@ -39,7 +39,7 @@
 </style>
 
 
-<div class="container mt-5">
+<div class="container mt-3">
     <h1 class="text-center">Quản Lý Sản Phẩm</h1>
 
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -50,7 +50,7 @@
         <div class="alert alert-success mt-2">${successMessage}</div>
     </c:if>
 
-    <div class="row mt-3">
+    <div class="row">
         <div>
             <table class="table table-bordered mt-3 text-center">
                 <thead>

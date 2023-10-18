@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.UUID;
 
 @Getter
@@ -15,8 +15,9 @@ import java.util.UUID;
 public class KhuyenMaiResponse {
     private UUID id;
     private String ma;
-    private Integer soPhamTramGiam;
-    private LocalDate ngayBatDau;
-    private LocalDate ngayKetThuc;
+    private String ten;
+    private Integer soPhanTramGiam;
+    private Date ngayBatDau;
+    private Date ngayKetThuc;
     private Integer trangThai;
 }
