@@ -2,12 +2,12 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <div>
-    <h1 class="text-center mt-3">Quản lý chi tiết sản phẩm</h1>
-    <div class="row col-2 ms-1 float-start">
-        <a href="/admin/san-pham-chi-tiet/create" class="btn btn-success">Thêm chi tiết sản phẩm</a>
+    <h1 class="text-center mt-3">Quản Lý Sản Phẩm Chi Tiết</h1>
+    <div class="row col-2 ms-1 mt-3">
+        <a href="/admin/san-pham-chi-tiet/create" class="btn btn-success">Thêm sản phẩm chi tiết</a>
     </div>
-    <div class="ms-1 mt-5">
-        <table class="table table-bordered">
+    <div class="ms-1">
+        <table class="table table-bordered text-center mt-3">
             <thead>
             <tr>
                 <th>STT</th>

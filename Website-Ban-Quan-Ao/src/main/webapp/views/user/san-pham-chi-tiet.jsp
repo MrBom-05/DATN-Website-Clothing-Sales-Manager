@@ -81,8 +81,7 @@
                                      id="mauSacSelect">
                             <option selected>Chọn</option>
                             <c:forEach items="${listMauSac}" var="mauSac">
-                                <option value="${mauSac.id}" ${mauSac.id == idMauSac ? "selected" : ""}
-                                        label="${mauSac.ten}"/>
+                                <option value="${mauSac.id}" ${mauSac.id == idMauSac ? "selected" : ""}>${mauSac.ten}</option>
                             </c:forEach>
                         </form:select>
 
@@ -111,7 +110,7 @@
                         <form:select path="idKichCo" class="form-select w-75" aria-label="Size Select">
                             <option selected>Chọn</option>
                             <c:forEach items="${listKichCo}" var="kichCo">
-                                <option value="${kichCo.id}" label="${kichCo.ten}"/>
+                                <option value="${kichCo.id}">${kichCo.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>

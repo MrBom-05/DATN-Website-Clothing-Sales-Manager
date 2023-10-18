@@ -1,8 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
 <html>
-
 <head>
+    <title>Leninn</title>
     <link rel="stylesheet" href="/../views/user/css/index.css"/>
     <link rel="stylesheet" href="/../views/user/css/styleguide.css"/>
     <link rel="stylesheet" href="/../views/user/css/productdetail.css"/>
@@ -86,12 +85,8 @@
             </div>
             <div class="col-md-5 col-12">
                 <div class="d-flex mb-2">
-                    <div class="text-sm font-weight-bold mr-1">Địa chỉ 1:</div>
+                    <div class="text-sm font-weight-bold mr-1">Địa chỉ:</div>
                     <div class="text-sm flex-fill">110 Nguyễn Hy Quang, Đống Đa, Hà Nội</div>
-                </div>
-                <div class="d-flex mb-2">
-                    <div class="text-sm font-weight-bold mr-1">Địa chỉ 2:</div>
-                    <div class="text-sm flex-fill">40A Ấu Triệu, Hoàn Kiếm, Hà Nội</div>
                 </div>
                 <div class="d-flex mb-2">
                     <div class="text-sm font-weight-bold mr-1">Hotline:</div>

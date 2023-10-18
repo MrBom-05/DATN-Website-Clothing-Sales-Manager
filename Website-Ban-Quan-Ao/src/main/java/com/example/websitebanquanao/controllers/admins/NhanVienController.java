@@ -47,7 +47,6 @@ public class NhanVienController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("nv") NhanVienRequest nhanVienRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-
         if (result.hasErrors()) {
             model.addAttribute("list", nhanVienService.getAll());
             model.addAttribute("view", "/views/admin/nhan-vien/index.jsp");

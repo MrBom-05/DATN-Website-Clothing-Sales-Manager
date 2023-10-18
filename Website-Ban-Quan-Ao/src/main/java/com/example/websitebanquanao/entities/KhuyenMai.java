@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -31,10 +31,10 @@ public class KhuyenMai {
     private Integer soPhanTramGiam;
 
     @Column(name = "ngay_bat_dau")
-    private LocalDate ngayBatDau;
+    private Date ngayBatDau;
 
     @Column(name = "ngay_ket_thuc")
-    private LocalDate ngayKetThuc;
+    private Date ngayKetThuc;
 
     @Column(name = "trang_thai")
     private Integer trangThai;

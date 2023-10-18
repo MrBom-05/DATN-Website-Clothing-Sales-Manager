@@ -51,10 +51,6 @@ public class KhachHangController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        if (khachHangRequest.getHoVaTen().trim().isEmpty()) {
-            result.rejectValue("hoVaTen", "error.kh", "Họ và tên không được để trống");
-            return "admin/layout";
-        }
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";

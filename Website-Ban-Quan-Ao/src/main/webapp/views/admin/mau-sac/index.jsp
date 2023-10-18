@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <h1 class="text-center">Quản Lý Màu Sắc</h1>
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
