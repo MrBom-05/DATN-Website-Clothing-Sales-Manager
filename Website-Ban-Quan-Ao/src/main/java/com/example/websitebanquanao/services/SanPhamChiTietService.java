@@ -131,4 +131,16 @@ public class SanPhamChiTietService {
         System.out.println("SanPhamChiTietService.getByIdSanPhamAndIdMauSacAndIdKichCo: " + idSanPham + " " + idMauSac + " " + idKichCo);
         return sanPhamChiTietRepository.getByIdSanPhamAndIdMauSacAndIdKichCo(idSanPham, idMauSac, idKichCo);
     }
+
+    public List<SanPhamChiTietResponse> getByStatus(Integer trangThai) {
+        return sanPhamChiTietRepository.getByStatus(trangThai);
+    }
+
+    public List<SanPhamChiTietResponse> getByTenMauSac(String tenMauSac) {
+        return sanPhamChiTietRepository.getByTenMauSac(tenMauSac);
+    }
+
+    public List<SanPhamChiTietResponse> getByTenKichCo(String tenKichCo) {
+        return sanPhamChiTietRepository.getByTenKichCo(tenKichCo);
+    }
 }
