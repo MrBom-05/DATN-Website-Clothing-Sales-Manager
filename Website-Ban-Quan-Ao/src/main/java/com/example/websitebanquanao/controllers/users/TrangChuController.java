@@ -6,6 +6,7 @@ import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,9 @@ public class TrangChuController {
     private GioHangChiTietService gioHangChiTietService;
 
     @Autowired
+    private KhuyenMaiChiTietService khuyenMaiChiTietService;
+
+    @Autowired
     private HttpSession session;
 
     @GetMapping("")
@@ -57,6 +61,12 @@ public class TrangChuController {
         model.addAttribute("viewContent", "/views/user/san-pham.jsp");
         return "user/layout";
     }
+
+//    @GetMapping("/so-phan-tram-giam/{idSanPham}")
+//    @ResponseBody
+//    public ResponseEntity<Integer> soPhanTramGiam(@PathVariable("idSanPham") UUID idSanPham) {
+//        return ResponseEntity.ok(khuyenMaiChiTietService.getSoPhanTramGiamByIdSanPham(idSanPham));
+//    }
 
     @GetMapping("/san-pham/{idSanPham}/{idMauSac}")
     public String sanPhamChiTiet(@PathVariable("idSanPham") UUID idSanPham, @PathVariable("idMauSac") Integer idMauSac, Model model) {

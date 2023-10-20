@@ -25,6 +25,9 @@ public class SanPhamService {
     @Autowired
     private SanPhamRepository sanPhamRepository;
 
+    @Autowired
+    private KhuyenMaiChiTietService khuyenMaiChiTietService;
+
     // admin
 
     public List<SanPhamResponse> getAll() {
