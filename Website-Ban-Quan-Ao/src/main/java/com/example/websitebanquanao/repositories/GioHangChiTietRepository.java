@@ -11,7 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, UUID> {
+    @Query("SELECT ghct FROM GioHangChiTiet ghct WHERE ghct.idSanPhamChiTiet.id = :idSanPhamChiTiet AND ghct.idGioHang.id = :idGioHang")
+    public GioHangChiTiet findByIdSanPhamChiTietIdAndIdGioHangId(UUID idSanPhamChiTiet, UUID idGioHang);
+
     @Modifying
     @Query("DELETE FROM GioHangChiTiet ghct WHERE ghct.idSanPhamChiTiet.id = :idSanPhamChiTiet AND ghct.idGioHang.idKhachHang.id = :idKhachHang")
-    void deleteByIdSanPhamChiTietAndIdKhachHang(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet, @Param("idKhachHang") UUID idKhachHang);
+    public void deleteByIdSanPhamChiTietAndIdKhachHang(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet, @Param("idKhachHang") UUID idKhachHang);
 }

@@ -37,7 +37,7 @@ public class LoaiController {
         model.addAttribute("loaiPage", loaiPage);
         model.addAttribute("l", loaiRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/loai/index.jsp");
+        model.addAttribute("view", "/views/admin/loai/chi-tiet.jsp");
         return "admin/layout";
     }
 
@@ -52,7 +52,7 @@ public class LoaiController {
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("l") LoaiRequest loaiRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/loai/index.jsp");
+            model.addAttribute("view", "/views/admin/loai/chi-tiet.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
         loaiService.add(loaiRequest);
@@ -64,7 +64,7 @@ public class LoaiController {
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("l") LoaiRequest loaiRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/loai/index.jsp");
+            model.addAttribute("view", "/views/admin/loai/chi-tiet.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
         loaiService.update(loaiRequest, id);

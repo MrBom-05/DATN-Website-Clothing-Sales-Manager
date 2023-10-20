@@ -45,14 +45,12 @@
                 </div>
                 <div class="menu-img">
                     <a href="/gio-hang" class="menu-overlap-group">
-                        <img class="menu-vector" src="../../img/vector.svg"/>
-                        <div class="menu-div-wrapper">
-                            <div class="menu-text-wrapper-3">4</div>
-                        </div>
+                        <i class="fas fa-shopping-cart" style="color: #000000;"></i>
                     </a>
                 </div>
                 <div class="menu-img">
-                    <a href="/dang-nhap" class="fas fa-user">
+                    <a href="/dang-nhap">
+                        <i class="fas fa-user" style="color: #00000f;"></i>
                     </a>
                 </div>
             </div>

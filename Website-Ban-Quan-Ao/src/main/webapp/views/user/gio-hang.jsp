@@ -29,16 +29,18 @@
                     <td>${gioHang.gia} ₫</td>
 
                     <td>
-                        <div class="input-group">
-                            <button class="btn btn-outline-dark" type="button"
-                                    onclick="decrement()">-
-                            </button>
-                            <input type="number" class="form-control text-center" style="width: 50px" id="quantity"
-                                   name="quantity" value="${gioHang.soLuong}" min="1">
-                            <button class="btn btn-outline-dark" type="button"
-                                    onclick="increment()">+
-                            </button>
-                        </div>
+                        <form action="/gio-hang/update/${gioHang.idSanPhamChiTiet}" method="post">
+                            <div class="input-group mt-3">
+                                <button type="submit" class="btn btn-outline-dark" type="button"
+                                        onclick="decrement()">-
+                                </button>
+                                <input type="number" class="form-control text-center" style="width: 50px" id="quantity"
+                                       name="soLuong" value="${gioHang.soLuong}" min="1">
+                                <button type="submit" class="btn btn-outline-dark" type="button"
+                                        onclick="increment()">+
+                                </button>
+                            </div>
+                        </form>
                     </td>
                     <td>${gioHang.soLuong * gioHang.gia} ₫</td>
                     <td>

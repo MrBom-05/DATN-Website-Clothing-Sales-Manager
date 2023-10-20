@@ -46,17 +46,17 @@
         </section>
         <section class="col-lg-6">
             <div class="col-lg-12">
-                <h3>${sanPham.ten}</h3>
+                <h3 class="fw-bold">${sanPham.ten}</h3>
             </div>
-            <div class="justify-content-between mt-5">
+            <div class="justify-content-between mt-4">
                 <div>
                     <c:choose>
                         <c:when test="${sanPham.giaNhoNhat == sanPham.giaLonNhat}">
-                            <h4>${sanPham.giaNhoNhat}đ</h4>
+                            <h5>${sanPham.giaNhoNhat} vnđ</h5>
                         </c:when>
                         <c:otherwise>
-                            <h4>${sanPham.giaNhoNhat} -- </h4>
-                            <h4>${sanPham.giaLonNhat}đ</h4>
+                            <h5>${sanPham.giaNhoNhat} -- </h5>
+                            <h5>${sanPham.giaLonNhat} vnđ</h5>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -151,7 +151,7 @@
 
                 <div class="mt-5">
                     <div class="justify-content-between">
-                        <button type="submit" class="btn btn-success">Thêm vào giỏ hàng</button>
+                        <button type="submit" class="btn btn-dark">Thêm vào giỏ hàng</button>
                     </div>
                 </div>
             </form:form>
