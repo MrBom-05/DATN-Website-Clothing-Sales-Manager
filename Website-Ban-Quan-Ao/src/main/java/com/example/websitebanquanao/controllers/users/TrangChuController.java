@@ -62,11 +62,11 @@ public class TrangChuController {
         return "user/layout";
     }
 
-//    @GetMapping("/so-phan-tram-giam/{idSanPham}")
-//    @ResponseBody
-//    public ResponseEntity<Integer> soPhanTramGiam(@PathVariable("idSanPham") UUID idSanPham) {
-//        return ResponseEntity.ok(khuyenMaiChiTietService.getSoPhanTramGiamByIdSanPham(idSanPham));
-//    }
+    @GetMapping("/so-phan-tram-giam/{idSanPham}")
+    @ResponseBody
+    public ResponseEntity<Integer> soPhanTramGiam(@PathVariable("idSanPham") UUID idSanPham) {
+        return ResponseEntity.ok(khuyenMaiChiTietService.getSoPhanTramGiamByIdSanPham(idSanPham));
+    }
 
     @GetMapping("/san-pham/{idSanPham}/{idMauSac}")
     public String sanPhamChiTiet(@PathVariable("idSanPham") UUID idSanPham, @PathVariable("idMauSac") Integer idMauSac, Model model) {

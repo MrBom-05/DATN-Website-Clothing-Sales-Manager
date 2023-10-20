@@ -28,14 +28,11 @@
                 <td>${kmct.tenLoai}</td>
                 <td>
                     <div id="trangThai_${kmct.id}">
-                        <!-- Nội dung dựa trên giá trị trangThai sẽ được hiển thị ở đây -->
                     </div>
                     <script>
-                        // Lấy giá trị idKhuyenMai và kmct.id từ JSP và đưa vào biến JavaScript
-                        var idKhuyenMai = '${idKhuyenMai}';
-                        var kmctId = '${kmct.id}';
-
                         $(document).ready(function () {
+                            var idKhuyenMai = '${idKhuyenMai}';
+                            var kmctId = '${kmct.id}';
                             $.ajax({
                                 url: "/admin/khuyen-mai/chi-tiet/getTrangThai/" + idKhuyenMai + "/" + kmctId,
                                 method: "GET",

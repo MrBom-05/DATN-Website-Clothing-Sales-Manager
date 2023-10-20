@@ -49,7 +49,7 @@ public class KhuyenMaiChiTietService {
     }
 
     // user
-//    public Integer getSoPhanTramGiamByIdSanPham(UUID idSanPham) {
-//        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPham);
-//    }
+    public Integer getSoPhanTramGiamByIdSanPham(UUID idSanPham) {
+        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPham);
+    }
 }
