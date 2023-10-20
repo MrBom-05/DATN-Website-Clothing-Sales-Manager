@@ -34,7 +34,7 @@ public class SanPhamController {
         model.addAttribute("listLoai", loaiService.getAll());
         model.addAttribute("sp", sanPhamRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
+        model.addAttribute("view", "/views/admin/san-pham/index.jsp");
         return "admin/layout";
     }
 

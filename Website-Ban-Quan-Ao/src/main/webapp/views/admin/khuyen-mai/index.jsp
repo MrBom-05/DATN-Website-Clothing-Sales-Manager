@@ -39,7 +39,8 @@
                 <td>${km.ngayKetThuc}</td>
                 <td>
                     <c:if test="${km.trangThai == '0'}">
-                        <a href="/admin/khuyen-mai/update-trang-thai/${km.id}/1" class="btn btn-success">Đang hoạt
+                        <a href="/admin/khuyen-mai/update-trang-thai/${km.id}/1" class="btn btn-success"
+                           onclick="return confirm('Bạn có chắc chắn muốn dừng hoạt động không?')">Đang hoạt
                             động</a>
                     </c:if>
                     <c:if test="${km.trangThai == '1'}">

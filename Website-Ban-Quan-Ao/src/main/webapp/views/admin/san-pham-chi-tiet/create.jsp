@@ -124,11 +124,14 @@
     <h1 class="text-center">Quản lý chi tiết sản phẩm</h1>
     <div class="row mt-3">
         <div class="col-12">
-            <form:form action="/admin/san-pham-chi-tiet/add" method="post" modelAttribute="sanPhamChiTiet">
+            <form:form action="${action}"
+                       method="post" modelAttribute="sanPhamChiTiet">
                 <div class="row">
                     <div class="col-4">
                         <label for="maSanPham" class="form-label">Mã Sản Phẩm</label>
-                        <form:input path="maSanPham" id="maSanPham" class="form-control"/>
+                        <form:input path="maSanPham" id="maSanPham" class="form-control"
+                                    value="${sanPhamChiTiet.maSanPham}"
+                                    required="true"/>
                     </div>
                     <div class="col-4">
                         <label for="idSanPham" class="form-label">Sản Phẩm</label>
@@ -136,7 +139,7 @@
                            title="Thêm Sản phẩm"></i>
                         <form:select path="idSanPham" id="idSanPham" class="form-select">
                             <c:forEach items="${listSanPham}" var="sanPham">
-                                <form:option value="${sanPham.id}" label="${sanPham.ten}"/>
+                                <option value="${sanPham.id}" ${sanPham.id == spct.idSanPham ? 'selected' : ''}>${sanPham.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>
@@ -146,7 +149,7 @@
                            title="Thêm màu sắc"></i>
                         <form:select path="idMauSac" id="idMauSac" class="form-select">
                             <c:forEach items="${listMauSac}" var="mauSac">
-                                <form:option value="${mauSac.id}" label="${mauSac.ten}"/>
+                                <option value="${mauSac.id}" ${mauSac.id == spct.idMauSac ? 'selected' : ''}>${mauSac.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>
@@ -158,45 +161,54 @@
                            title="Thêm Kích cỡ"></i>
                         <form:select path="idKichCo" id="idKichCo" class="form-select">
                             <c:forEach items="${listKichCo}" var="kichCo">
-                                <form:option value="${kichCo.id}" label="${kichCo.ten}"/>
+                                <option value="${kichCo.id}"
+                                        label="${kichCo.ten}" ${kichCo.id == spct.idKichCo ? 'selected' : ''}>${kichCo.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>
                     <div class="col-4">
                         <label for="gia" class="form-label">Giá Bán</label>
-                        <form:input path="gia" id="gia" class="form-control" type="number"/>
+                        <form:input path="gia" id="gia" class="form-control" type="number" value="${sanPhamChiTiet.gia}"
+                                    required="true"/>
                     </div>
                     <div class="col-4">
                         <label for="soLuong" class="form-label">Số lượng</label>
-                        <form:input path="soLuong" id="soLuong" class="form-control" type="number"/>
+                        <form:input path="soLuong" id="soLuong" class="form-control" type="number"
+                                    value="${sanPhamChiTiet.soLuong}"
+                                    required="true"/>
                     </div>
                 </div>
                 <div class="mt-3">
                     <label for="moTa" class="form-label">Mô tả</label>
-                    <form:textarea path="moTa" id="moTa" class="form-control" style="height: 130px"/>
+                    <form:textarea path="moTa" id="moTa" class="form-control" style="height: 130px"
+                                   value="${sanPhamChiTiet.moTa}"
+                                   required="true"/>
                 </div>
-                <div class="mt-3">
-                    <label class="form-label">Ảnh sản phẩm</label>
-                    <div>
-                        <c:forEach var="i" begin="0" end="2">
-                            <label for="imageInput${i}" class="image-preview-container">
-                                <img id="imageDisplay${i}" class="image-preview" src="" alt="Image ${i + 1}">
-                                <span class="image-placeholder" id="placeholder${i}">+</span>
-                            </label>
-                            <input type="file" id="imageInput${i}" class="image-input" accept="image/*"
-                                   onchange="displayImage(${i}, 'imageDisplay${i}', 'placeholder${i}'); convertImageToBase64(${i});"/>
-                            <label class="image-input-label selected" for="imageInput${i}">Chọn ảnh</label>
+                <%-- nếu là edit thì ẩn đi  --%>
+                <c:if test="${sanPhamChiTiet.id == null}">
+                    <div class="mt-3">
+                        <label class="form-label">Ảnh sản phẩm</label>
+                        <div>
+                            <c:forEach var="i" begin="0" end="2">
+                                <label for="imageInput${i}" class="image-preview-container">
+                                    <img id="imageDisplay${i}" class="image-preview" src="" alt="Image ${i + 1}">
+                                    <span class="image-placeholder" id="placeholder${i}">+</span>
+                                </label>
+                                <input type="file" id="imageInput${i}" class="image-input" accept="image/*"
+                                       onchange="displayImage(${i}, 'imageDisplay${i}', 'placeholder${i}'); convertImageToBase64(${i});"/>
+                                <label class="image-input-label selected" for="imageInput${i}">Chọn ảnh</label>
 
-                            <!-- Thêm hidden input để lưu trữ giá trị base64Images -->
-                            <form:input path="duongDan[${i}]" type="hidden" id="base64Images${i}"/>
-                        </c:forEach>
+                                <!-- Thêm hidden input để lưu trữ giá trị base64Images -->
+                                <form:input path="duongDan[${i}]" type="hidden" id="base64Images${i}"/>
+                            </c:forEach>
+                        </div>
                     </div>
-                </div>
+                </c:if>
                 <div class="mt-3">
                     <label for="trangThai" class="form-label">Trạng thái</label>
                     <form:select path="trangThai" id="trangThai" class="form-select">
-                        <form:option value="1" label="Đang bán"/>
-                        <form:option value="0" label="Ngừng bán"/>
+                        <option value="1"  ${sanPhamChiTiet.trangThai == 1 ? 'selected' : ''}>Đang bán</option>
+                        <option value="0"  ${sanPhamChiTiet.trangThai == 0 ? 'selected' : ''} >Ngừng bán</option>
                     </form:select>
                 </div>
                 <div class="mt-3">
@@ -208,101 +220,105 @@
         </div>
     </div>
 </div>
-<%--mau sac--%>
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form:form modelAttribute="ms" method="post" action="/admin/mau-sac/them-nhanh">
-                    <div class="row mb-3">
-                        <div class="form-group row">
-                            <div class="col-6">
-                                <label for="ten" class="form-label">Tên Màu</label>
-                                <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
-                                <form:errors path="ten" cssClass="text-danger"/>
-                            </div>
-                            <div class="col-6">
-                                <label for="maMauSac" class="form-label">Mã Màu</label>
-                                <form:input type="text" path="maMauSac" id="maMauSac" class="form-control"
-                                            required="true"/>
-                                <form:errors path="maMauSac" cssClass="text-danger"/>
+
+<!-- Modal -->
+<c:if test="${sanPhamChiTiet.id == null}">
+    <%--mau sac--%>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form:form modelAttribute="ms" method="post" action="/admin/mau-sac/them-nhanh">
+                        <div class="row mb-3">
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <label for="ten" class="form-label">Tên Màu</label>
+                                    <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
+                                    <form:errors path="ten" cssClass="text-danger"/>
+                                </div>
+                                <div class="col-6">
+                                    <label for="maMauSac" class="form-label">Mã Màu</label>
+                                    <form:input type="text" path="maMauSac" id="maMauSac" class="form-control"
+                                                required="true"/>
+                                    <form:errors path="maMauSac" cssClass="text-danger"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- ... -->
-                    <button type="submit" class="btn btn-success mt-3 col-2 offset-5 save-button">Lưu</button>
-                </form:form>
+                        <!-- ... -->
+                        <button type="submit" class="btn btn-success mt-3 col-2 offset-5 save-button">Lưu</button>
+                    </form:form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<%--kich co--%>
-<div class="modal fade" id="modalKichCo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form:form id="edit-form" modelAttribute="kc" method="post" action="/admin/kich-co/them-nhanh">
-                    <div class="form-group text-center">
-                        <label for="ten" class="form-label">Kích cỡ</label>
-                        <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
-                        <form:errors path="ten" cssClass="text-danger"/>
-                        <button type="submit" class="btn btn-success mt-3">Lưu</button>
-                    </div>
-                </form:form>
+    <%--kich co--%>
+    <div class="modal fade" id="modalKichCo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form:form id="edit-form" modelAttribute="kc" method="post" action="/admin/kich-co/them-nhanh">
+                        <div class="form-group text-center">
+                            <label for="ten" class="form-label">Kích cỡ</label>
+                            <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
+                            <form:errors path="ten" cssClass="text-danger"/>
+                            <button type="submit" class="btn btn-success mt-3">Lưu</button>
+                        </div>
+                    </form:form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<%--san pham--%>
-<div class="modal fade" id="modalSanPham" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form:form id="edit-form" modelAttribute="sp" method="post" action="/admin/san-pham/them-nhanh"
-                           enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="ten" class="form-label">Tên Sản Phẩm</label>
-                                <form:input type="text" path="ten" id="ten" class="form-control"
-                                            required="true"/>
-                                <form:errors path="ten" cssClass="text-danger"/>
+    <%--san pham--%>
+    <div class="modal fade" id="modalSanPham" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form:form id="edit-form" modelAttribute="sp" method="post" action="/admin/san-pham/them-nhanh"
+                               enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="ten" class="form-label">Tên Sản Phẩm</label>
+                                    <form:input type="text" path="ten" id="ten" class="form-control"
+                                                required="true"/>
+                                    <form:errors path="ten" cssClass="text-danger"/>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="form-label">Loại</label>
+                                    <form:select class="form-select" path="idLoai">
+                                        <c:forEach items="${listLoai}" var="loai">
+                                            <option value="${loai.id}">${loai.ten}</option>
+                                        </c:forEach>
+                                    </form:select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="form-label">Loại</label>
-                                <form:select class="form-select" path="idLoai">
-                                    <c:forEach items="${listLoai}" var="loai">
-                                        <option value="${loai.id}">${loai.ten}</option>
-                                    </c:forEach>
-                                </form:select>
+
+                        <div class="mt-3 text-center">
+                            <label class="form-label">Ảnh sản phẩm</label>
+                            <div class="text-center">
+                                <label for="imageInput" class="image-preview-container">
+                                    <img id="imageDisplayProduct" class="image-preview" src="" alt="Image">
+                                    <span class="image-placeholder" id="placeholder1">+</span>
+                                </label>
+                                <form:input path="anh" type="file" id="imageInput" class="image-input" accept="image/*"
+                                            onchange="displayImageProduct()"/>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="mt-3 text-center">
-                        <label class="form-label">Ảnh sản phẩm</label>
-                        <div class="text-center">
-                            <label for="imageInput" class="image-preview-container">
-                                <img id="imageDisplayProduct" class="image-preview" src="" alt="Image">
-                                <span class="image-placeholder" id="placeholder1">+</span>
-                            </label>
-                            <form:input path="anh" type="file" id="imageInput" class="image-input" accept="image/*"
-                                        onchange="displayImageProduct()"/>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-success mt-3 col-2 offset-5">Lưu</button>
-                </form:form>
+                        <button type="submit" class="btn btn-success mt-3 col-2 offset-5">Lưu</button>
+                    </form:form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</c:if>
 
 
 
