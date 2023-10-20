@@ -34,6 +34,9 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse(s.id, s.maSanPham, s.idSanPham.ten, s.idMauSac.ten, s.idKichCo.ten, s.gia, s.soLuong, s.moTa, s.trangThai) from SanPhamChiTiet s where s.idKichCo.ten = :tenKichCo")
     public List<SanPhamChiTietResponse> getByTenKichCo(@Param("tenKichCo") String tenKichCo);
 
+    @Query("select spct from SanPhamChiTiet spct where spct.idSanPham.id = :idSanPham")
+    public List<SanPhamChiTiet> findSanPhamChiTietByIdSanPham(@Param("idSanPham") UUID idSanPham);
+
     @Modifying
     @Query("UPDATE SanPhamChiTiet ctsp SET ctsp.soLuong = :currentSoLuong WHERE ctsp.id = :idSanPhamChiTiet")
     public void updateSoLuongAfterDelete(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet, @Param("currentSoLuong") int currentSoLuong);
