@@ -34,7 +34,7 @@ public class SanPhamController {
         model.addAttribute("listLoai", loaiService.getAll());
         model.addAttribute("sp", sanPhamRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/san-pham/index.jsp");
+        model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
         return "admin/layout";
     }
 
@@ -47,7 +47,7 @@ public class SanPhamController {
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
+            model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
             return "admin/layout";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Thêm mới sản phẩm thành công");
@@ -58,7 +58,7 @@ public class SanPhamController {
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
+            model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
             return "admin/layout";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật sản phẩm thành công");
@@ -68,7 +68,7 @@ public class SanPhamController {
     @PostMapping("/them-nhanh")
     public String themNhanh(@Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
+            model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
             return "admin/layout";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Thêm mới sản phẩm thành công");

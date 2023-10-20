@@ -1,6 +1,7 @@
 package com.example.websitebanquanao.repositories;
 
 import com.example.websitebanquanao.entities.SanPham;
+import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
@@ -20,6 +21,9 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
     // admin
     @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public List<SanPhamResponse> getAll();
+
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse(s.id, s.ten, s.idLoai.ten) from SanPham s")
+    public List<KhuyenMaiChiTietResponse> getAllKhuyenMai();
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public Page<SanPhamResponse> getPage(Pageable pageable);

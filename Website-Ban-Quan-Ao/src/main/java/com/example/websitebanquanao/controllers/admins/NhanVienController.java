@@ -33,7 +33,7 @@ public class NhanVienController {
         model.addAttribute("nhanVienPage", nhanVienPage);
         model.addAttribute("nv", nhanVienRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/nhan-vien/index.jsp");
+        model.addAttribute("view", "/views/admin/nhan-vien/chi-tiet.jsp");
         return "admin/layout";
     }
 
@@ -49,7 +49,7 @@ public class NhanVienController {
     public String store(@Valid @ModelAttribute("nv") NhanVienRequest nhanVienRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("list", nhanVienService.getAll());
-            model.addAttribute("view", "/views/admin/nhan-vien/index.jsp");
+            model.addAttribute("view", "/views/admin/nhan-vien/chi-tiet.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
         nhanVienService.add(nhanVienRequest);
@@ -62,7 +62,7 @@ public class NhanVienController {
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("nv") NhanVienRequest nhanVienRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("list", nhanVienService.getAll());
-            model.addAttribute("view", "/views/admin/nhan-vien/index.jsp");
+            model.addAttribute("view", "/views/admin/nhan-vien/chi-tiet.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
         nhanVienService.update(nhanVienRequest, id);

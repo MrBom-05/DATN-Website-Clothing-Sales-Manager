@@ -3,6 +3,7 @@ package com.example.websitebanquanao.services;
 import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.entities.SanPham;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
+import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
@@ -28,6 +29,10 @@ public class SanPhamService {
 
     public List<SanPhamResponse> getAll() {
         return sanPhamRepository.getAll();
+    }
+
+    public List<KhuyenMaiChiTietResponse> getAllKhuyenMai() {
+        return sanPhamRepository.getAllKhuyenMai();
     }
 
     public Page<SanPhamResponse> getPage(int page, int pageSize) {
