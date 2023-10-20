@@ -17,7 +17,7 @@
                                         <p class="fw-bold">${sanPham.giaNhoNhat}đ</p>
                                     </c:when>
                                     <c:otherwise>
-                                        <p class="fw-bold">${sanPham.giaNhoNhat} -- ${sanPham.giaLonNhat}đ</p>
+                                        <p class="fw-bold">${sanPham.giaNhoNhat} -- ${sanPham.giaLonNhat} vnđ</p>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
@@ -31,7 +31,7 @@
 </section>
 <section>
     <div class="row justify-content-center col-2 offset-5 px-1 ">
-        <a href="#"
+        <a href="/san-pham"
            class="text-decoration-none text-dark fw-bold text-center py-3 px-5 border border-none rounded-pill">Xem
             Thêm</a>
     </div>

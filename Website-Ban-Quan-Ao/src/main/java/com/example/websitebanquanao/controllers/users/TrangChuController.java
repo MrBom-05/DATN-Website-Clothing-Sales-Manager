@@ -8,10 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -93,6 +90,13 @@ public class TrangChuController {
     public String themGioHang(@ModelAttribute("gioHang") GioHangUserRequest gioHangUserRequest, Model model, @PathVariable("id") UUID id) {
         KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
         gioHangChiTietService.add(id, khachHangResponse.getId(), gioHangUserRequest);
+        return "redirect:/gio-hang";
+    }
+
+    @PostMapping("/gio-hang/update/{id}")
+    public String capNhatGioHang(@PathVariable("id") UUID id, @RequestParam("soLuong") Integer soLuong) {
+        KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        gioHangChiTietService.updateByIdSanPhamChiTietAndIdKhachHang(id, khachHangResponse.getId(), soLuong);
         return "redirect:/gio-hang";
     }
 
