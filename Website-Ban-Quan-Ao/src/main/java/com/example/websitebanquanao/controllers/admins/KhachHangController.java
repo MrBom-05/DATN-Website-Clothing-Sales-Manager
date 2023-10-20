@@ -38,7 +38,7 @@ public class KhachHangController {
         model.addAttribute("khachHangPage", khachHangPage);
         model.addAttribute("kh", khachHangRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/khach-hang/chi-tiet.jsp");
+        model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
         return "admin/layout";
     }
 
@@ -52,7 +52,7 @@ public class KhachHangController {
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/khach-hang/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";
         }
         khachHangService.add(khachHangRequest);
@@ -64,7 +64,7 @@ public class KhachHangController {
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/khach-hang/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";
         }
         khachHangService.update(khachHangRequest, id);

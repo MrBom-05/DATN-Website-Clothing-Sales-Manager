@@ -2,7 +2,6 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.*;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
-import com.example.websitebanquanao.infrastructures.requests.NhanVienRequest;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
 import com.example.websitebanquanao.services.HoaDonChiTietService;
@@ -60,6 +59,7 @@ public class BanHangController {
         hoaDonRequest.setTrangThai(0);
         hoaDonRequest.setLoaiHoaDon(0);
         hoaDonService.add(hoaDonRequest);
+        session.setAttribute("successMessage", "Thêm hoá đơn thành công");
         return "redirect:/admin/ban-hang";
     }
 
@@ -69,6 +69,28 @@ public class BanHangController {
         SanPhamChiTiet ctsp = ctspService.findById(idSanPhamChiTiet);
 
         if (ctsp != null) {
+            // Kiểm tra xem sản phẩm đã tồn tại trong hoá đơn chưa
+            HoaDonChiTiet existingChiTiet = hoaDonChiTietService.getChiTietByHoaDonAndSanPham(idHoaDon, idSanPhamChiTiet);
+
+            if (existingChiTiet != null) {
+                // Sản phẩm đã tồn tại trong hoá đơn, tăng số lượng
+                int soLuongHienTai = existingChiTiet.getSoLuong();
+                existingChiTiet.setSoLuong(soLuongHienTai + soLuongMoi);
+                hoaDonChiTietService.update(existingChiTiet);
+
+                // Thông báo thành công
+                session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
+            } else {
+                // Sản phẩm chưa tồn tại trong hoá đơn, tạo hoá đơn chi tiết mới
+                hoaDonChiTiet.setSoLuong(soLuongMoi);
+                hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
+                hoaDonChiTiet.setIdSanPhamChiTiet(ctsp);
+                hoaDonChiTietService.add(hoaDonChiTiet);
+
+                // Thông báo thành công
+                session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
+            }
+
             // Trừ đi số lượng mới từ số lượng hiện tại
             int soLuongConLai = ctsp.getSoLuong() - soLuongMoi;
 
@@ -77,20 +99,21 @@ public class BanHangController {
                 soLuongConLai = 0;
             }
 
-            // Cập nhật số lượng mới
+            // Cập nhật số lượng mới của sản phẩm
             ctsp.setSoLuong(soLuongConLai);
-            ctspService.updateSoLuong(ctsp); // Đảm bảo bạn có một phương thức update trong ctspService
+            ctspService.updateSoLuong(ctsp);
+
+            // Lưu trạng thái thành công vào session
+            session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
+        } else {
+            // Sản phẩm không tồn tại, lưu trạng thái thất bại vào session
+            session.setAttribute("errorMessage", "Sản phẩm không tồn tại hoặc có lỗi xảy ra");
+
         }
-
-        // Sử dụng trường soLuongMoi thay vì soLuong
-        hoaDonChiTiet.setSoLuong(soLuongMoi);
-
-        // Thêm sản phẩm vào giỏ hàng
-        hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
-        hoaDonChiTietService.add(hoaDonChiTiet);
 
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
     }
+
 
 
     @GetMapping("/view-hoa-don/{id}")
@@ -107,6 +130,7 @@ public class BanHangController {
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAll());
         model.addAttribute("idHoaDon", id);
+        model.addAttribute("hoaDon", hoaDon); // Truyền giá trị hoaDon vào model
 
         model.addAttribute("listSanPhamTrongGioHang", listSanPhamTrongGioHang);
 
@@ -165,6 +189,7 @@ public class BanHangController {
             hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
             hoaDon.setGhiChu(ghiChu);
             hoaDonService.update(hoaDon, idHoaDon);
+            session.setAttribute("successMessage", "Thanh toán thành công");
         }
 
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;

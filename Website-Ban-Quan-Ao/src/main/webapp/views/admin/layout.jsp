@@ -40,6 +40,12 @@
                    href="/admin/kich-co/index">Kích cỡ</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/nhan-vien/index">Nhân viên</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/giam-gia/index">Giảm giá</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/khuyen-mai/index">Khuyến mãi</a>
+
+
             </c:if>
             <c:if test="${admin.chucVu == 1}">
                 <!-- Hiển thị menu cho nhân viên -->
@@ -55,6 +61,10 @@
                    href="/admin/loai/index">Loại</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/kich-co/index">Kích cỡ</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/giam-gia/index">Giảm giá</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/khuyen-mai/index">Khuyến mãi</a>
             </c:if>
         </div>
     </div>

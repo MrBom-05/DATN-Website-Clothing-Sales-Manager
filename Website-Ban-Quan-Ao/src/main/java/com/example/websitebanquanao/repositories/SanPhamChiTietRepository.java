@@ -25,6 +25,15 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse(s.id, s.idSanPham, s.idMauSac, s.idKichCo, s.gia, s.soLuong, s.moTa, s.trangThai) from SanPhamChiTiet s where s.trangThai = 1")
     public Page<BanHangTaiQuayResponse> findAllCtsp(Pageable pageable);
 
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse(s.id, s.maSanPham, s.idSanPham.ten, s.idMauSac.ten, s.idKichCo.ten, s.gia, s.soLuong, s.moTa, s.trangThai) from SanPhamChiTiet s where s.trangThai = :trangThai")
+    public List<SanPhamChiTietResponse> getByStatus(@Param("trangThai") Integer trangThai);
+
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse(s.id, s.maSanPham, s.idSanPham.ten, s.idMauSac.ten, s.idKichCo.ten, s.gia, s.soLuong, s.moTa, s.trangThai) from SanPhamChiTiet s where s.idMauSac.ten = :tenMauSac")
+    public List<SanPhamChiTietResponse> getByTenMauSac(@Param("tenMauSac") String tenMauSac);
+
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse(s.id, s.maSanPham, s.idSanPham.ten, s.idMauSac.ten, s.idKichCo.ten, s.gia, s.soLuong, s.moTa, s.trangThai) from SanPhamChiTiet s where s.idKichCo.ten = :tenKichCo")
+    public List<SanPhamChiTietResponse> getByTenKichCo(@Param("tenKichCo") String tenKichCo);
+
     @Query("select spct from SanPhamChiTiet spct where spct.idSanPham.id = :idSanPham")
     public List<SanPhamChiTiet> findSanPhamChiTietByIdSanPham(@Param("idSanPham") UUID idSanPham);
 
@@ -35,4 +44,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     // user
     @Query("select s from SanPhamChiTiet s where s.idSanPham.id = :idSanPham and s.idMauSac.id = :idMauSac and s.idKichCo.id = :idKichCo")
     public SanPhamChiTiet getByIdSanPhamAndIdMauSacAndIdKichCo(@Param("idSanPham") UUID idSanPham, @Param("idMauSac") Integer idMauSac, @Param("idKichCo") Integer idKichCo);
+
+
+
+
 }

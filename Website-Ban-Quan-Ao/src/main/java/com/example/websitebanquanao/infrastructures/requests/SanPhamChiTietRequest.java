@@ -14,6 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SanPhamChiTietRequest {
+
+    private UUID id;
     private String maSanPham;
     private UUID idSanPham;
     private Integer idMauSac;
