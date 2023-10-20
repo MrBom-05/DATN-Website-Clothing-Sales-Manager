@@ -37,7 +37,7 @@ public class KichCoController {
         model.addAttribute("kichCoPage", kichCoPage);
         model.addAttribute("kc", kichCoRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/kich-co/chi-tiet.jsp");
+        model.addAttribute("view", "/views/admin/kich-co/index.jsp");
         return "admin/layout";
     }
 
@@ -51,7 +51,7 @@ public class KichCoController {
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("kc") KichCoRequest kichCoRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/kich-co/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
         kichCoService.add(kichCoRequest);
@@ -62,7 +62,7 @@ public class KichCoController {
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("l") KichCoRequest kichCoRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/kich-co/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
         kichCoService.update(kichCoRequest, id);
@@ -78,7 +78,7 @@ public class KichCoController {
     @PostMapping("/them-nhanh")
     public String themNhanh(@Valid @ModelAttribute("kc") KichCoRequest kichCoRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/kich-co/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
         kichCoService.add(kichCoRequest);
