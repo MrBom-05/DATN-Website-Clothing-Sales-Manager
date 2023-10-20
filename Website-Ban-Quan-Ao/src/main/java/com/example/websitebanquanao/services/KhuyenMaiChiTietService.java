@@ -20,6 +20,7 @@ public class KhuyenMaiChiTietService {
     @Autowired
     private SanPhamChiTietService sanPhamChiTietService;
 
+    // admin
     public int getTrangThai(UUID idKhuyenMai, UUID idSanPham) {
         List<KhuyenMaiChiTiet> khuyenMaiChiTietList = khuyenMaiChiTietRepository.check(idKhuyenMai, idSanPham);
         if (khuyenMaiChiTietList.isEmpty()) {
@@ -45,5 +46,10 @@ public class KhuyenMaiChiTietService {
     @Transactional
     public void delete(UUID idKhuyenMai, UUID idSanPham) {
         khuyenMaiChiTietRepository.deleteByIdKhuyenMaiAndIdSanPham(idKhuyenMai, idSanPham);
+    }
+
+    // user
+    public Integer getSoPhanTramGiamByIdSanPham(UUID idSanPham) {
+        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPham);
     }
 }
