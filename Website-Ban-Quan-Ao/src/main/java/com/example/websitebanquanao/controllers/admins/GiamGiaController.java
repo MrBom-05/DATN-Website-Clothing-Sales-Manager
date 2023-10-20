@@ -31,7 +31,7 @@ public class GiamGiaController {
         model.addAttribute("giamGiaPage", giamGiaPage);
         model.addAttribute("gg", giamGiaRequest);
         model.addAttribute("successMessage", successMessage); // Hiển thị thông báo thành công
-        model.addAttribute("view", "/views/admin/giam-gia/chi-tiet.jsp");
+        model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
         return "admin/layout";
     }
 
@@ -46,7 +46,7 @@ public class GiamGiaController {
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("gg") GiamGiaRequest giamGiaRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/giam-gia/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
         giamGiaService.add(giamGiaRequest);
@@ -58,7 +58,7 @@ public class GiamGiaController {
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("gg") GiamGiaRequest giamGiaRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/giam-gia/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
         giamGiaService.update(giamGiaRequest, id);

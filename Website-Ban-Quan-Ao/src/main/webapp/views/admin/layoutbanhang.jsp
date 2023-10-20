@@ -104,7 +104,7 @@
                                         </form>
                                     </c:if>
                                     <c:if test="${hoaDon.trangThai == 1}">
-                                        <span class="text-danger">Không thể xóa</span>
+                                        <span class="text-danger">Không thể thao tác</span>
                                     </c:if>
                                 </td>
                             </tr>
@@ -139,7 +139,7 @@
                                                            class="form-control" min="1" max="${product.soLuong}"
                                                            value="1"/>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary ">Thêm vào giỏ hàng
+                                                <button type="submit" class="btn btn-primary mt-1 ">Thêm vào giỏ hàng
                                                 </button>
                                             </form>
                                         </c:if>
