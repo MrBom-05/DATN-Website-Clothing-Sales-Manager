@@ -126,6 +126,10 @@ public class SanPhamChiTietService {
         sanPhamChiTietRepository.updateSoLuongAfterDelete(idSanPhamChiTiet, currentSoLuong);
     }
 
+    public List<SanPhamChiTiet> findByIdSanPham(UUID idSanPham) {
+        return sanPhamChiTietRepository.findSanPhamChiTietByIdSanPham(idSanPham);
+    }
+
     // user
     public SanPhamChiTiet getByIdSanPhamAndIdMauSacAndIdKichCo(UUID idSanPham, Integer idMauSac, Integer idKichCo) {
         System.out.println("SanPhamChiTietService.getByIdSanPhamAndIdMauSacAndIdKichCo: " + idSanPham + " " + idMauSac + " " + idKichCo);

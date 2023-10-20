@@ -37,7 +37,7 @@ public class MauSacController {
         model.addAttribute("mauSacPage", mauSacPage);
         model.addAttribute("ms", mauSacRequest);
         model.addAttribute("successMessage", successMessage);
-        model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
+        model.addAttribute("view", "/views/admin/mau-sac/chi-tiet.jsp");
         return "admin/layout";
     }
 
@@ -51,7 +51,7 @@ public class MauSacController {
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
+            model.addAttribute("view", "/views/admin/mau-sac/chi-tiet.jsp");
             return "admin/layout";
         }
         mauSacService.add(mauSacRequest);
@@ -63,7 +63,7 @@ public class MauSacController {
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
+            model.addAttribute("view", "/views/admin/mau-sac/chi-tiet.jsp");
             return "admin/layout";
         }
         mauSacService.update(mauSacRequest, id);
@@ -79,7 +79,7 @@ public class MauSacController {
     @PostMapping("/them-nhanh")
     public String themNhanh(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
+            model.addAttribute("view", "/views/admin/mau-sac/chi-tiet.jsp");
             return "admin/layout";
         }
         mauSacService.add(mauSacRequest);

@@ -2,7 +2,9 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.requests.KhuyenMaiRequest;
 import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiResponse;
+import com.example.websitebanquanao.services.KhuyenMaiChiTietService;
 import com.example.websitebanquanao.services.KhuyenMaiService;
+import com.example.websitebanquanao.services.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,15 @@ public class KhuyenMaiController {
     private KhuyenMaiService khuyenMaiService;
 
     @Autowired
+    private KhuyenMaiChiTietService khuyenMaiChiTietService;
+
+    @Autowired
+    private SanPhamService sanPhamService;
+
+    @Autowired
     private KhuyenMaiRequest khuyenMaiRequest;
 
+    // KhuyenMai
     private static final String redirect = "redirect:/admin/khuyen-mai/index";
 
     @GetMapping("index")
@@ -76,5 +85,34 @@ public class KhuyenMaiController {
     @ResponseBody
     public ResponseEntity<KhuyenMaiResponse> getKhuyenMai(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(khuyenMaiService.getById(id));
+    }
+
+    // KhuyenMaiChiTiet
+    @GetMapping("/chi-tiet/{id}")
+    public String chiTiet(@PathVariable("id") UUID id, Model model) {
+        model.addAttribute("khuyenMaiChiTietPage", sanPhamService.getAllKhuyenMai());
+        model.addAttribute("idKhuyenMai", id);
+        model.addAttribute("view", "/views/admin/khuyen-mai/chi-tiet.jsp");
+        return "admin/layout";
+    }
+
+    @GetMapping("/add-chi-tiet/{idKhuyenMai}/{idSanPham}")
+    public String addChiTiet(@PathVariable("idKhuyenMai") UUID idKhuyenMai, @PathVariable("idSanPham") UUID idSanPham, RedirectAttributes redirectAttributes) {
+        khuyenMaiChiTietService.save(idKhuyenMai, idSanPham);
+        redirectAttributes.addFlashAttribute("successMessage", "Thêm sản phẩm vào khuyến mãi thành công");
+        return "redirect:/admin/khuyen-mai/chi-tiet/" + idKhuyenMai;
+    }
+
+    @GetMapping("/delete-chi-tiet/{idKhuyenMai}/{idSanPham}")
+    public String deleteChiTiet(@PathVariable("idKhuyenMai") UUID idKhuyenMai, @PathVariable("idSanPham") UUID idSanPham, RedirectAttributes redirectAttributes) {
+        khuyenMaiChiTietService.delete(idKhuyenMai, idSanPham);
+        redirectAttributes.addFlashAttribute("successMessage", "Xoá sản phẩm khỏi khuyến mãi thành công");
+        return "redirect:/admin/khuyen-mai/chi-tiet/" + idKhuyenMai;
+    }
+
+    @GetMapping("/chi-tiet/getTrangThai/{idKhuyenMai}/{idSanPham}")
+    @ResponseBody
+    public ResponseEntity<Integer> getTrangThai(@PathVariable("idKhuyenMai") UUID idKhuyenMai, @PathVariable("idSanPham") UUID idSanPham) {
+        return ResponseEntity.ok(khuyenMaiChiTietService.getTrangThai(idKhuyenMai, idSanPham));
     }
 }

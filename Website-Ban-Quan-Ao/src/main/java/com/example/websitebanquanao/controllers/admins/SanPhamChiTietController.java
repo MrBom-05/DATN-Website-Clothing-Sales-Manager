@@ -43,7 +43,7 @@ public class SanPhamChiTietController {
     @GetMapping("/index")
     public String index(Model model) {
         model.addAttribute("list", sanPhamChiTietService.getAll());
-        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
+        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/chi-tiet.jsp");
         return "admin/layout";
     }
     @GetMapping("/create")

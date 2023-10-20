@@ -29,15 +29,38 @@ public class GioHangChiTietService {
 
         GioHang gioHang = gioHangService.findByIdKhachHang(idKhachHang);
 
-        GioHangChiTiet gioHangChiTiet = new GioHangChiTiet();
-        gioHangChiTiet.setIdGioHang(gioHang);
-        gioHangChiTiet.setIdSanPhamChiTiet(sanPhamChiTiet);
-        gioHangChiTiet.setSoLuong(gioHangUserRequest.getSoLuong());
-        gioHangChiTiet.setGia(sanPhamChiTiet.getGia());
+        GioHangChiTiet gioHangChiTiet = gioHangChiTietRepository.findByIdSanPhamChiTietIdAndIdGioHangId(sanPhamChiTiet.getId(), gioHang.getId());
+
+        if (gioHangChiTiet != null) {
+            gioHangChiTiet.setSoLuong(gioHangChiTiet.getSoLuong() + gioHangUserRequest.getSoLuong());
+
+            gioHangChiTietRepository.save(gioHangChiTiet);
+
+            System.out.println("GioHangChiTietService.update: " + gioHangChiTiet.getId());
+        } else {
+            gioHangChiTiet = new GioHangChiTiet();
+            gioHangChiTiet.setIdGioHang(gioHang);
+            gioHangChiTiet.setIdSanPhamChiTiet(sanPhamChiTiet);
+            gioHangChiTiet.setSoLuong(gioHangUserRequest.getSoLuong());
+            gioHangChiTiet.setGia(sanPhamChiTiet.getGia());
+
+            gioHangChiTietRepository.save(gioHangChiTiet);
+
+            System.out.println("GioHangChiTietService.add: " + gioHangChiTiet.getId());
+        }
+    }
+
+    @Transactional
+    public void updateByIdSanPhamChiTietAndIdKhachHang(UUID idSanPhamChiTiet, UUID idKhachHang, Integer soLuong) {
+        GioHang gioHang = gioHangService.findByIdKhachHang(idKhachHang);
+
+        GioHangChiTiet gioHangChiTiet = gioHangChiTietRepository.findByIdSanPhamChiTietIdAndIdGioHangId(idSanPhamChiTiet, gioHang.getId());
+
+        gioHangChiTiet.setSoLuong(soLuong);
 
         gioHangChiTietRepository.save(gioHangChiTiet);
 
-        System.out.println("GioHangChiTietService.add: " + gioHangChiTiet);
+        System.out.println("GioHangChiTietService.updateByIdSanPhamChiTietAndIdKhachHang: " + gioHangChiTiet.getId());
     }
 
     @Transactional

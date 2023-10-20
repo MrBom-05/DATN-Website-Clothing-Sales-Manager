@@ -28,7 +28,7 @@
                     <div class="card-body align-items-center">
                         <select path="idMauSac" id="idMauSac" class="form-select">
                             <c:forEach items="${listMauSac}" var="mauSac">
-                                <option value="${mauSac.id}" label="${mauSac.ten}"/>
+                                <option value="${mauSac.id}">${mauSac.ten}</option>
                             </c:forEach>
                         </select>
                     </div>

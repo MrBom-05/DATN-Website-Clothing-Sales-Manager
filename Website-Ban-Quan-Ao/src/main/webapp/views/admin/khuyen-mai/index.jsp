@@ -39,11 +39,13 @@
                 <td>${km.ngayKetThuc}</td>
                 <td>
                     <c:if test="${km.trangThai == '0'}">
-                    <a href="/admin/khuyen-mai/update-trang-thai/${km.id}/1" class="btn btn-success">Đang hoạt động</a>
+                        <a href="/admin/khuyen-mai/update-trang-thai/${km.id}/1" class="btn btn-success">Đang hoạt
+                            động</a>
                     </c:if>
                     <c:if test="${km.trangThai == '1'}">
-                    <a class="btn btn-warning">Dừng hoạt động</a>
+                        <a class="btn btn-warning">Dừng hoạt động</a>
                     </c:if>
+                </td>
                 <td>
                     <a href="#" class="btn btn-primary update-button"
                        data-bs-toggle="modal" data-bs-target="#exampleModal"
@@ -53,6 +55,7 @@
                     </a>
                     <a href="/admin/khuyen-mai/delete/${km.id}" class="btn btn-danger"
                        onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+                    <a href="/admin/khuyen-mai/chi-tiet/${km.id}" class="btn btn-success">Thêm</a>
                 </td>
             </tr>
         </c:forEach>
