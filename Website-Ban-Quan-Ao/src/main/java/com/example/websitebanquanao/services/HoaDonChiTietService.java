@@ -43,4 +43,8 @@ private HoaDonChiTietRepository hoaDonChiTietRepository;
             hoaDonChiTietRepository.save(hoaDonChiTiet);
         }
     }
+
+    public HoaDonChiTiet getChiTietByHoaDonAndSanPham(UUID idHoaDon, UUID idSanPhamChiTiet) {
+        return hoaDonChiTietRepository.findByHoaDonIdAndSanPhamChiTietId(idHoaDon, idSanPhamChiTiet);
+    }
 }

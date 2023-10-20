@@ -14,9 +14,21 @@
 
 <body>
 <%-- Tạo biến tổng tiền --%>
-<c:set var="tongTien" value="0" />
+<c:set var="tongTien" value="0"/>
+<c:if test="${not empty sessionScope.successMessage}">
+    <div class="alert alert-success" role="alert">
+            ${sessionScope.successMessage}
+    </div>
+    <% session.removeAttribute("successMessage"); %>
+</c:if>
+<c:if test="${not empty sessionScope.errorMessage}">
+    <div class="alert alert-danger" role="alert">
+            ${sessionScope.errorMessage}
+    </div>
+    <% session.removeAttribute("errorMessage"); %>
+</c:if>
 
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-lg-6">
             <h4>Danh sách hóa đơn</h4>
@@ -77,18 +89,23 @@
                                 <td>${gioHang.soLuong}</td>
                                 <td>${gioHang.gia}</td>
                                 <td>${gioHang.soLuong * gioHang.gia}</td>
-                                <c:set var="tongTien" value="${tongTien + (gioHang.soLuong * gioHang.gia)}" />
+                                <c:set var="tongTien" value="${tongTien + (gioHang.soLuong * gioHang.gia)}"/>
                                 <td>
-                                    <form method="post"
-                                          action="/admin/ban-hang/delete-gio-hang/${gioHang.idHoaDonChiTiet}">
-                                        <div class="input-group">
-                                            <input type="number" name="soLuong" class="form-control" min="1"
-                                                   max="${gioHang.soLuong}" value="1"/>
-                                            <div class="input-group-append">
-                                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                    <c:if test="${hoaDon.trangThai == 0}">
+                                        <form method="post"
+                                              action="/admin/ban-hang/delete-gio-hang/${gioHang.idHoaDonChiTiet}">
+                                            <div class="input-group">
+                                                <input type="number" name="soLuong" class="form-control" min="1"
+                                                       max="${gioHang.soLuong}" value="1"/>
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </c:if>
+                                    <c:if test="${hoaDon.trangThai == 1}">
+                                        <span class="text-danger">Không thể xóa</span>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -100,10 +117,6 @@
             <div class="row mt-4">
                 <div class="col-12">
                     <h4>Danh sách sản phẩm</h4>
-                    <div class="form-group col-5 mb-2">
-                        <label>Tìm kiếm sản phẩm</label>
-                        <input type="text" class="form-control">
-                    </div>
 
                     <div class="row">
                         <!-- repeat -->
@@ -111,24 +124,25 @@
                             <div class="col-4 mb-4">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <img src="${product.sanPham.anh}" class="card-img-top" alt="...">
-                                        <h5 class="card-title">${product.sanPham.ten}</h5>
+                                        <span class="card-title fw-bold">${product.sanPham.ten}</span>
                                         <p class="card-text">${product.gia}đ</p>
                                         <p class="card-text">Số lượng: ${product.soLuong}</p>
-                                        <p class="card-text">Màu sắc: ${product.mauSac.ten}</p>
-                                        <form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">
-                                            <input type="hidden" name="idSanPhamChiTiet" value="${product.id}"/>
-                                            <input type="hidden" name="gia" value="${product.gia}"/>
-                                            <input type="hidden" name="soLuong" value="${product.soLuong}"/>
-                                            <!-- Giữ nguyên số lượng hiện tại -->
-                                            <div class="form-group">
-                                                <label>Số lượng:</label>
-                                                <input type="number" name="soLuongMoi" id="soLuongMoi"
-                                                       class="form-control" min="1" max="${product.soLuong}" value="1"/>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
-                                        </form>
-
+                                        <c:if test="${hoaDon.trangThai == 0}"> <!-- Kiểm tra trạng thái hóa đơn (0 là chờ thanh toán) -->
+                                            <form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">
+                                                <input type="hidden" name="idSanPhamChiTiet" value="${product.id}"/>
+                                                <input type="hidden" name="gia" value="${product.gia}"/>
+                                                <input type="hidden" name="soLuong" value="${product.soLuong}"/>
+                                                <!-- Giữ nguyên số lượng hiện tại -->
+                                                <div class="form-group">
+                                                    <label>Số lượng:</label>
+                                                    <input type="number" name="soLuongMoi" id="soLuongMoi"
+                                                           class="form-control" min="1" max="${product.soLuong}"
+                                                           value="1"/>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary ">Thêm vào giỏ hàng
+                                                </button>
+                                            </form>
+                                        </c:if>
                                     </div>
                                 </div>
                             </div>
@@ -138,6 +152,9 @@
                 </div>
             </div>
         </div>
+
+
+
         <div class="col-lg-2">
             <div class="form-group">
                 <label>Quét mã QR code</label>
@@ -155,29 +172,36 @@
                     <label class="form-label">Tổng tiền</label>
                     <label class="form-label float-end" id="tong-tien">${tongTien}</label>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Hình thức thanh toán</label>
-                    <select class="form-select" id="hinh-thuc-thanh-toan" name="httt" aria-label="Default select example">
-                        <option selected value="0">Chọn hình thức thanh toán</option>
-                        <option value="1">Tiền mặt</option>
-                        <option value="2">Chuyển khoản</option>
-                        <option value="3">Thẻ</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Tiền khách đưa</label>
-                    <input type="number" class="form-control" id="tien-khach-dua" name="tienKhachDua" min="${tongTien}" step="0.01">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Tiền Thừa</label>
-                    <label class="form-label float-end" id="tien-thua">0</label>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Ghi chú</label>
-                    <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3" placeholder="Nhập địa chỉ"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Thanh toán</button>
-                <button type="button" class="btn btn-secondary">Hủy</button>
+                <c:if test="${hoaDon.trangThai == 0}">
+                    <div class="mb-3">
+                        <label class="form-label">Hình thức thanh toán</label>
+                        <select class="form-select" id="hinh-thuc-thanh-toan" name="httt"
+                                aria-label="Default select example">
+                            <option selected value="0">Chọn hình thức thanh toán</option>
+                            <option value="1">Tiền mặt</option>
+                            <option value="2">Chuyển khoản</option>
+                            <option value="3">Thẻ</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tiền khách đưa</label>
+                        <input type="number" class="form-control" id="tien-khach-dua" name="tienKhachDua"
+                               min="${tongTien}" step="0.01">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tiền Thừa</label>
+                        <label class="form-label float-end" id="tien-thua">0</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3"
+                                  placeholder="Nhập địa chỉ"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thanh toán</button>
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 1}">
+                    <span class="text-danger">Hóa đơn đã thanh toán</span>
+                </c:if>
             </form>
         </div>
 
@@ -189,7 +213,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-    const scanner = new Instascan.Scanner({ video: document.getElementById('qr-video') });
+    const scanner = new Instascan.Scanner({video: document.getElementById('qr-video')});
 
     // Thêm sự kiện cho khi quét QR code thành công
     scanner.addListener('scan', function (content) {
@@ -204,7 +228,7 @@
                     gia: 0,
                     soLuongMoi: 1
                 },
-                success: function(response) {
+                success: function (response) {
                     // Xử lý khi thêm thành công
                     alert("Đã thêm sản phẩm vào giỏ hàng!");
                     location.reload();
@@ -266,6 +290,7 @@
             }
         });
     });
+    //
 </script>
 
 
