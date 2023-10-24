@@ -28,11 +28,13 @@
                                     <c:when test="${sanPham.giaNhoNhat eq sanPham.giaLonNhat}">
                                         <p class="fw-bold gia-san-pham"
                                            id="gia-san-pham_${sanPham.id}">${sanPham.giaNhoNhat} vnđ</p>
+                                        <p class="fw-bold gia-moi" id="gia-moi_${sanPham.id}"></p>
                                     </c:when>
                                     <c:otherwise>
                                         <p class="fw-bold gia-san-pham"
                                            id="gia-san-pham_${sanPham.id}">${sanPham.giaNhoNhat}
                                             -- ${sanPham.giaLonNhat} vnđ</p>
+                                        <p class="fw-bold gia-moi" id="gia-moi_${sanPham.id}"></p>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
@@ -49,20 +51,29 @@
                             success: function (data) {
                                 console.log("idSanPham: " + idSanPham);
                                 console.log(data);
-                                if (data != null) {
-                                    var span = $("#so-phan-tram-giam_" + idSanPham);
-                                    span.html(data + "% off");
+                                var span = $("#so-phan-tram-giam_" + idSanPham);
+                                var giaSpan = $("#gia-san-pham_" + idSanPham);
+                                var giaCu = giaSpan.html();
 
-                                    var giaSpan = $("#gia-san-pham_" + idSanPham);
-                                    giaSpan.hide();
+                                if (data != null) {
+                                    // nếu tồn tại khuyến mãi thì mới hiển thị thẻ span
+                                    if (data > 0) {
+                                        span.show();
+                                        span.html(data + "% off");
+                                    } else {
+                                        span.hide();
+                                    }
                                     // Tính giá sản phẩm sau khi giảm và hiển thị nó
                                     var giaSanPham = ${sanPham.giaNhoNhat};
                                     var soPhanTramGiam = data;
                                     var giaSauGiam = giaSanPham - (giaSanPham * soPhanTramGiam / 100);
-                                    giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');
-                                } else {
-                                    var span = $("#so-phan-tram-giam_" + idSanPham);
-                                    span.hide();
+                                    giaSpan.hide();
+                                    if(data > 0){
+                                        giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');
+                                        giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;">' + giaCu + '</p>');
+                                    }else{
+                                        giaSpan.show();
+                                    }
                                 }
                             },
                             error: function () {
@@ -71,6 +82,7 @@
                         });
                     });
                 </script>
+
             </c:forEach>
         </div>
     </div>
