@@ -48,16 +48,27 @@ public class TrangChuController {
 
     @GetMapping("")
     public String trangChu(Model model) {
-        model.addAttribute("listTrangChu", sanPhamService.getListTrangChu());
+        model.addAttribute("listTrangChu", sanPhamService.getListTrangChu(""));
         model.addAttribute("viewBanner", "/views/user/banner.jsp");
         model.addAttribute("viewContent", "/views/user/trang-chu.jsp");
         return "user/layout";
     }
 
     @GetMapping("/san-pham")
-    public String sanPham(Model model) {
-        model.addAttribute("listLoai", loaiService.getAll());
-        model.addAttribute("listMauSac", mauSacService.getAll());
+    public String sanPham(Model model, @RequestParam(defaultValue = "", name = "sort", required = false) String sort) {
+        model.addAttribute("idLoai", -1);
+        model.addAttribute("listLoai", sanPhamService.getListLoai());
+        model.addAttribute("listSanPham", sanPhamService.getListTrangChu(sort));
+        model.addAttribute("viewContent", "/views/user/san-pham.jsp");
+        return "user/layout";
+    }
+
+    @GetMapping("/san-pham/{idLoai}")
+    public String sanPhamById(Model model, @PathVariable("idLoai") Integer idLoai, @RequestParam(defaultValue = "", name = "sort", required = false) String sort) {
+        System.out.println("idLoai: " + idLoai);
+        model.addAttribute("listLoai", sanPhamService.getListLoai());
+        model.addAttribute("listSanPham", sanPhamService.getListSanPhamByIdLoai(idLoai, sort));
+        model.addAttribute("idLoai", idLoai);
         model.addAttribute("viewContent", "/views/user/san-pham.jsp");
         return "user/layout";
     }
@@ -142,5 +153,11 @@ public class TrangChuController {
             return "redirect:/";
         }
         return "redirect:/dang-nhap";
+    }
+
+    @GetMapping("/gioi-thieu")
+    public String gioiThieu(Model model) {
+        model.addAttribute("viewContent", "/views/user/gioi-thieu.jsp");
+        return "user/layout";
     }
 }

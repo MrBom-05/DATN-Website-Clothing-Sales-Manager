@@ -23,6 +23,6 @@ public interface KichCoRepository extends JpaRepository<KichCo, Integer> {
     @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.KichCoResponse(k.id, k.ten) FROM KichCo k WHERE k.id = :id")
     public KichCoResponse getByIdResponse(@Param("id") Integer id);
 
-    @Query("SELECT DISTINCT new com.example.websitebanquanao.infrastructures.responses.KichCoResponse(kc.id, kc.ten) FROM KichCo kc INNER JOIN kc.sanPhamChiTiets spct INNER JOIN spct.idSanPham sp INNER JOIN spct.idMauSac ms WHERE sp.id = :idSanPham AND ms.id = :idMauSac ORDER BY kc.ten")
+    @Query("SELECT DISTINCT new com.example.websitebanquanao.infrastructures.responses.KichCoResponse(kc.id, kc.ten) FROM KichCo kc INNER JOIN kc.sanPhamChiTiets spct INNER JOIN spct.idSanPham sp INNER JOIN spct.idMauSac ms WHERE sp.id = :idSanPham AND ms.id = :idMauSac AND spct.soLuong > 0 AND spct.trangThai = 1 ORDER BY kc.ten")
     public List<KichCoResponse> getListKichCoByIdSanPhamAndMauSac(@Param("idSanPham") UUID idSanPham, @Param("idMauSac") Integer idMauSac);
 }
