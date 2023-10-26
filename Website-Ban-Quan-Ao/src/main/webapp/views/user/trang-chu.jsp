@@ -24,19 +24,9 @@
                             <span class="discount-percentage" id="so-phan-tram-giam_${sanPham.id}"></span>
                             <div class="card-body text-center">
                                 <p>${sanPham.ten}</p>
-                                <c:choose>
-                                    <c:when test="${sanPham.giaNhoNhat eq sanPham.giaLonNhat}">
-                                        <p class="fw-bold gia-san-pham"
-                                           id="gia-san-pham_${sanPham.id}">${sanPham.giaNhoNhat} vnđ</p>
-                                        <p class="fw-bold gia-moi" id="gia-moi_${sanPham.id}"></p>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <p class="fw-bold gia-san-pham"
-                                           id="gia-san-pham_${sanPham.id}">${sanPham.giaNhoNhat}
-                                            -- ${sanPham.giaLonNhat} vnđ</p>
-                                        <p class="fw-bold gia-moi" id="gia-moi_${sanPham.id}"></p>
-                                    </c:otherwise>
-                                </c:choose>
+                                <p class="fw-bold gia-san-pham"
+                                   id="gia-san-pham_${sanPham.id}">${sanPham.gia} vnđ</p>
+                                <p class="fw-bold gia-moi" id="gia-moi_${sanPham.id}"></p>
                             </div>
                         </div>
                     </a>
@@ -49,8 +39,6 @@
                             url: "/so-phan-tram-giam/" + idSanPham,
                             method: "GET",
                             success: function (data) {
-                                console.log("idSanPham: " + idSanPham);
-                                console.log(data);
                                 var span = $("#so-phan-tram-giam_" + idSanPham);
                                 var giaSpan = $("#gia-san-pham_" + idSanPham);
                                 var giaCu = giaSpan.html();
@@ -64,14 +52,14 @@
                                         span.hide();
                                     }
                                     // Tính giá sản phẩm sau khi giảm và hiển thị nó
-                                    var giaSanPham = ${sanPham.giaNhoNhat};
+                                    var giaSanPham = ${sanPham.gia};
                                     var soPhanTramGiam = data;
                                     var giaSauGiam = giaSanPham - (giaSanPham * soPhanTramGiam / 100);
                                     giaSpan.hide();
-                                    if(data > 0){
+                                    if (data > 0) {
                                         giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');
                                         giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;">' + giaCu + '</p>');
-                                    }else{
+                                    } else {
                                         giaSpan.show();
                                     }
                                 }

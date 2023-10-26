@@ -3,10 +3,7 @@ package com.example.websitebanquanao.services;
 import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.entities.SanPham;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
-import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse;
-import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse;
-import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
-import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
+import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.repositories.SanPhamRepository;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,8 +117,30 @@ public class SanPhamService {
 
 
     // user
-    public List<TrangChuResponse> getListTrangChu() {
+    public List<TrangChuResponse> getListTrangChu(String sort) {
+        if (sort != null) {
+            if (sort.equals("esc")) {
+                return sanPhamRepository.getListTrangChuASC();
+            } else if (sort.equals("desc")) {
+                return sanPhamRepository.getListTrangChuDESC();
+            }
+        }
         return sanPhamRepository.getListTrangChu();
+    }
+
+    public List<TrangChuResponse> getListSanPhamByIdLoai(Integer idLoai, String sort) {
+        if (sort != null) {
+            if (sort.equals("esc")) {
+                return sanPhamRepository.getListSanPhamByIdLoaiASC(idLoai);
+            } else if (sort.equals("desc")) {
+                return sanPhamRepository.getListSanPhamByIdLoaiDESC(idLoai);
+            }
+        }
+        return sanPhamRepository.getListSanPhamByIdLoai(idLoai);
+    }
+
+    public List<LoaiResponse> getListLoai() {
+        return sanPhamRepository.getListLoai();
     }
 
     public SanPhamChiTietUserResponse getByIdSanPham(UUID idSanPham) {
