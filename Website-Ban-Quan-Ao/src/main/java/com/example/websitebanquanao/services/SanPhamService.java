@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,25 +119,27 @@ public class SanPhamService {
 
     // user
     public List<TrangChuResponse> getListTrangChu(String sort) {
+        List<TrangChuResponse> list = sanPhamRepository.getListTrangChu();
         if (sort != null) {
-            if (sort.equals("esc")) {
-                return sanPhamRepository.getListTrangChuASC();
+            if (sort.equals("asc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia));
             } else if (sort.equals("desc")) {
-                return sanPhamRepository.getListTrangChuDESC();
+                list.sort(Comparator.comparing(TrangChuResponse::getGia).reversed());
             }
         }
-        return sanPhamRepository.getListTrangChu();
+        return list;
     }
 
     public List<TrangChuResponse> getListSanPhamByIdLoai(Integer idLoai, String sort) {
+        List<TrangChuResponse> list = sanPhamRepository.getListSanPhamByIdLoai(idLoai);
         if (sort != null) {
-            if (sort.equals("esc")) {
-                return sanPhamRepository.getListSanPhamByIdLoaiASC(idLoai);
+            if (sort.equals("asc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia));
             } else if (sort.equals("desc")) {
-                return sanPhamRepository.getListSanPhamByIdLoaiDESC(idLoai);
+                list.sort(Comparator.comparing(TrangChuResponse::getGia).reversed());
             }
         }
-        return sanPhamRepository.getListSanPhamByIdLoai(idLoai);
+        return list;
     }
 
     public List<LoaiResponse> getListLoai() {

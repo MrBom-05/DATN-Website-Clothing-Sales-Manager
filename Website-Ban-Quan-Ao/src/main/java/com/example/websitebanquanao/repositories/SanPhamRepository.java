@@ -33,20 +33,8 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
     @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListTrangChu();
 
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms group by s.id, s.ten, s.anh ,s.ngayTao order by min(spct.gia) asc")
-    public List<TrangChuResponse> getListTrangChuASC();
-
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms group by s.id, s.ten, s.anh, s.ngayTao order by min(spct.gia) desc")
-    public List<TrangChuResponse> getListTrangChuDESC();
-
     @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms where s.idLoai.id = :idLoai group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListSanPhamByIdLoai(@Param("idLoai") Integer idLoai);
-
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms where s.idLoai.id = :idLoai group by s.id, s.ten, s.anh, s.ngayTao order by min(spct.gia) asc")
-    public List<TrangChuResponse> getListSanPhamByIdLoaiASC(@Param("idLoai") Integer idLoai);
-
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms where s.idLoai.id = :idLoai group by s.id, s.ten, s.anh, s.ngayTao order by min(spct.gia) desc")
-    public List<TrangChuResponse> getListSanPhamByIdLoaiDESC(@Param("idLoai") Integer idLoai);
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse(s.id, s.ten, min(spct.gia), max(spct.gia), spct.moTa) from SanPham s join s.sanPhamChiTiets spct where s.id = :idSanPham group by s.id, s.ten, spct.moTa")
     public SanPhamChiTietUserResponse getByIdSanPham(@Param("idSanPham") UUID idSanPham);
