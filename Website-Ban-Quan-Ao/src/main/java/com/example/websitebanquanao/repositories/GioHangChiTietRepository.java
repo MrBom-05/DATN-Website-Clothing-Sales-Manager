@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Repository
@@ -17,4 +18,7 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Modifying
     @Query("DELETE FROM GioHangChiTiet ghct WHERE ghct.idSanPhamChiTiet.id = :idSanPhamChiTiet AND ghct.idGioHang.idKhachHang.id = :idKhachHang")
     public void deleteByIdSanPhamChiTietAndIdKhachHang(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet, @Param("idKhachHang") UUID idKhachHang);
+
+    @Query("SELECT SUM(ghi.gia * ghi.soLuong) FROM GioHangChiTiet ghi WHERE ghi.idGioHang.idKhachHang.id = :khachHangId")
+    public BigDecimal getTongTienByIdKhachHang(@Param("khachHangId") UUID khangHangId);
 }

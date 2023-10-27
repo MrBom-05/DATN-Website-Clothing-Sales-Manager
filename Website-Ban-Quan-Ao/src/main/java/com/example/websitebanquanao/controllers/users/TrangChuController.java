@@ -1,7 +1,9 @@
 package com.example.websitebanquanao.controllers.users;
 
+import com.example.websitebanquanao.infrastructures.requests.DangKyUserRequest;
 import com.example.websitebanquanao.infrastructures.requests.DangNhapUserRequest;
 import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
+import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpSession;
@@ -15,9 +17,6 @@ import java.util.UUID;
 
 @Controller
 public class TrangChuController {
-
-    @Autowired
-    private LoaiService loaiService;
 
     @Autowired
     private SanPhamService sanPhamService;
@@ -102,6 +101,7 @@ public class TrangChuController {
             return "redirect:/dang-nhap";
         } else {
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
+            model.addAttribute("tongTien", gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId()));
         }
         model.addAttribute("viewContent", "/views/user/gio-hang.jsp");
         return "user/layout";
@@ -136,13 +136,14 @@ public class TrangChuController {
 
     @GetMapping("/dang-nhap")
     public String dangNhap(Model model) {
-        model.addAttribute("kh", new DangNhapUserRequest());
+        model.addAttribute("dangNhap", new DangNhapUserRequest());
+        model.addAttribute("dangKy", new DangKyUserRequest());
         model.addAttribute("viewContent", "/views/user/dang-nhap.jsp");
         return "user/layout";
     }
 
     @PostMapping("/dang-nhap")
-    public String dangNhap(@ModelAttribute("kh") DangNhapUserRequest dangNhapUserRequest, Model model) {
+    public String dangNhap(@ModelAttribute("dangNhap") DangNhapUserRequest dangNhapUserRequest, Model model) {
         String email = dangNhapUserRequest.getEmail();
         String matKhau = dangNhapUserRequest.getMatKhau();
 
@@ -152,6 +153,22 @@ public class TrangChuController {
             gioHangService.checkAndAdd(khachHangResponse.getId());
             return "redirect:/";
         }
+        return "redirect:/dang-nhap";
+    }
+
+    @PostMapping("/dang-ky")
+    public String dangKy(@ModelAttribute("dangKy") DangKyUserRequest dangKyUserRequest, Model model) {
+        String email = dangKyUserRequest.getEmailDK();
+        String matKhau = dangKyUserRequest.getMatKhauDK();
+        String hoTen = dangKyUserRequest.getHoTen();
+
+        KhachHangRequest khachHangRequest = new KhachHangRequest();
+        khachHangRequest.setEmail(email);
+        khachHangRequest.setMatKhau(matKhau);
+        khachHangRequest.setHoVaTen(hoTen);
+
+        khachHangService.add(khachHangRequest);
+
         return "redirect:/dang-nhap";
     }
 
