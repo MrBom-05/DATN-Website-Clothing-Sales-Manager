@@ -15,6 +15,8 @@ public class GioHangResponse {
     private UUID idSanPhamChiTiet;
     private String maSanPham;
     private String tenSanPham;
+    private String tenMau;
+    private String tenSize;
     private Long soLuong;
     private BigDecimal gia;
 }

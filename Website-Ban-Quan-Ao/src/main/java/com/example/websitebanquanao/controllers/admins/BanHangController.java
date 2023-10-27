@@ -6,6 +6,7 @@ import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResp
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
 import com.example.websitebanquanao.services.HoaDonChiTietService;
 import com.example.websitebanquanao.services.HoaDonService;
+import com.example.websitebanquanao.services.KhuyenMaiChiTietService;
 import com.example.websitebanquanao.services.SanPhamChiTietService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class BanHangController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private SanPhamChiTietService ctspService;
+    @Autowired
+    private KhuyenMaiChiTietService khuyenMaiChiTietService;
 
     @Autowired
     HttpSession session;
@@ -226,6 +229,5 @@ public class BanHangController {
         // Trả về một thông báo thành công (hoặc bất kỳ thông báo nào bạn muốn) trong dữ liệu JSON
         return new ResponseEntity<>("Thêm sản phẩm vào giỏ hàng thành công", HttpStatus.OK);
     }
-
 }
 

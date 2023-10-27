@@ -85,7 +85,7 @@
                             <tr>
                                 <td>${index.count}</td>
                                 <td>${gioHang.maSanPham}</td>
-                                <td>${gioHang.tenSanPham}</td>
+                                <td>${gioHang.tenSanPham}/${gioHang.tenMau}/${gioHang.tenSize}</td>
                                 <td>${gioHang.soLuong}</td>
                                 <td>${gioHang.gia}</td>
                                 <td>${gioHang.soLuong * gioHang.gia}</td>
@@ -95,9 +95,9 @@
                                         <form method="post"
                                               action="/admin/ban-hang/delete-gio-hang/${gioHang.idHoaDonChiTiet}">
                                             <div class="input-group">
-                                                <input type="number" name="soLuong" class="form-control" min="1"
-                                                       max="${gioHang.soLuong}" value="1"/>
-                                                <div class="input-group-append">
+                                                <input type="number" name="soLuong" class="w-50 form-control" min="1"
+                                                       max="${gioHang.soLuong}" value="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                                <div class="input-group-append mt-2">
                                                     <button type="submit" class="btn btn-danger">Xóa</button>
                                                 </div>
                                             </div>
@@ -124,13 +124,15 @@
                             <div class="col-4 mb-4">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <span class="card-title fw-bold">${product.sanPham.ten}</span>
-                                        <p class="card-text">${product.gia}đ</p>
+                                        <span class="card-title fw-bold">${product.sanPham.ten}/${product.mauSac.ten}/${product.kichCo.ten}</span>
+                                        <p class="fw-bold gia-san-pham"
+                                           id="gia-san-pham_${product.id}">${product.gia} vnđ</p>
+                                        <p class="fw-bold gia-moi" id="gia-moi_${product.id}"></p>
                                         <p class="card-text">Số lượng: ${product.soLuong}</p>
                                         <c:if test="${hoaDon.trangThai == 0}"> <!-- Kiểm tra trạng thái hóa đơn (0 là chờ thanh toán) -->
                                             <form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">
                                                 <input type="hidden" name="idSanPhamChiTiet" value="${product.id}"/>
-                                                <input type="hidden" name="gia" value="${product.gia}"/>
+                                                <input type="hidden" name="gia" value="${product.gia} " id="gia_${product.id}"/>
                                                 <input type="hidden" name="soLuong" value="${product.soLuong}"/>
                                                 <!-- Giữ nguyên số lượng hiện tại -->
                                                 <div class="form-group">
@@ -146,6 +148,50 @@
                                     </div>
                                 </div>
                             </div>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                                $(document).ready(function () {
+                                    var idSanPhamChiTiet = '${product.id}';
+                                    var giaInput = $("#gia_${product.id}"); // Lấy ô input dựa trên id
+                                    $.ajax({
+                                        url: "/so-phan-tram-giam/" + idSanPhamChiTiet,
+                                        method: "GET",
+                                        success: function (data) {
+                                            var span = $("#so-phan-tram-giam_" + idSanPhamChiTiet);
+                                            var giaSpan = $("#gia-san-pham_" + idSanPhamChiTiet);
+                                            var giaCu = giaSpan.html();
+                                            if (data != null) {
+                                                // Kiểm tra xem có khuyến mãi không
+                                                if (data > 0) {
+                                                    span.show();
+                                                    span.html(data + "% off");
+
+                                                    // Tính giá sản phẩm sau khi giảm
+                                                    var giaSanPham = ${product.gia};
+                                                    var soPhanTramGiam = data;
+                                                    var giaSauGiam = giaSanPham - (giaSanPham * soPhanTramGiam / 100);
+                                                    giaSauGiam = Math.floor(giaSauGiam);
+                                                    giaSpan.hide();
+
+                                                    if (data > 0) {
+                                                        giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');
+                                                        giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;">' + giaCu + '</p');
+
+                                                        // Cập nhật giá mới trong ô input dựa trên id
+                                                        giaInput.val(giaSauGiam);
+                                                    } else {
+                                                        giaSpan.show();
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        error: function () {
+                                            // Xử lý lỗi nếu có
+                                        }
+                                    });
+                                });
+
+                            </script>
                         </c:forEach>
                         <!-- end repeat -->
                     </div>
@@ -168,6 +214,10 @@
         <div class="col-lg-4 border">
             <h4 class="text-center">Thanh toán</h4>
             <form method="post" action="/admin/ban-hang/thanh-toan/${idHoaDon}">
+                <div class="mb-3">
+                    <label class="form-label">Voucher</label>
+                    <input type="text" class="form-control" id="voucher" name="voucher" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Tổng tiền</label>
                     <label class="form-label float-end" id="tong-tien">${tongTien}</label>
