@@ -34,7 +34,6 @@
             <h4>Danh sách hóa đơn</h4>
             <form method="post" action="/admin/ban-hang/add-hoa-don">
                 <input type="hidden" name="id" value="${admin.id}">
-                ${admin.hoVaTen }
                 <button type="submit" class="btn btn-primary">Tạo mới</button>
             </form>
             <table class="table table-bordered text-center mt-3">
