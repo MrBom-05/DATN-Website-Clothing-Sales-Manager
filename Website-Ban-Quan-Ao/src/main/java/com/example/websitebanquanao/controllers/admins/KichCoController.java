@@ -3,6 +3,7 @@ package com.example.websitebanquanao.controllers.admins;
 import com.example.websitebanquanao.entities.KichCo;
 import com.example.websitebanquanao.infrastructures.requests.KichCoRequest;
 import com.example.websitebanquanao.infrastructures.responses.KichCoResponse;
+import com.example.websitebanquanao.repositories.KichCoRepository;
 import com.example.websitebanquanao.services.KichCoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,16 @@ public class KichCoController {
     private KichCoRequest kichCoRequest;
 
     private static final String redirect = "redirect:/admin/kich-co/index";
+    @Autowired
+    private KichCoRepository kichCoRepository;
 
     @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage, @ModelAttribute("errorMessage") String errorMessage) {
         Page<KichCoResponse> kichCoPage = kichCoService.getPage(page, 5);
         model.addAttribute("kichCoPage", kichCoPage);
         model.addAttribute("kc", kichCoRequest);
         model.addAttribute("successMessage", successMessage);
+        model.addAttribute("errorMessage", errorMessage);
         model.addAttribute("view", "/views/admin/kich-co/index.jsp");
         return "admin/layout";
     }
@@ -54,6 +58,13 @@ public class KichCoController {
             model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
+
+        if (kichCoRepository.existsByTen(kichCoRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm kích cỡ thất bại");
+            return redirect;
+        }
+
+
         kichCoService.add(kichCoRequest);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm kích cỡ thành công");
         return redirect;
@@ -65,6 +76,12 @@ public class KichCoController {
             model.addAttribute("view", "/views/admin/kich-co/index.jsp");
             return "admin/layout";
         }
+
+        if (kichCoRepository.existsByTen(kichCoRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật cỡ thất bại");
+            return redirect;
+        }
+
         kichCoService.update(kichCoRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật kích cỡ thành công");
         return redirect;

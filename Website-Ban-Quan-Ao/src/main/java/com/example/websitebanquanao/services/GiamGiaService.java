@@ -24,16 +24,15 @@ public class GiamGiaService {
     }
 
     public void add(GiamGiaRequest giamGiaRequest) {
-        GiamGia giamGia = new GiamGia();
-        giamGia.setMa(giamGiaRequest.getMa());
-        giamGia.setSoPhanTramGiam(giamGiaRequest.getSoPhanTramGiam());
-        giamGia.setSoLuong(giamGiaRequest.getSoLuong());
-        giamGia.setNgayBatDau(giamGiaRequest.getNgayBatDau());
-        giamGia.setNgayKetThuc(giamGiaRequest.getNgayKetThuc());
+            GiamGia giamGia = new GiamGia();
+            giamGia.setMa(giamGiaRequest.getMa());
+            giamGia.setSoPhanTramGiam(giamGiaRequest.getSoPhanTramGiam());
+            giamGia.setSoLuong(giamGiaRequest.getSoLuong());
+            giamGia.setNgayBatDau(giamGiaRequest.getNgayBatDau());
+            giamGia.setNgayKetThuc(giamGiaRequest.getNgayKetThuc());
 
-        giamGiaRepository.save(giamGia);
-
-        System.out.println("GiamGiaService.add: " + giamGia.getMa());
+            giamGiaRepository.save(giamGia);
+            System.out.println("GiamGiaService.add: " + giamGia.getMa());
     }
 
     public void update(GiamGiaRequest giamGiaRequest, UUID id) {
