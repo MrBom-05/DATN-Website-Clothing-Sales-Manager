@@ -54,9 +54,9 @@ public class KhuyenMaiChiTietService {
     }
 
     public Integer getSoPhanTramGiamByIdSanPhamChiTiet(UUID idSanPhamChiTiet) {
-        if (khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPhamChiTiet) == null) {
+        if (khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPhamChiTiet) == null) {
             return 0;
         }
-        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPhamChiTiet);
+        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPhamChiTiet);
     }
 }

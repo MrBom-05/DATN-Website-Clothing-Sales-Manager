@@ -22,9 +22,8 @@ public interface KhuyenMaiChiTietRepository extends JpaRepository<KhuyenMaiChiTi
     public void deleteByIdKhuyenMaiAndIdSanPham(@Param("idKhuyenMai") UUID idKhuyenMai, @Param("idSanPham") UUID idSanPham);
 
     // user
-    @Query("select kmct.idKhuyenMai.soPhanTramGiam from KhuyenMaiChiTiet kmct where kmct.idSanPhamChiTiet.idSanPham.id = :idSanPham and kmct.idKhuyenMai.trangThai = 0")
+    @Query("select kmct.idKhuyenMai.soPhanTramGiam from KhuyenMaiChiTiet kmct where kmct.idSanPhamChiTiet.idSanPham.id = :idSanPham or kmct.idSanPhamChiTiet.id = :idSanPham  and kmct.idKhuyenMai.trangThai = 0")
     public Integer getSoPhanTramGiamByIdSanPham(@Param("idSanPham") UUID idSanPham);
 
-    @Query("select kmct.idKhuyenMai.soPhanTramGiam from KhuyenMaiChiTiet kmct where kmct.idSanPhamChiTiet.id = :idSanPhamChiTiet and kmct.idKhuyenMai.trangThai = 0")
-    public Integer getSoPhanTramGiamByIdSanPhamChiTiet(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet);
+
 }
