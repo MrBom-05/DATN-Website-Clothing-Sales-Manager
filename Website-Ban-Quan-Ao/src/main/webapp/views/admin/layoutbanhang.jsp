@@ -181,6 +181,9 @@
                                                         giaInput.val(giaSauGiam);
                                                     } else {
                                                         giaSpan.show();
+                                                        $(".gia-moi").remove();
+                                                        $(".gia-cu").remove();
+                                                        giaInput.val(giaSanPham);
                                                     }
                                                 }
                                             }
@@ -215,10 +218,6 @@
             <h4 class="text-center">Thanh toán</h4>
             <form method="post" action="/admin/ban-hang/thanh-toan/${idHoaDon}">
                 <div class="mb-3">
-                    <label class="form-label">Voucher</label>
-                    <input type="text" class="form-control" id="voucher" name="voucher" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                </div>
-                <div class="mb-3">
                     <label class="form-label">Tổng tiền</label>
                     <label class="form-label float-end" id="tong-tien">${tongTien}</label>
                 </div>
@@ -230,7 +229,6 @@
                             <option selected value="0">Chọn hình thức thanh toán</option>
                             <option value="1">Tiền mặt</option>
                             <option value="2">Chuyển khoản</option>
-                            <option value="3">Thẻ</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -269,13 +267,13 @@
     scanner.addListener('scan', function (content) {
         if (content !== "") {
             // Hiển thị kết quả quét được lên giao diện
-            document.getElementById('qr-result').textContent = content;
+            document.getElementById('qr-result').textContent = 'Quét thành công';
             $.ajax({
                 url: `/admin/ban-hang/add-gio-hang-qr-code/${idHoaDon}`,
                 method: "POST",
                 data: {
                     idSanPhamChiTiet: content,
-                    gia: 0,
+                    gia: $("#gia_" + content).val(),
                     soLuongMoi: 1
                 },
                 success: function (response) {

@@ -39,8 +39,6 @@ public class KhuyenMai {
     @Column(name = "trang_thai")
     private Integer trangThai;
 
-    @OneToMany(mappedBy = "idKhuyenMai")
-    private Set<HoaDon> hoaDons = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idKhuyenMai")
     private Set<KhuyenMaiChiTiet> khuyenMaiChiTiets = new LinkedHashSet<>();
