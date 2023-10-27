@@ -177,4 +177,16 @@ public class TrangChuController {
         model.addAttribute("viewContent", "/views/user/gioi-thieu.jsp");
         return "user/layout";
     }
+
+    @GetMapping("/chinh-sach-bao-mat")
+    public String chinhSachBaoMat(Model model) {
+        model.addAttribute("viewContent", "/views/user/chinh-sach-bao-mat.jsp");
+        return "user/layout";
+    }
+
+    @GetMapping("/chinh-sach-doi-tra")
+    public String chinhSachDoiTra(Model model) {
+        model.addAttribute("viewContent", "/views/user/chinh-sach-doi-tra.jsp");
+        return "user/layout";
+    }
 }
