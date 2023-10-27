@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="container mt-3">
@@ -7,6 +7,10 @@
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
     </c:if>
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">${errorMessage}</div>
+    </c:if>
+
     <div class="row mt-3">
         <div class="col-6">
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -62,7 +66,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <%--@elvariable id="gg" type="java"--%>
                     <form:form id="edit-form" modelAttribute="gg" method="post" action="/admin/giam-gia/store">
                         <div class="row mb-3">
                             <div class="col">
@@ -76,10 +79,10 @@
                         <div class="row mb-3">
 
                             <div class="col">
-                                <div class="form-group">
+                                <div a class="form-group">
                                     <label for="soPhanTramGiam">Số phần trăm</label>
-                                    <form:input type="text" path="soPhanTramGiam" id="soPhanTramGiam"
-                                                class="form-control" required="true"/>
+                                    <form:input type="number" path="soPhanTramGiam" id="soPhanTramGiam"
+                                                class="form-control" required="true" min="1" max="100"/>
                                     <form:errors path="soPhanTramGiam" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -87,8 +90,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="soLuong">Số lượng</label>
-                                    <form:input type="text" path="soLuong" id="soLuong" class="form-control"
-                                                required="true"/>
+                                    <form:input type="number" path="soLuong" id="soLuong" class="form-control"
+                                                required="true" min="1" max="10000"/>
                                     <form:errors path="soLuong" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -98,7 +101,7 @@
                                 <div class="form-group">
                                     <label for="ngayBatDau">Ngày Bắt Đầu</label>
                                     <form:input type="date" path="ngayBatDau" id="ngayBatDau" class="form-control"
-                                                required="true"/>
+                                                required="true" />
                                     <form:errors path="ngayBatDau" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -106,7 +109,7 @@
                                 <div class="form-group">
                                     <label for="ngayKetThuc">Ngày Kết Thúc</label>
                                     <form:input type="date" path="ngayKetThuc" id="ngayKetThuc" class="form-control"
-                                                required="true"/>
+                                                required="true" />
                                     <form:errors path="ngayKetThuc" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -160,41 +163,23 @@
             },
         });
     });
-    document.addEventListener("DOMContentLoaded", function () {
-        var updateButtons = document.querySelectorAll(".update-button");
-        var clickClose = document.querySelector(".btn-close");
 
-        updateButtons.forEach(function (button) {
-            button.addEventListener("click", function () {
-                var modalTitle = document.querySelector(".modal-title");
+    $(document).ready(function () {
+        var form = $("#edit-form");
+        var ngayBatDau = $("#ngayBatDau");
+        var ngayKetThuc = $("#ngayKetThuc");
 
-                // Đặt tiêu đề modal thành "Cập Nhật Giảm Giá"
-                modalTitle.textContent = "Cập Nhật Giảm Giá";
-            });
-        });
-        clickClose.addEventListener("click", function () {
-            var modalTitle = document.querySelector(".modal-title");
+        form.submit(function (event) {
+            var startDate = new Date(ngayBatDau.val());
+            var endDate = new Date(ngayKetThuc.val());
 
-            // Đặt tiêu đề modal thành "Thêm Khách Hàng"
-            modalTitle.textContent = "Thêm Giảm Giá";
-
+            if (endDate <= startDate) {
+                event.preventDefault(); // Ngăn chặn việc gửi form nếu ngày kết thúc không hợp lệ
+                alert('Ngày kết thúc phải sau ngày bắt đầu.');
+            }
         });
     });
 
-    // Lấy các trường input và form
-    const form = document.getElementById('edit-form');
-    const ma = document.getElementById('ma');
-    const soPhanTramGiam = document.getElementById('soPhanTramGiam');
-    const soLuong = document.getElementById('soLuong');
-    const ngayBatDau = document.getElementById('ngayBatDau');
-    const ngayKetThuc = document.getElementById('ngayKetThuc');
-
-    // Thêm sự kiện submit form
-    form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-            event.preventDefault(); // Ngăn chặn việc gửi form nếu có lỗi
-        }
-    });
 
 </script>
 

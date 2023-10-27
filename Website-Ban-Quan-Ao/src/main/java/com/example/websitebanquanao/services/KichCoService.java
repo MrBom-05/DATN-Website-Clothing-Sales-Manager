@@ -29,11 +29,12 @@ public class KichCoService {
     }
 
     public void add(KichCoRequest kichCoRequest) {
-        KichCo kichCo = new KichCo();
-        kichCo.setTen(kichCoRequest.getTen());
-        kichCoRepository.save(kichCo);
+            KichCo kichCo = new KichCo();
+            kichCo.setTen(kichCoRequest.getTen());
+            kichCoRepository.save(kichCo);
 
-        System.out.println("KichCoService.add: " + kichCo.getTen());
+            System.out.println("KichCoService.add: " + kichCo.getTen());
+
     }
 
     public void update(KichCoRequest kichCoRequest, Integer id){

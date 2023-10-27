@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.requests.KhuyenMaiRequest;
 import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiResponse;
+import com.example.websitebanquanao.repositories.KhuyenMaiRepository;
 import com.example.websitebanquanao.services.KhuyenMaiChiTietService;
 import com.example.websitebanquanao.services.KhuyenMaiService;
 import com.example.websitebanquanao.services.SanPhamService;
@@ -32,15 +33,19 @@ public class KhuyenMaiController {
     @Autowired
     private KhuyenMaiRequest khuyenMaiRequest;
 
+    @Autowired
+    private KhuyenMaiRepository khuyenMaiRepository;
+
     // KhuyenMai
     private static final String redirect = "redirect:/admin/khuyen-mai/index";
 
     @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage, @ModelAttribute("errorMessage") String errorMessage) {
         Page<KhuyenMaiResponse> khuyenMaiPage = khuyenMaiService.getPage(page, 5);
         model.addAttribute("khuyenMaiPage", khuyenMaiPage);
         model.addAttribute("km", khuyenMaiRequest);
         model.addAttribute("successMessage", successMessage);
+        model.addAttribute("errorMessage", errorMessage);
         model.addAttribute("view", "/views/admin/khuyen-mai/index.jsp");
         return "admin/layout";
     }
@@ -58,6 +63,26 @@ public class KhuyenMaiController {
             model.addAttribute("view", "/views/admin/khuyen-mai/index.jsp");
             return "admin/layout";
         }
+
+        // Kiểm tra xem mã giảm giá đã tồn tại
+        if (khuyenMaiRepository.existsByMa(khuyenMaiRequest.getMa())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm khuyến mãi thất bại");
+            return redirect;
+        }
+
+        // Kiểm tra số phần trăm giảm
+        if (khuyenMaiRequest.getSoPhanTramGiam() < 1 || khuyenMaiRequest.getSoPhanTramGiam() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Phần trăm giảm không hợp lệ");
+            return redirect;
+        }
+
+
+        // Kiểm tra xem ngày kết thúc sau ngày bắt đầu
+        if (khuyenMaiRequest.getNgayKetThuc().isBefore(khuyenMaiRequest.getNgayBatDau())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "ngày bắt đầu và ngày kết thúc không hợp lệ");
+            return redirect;
+        }
+
         khuyenMaiService.add(khuyenMaiRequest);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm khuyến mãi thành công");
         return redirect;
@@ -69,6 +94,17 @@ public class KhuyenMaiController {
             model.addAttribute("view", "/views/admin/khuyen-mai/index.jsp");
             return "admin/layout";
         }
+
+        if (khuyenMaiRepository.existsByMa(khuyenMaiRequest.getMa())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm khuyến mãi thất bại");
+            return redirect;
+        }
+
+        if (khuyenMaiRequest.getSoPhanTramGiam() < 1 || khuyenMaiRequest.getSoPhanTramGiam() > 100) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Phần trăm giảm không hợp lệ");
+            return redirect;
+        }
+
         khuyenMaiService.update(khuyenMaiRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khuyến mãi thành công");
         return redirect;
