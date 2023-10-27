@@ -52,4 +52,11 @@ public class KhuyenMaiChiTietService {
     public Integer getSoPhanTramGiamByIdSanPham(UUID idSanPham) {
         return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPham);
     }
+
+    public Integer getSoPhanTramGiamByIdSanPhamChiTiet(UUID idSanPhamChiTiet) {
+        if (khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPhamChiTiet) == null) {
+            return 0;
+        }
+        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPhamChiTiet);
+    }
 }
