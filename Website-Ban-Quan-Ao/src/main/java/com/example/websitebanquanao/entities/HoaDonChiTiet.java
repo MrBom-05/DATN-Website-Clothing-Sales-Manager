@@ -25,6 +25,10 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_san_pham_chi_tiet")
     private SanPhamChiTiet idSanPhamChiTiet;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_khuyen_mai")
+    private KhuyenMai idKhuyenMai;
+
     @Column(name = "gia", precision = 20)
     private BigDecimal gia;
 

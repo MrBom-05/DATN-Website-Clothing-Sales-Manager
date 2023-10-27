@@ -142,8 +142,6 @@ CREATE TABLE hoa_don
     id_khach_hang        UNIQUEIDENTIFIER,
     -- id người duyệt
     id_nhan_vien         UNIQUEIDENTIFIER,
-
-    id_khuyen_mai        UNIQUEIDENTIFIER,
     id_giam_gia          UNIQUEIDENTIFIER,
     nguoi_nhan           NVARCHAR(100),
     email                NVARCHAR(50),
@@ -163,6 +161,7 @@ CREATE TABLE hoa_don_chi_tiet
     id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     id_hoa_don           UNIQUEIDENTIFIER,
     id_san_pham_chi_tiet UNIQUEIDENTIFIER,
+    id_khuyen_mai        UNIQUEIDENTIFIER,
     gia                  DECIMAL(20, 0)               DEFAULT 0,
     so_luong             INT
 )
@@ -221,8 +220,8 @@ ALTER TABLE hoa_don
 -- nhanh_vien - hoa_don
 ALTER TABLE hoa_don
     ADD FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien (id)
--- khuyen_mai - hoa_don
-ALTER TABLE hoa_don
+-- khuyen_mai - hoa_don_chi_tiet
+ALTER TABLE hoa_don_chi_tiet
     ADD FOREIGN KEY (id_khuyen_mai) REFERENCES khuyen_mai (id)
 -- giam_gia - hoa_don
 ALTER TABLE hoa_don
