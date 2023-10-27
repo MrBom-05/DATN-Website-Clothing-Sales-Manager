@@ -24,4 +24,6 @@ public interface KhuyenMaiRepository extends JpaRepository<KhuyenMai, UUID> {
     @Modifying
     @Query("update KhuyenMai km set km.trangThai = :trangThai where km.id = :id")
     public void updateTrangThaiById(@Param("id") UUID id, @Param("trangThai") int trangThai);
+
+    boolean existsByMa(String ma);
 }

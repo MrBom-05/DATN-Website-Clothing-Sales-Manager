@@ -3,6 +3,7 @@ package com.example.websitebanquanao.controllers.admins;
 import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.infrastructures.requests.LoaiRequest;
 import com.example.websitebanquanao.infrastructures.responses.LoaiResponse;
+import com.example.websitebanquanao.repositories.LoaiRepository;
 import com.example.websitebanquanao.services.LoaiService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +31,16 @@ public class LoaiController {
     private LoaiRequest loaiRequest;
 
     private static final String redirect = "redirect:/admin/loai/index";
+    @Autowired
+    private LoaiRepository loaiRepository;
 
     @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage, @ModelAttribute("errorMessage") String errorMessage) {
         Page<LoaiResponse> loaiPage = loaiService.getPage(page, 5);
         model.addAttribute("loaiPage", loaiPage);
         model.addAttribute("l", loaiRequest);
         model.addAttribute("successMessage", successMessage);
+        model.addAttribute("errorMessage", errorMessage);
         model.addAttribute("view", "/views/admin/loai/index.jsp");
         return "admin/layout";
     }
@@ -55,6 +59,12 @@ public class LoaiController {
             model.addAttribute("view", "/views/admin/loai/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
+
+        if (loaiRepository.existsByTen(loaiRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm Loại thất bại");
+            return redirect;
+        }
+
         loaiService.add(loaiRequest);
         // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm loại thành công");
@@ -67,6 +77,12 @@ public class LoaiController {
             model.addAttribute("view", "/views/admin/loai/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
+
+        if (loaiRepository.existsByTen(loaiRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật Loại thất bại");
+            return redirect;
+        }
+
         loaiService.update(loaiRequest, id);
         // Lưu thông báo cập nhật thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật loại thành công");

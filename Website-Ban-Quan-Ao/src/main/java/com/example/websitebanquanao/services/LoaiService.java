@@ -27,11 +27,12 @@ public class LoaiService {
     }
 
     public void add(LoaiRequest loaiRequest) {
-        Loai loai = new Loai();
-        loai.setTen(loaiRequest.getTen());
-        loaiRepository.save(loai);
+            Loai loai = new Loai();
+            loai.setTen(loaiRequest.getTen());
+            loaiRepository.save(loai);
 
-        System.out.println("LoaiService.add: " + loai.getTen());
+            System.out.println("LoaiService.add: " + loai.getTen());
+
     }
 
     public void update(LoaiRequest loaiRequest, Integer id){
