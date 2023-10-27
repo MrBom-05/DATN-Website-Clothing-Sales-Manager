@@ -18,4 +18,9 @@ public interface GiamGiaRepository extends JpaRepository<GiamGia, UUID> {
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse(g.id, g.ma, g.soPhanTramGiam, g.soLuong, g.ngayBatDau, g.ngayKetThuc) from GiamGia g where g.id = :id")
     public GiamGiaResponse getByIdResponse(@Param("id") UUID id);
+
+    // Phương thức kiểm tra sự tồn tại của mã giảm giá
+    boolean existsByMa(String ma);
+
+
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.UUID;
 
 @Service
@@ -25,17 +26,18 @@ public class KhuyenMaiService {
     }
 
     public void add(KhuyenMaiRequest khuyenMaiRequest) {
-        KhuyenMai khuyenMai = new KhuyenMai();
-        khuyenMai.setMa(khuyenMaiRequest.getMa());
-        khuyenMai.setTen(khuyenMaiRequest.getTen());
-        khuyenMai.setSoPhanTramGiam(khuyenMaiRequest.getSoPhanTramGiam());
-        khuyenMai.setNgayBatDau(khuyenMaiRequest.getNgayBatDau());
-        khuyenMai.setNgayKetThuc(khuyenMaiRequest.getNgayKetThuc());
-        khuyenMai.setTrangThai(0);
+            KhuyenMai khuyenMai = new KhuyenMai();
+            khuyenMai.setMa(khuyenMaiRequest.getMa());
+            khuyenMai.setTen(khuyenMaiRequest.getTen());
+            khuyenMai.setSoPhanTramGiam(khuyenMaiRequest.getSoPhanTramGiam());
+            khuyenMai.setNgayBatDau(Date.valueOf(khuyenMaiRequest.getNgayBatDau()));
+            khuyenMai.setNgayKetThuc(Date.valueOf(khuyenMaiRequest.getNgayKetThuc()));
+            khuyenMai.setTrangThai(0);
 
-        khuyenMaiRepository.save(khuyenMai);
+            khuyenMaiRepository.save(khuyenMai);
 
-        System.out.println("KhuyenMaiService.add: " + khuyenMai.getMa());
+            System.out.println("KhuyenMaiService.add: " + khuyenMai.getMa());
+
     }
 
     public void update(KhuyenMaiRequest khuyenMaiRequest, UUID id) {
@@ -44,8 +46,8 @@ public class KhuyenMaiService {
             khuyenMai.setMa(khuyenMaiRequest.getMa());
             khuyenMai.setTen(khuyenMaiRequest.getTen());
             khuyenMai.setSoPhanTramGiam(khuyenMaiRequest.getSoPhanTramGiam());
-            khuyenMai.setNgayBatDau(khuyenMaiRequest.getNgayBatDau());
-            khuyenMai.setNgayKetThuc(khuyenMaiRequest.getNgayKetThuc());
+            khuyenMai.setNgayBatDau(Date.valueOf(khuyenMaiRequest.getNgayBatDau()));
+            khuyenMai.setNgayKetThuc(Date.valueOf(khuyenMaiRequest.getNgayKetThuc()));
             khuyenMai.setTrangThai(0);
 
             khuyenMaiRepository.save(khuyenMai);

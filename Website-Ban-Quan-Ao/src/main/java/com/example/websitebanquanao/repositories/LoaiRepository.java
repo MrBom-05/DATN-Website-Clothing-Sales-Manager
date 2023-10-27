@@ -21,4 +21,6 @@ public interface LoaiRepository extends JpaRepository<Loai, Integer> {
 
     @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.LoaiResponse(l.id, l.ten) FROM Loai l WHERE l.id = :id")
     public LoaiResponse getByIdResponse(@Param("id") Integer id);
+
+    boolean existsByTen(String ten);
 }

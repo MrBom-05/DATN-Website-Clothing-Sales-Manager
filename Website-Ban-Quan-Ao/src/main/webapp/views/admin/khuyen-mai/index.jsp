@@ -7,6 +7,9 @@
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
     </c:if>
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">${errorMessage}</div>
+    </c:if>
     <div class="row mt-3">
         <div class="col-6">
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -95,9 +98,9 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="soPhanTramGiam" class="form-label">Số phần trăm giảm</label>
-                                    <form:input type="numbern" path="soPhanTramGiam" id="soPhanTramGiam"
+                                    <form:input type="number" path="soPhanTramGiam" id="soPhanTramGiam"
                                                 class="form-control"
-                                                required="true"/>
+                                                required="true" min="1" max="100"/>
                                     <form:errors path="soPhanTramGiam" cssClass="text-danger"/>
                                 </div>
                             </div>
@@ -189,6 +192,23 @@
             $("#edit-form").trigger("reset");
             $("#edit-form").attr("action", "/admin/khach-hang/store");
 
+        });
+    });
+
+
+    $(document).ready(function () {
+        var form = $("#edit-form");
+        var ngayBatDau = $("#ngayBatDau");
+        var ngayKetThuc = $("#ngayKetThuc");
+
+        form.submit(function (event) {
+            var startDate = new Date(ngayBatDau.val());
+            var endDate = new Date(ngayKetThuc.val());
+
+            if (endDate <= startDate) {
+                event.preventDefault(); // Ngăn chặn việc gửi form nếu ngày kết thúc không hợp lệ
+                alert('Ngày kết thúc phải sau ngày bắt đầu.');
+            }
         });
     });
 </script>

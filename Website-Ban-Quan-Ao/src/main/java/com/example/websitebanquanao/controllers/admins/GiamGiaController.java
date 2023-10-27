@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.requests.GiamGiaRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
+import com.example.websitebanquanao.repositories.GiamGiaRepository;
 import com.example.websitebanquanao.services.GiamGiaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
@@ -23,14 +30,18 @@ public class GiamGiaController {
     @Autowired
     private GiamGiaRequest giamGiaRequest;
 
+    @Autowired
+    private GiamGiaRepository giamGiaRepository;
+
     private static final String redirect = "redirect:/admin/giam-gia/index";
 
     @GetMapping("index")
-    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
+    public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage, @ModelAttribute("errorMessage") String errorMessage) {
         Page<GiamGiaResponse> giamGiaPage = giamGiaService.getPage(page, 5);
         model.addAttribute("giamGiaPage", giamGiaPage);
         model.addAttribute("gg", giamGiaRequest);
         model.addAttribute("successMessage", successMessage); // Hiển thị thông báo thành công
+        model.addAttribute("errorMessage", errorMessage); // Hiển thị thông báo thành công
         model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
         return "admin/layout";
     }
@@ -47,8 +58,29 @@ public class GiamGiaController {
     public String store(@Valid @ModelAttribute("gg") GiamGiaRequest giamGiaRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
-            return "admin/layout"; // Trả về trang index nếu có lỗi
+            return redirect; // Trả về trang index nếu có lỗi
         }
+
+        // Kiểm tra xem mã giảm giá đã tồn tại
+        if (giamGiaRepository.existsByMa(giamGiaRequest.getMa())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm giảm giá thất bại");
+            return redirect;
+        }
+
+        // Kiểm tra số phần trăm giảm và số lượng
+        if (giamGiaRequest.getSoPhanTramGiam() < 1 || giamGiaRequest.getSoPhanTramGiam() > 100 ||
+                giamGiaRequest.getSoLuong() < 1 || giamGiaRequest.getSoLuong() > 10000) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số lượng và phần trăm giảm không hợp lệ");
+            return redirect;
+        }
+
+
+        // Kiểm tra xem ngày kết thúc sau ngày bắt đầu
+        if (giamGiaRequest.getNgayKetThuc().isBefore(giamGiaRequest.getNgayBatDau())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "ngày bắt đầu và ngày kết thúc không hợp lệ");
+            return redirect;
+        }
+
         giamGiaService.add(giamGiaRequest);
         // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm giảm giá thành công");
@@ -61,6 +93,7 @@ public class GiamGiaController {
             model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
+
         giamGiaService.update(giamGiaRequest, id);
         // Lưu thông báo cập nhật thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật giảm giá thành công");
