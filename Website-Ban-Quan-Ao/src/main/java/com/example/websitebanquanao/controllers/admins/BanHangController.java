@@ -202,32 +202,38 @@ public class BanHangController {
     @PostMapping("/add-gio-hang-qr-code/{idHoaDon}")
     @ResponseBody
     public ResponseEntity<String> addGioHangQRCode(@ModelAttribute("hdct") HoaDonChiTiet hoaDonChiTiet, @PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("idSanPhamChiTiet") UUID idSanPhamChiTiet, @RequestParam("gia") int gia, @RequestParam("soLuongMoi") int soLuongMoi) {
-        // Lấy chi tiết sản phẩm từ cơ sở dữ liệu dựa trên idSanPhamChiTiet
         SanPhamChiTiet ctsp = ctspService.findById(idSanPhamChiTiet);
 
         if (ctsp != null) {
+            HoaDonChiTiet existingChiTiet = hoaDonChiTietService.getChiTietByHoaDonAndSanPham(idHoaDon, idSanPhamChiTiet);
+
+            if (existingChiTiet != null) {
+                int soLuongHienTai = existingChiTiet.getSoLuong();
+                existingChiTiet.setSoLuong(soLuongHienTai + soLuongMoi);
+                hoaDonChiTietService.update(existingChiTiet);
+
+            } else {
+                // Sản phẩm chưa tồn tại trong hoá đơn, tạo hoá đơn chi tiết mới
+                hoaDonChiTiet.setSoLuong(soLuongMoi);
+                hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
+                hoaDonChiTiet.setIdSanPhamChiTiet(ctsp);
+                hoaDonChiTietService.add(hoaDonChiTiet);
+
+            }
+
             // Trừ đi số lượng mới từ số lượng hiện tại
             int soLuongConLai = ctsp.getSoLuong() - soLuongMoi;
 
             if (soLuongConLai < 0) {
-                // Xử lý tình huống số lượng âm (tuỳ theo quy tắc của bạn)
                 soLuongConLai = 0;
             }
 
-            // Cập nhật số lượng mới
+            // Cập nhật số lượng mới của sản phẩm
             ctsp.setSoLuong(soLuongConLai);
-            ctspService.updateSoLuong(ctsp); // Đảm bảo bạn có một phương thức update trong ctspService
+            ctspService.updateSoLuong(ctsp);
+
         }
-
-        // Sử dụng trường soLuongMoi thay vì soLuong
-        hoaDonChiTiet.setSoLuong(soLuongMoi);
-
-        // Thêm sản phẩm vào giỏ hàng
-        hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
-        hoaDonChiTietService.add(hoaDonChiTiet);
-
-        // Trả về một thông báo thành công (hoặc bất kỳ thông báo nào bạn muốn) trong dữ liệu JSON
-        return new ResponseEntity<>("Thêm sản phẩm vào giỏ hàng thành công", HttpStatus.OK);
+        return new ResponseEntity<String>("Thêm thành công", HttpStatus.OK);
     }
 }
 

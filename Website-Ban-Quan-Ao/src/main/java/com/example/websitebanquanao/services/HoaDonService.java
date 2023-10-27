@@ -55,7 +55,6 @@ public class HoaDonService {
         hoaDon.setNgayNhan(hoaDonRequest.getNgayNhan());
         hoaDon.setIdKhachHang(hoaDonRequest.getIdKhachHang());
         hoaDon.setIdNhanVien(hoaDonRequest.getIdNhanVien());
-        hoaDon.setIdKhuyenMai(hoaDonRequest.getIdKhuyenMai());
         hoaDon.setIdGiamGia(hoaDonRequest.getIdGiamGia());
         hoaDon.setNguoiNhan(hoaDonRequest.getNguoiNhan());
         hoaDon.setEmail(hoaDonRequest.getEmail());
