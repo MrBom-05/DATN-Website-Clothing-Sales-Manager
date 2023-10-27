@@ -96,6 +96,7 @@
                                     var giaSanPham = ${sanPham.gia};
                                     var soPhanTramGiam = data;
                                     var giaSauGiam = giaSanPham - (giaSanPham * soPhanTramGiam / 100);
+                                    giaSauGiam = Math.floor(giaSauGiam);
                                     giaSpan.hide();
                                     if (data > 0) {
                                         giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');

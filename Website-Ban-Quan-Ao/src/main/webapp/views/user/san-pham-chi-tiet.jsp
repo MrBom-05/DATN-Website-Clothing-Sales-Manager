@@ -61,6 +61,7 @@
                     </c:choose>
                 </div>
             </div>
+
             <hr/>
             <div class="input-group pt-2">
                 <h6 class="me-2" id="product-name">Mô tả</h6>
@@ -212,5 +213,7 @@
         </div>
     </div>
 </div>
+<%--cdn jquery--%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
