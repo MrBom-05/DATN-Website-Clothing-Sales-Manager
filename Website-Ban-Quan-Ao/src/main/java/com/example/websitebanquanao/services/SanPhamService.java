@@ -3,10 +3,7 @@ package com.example.websitebanquanao.services;
 import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.entities.SanPham;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
-import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse;
-import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietUserResponse;
-import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
-import com.example.websitebanquanao.infrastructures.responses.TrangChuResponse;
+import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.repositories.SanPhamRepository;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -120,8 +118,32 @@ public class SanPhamService {
 
 
     // user
-    public List<TrangChuResponse> getListTrangChu() {
-        return sanPhamRepository.getListTrangChu();
+    public List<TrangChuResponse> getListTrangChu(String sort) {
+        List<TrangChuResponse> list = sanPhamRepository.getListTrangChu();
+        if (sort != null) {
+            if (sort.equals("asc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia));
+            } else if (sort.equals("desc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia).reversed());
+            }
+        }
+        return list;
+    }
+
+    public List<TrangChuResponse> getListSanPhamByIdLoai(Integer idLoai, String sort) {
+        List<TrangChuResponse> list = sanPhamRepository.getListSanPhamByIdLoai(idLoai);
+        if (sort != null) {
+            if (sort.equals("asc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia));
+            } else if (sort.equals("desc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia).reversed());
+            }
+        }
+        return list;
+    }
+
+    public List<LoaiResponse> getListLoai() {
+        return sanPhamRepository.getListLoai();
     }
 
     public SanPhamChiTietUserResponse getByIdSanPham(UUID idSanPham) {

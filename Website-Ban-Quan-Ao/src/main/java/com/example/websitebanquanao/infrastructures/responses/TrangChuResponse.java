@@ -17,8 +17,7 @@ public class TrangChuResponse {
     private UUID id;
     private String ten;
     private String anh;
-    private BigDecimal giaNhoNhat;
-    private BigDecimal giaLonNhat;
+    private BigDecimal gia;
     private Integer idMauSac;
     private Date ngayTao;
 }

@@ -14,7 +14,7 @@
 
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -24,33 +24,30 @@
             <div class="collapse navbar-collapse ps-5" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/san-pham">Sản Phẩm</a>
+                        <a style="color: #ffffff" class="nav-link" href="/san-pham">Sản Phẩm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sale</a>
+                        <a style="color: #ffffff" class="nav-link" href="/sale">Sale</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Giới Thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Chính Sách</a>
+                        <a style="color: #ffffff" class="nav-link" href="/gioi-thieu">Giới Thiệu</a>
                     </li>
                 </ul>
             </div>
             <div class="menu-div-2">
                 <div class="menu-img">
                     <a href="#" class="text-dark">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-search" style="color: #ffffff"></i>
                     </a>
                 </div>
                 <div class="menu-img">
                     <a href="/gio-hang" class="menu-overlap-group">
-                        <i class="fas fa-shopping-cart" style="color: #000000;"></i>
+                        <i class="fas fa-shopping-cart" style="color: #ffffff;"></i>
                     </a>
                 </div>
                 <div class="menu-img">
                     <a href="/dang-nhap">
-                        <i class="fas fa-user" style="color: #00000f;"></i>
+                        <i class="fas fa-user" style="color: #ffffff;"></i>
                     </a>
                 </div>
             </div>
