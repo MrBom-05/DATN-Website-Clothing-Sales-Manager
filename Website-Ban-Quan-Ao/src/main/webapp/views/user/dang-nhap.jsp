@@ -29,8 +29,7 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="login" role="tabpanel"
                  aria-labelledby="login-tab">
-                <%--@elvariable id="kh" type="java"--%>
-                <form:form modelAttribute="kh" action="/dang-nhap" method="post">
+                <form:form modelAttribute="dangNhap" action="/dang-nhap" method="post">
                     <div class="row">
                         <div class="col-6">
                             <label for="loginEmail"
@@ -48,10 +47,6 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-9">
-                            <input type="checkbox" class="form-check-input"
-                                   id="loginRemember"/>
-                            <label class="form-check-label" for="loginRemember">Ghi
-                                nhớ tài khoản</label>
                         </div>
                         <div class="col-3">
                             <a class="link-dark" style="text-decoration: none">Quên
@@ -64,34 +59,33 @@
             </div>
             <div class="tab-pane fade" id="register" role="tabpanel"
                  aria-labelledby="register-tab">
-                <form>
+                <form:form id="registrationForm" modelAttribute="dangKy" action="/dang-ky" method="post">
                     <div class="row">
                         <div class="col-6">
                             <label for="registerName" class="form-label">Họ Và
                                 Tên (*)</label>
-                            <input type="text" class="form-control"
-                                   id="registerName">
+                            <form:input path="hoTen" type="text" class="form-control"
+                                        id="registerName"/>
                         </div>
                         <div class="col-6">
                             <label for="registerEmail"
                                    class="form-label">Email (*)</label>
-                            <input type="email" class="form-control"
-                                   id="registerEmail"
-                                   aria-describedby="emailHelp">
+                            <form:input path="emailDK" type="email" class="form-control"
+                                        id="registerEmail"/>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="registerPassword" class="form-label">Mật
                                 Khẩu (*)</label>
-                            <input type="password" class="form-control"
-                                   id="registerPassword">
+                            <form:input path="matKhauDK" type="password" class="form-control"
+                                        id="registerPassword"/>
                         </div>
                         <div class="col-6">
                             <label for="registerPassword" class="form-label">Xác nhận
                                 Mật Khẩu (*)</label>
                             <input type="password" class="form-control"
-                                   id="registerPassword">
+                                   id="confirmPassword">
                         </div>
                     </div>
                     <div class="flex items-center mt-3">
@@ -107,7 +101,30 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-dark mt-5">Đăng Ký</button>
-                </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            // Lắng nghe sự kiện khi form được gửi
+                            document.getElementById("registrationForm").addEventListener("submit", function (event) {
+                                // Kiểm tra xem checkbox đã được chọn
+                                var checkbox = document.getElementById("accept");
+                                if (!checkbox.checked) {
+                                    alert("Vui lòng đồng ý với các chính sách trước khi đăng ký.");
+                                    event.preventDefault(); // Ngăn chặn việc gửi form
+                                    return;
+                                }
+
+                                // Kiểm tra xem mật khẩu và xác nhận mật khẩu trùng nhau
+                                var password = document.getElementById("registerPassword").value;
+                                var confirmPassword = document.getElementById("confirmPassword").value;
+                                if (password !== confirmPassword) {
+                                    alert("Mật khẩu và xác nhận mật khẩu phải trùng nhau.");
+                                    event.preventDefault(); // Ngăn chặn việc gửi form
+                                }
+                            });
+                        });
+                    </script>
+
+                </form:form>
             </div>
         </div>
     </div>

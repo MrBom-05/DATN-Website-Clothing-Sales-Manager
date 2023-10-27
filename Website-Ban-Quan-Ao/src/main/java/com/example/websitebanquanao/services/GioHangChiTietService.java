@@ -22,6 +22,9 @@ public class GioHangChiTietService {
     private SanPhamChiTietService sanPhamChiTietService;
 
     @Autowired
+    private KhuyenMaiChiTietService khuyenMaiChiTietService;
+
+    @Autowired
     private GioHangService gioHangService;
 
     public void add(UUID idSanPham, UUID idKhachHang, GioHangUserRequest gioHangUserRequest) {
@@ -38,11 +41,15 @@ public class GioHangChiTietService {
 
             System.out.println("GioHangChiTietService.update: " + gioHangChiTiet.getId());
         } else {
+            Integer soPhanTramGiamGia = khuyenMaiChiTietService.getSoPhanTramGiamByIdSanPhamChiTiet(sanPhamChiTiet.getId());
+            BigDecimal giaBan = sanPhamChiTiet.getGia();
+            BigDecimal giaBanSauKhuyenMai = giaBan.subtract(giaBan.multiply(new BigDecimal(soPhanTramGiamGia)).divide(new BigDecimal(100)));
+
             gioHangChiTiet = new GioHangChiTiet();
             gioHangChiTiet.setIdGioHang(gioHang);
             gioHangChiTiet.setIdSanPhamChiTiet(sanPhamChiTiet);
             gioHangChiTiet.setSoLuong(gioHangUserRequest.getSoLuong());
-            gioHangChiTiet.setGia(sanPhamChiTiet.getGia());
+            gioHangChiTiet.setGia(giaBanSauKhuyenMai);
 
             gioHangChiTietRepository.save(gioHangChiTiet);
 
@@ -67,5 +74,13 @@ public class GioHangChiTietService {
     public void deleteByIdSanPhamChiTietAndIdKhachHang(UUID idSanPhamChiTiet, UUID idKhachHang) {
         gioHangChiTietRepository.deleteByIdSanPhamChiTietAndIdKhachHang(idSanPhamChiTiet, idKhachHang);
         System.out.println("GioHangChiTietService.deleteByIdSanPhamChiTietAndIdKhachHang: " + idSanPhamChiTiet + " " + idKhachHang);
+    }
+
+    public BigDecimal getTongTienByIdKhachHang(UUID idKhachHang) {
+        if (gioHangChiTietRepository.getTongTienByIdKhachHang(idKhachHang) == null) {
+            return new BigDecimal(0);
+        } else {
+            return gioHangChiTietRepository.getTongTienByIdKhachHang(idKhachHang);
+        }
     }
 }

@@ -71,7 +71,7 @@
                 <div class="py-3 border-bottom">
                     <div class="row ms-1 me-1">
                         <label class="col fw-bold fs-6 ">Tạm tính</label>
-                        <label class="col  fs-6 text-end">450,000 ₫</label>
+                        <label class="col  fs-6 text-end">${tongTien} vnđ</label>
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
                 <div class="bg-white py-3 border-bottom">
                     <div class="row ms-1 me-1">
                         <label class="col fw-bold fs-5">Tổng</label>
-                        <label class="col text-uppercase fw-bold fs-5 text-end">450,000 ₫</label>
+                        <label class="col text-uppercase fw-bold fs-5 text-end">${tongTien} vnđ</label>
                     </div>
                 </div>
             </div>
