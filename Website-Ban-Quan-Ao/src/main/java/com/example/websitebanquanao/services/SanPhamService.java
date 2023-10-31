@@ -142,6 +142,18 @@ public class SanPhamService {
         return list;
     }
 
+    public List<TrangChuResponse> getListSale(String sort) {
+        List<TrangChuResponse> list = sanPhamRepository.getListSale();
+        if (sort != null) {
+            if (sort.equals("asc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia));
+            } else if (sort.equals("desc")) {
+                list.sort(Comparator.comparing(TrangChuResponse::getGia).reversed());
+            }
+        }
+        return list;
+    }
+
     public List<LoaiResponse> getListLoai() {
         return sanPhamRepository.getListLoai();
     }
