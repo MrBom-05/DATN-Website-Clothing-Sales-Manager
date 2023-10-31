@@ -53,7 +53,17 @@
                         <td>${index.count}</td>
                         <td>${hoaDon.ma}</td>
                         <td>${hoaDon.idNhanVien.hoVaTen}</td>
-                        <td>${hoaDon.ngayTao}</td>
+
+                        <td>
+<%--                            format ngày tạo--%>
+                            <span id="formattedDate${index.count}"></span>
+                            <script>
+                                var originalDate = "${hoaDon.ngayTao}";
+                                var formattedDate = new Date(originalDate).toLocaleString();
+                                document.getElementById("formattedDate${index.count}").textContent = formattedDate;
+                            </script>
+                        </td>
+
                         <td>${hoaDon.trangThai == 0 ? "Chờ thanh toán" : "Đã thanh toán"}</td>
                         <td>
                             <a href="/admin/ban-hang/view-hoa-don/${hoaDon.id}" class="btn btn-primary">Xem</a>
