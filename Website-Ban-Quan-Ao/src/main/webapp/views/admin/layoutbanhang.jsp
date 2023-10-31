@@ -64,6 +64,7 @@
                             </script>
                         </td>
 
+
                         <td>${hoaDon.trangThai == 0 ? "Chờ thanh toán" : "Đã thanh toán"}</td>
                         <td>
                             <a href="/admin/ban-hang/view-hoa-don/${hoaDon.id}" class="btn btn-primary">Xem</a>
