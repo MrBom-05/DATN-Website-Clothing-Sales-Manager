@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 public class HoaDonRequest {
 
-    private LocalDate ngayTao;
+    private Instant ngayTao;
 
     private Instant ngayThanhToan;
 
