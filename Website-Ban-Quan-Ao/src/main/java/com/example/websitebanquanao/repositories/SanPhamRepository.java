@@ -33,6 +33,9 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
     @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListTrangChu();
 
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, MIN(spct.gia), MIN(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms join spct.khuyenMaiChiTiets kmct join kmct.idKhuyenMai km where km.ngayBatDau <= CURRENT_DATE and km.ngayKetThuc >= CURRENT_DATE group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
+    public List<TrangChuResponse> getListSale();
+
     @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms where s.idLoai.id = :idLoai group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListSanPhamByIdLoai(@Param("idLoai") Integer idLoai);
 

@@ -115,8 +115,7 @@
 
             </c:forEach>
         </div>
-
-        <!-- end repeat -->
     </div>
 
+    <h5 class="text-center">Bạn đã xem hết!</h5>
 </section>

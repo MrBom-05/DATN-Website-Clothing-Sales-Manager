@@ -23,7 +23,7 @@
     <h6 class="text-center">
         Skateboarding nói riêng, tìm kiếm, phát triển những cá nhân có triển vọng trong cộng đồng
     </h6>
-    <h6 class="text-center">
+    <h6 class="text-center" style="margin-bottom: 220px">
         #LENINNSKATESHOP
     </h6>
 </div>
