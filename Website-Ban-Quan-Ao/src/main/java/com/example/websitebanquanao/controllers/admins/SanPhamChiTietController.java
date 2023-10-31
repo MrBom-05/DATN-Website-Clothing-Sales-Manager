@@ -1,17 +1,19 @@
 package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.SanPhamChiTiet;
-import com.example.websitebanquanao.infrastructures.requests.KichCoRequest;
-import com.example.websitebanquanao.infrastructures.requests.MauSacRequest;
-import com.example.websitebanquanao.infrastructures.requests.SanPhamChiTietRequest;
-import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
+import com.example.websitebanquanao.infrastructures.requests.*;
+import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse;
 import com.example.websitebanquanao.services.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -43,7 +45,9 @@ public class SanPhamChiTietController {
     @GetMapping("/index")
     public String index(Model model) {
         model.addAttribute("list", sanPhamChiTietService.getAll());
-        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/chi-tiet.jsp");
+        model.addAttribute("listMauSac", mauSacService.getAll());
+        model.addAttribute("listKichCo", kichCoService.getAll());
+        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
         return "admin/layout";
     }
     @GetMapping("/create")
@@ -68,6 +72,17 @@ public class SanPhamChiTietController {
         sanPhamChiTietService.add(sanPhamChiTietRequest);
         return "redirect:/admin/san-pham-chi-tiet/index";
     }
+    @PostMapping("update/{id}")
+    public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("sanPhamChiTiet") SanPhamChiTietRequest sanPhamChiTietRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("list", sanPhamChiTietService.getAll());
+            model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
+            return "admin/layout";
+        }
+        sanPhamChiTietService.update(sanPhamChiTietRequest, id);
+        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật chi tiết sản phẩm thành công");
+        return "redirect:/admin/san-pham-chi-tiet/index";
+    }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") SanPhamChiTiet sanPhamChiTiet, Model model) {
@@ -77,8 +92,9 @@ public class SanPhamChiTietController {
 
         model.addAttribute("list", sanPhamChiTietService.getAll());
 
-        model.addAttribute("sanPhamChiTiet", new SanPhamChiTietRequest());
-        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/edit.jsp");
+        model.addAttribute("sanPhamChiTiet", sanPhamChiTiet);
+        model.addAttribute("action", "/admin/san-pham-chi-tiet/update/" + sanPhamChiTiet.getId());
+        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/create.jsp");
         return "admin/layout";
     }
     @GetMapping("/get-anh/{id}")
@@ -87,6 +103,57 @@ public class SanPhamChiTietController {
         model.addAttribute("sanPhamChiTiet", new SanPhamChiTietRequest());
         model.addAttribute("listAnh", anhSanPhamService.getAll(id));
         model.addAttribute("view", "/views/admin/san-pham-chi-tiet/create.jsp");
+        return "admin/layout";
+    }
+    @GetMapping("/filter")
+    public String filter(@RequestParam(name = "status", required = false) Integer status, Model model) {
+        List<SanPhamChiTietResponse> filteredList;
+
+        if (status != null && status != -1) {
+            filteredList = sanPhamChiTietService.getByStatus(status);
+        } else {
+            // If no status is selected, show all products.
+            filteredList = sanPhamChiTietService.getAll();
+        }
+        model.addAttribute("list", sanPhamChiTietService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
+        model.addAttribute("listKichCo", kichCoService.getAll());
+        model.addAttribute("list", filteredList);
+        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
+        return "admin/layout";
+    }
+    @GetMapping("/filter-mau-sac")
+    public String filterMauSac(@RequestParam(name = "tenMauSac", required = false) String tenMauSac, Model model) {
+        List<SanPhamChiTietResponse> filteredList;
+
+        if (tenMauSac != null && !tenMauSac.isEmpty()) {
+            filteredList = sanPhamChiTietService.getByTenMauSac(tenMauSac);
+        } else {
+            // If no status is selected, show all products.
+            filteredList = sanPhamChiTietService.getAll();
+        }
+        model.addAttribute("list", sanPhamChiTietService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
+        model.addAttribute("listKichCo", kichCoService.getAll());
+        model.addAttribute("list", filteredList);
+        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
+        return "admin/layout";
+    }
+    @GetMapping("/filter-kich-co")
+    public String filterKichCo(@RequestParam(name = "tenKichCo", required = false) String tenKichCo, Model model) {
+        List<SanPhamChiTietResponse> filteredList;
+
+        if (tenKichCo != null && !tenKichCo.isEmpty()) {
+            filteredList = sanPhamChiTietService.getByTenKichCo(tenKichCo);
+        } else {
+            // If no status is selected, show all products.
+            filteredList = sanPhamChiTietService.getAll();
+        }
+        model.addAttribute("list", sanPhamChiTietService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
+        model.addAttribute("listKichCo", kichCoService.getAll());
+        model.addAttribute("list", filteredList);
+        model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
         return "admin/layout";
     }
 }
