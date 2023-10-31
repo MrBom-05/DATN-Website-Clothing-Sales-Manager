@@ -56,8 +56,8 @@ public class BanHangController {
         System.out.println(nhanVien.getId());
         hoaDonRequest.setIdNhanVien(nhanVien);
         Instant currentInstant = Instant.now();
-        LocalDate currentDate = LocalDate.now();
-        hoaDonRequest.setNgayTao(currentDate);
+
+        hoaDonRequest.setNgayTao(currentInstant);
         hoaDonRequest.setNgayThanhToan(currentInstant);
         hoaDonRequest.setTrangThai(0);
         hoaDonRequest.setLoaiHoaDon(0);
