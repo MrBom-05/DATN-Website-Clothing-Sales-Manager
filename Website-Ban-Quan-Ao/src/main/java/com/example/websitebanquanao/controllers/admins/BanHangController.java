@@ -42,11 +42,12 @@ public class BanHangController {
 
     @GetMapping("")
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
-        Page<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp(page, pageSize);
+        List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAll());
         model.addAttribute("hdct", new HoaDonChiTiet());
-        return "admin/layoutbanhang";
+        model.addAttribute("view", "/views/admin/ban-hang.jsp");
+        return "admin/layout";
     }
 
     @PostMapping("/add-hoa-don")
@@ -56,7 +57,6 @@ public class BanHangController {
         System.out.println(nhanVien.getId());
         hoaDonRequest.setIdNhanVien(nhanVien);
         Instant currentInstant = Instant.now();
-
         hoaDonRequest.setNgayTao(currentInstant);
         hoaDonRequest.setNgayThanhToan(currentInstant);
         hoaDonRequest.setTrangThai(0);
@@ -129,7 +129,7 @@ public class BanHangController {
         List<GioHangResponse> listSanPhamTrongGioHang = hoaDonChiTietService.getHoaDonChiTietByHoaDonId(id);
 
         // Truyền idHoaDon để sử dụng trong form
-        Page<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp(page, pageSize);
+        List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAll());
         model.addAttribute("idHoaDon", id);
@@ -137,7 +137,8 @@ public class BanHangController {
 
         model.addAttribute("listSanPhamTrongGioHang", listSanPhamTrongGioHang);
 
-        return "admin/layoutbanhang";
+        model.addAttribute("view", "/views/admin/ban-hang.jsp");
+        return "admin/layout";
     }
 
     @PostMapping("/delete-gio-hang/{idHoaDonChiTiet}")
