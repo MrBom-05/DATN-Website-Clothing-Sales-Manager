@@ -63,7 +63,7 @@
                             <img src="${sanPham.anh}" class="card-img-top" alt="${sanPham.ten}">
                             <span class="discount-percentage" id="so-phan-tram-giam_${sanPham.id}"></span>
                             <div class="card-body text-center">
-                                <p>${sanPham.ten}</p>
+                                <p class="text-uppercase">${sanPham.ten}</p>
 
                                 <p class="fw-bold gia-san-pham"
                                    id="gia-san-pham_${sanPham.id}">${sanPham.gia} vnđ</p>

@@ -22,7 +22,7 @@
                     </td>
 
                     <td>
-                        <a class="link-dark" style="text-decoration: none"
+                        <a class="link-dark text-uppercase" style="text-decoration: none"
                            href="/san-pham/${gioHang.id}/${gioHang.idMauSac}">${gioHang.tenSanPham}-${gioHang.tenMauSac}-${gioHang.tenKichCo}</a>
                     </td>
 
@@ -42,7 +42,7 @@
                             </div>
                         </form>
                     </td>
-                    <td>${gioHang.soLuong * gioHang.gia} ₫</td>
+                    <td>${gioHang.soLuong * gioHang.gia} vn₫</td>
                     <td>
                         <a href="/gio-hang/${gioHang.idSanPhamChiTiet}" type="button" class="btn-close"
                            aria-label="Close"></a>
@@ -71,7 +71,7 @@
                 <div class="py-3 border-bottom">
                     <div class="row ms-1 me-1">
                         <label class="col fw-bold fs-6 ">Tạm tính</label>
-                        <label class="col  fs-6 text-end">${tongTien} vnđ</label>
+                        <label class="col fs-6 text-end">${tongTien} vnđ</label>
                     </div>
                 </div>
 
@@ -97,7 +97,7 @@
                 </div>
             </div>
             <div class="mt-3 mb-3 text-center">
-                <button class="bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</button>
+                <a href="/thanh-toan" class="bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</a>
             </div>
         </div>
     </div>

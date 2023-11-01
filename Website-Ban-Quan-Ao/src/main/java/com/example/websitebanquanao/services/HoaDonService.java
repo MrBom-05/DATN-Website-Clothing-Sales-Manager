@@ -1,11 +1,15 @@
 package com.example.websitebanquanao.services;
 
 import com.example.websitebanquanao.entities.HoaDon;
+import com.example.websitebanquanao.entities.KhachHang;
+import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
+import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,9 +18,15 @@ public class HoaDonService {
     @Autowired
     private HoaDonRepository hoaDonRepository;
 
+    @Autowired
+    private HoaDonChiTietService hoaDonChiTietService;
+
+
+    // admin
     public List<HoaDon> getAll() {
         return hoaDonRepository.findAll();
     }
+
     public String maHDCount() {
         String code = "";
         List<HoaDon> list = hoaDonRepository.findAll();
@@ -46,7 +56,8 @@ public class HoaDonService {
         }
         return code;
     }
-    public void add(HoaDonRequest hoaDonRequest){
+
+    public void add(HoaDonRequest hoaDonRequest) {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMa(maHDCount());
         hoaDon.setNgayTao(hoaDonRequest.getNgayTao());
@@ -73,10 +84,11 @@ public class HoaDonService {
     public HoaDon getById(UUID idHoaDon) {
         if (hoaDonRepository.findById(idHoaDon).isPresent()) {
             return hoaDonRepository.findById(idHoaDon).get();
-        }else {
+        } else {
             return null;
         }
     }
+
     public HoaDon findHoaDonByHoaDonChiTietId(UUID idHoaDonChiTiet) {
         return hoaDonRepository.findHoaDonByHoaDonChiTietId(idHoaDonChiTiet);
     }
@@ -85,5 +97,35 @@ public class HoaDonService {
         if (hoaDon != null && idHoaDon != null) {
             hoaDonRepository.save(hoaDon);
         }
+    }
+
+    // user
+    public String addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse) {
+        HoaDon hoaDon = new HoaDon();
+
+        hoaDon.setMa(maHDCount());
+        Instant currentInstant = Instant.now();
+        hoaDon.setNgayTao(currentInstant);
+        hoaDon.setNguoiNhan(formThanhToan.getHoTen());
+        hoaDon.setTinhThanhPho(formThanhToan.getTinhThanhPho());
+        hoaDon.setQuanHuyen(formThanhToan.getQuanHuyen());
+        hoaDon.setXaPhuong(formThanhToan.getXaPhuong());
+        hoaDon.setDiaChi(formThanhToan.getDiaChi());
+        hoaDon.setSoDienThoai(formThanhToan.getSoDienThoai());
+        hoaDon.setEmail(formThanhToan.getEmail());
+        hoaDon.setHinhThucThanhToan(formThanhToan.getHinhThucThanhToan());
+        hoaDon.setGhiChu(formThanhToan.getGhiChu());
+        hoaDon.setLoaiHoaDon(1);
+        hoaDon.setTrangThai(0);
+
+        KhachHang khachHang = new KhachHang();
+        khachHang.setId(khachHangResponse.getId());
+
+        hoaDon.setIdKhachHang(khachHang);
+
+        hoaDonRepository.save(hoaDon);
+        hoaDonChiTietService.addHoaDonChiTietUser(hoaDon, khachHangResponse.getId());
+        System.out.println("HoaDonService.addHoaDonUser: " + hoaDon.getMa());
+        return hoaDon.getMa();
     }
 }
