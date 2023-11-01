@@ -1,9 +1,7 @@
 package com.example.websitebanquanao.controllers.users;
 
-import com.example.websitebanquanao.infrastructures.requests.DangKyUserRequest;
-import com.example.websitebanquanao.infrastructures.requests.DangNhapUserRequest;
-import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
-import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
+import com.example.websitebanquanao.entities.HoaDon;
+import com.example.websitebanquanao.infrastructures.requests.*;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpSession;
@@ -41,6 +39,9 @@ public class TrangChuController {
 
     @Autowired
     private KhuyenMaiChiTietService khuyenMaiChiTietService;
+
+    @Autowired
+    private HoaDonService hoaDonService;
 
     @Autowired
     private HttpSession session;
@@ -148,7 +149,33 @@ public class TrangChuController {
     // trang thanh toán
     @GetMapping("thanh-toan")
     public String thanhToan(Model model) {
+        KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        if (khachHangResponse == null) {
+            return "redirect:/dang-nhap";
+        } else {
+            model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
+            model.addAttribute("tongTien", gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId()));
+        }
         model.addAttribute("viewContent", "/views/user/thanh-toan.jsp");
+        return "user/layout";
+    }
+
+    @ModelAttribute("formThanhToan")
+    public FormThanhToan formThanhToan() {
+        return new FormThanhToan();
+    }
+
+    // form thanh toán
+    @PostMapping("thanh-toan")
+    public String formThanhToan(@ModelAttribute("formThanhToan") FormThanhToan formThanhToan, Model model) {
+        KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        if (khachHangResponse == null) {
+            return "redirect:/dang-nhap";
+        } else {
+            String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse);
+            model.addAttribute("maHoaDon", maHoaDon);
+            model.addAttribute("viewContent", "/views/user/hoan-thanh-thanh-toan.jsp");
+        }
         return "user/layout";
     }
 

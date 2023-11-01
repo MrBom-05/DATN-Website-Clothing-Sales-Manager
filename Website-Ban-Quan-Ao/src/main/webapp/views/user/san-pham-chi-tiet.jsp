@@ -46,7 +46,7 @@
         </section>
         <section class="col-lg-6">
             <div class="col-lg-12">
-                <h3 class="fw-bold">${sanPham.ten}</h3>
+                <h3 class="fw-bold text-uppercase">${sanPham.ten}</h3>
             </div>
             <div class="justify-content-between mt-4">
                 <div>

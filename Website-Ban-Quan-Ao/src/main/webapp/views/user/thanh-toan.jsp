@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<form>
+<form:form modelAttribute="formThanhToan" action="/thanh-toan" method="post">
     <div class="row col-10 container offset-1 mt-1">
         <div class="col-6">
             <div class="text-center py-3 fw-bold  text-xl-center text-uppercase">
@@ -10,52 +11,53 @@
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Họ và Tên (*)</div>
-                <input class="w-100 form-control" type="text" placeholder="Họ và Tên">
+                <form:input path="hoTen" class="w-100 form-control" type="text" placeholder="Họ và Tên"/>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Tỉnh/Thành Phố (*)</div>
-                <select class="w-100 form-control" name="">
+                <form:select path="tinhThanhPho" class="w-100 form-control" name="">
                     <option value="">Bắc Giang</option>
                     <option value="">Hà Nội</option>
-                </select>
+                </form:select>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Quận/Huyện (*)</div>
-                <select class="w-100 form-control" name="">
+                <form:select path="quanHuyen" class="w-100 form-control" name="">
                     <option value="">Bắc Giang</option>
                     <option value="">Hà Nội</option>
-                </select>
+                </form:select>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Xã/Phường (*)</div>
-                <select class="w-100 form-control" name="">
+                <form:select path="xaPhuong" class="w-100 form-control" name="">
                     <option value="">Bắc Giang</option>
                     <option value="">Hà Nội</option>
-                </select>
+                </form:select>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Địa chỉ (*)</div>
-                <textarea class="w-100 form-control" placeholder="..." name="" cols="30" rows="3"></textarea>
+                <form:textarea path="diaChi" class="w-100 form-control" placeholder="..." name="" cols="30"
+                               rows="3"></form:textarea>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Số điện thoại (*)</div>
-                <input class="w-100 form-control" type="text" placeholder="...">
+                <form:input path="soDienThoai" class="w-100 form-control" type="text" placeholder="..."/>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Email (*)</div>
-                <input class="w-100 form-control" type="text" placeholder="...">
+                <form:input path="email" class="w-100 form-control" type="text" placeholder="..."/>
             </div>
             <div class="px-md-5 px-3 py-2 form-check  border-bottom">
                 <div class="form-label ">Phương thức thanh toán (*)</div>
                 <label class="form-check-label text-sm-left fw-bold ">
-                    <input class="" type="radio" value="1" name="payment_method" checked>
+                    <form:radiobutton path="hinhThucThanhToan" value="1" name="payment_method"/>
                     THANH TOÁN KHI NHẬN HÀNG
                 </label>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-check">
                 <label class="form-check-label text-sm-left fw-bold ">
-                    <input class="" type="radio" value="2" name="payment_method" checked>
+                    <form:radiobutton path="hinhThucThanhToan" value="2" name="payment_method" checked="true"/>
                     CHUYỂN KHOẢN NGÂN HÀNG
                 </label>
             </div>
@@ -72,12 +74,12 @@
 
             <div class="px-md-5 px-3 py-2 form-group mb-5">
                 <div class="form-label ">Ghi chú (*)</div>
-                <textarea class="w-100 form-control" placeholder="..." name="" cols="30" rows="5"></textarea>
+                <form:textarea path="ghiChu" class="w-100 form-control" placeholder="..." name="" cols="30"
+                               rows="5"></form:textarea>
             </div>
 
         </div>
-        <div class="col-1"></div>
-        <div class="col-4 bg-light">
+        <div class="col-6 bg-light">
             <div class="ms-3">
                 <div class="text-center py-5 fw-bold fs-4 text-xl-center text-uppercase mb-2">
                     GIỎ HÀNG CỦA BẠN
@@ -85,22 +87,27 @@
                 <div class="me-3">
                     <div class="bg-white  border-bottom">
                         <div class="row ms-1 me-1 py-3">
-                            <label class="col text-uppercase fw-bold fs-5  ">Sản phẩm</label>
+                            <label class="col text-uppercase fw-bold fs-5">Sản phẩm</label>
                             <label class="col text-uppercase fw-bold fs-5 text-end">Tạm tính</label>
                         </div>
                     </div>
 
                     <div class="bg-white py-3  border-bottom">
-                        <div class="row ms-1 me-1">
-                            <label class="col-8 text-uppercase">NGƯỜI DA ĐEN x1</label>
-                            <label class="col-4 text-uppercase text-end">450,000 ₫</label>
-                        </div>
+                        <c:forEach items="${listGioHang}" var="gioHang">
+                            <div class="row ms-1 me-1">
+                                <label class="col-8 text-uppercase">${gioHang.tenSanPham} - ${gioHang.tenMauSac}
+                                    - ${gioHang.tenKichCo}
+                                    x${gioHang.soLuong}</label>
+                                <label class="col-4 text-end">${gioHang.soLuong * gioHang.gia}
+                                    vn₫</label>
+                            </div>
+                        </c:forEach>
                     </div>
 
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6 ">Tạm tính</label>
-                            <label class="col text-uppercase fw-bold fs-6 text-end">450,000 ₫</label>
+                            <label class="col fw-bold fs-6 text-end">${tongTien} vn₫</label>
                         </div>
                     </div>
 
@@ -145,8 +152,8 @@
                 </label>
             </div>
             <div class="mt-3">
-                <button class="w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</button>
+                <button type="submit" class="w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</button>
             </div>
         </div>
     </div>
-</form>
+</form:form>
