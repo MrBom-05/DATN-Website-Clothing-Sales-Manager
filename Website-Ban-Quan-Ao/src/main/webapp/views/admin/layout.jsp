@@ -11,17 +11,72 @@
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+<style>
+    <%--    bo tròn hình ảnh--%>
+    .img-fluid {
+        border-radius: 50%;
+    }
+
+    .custom-sidebar {
+        background-color: #fff;
+        border-right: 1px solid #dee2e6;
+    }
+
+    .custom-sidebar .list-group-item {
+        border: none;
+    }
+
+    .custom-sidebar .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .custom-sidebar .list-group-item.active {
+        background-color: #fff;
+        border-right: 3px solid #007bff;
+    }
+    .custom-sidebar .list-group-item.active:hover {
+        background-color: #fff;
+    }
+    .custom-sidebar .list-group-item.active i {
+        color: #007bff;
+    }
+    .custom-sidebar .list-group-item i {
+        margin-right: 10px;
+    }
+    .custom-sidebar .sidebar-heading {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .custom-sidebar .sidebar-heading img {
+        width: 100px;
+    }
+
+    .custom-sidebar .sidebar-heading h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+
+    .custom-sidebar .sidebar-heading p {
+        font-size: 0.875rem;
+        font-weight: 400;
+        margin-bottom: 0;
+    }
+</style>
 <body>
 <div class="d-flex " id="wrapper">
     <!-- Sidebar-->
-    <div class="border-end bg-white" id="sidebar-wrapper">
+    <div class="border-end custom-sidebar" id="sidebar-wrapper">
         <div class="sidebar-heading border-bottom bg-light">
-                <c:if test="${admin.chucVu == 0}">
-                    <h3>Quản lý</h3>
-                </c:if>
-                <c:if test="${admin.chucVu == 1}">
-                    <h3>Nhân viên</h3>
-                </c:if>
+            <c:if test="${admin.chucVu == 0}">
+                <h3>Quản lý</h3>
+            </c:if>
+            <c:if test="${admin.chucVu == 1}">
+
+            </c:if>
+            <img src="/../views/admin/css/logo.png" alt="" class="img-fluid" style="width: 150px">
         </div>
         <div class="list-group list-group-flush">
             <c:if test="${admin.chucVu == 0}">

@@ -40,7 +40,7 @@ public class HoaDonController {
         List<GioHangResponse> listSanPhamTrongGioHang = hoaDonChiTietService.getHoaDonChiTietByHoaDonId(id);
 
         // Truyền idHoaDon để sử dụng trong form
-        Page<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp(page, pageSize);
+        List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAll());
         model.addAttribute("idHoaDon", id);

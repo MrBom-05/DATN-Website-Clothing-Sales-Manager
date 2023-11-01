@@ -36,9 +36,8 @@ public class SanPhamChiTietService {
         return sanPhamChiTietRepository.getAll();
     }
 
-    public Page<BanHangTaiQuayResponse> findAllCtsp(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        return sanPhamChiTietRepository.findAllCtsp(pageable);
+    public List<BanHangTaiQuayResponse> findAllCtsp() {
+        return sanPhamChiTietRepository.findAllCtsp();
     }
 
 
