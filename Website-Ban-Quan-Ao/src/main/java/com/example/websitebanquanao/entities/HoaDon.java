@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -84,6 +85,9 @@ public class HoaDon {
 
     @Column(name = "loai_hoa_don")
     private Integer loaiHoaDon;
+
+    @Column(name = "phiVanChuyen")
+    private BigDecimal phiVanChuyen;
 
     @Column(name = "ghi_chu")
     private String ghiChu;

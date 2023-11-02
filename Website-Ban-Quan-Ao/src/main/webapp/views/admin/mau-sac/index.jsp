@@ -9,13 +9,12 @@
     </c:if>
 
     <div class="row mt-3">
-        <div class="col-7">
+        <div class="col-9">
             <table class="table table-bordered mt-3 text-center">
                 <thead>
                 <tr>
                     <th>STT</th>
                     <th>Tên Màu</th>
-                    <th>Mã Màu Sắc</th>
                     <th>Thao Tác</th>
                 </tr>
                 </thead>
@@ -25,14 +24,9 @@
                         <td>${index.index + mauSacPage.number * mauSacPage.size + 1}</td>
                         <td>${ms.ten}</td>
                         <td>
-                            <div
-                                    style="width: 70px; height: 20px; background-color: ${ms.maMauSac};">
-                            </div>
-                        </td>
-                        <td>
                             <a href="#" class="btn btn-primary update-button"
                                data-bs-toggle="modal" data-bs-target="#exampleModal"
-                               data-id="${ms.id}" data-maMauSac="${ms.maMauSac}" data-ten="${ms.ten}">
+                               data-id="${ms.id}" data-ten="${ms.ten}">
                                 Cập Nhật
                             </a>
                             <a href="/admin/mau-sac/delete/${ms.id}" class="btn btn-danger"
@@ -44,22 +38,13 @@
             </table>
         </div>
 
-        <div class="col-5 mt-4">
+        <div class="col-3 mt-4">
             <form:form id="edit-form" modelAttribute="ms" method="post" action="/admin/mau-sac/store">
-                <div class="row mb-3">
-                    <div class="form-group row">
-                        <div class="col-6">
-                            <label for="ten" class="form-label">Tên Màu</label>
-                            <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
-                            <form:errors path="ten" cssClass="text-danger"/>
-                        </div>
-                        <div class="col-6">
-                            <label for="maMauSac" class="form-label">Mã Màu</label>
-                            <form:input type="text" path="maMauSac" id="maMauSac" class="form-control" required="true"/>
-                            <form:errors path="maMauSac" cssClass="text-danger"/>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-success mt-3 col-2 offset-5">Lưu</button>
+                <div class="form-group text-center">
+                    <label for="ten" class="form-label">Tên Màu</label>
+                    <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
+                    <form:errors path="ten" cssClass="text-danger"/>
+                    <button type="submit" class="btn btn-success mt-3">Lưu</button>
                 </div>
             </form:form>
         </div>
@@ -98,7 +83,6 @@
             url: "/admin/mau-sac/get/" + id,
             type: "GET",
             success: function (data) {
-                $("#maMauSac").val(data.maMauSac);
                 $("#ten").val(data.ten);
 
                 $("#edit-form").attr("action", "/admin/mau-sac/update/" + id);

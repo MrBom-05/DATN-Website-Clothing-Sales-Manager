@@ -12,5 +12,4 @@ import lombok.Setter;
 public class MauSacResponse {
     private Integer id;
     private String ten;
-    private String maMauSac;
 }
