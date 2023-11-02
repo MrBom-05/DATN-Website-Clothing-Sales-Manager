@@ -12,17 +12,16 @@ CREATE TABLE loai
 CREATE TABLE san_pham
 (
     id       UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ten      NVARCHAR( MAX) NOT NULL,
+    ten      NVARCHAR(MAX) NOT NULL,
     ngay_tao DATE,
-    anh      NVARCHAR( MAX),
-    id_loai  INT NOT NULL,
+    anh      NVARCHAR(MAX),
+    id_loai  INT           NOT NULL,
 )
 
 CREATE TABLE mau_sac
 (
-    id         INT IDENTITY (1, 1) PRIMARY KEY,
-    ten        NVARCHAR(50) NOT NULL,
-    ma_mau_sac VARCHAR(10) NOT NULL
+    id  INT IDENTITY (1, 1) PRIMARY KEY,
+    ten NVARCHAR(50) NOT NULL
 )
 
 CREATE TABLE kich_co
@@ -40,7 +39,7 @@ CREATE TABLE san_pham_chi_tiet
     id_mau_sac  INT,
     gia         DECIMAL(20, 0)               DEFAULT 0,
     so_luong    INT,
-    mo_ta       NVARCHAR( MAX),
+    mo_ta       NVARCHAR(MAX),
     trang_thai  INT
 )
 
@@ -48,7 +47,7 @@ CREATE TABLE anh_san_pham
 (
     id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     id_san_pham_chi_tiet UNIQUEIDENTIFIER,
-    duong_dan            NVARCHAR( MAX) NOT NULL
+    duong_dan            NVARCHAR(MAX) NOT NULL
 )
 
 CREATE TABLE khach_hang
@@ -153,7 +152,8 @@ CREATE TABLE hoa_don
     tinh_thanh_pho       NVARCHAR(80),
     trang_thai           INT,
     loai_hoa_don         INT,
-    ghi_chu              NVARCHAR( MAX)
+    phiVanChuyen         DECIMAL(20, 0)               DEFAULT 0,
+    ghi_chu              NVARCHAR(MAX)
 )
 
 CREATE TABLE hoa_don_chi_tiet
@@ -173,7 +173,7 @@ CREATE TABLE doi_tra
     id_hoa_don    UNIQUEIDENTIFIER,
     id_nhan_vien  UNIQUEIDENTIFIER,
     ngay_doi_tra  DATETIME                     DEFAULT GETDATE(),
-    ghi_chu       NVARCHAR( MAX),
+    ghi_chu       NVARCHAR(MAX),
 
     trang_thai    INT
 )

@@ -14,8 +14,8 @@ import java.util.UUID;
 public class KhachHangResponse {
     private UUID id;
     private String hoVaTen;
-    private String email;
     private String soDienThoai;
+    private String email;
     private String diaChi;
     private String xaPhuong;
     private String quanHuyen;

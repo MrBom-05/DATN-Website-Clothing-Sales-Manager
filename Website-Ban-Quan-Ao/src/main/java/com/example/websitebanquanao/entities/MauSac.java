@@ -22,9 +22,6 @@ public class MauSac {
     @Column(name = "ten", nullable = false, length = 50)
     private String ten;
 
-    @Column(name = "ma_mau_sac", nullable = false, length = 10)
-    private String maMauSac;
-
     @OneToMany(mappedBy = "idMauSac")
     private Set<SanPhamChiTiet> sanPhamChiTiets = new LinkedHashSet<>();
 
