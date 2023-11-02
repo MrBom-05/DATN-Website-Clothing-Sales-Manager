@@ -1,8 +1,12 @@
 package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.HoaDon;
+import com.example.websitebanquanao.entities.HoaDonChiTiet;
+import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
+import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse;
+import com.example.websitebanquanao.services.AnhSanPhamService;
 import com.example.websitebanquanao.services.HoaDonChiTietService;
 import com.example.websitebanquanao.services.HoaDonService;
 import com.example.websitebanquanao.services.SanPhamChiTietService;
@@ -24,6 +28,8 @@ public class HoaDonController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private SanPhamChiTietService sanPhamChiTietService;
+    @Autowired
+    private AnhSanPhamService anhSanPhamService;
     @GetMapping("/admin/hoa-don")
     public String index(Model model) {
         model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
@@ -51,5 +57,38 @@ public class HoaDonController {
         model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
         return "admin/layout";
     }
+
+    @GetMapping("/admin/hoa-don/{id}")
+    public String viewHoaDonAdmin(@PathVariable("id") UUID id, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
+        // Lấy thông tin hoá đơn chi tiết dựa trên id hoá đơn
+        HoaDon hoaDon = hoaDonService.getById(id);
+        List<GioHangResponse> listSanPhamTrongGioHang = hoaDonChiTietService.getHoaDonChiTietByHoaDonId(id);
+        List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
+        model.addAttribute("listProduct", listProduct);
+        model.addAttribute("listHoaDon", hoaDonService.getAll());
+        model.addAttribute("idHoaDon", id);
+        model.addAttribute("hoaDon", hoaDon); // Truyền giá trị hoaDon vào model
+
+        model.addAttribute("listSanPhamTrongGioHang", listSanPhamTrongGioHang);
+
+        model.addAttribute("view", "/views/admin/hoa-don/danh-sach-hoa-don.jsp");
+        return "admin/layout";
+    }
+
+    @GetMapping("/get-anh-san-pham/{idCtsp}")
+    @ResponseBody
+    public List<AnhSanPhamResponse> getAnhSanPhamByCtspId(@PathVariable("idCtsp") UUID idCtsp) {
+        List<AnhSanPhamResponse> listAnh = anhSanPhamService.getListAnhByIdSanPhamChiTiet(idCtsp);
+        return listAnh;
+    }
+
+    @GetMapping("/admin/hoa-don/filter")
+    public String filterHoaDon(@RequestParam("trangThai") Integer trangThai, Model model) {
+        List<HoaDon> filteredHoaDon = hoaDonService.getHoaDonByTrangThai(trangThai);
+        model.addAttribute("listHoaDon", filteredHoaDon);
+        model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
+        return "admin/layout";
+    }
+
 
 }

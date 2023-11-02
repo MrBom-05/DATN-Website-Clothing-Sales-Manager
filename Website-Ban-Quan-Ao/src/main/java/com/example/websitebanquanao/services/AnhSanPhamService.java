@@ -57,4 +57,8 @@ public class AnhSanPhamService {
         return anhSanPhamRepository.getListAnhByIdSanPhamAndIdMauSac(idSanPham, idMauSac);
     }
 
+    public List<AnhSanPhamResponse> getListAnhByIdSanPhamChiTiet(UUID idSanPham){
+        return anhSanPhamRepository.getListAnhByIdSanPhamChiTiet(idSanPham);
+    }
+
 }
