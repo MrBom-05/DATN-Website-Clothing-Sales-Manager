@@ -33,7 +33,6 @@ public class MauSacService {
     public void add(MauSacRequest mauSacRequest) {
         MauSac mauSac = new MauSac();
         mauSac.setTen(mauSacRequest.getTen());
-        mauSac.setMaMauSac(mauSacRequest.getMaMauSac());
         mauSacRepository.save(mauSac);
 
         System.out.println("MauSacService.add: " + mauSac.getTen());
@@ -42,7 +41,6 @@ public class MauSacService {
     public void update(MauSacRequest mauSacRequest, Integer id) {
         MauSac mauSac = mauSacRepository.findById(id).orElse(null);
         if (mauSac != null) {
-            mauSac.setMaMauSac(mauSacRequest.getMaMauSac());
             mauSac.setTen(mauSacRequest.getTen());
             mauSacRepository.save(mauSac);
             System.out.println("mauSacService.update: " + mauSac.getTen());

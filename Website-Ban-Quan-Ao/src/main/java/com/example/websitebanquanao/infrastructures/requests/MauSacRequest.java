@@ -15,6 +15,4 @@ import org.springframework.stereotype.Component;
 public class MauSacRequest {
     @NotBlank(message = "Tên mà không được để trống")
     private String ten;
-    @NotBlank(message = "Mã màu được để trống")
-    private String maMauSac;
 }
