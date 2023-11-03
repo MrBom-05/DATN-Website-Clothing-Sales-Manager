@@ -129,12 +129,6 @@ public class SanPhamChiTietService {
         return sanPhamChiTietRepository.findSanPhamChiTietByIdSanPham(idSanPham);
     }
 
-    // user
-    public SanPhamChiTiet getByIdSanPhamAndIdMauSacAndIdKichCo(UUID idSanPham, Integer idMauSac, Integer idKichCo) {
-        System.out.println("SanPhamChiTietService.getByIdSanPhamAndIdMauSacAndIdKichCo: " + idSanPham + " " + idMauSac + " " + idKichCo);
-        return sanPhamChiTietRepository.getByIdSanPhamAndIdMauSacAndIdKichCo(idSanPham, idMauSac, idKichCo);
-    }
-
     public List<SanPhamChiTietResponse> getByStatus(Integer trangThai) {
         return sanPhamChiTietRepository.getByStatus(trangThai);
     }
@@ -145,5 +139,21 @@ public class SanPhamChiTietService {
 
     public List<SanPhamChiTietResponse> getByTenKichCo(String tenKichCo) {
         return sanPhamChiTietRepository.getByTenKichCo(tenKichCo);
+    }
+
+    // user
+    public SanPhamChiTiet getByIdSanPhamAndIdMauSacAndIdKichCo(UUID idSanPham, Integer idMauSac, Integer idKichCo) {
+        System.out.println("SanPhamChiTietService.getByIdSanPhamAndIdMauSacAndIdKichCo: " + idSanPham + " " + idMauSac + " " + idKichCo);
+        return sanPhamChiTietRepository.getByIdSanPhamAndIdMauSacAndIdKichCo(idSanPham, idMauSac, idKichCo);
+    }
+
+    @Transactional
+    public void updateSoLuongByIdSanPhamChiTiet(UUID idSanPhamChiTiet, int currentSoLuong) {
+        SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(idSanPhamChiTiet).orElse(null);
+
+        int soLuong = sanPhamChiTiet.getSoLuong() - currentSoLuong;
+
+        sanPhamChiTietRepository.updateSoLuongAfterDelete(idSanPhamChiTiet, soLuong);
+        System.out.println("SanPhamChiTietService.updateSoLuongByIdSanPhamChiTiet: " + idSanPhamChiTiet + " " + soLuong);
     }
 }

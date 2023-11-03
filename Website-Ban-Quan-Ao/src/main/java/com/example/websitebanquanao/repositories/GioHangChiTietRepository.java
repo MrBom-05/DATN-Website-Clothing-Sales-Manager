@@ -19,6 +19,10 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
     @Query("DELETE FROM GioHangChiTiet ghct WHERE ghct.idSanPhamChiTiet.id = :idSanPhamChiTiet AND ghct.idGioHang.idKhachHang.id = :idKhachHang")
     public void deleteByIdSanPhamChiTietAndIdKhachHang(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet, @Param("idKhachHang") UUID idKhachHang);
 
+    @Modifying
+    @Query("DELETE FROM GioHangChiTiet ghct WHERE ghct.idGioHang.idKhachHang.id = :idKhachHang")
+    public void deleteByIdKhachHang(@Param("idKhachHang") UUID idKhachHang);
+
     @Query("SELECT SUM(ghi.gia * ghi.soLuong) FROM GioHangChiTiet ghi WHERE ghi.idGioHang.idKhachHang.id = :khachHangId")
     public BigDecimal getTongTienByIdKhachHang(@Param("khachHangId") UUID khangHangId);
 }

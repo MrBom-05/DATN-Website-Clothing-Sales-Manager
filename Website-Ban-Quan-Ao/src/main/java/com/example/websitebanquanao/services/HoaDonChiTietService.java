@@ -21,6 +21,12 @@ public class HoaDonChiTietService {
     @Autowired
     private GioHangService gioHangService;
 
+    @Autowired
+    private GioHangChiTietService gioHangChiTietService;
+
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
+
     // admin
     public void add(HoaDonChiTiet hoaDonChiTiet) {
         hoaDonChiTietRepository.save(hoaDonChiTiet);
@@ -68,7 +74,10 @@ public class HoaDonChiTietService {
             hoaDonChiTiet.setSoLuong(gioHangUserResponse.getSoLuong());
             hoaDonChiTiet.setGia(gioHangUserResponse.getGia());
             hoaDonChiTietRepository.save(hoaDonChiTiet);
+            sanPhamChiTietService.updateSoLuongByIdSanPhamChiTiet(gioHangUserResponse.getIdSanPhamChiTiet(), gioHangUserResponse.getSoLuong());
         }
+
+        gioHangChiTietService.deleteByIdKhachHang(idKhachHang);
         System.out.println("HoaDonChiTietService.addHoaDonChiTietUser: " + hoaDon.getMa());
     }
 }

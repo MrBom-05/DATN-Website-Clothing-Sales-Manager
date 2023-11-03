@@ -76,6 +76,12 @@ public class GioHangChiTietService {
         System.out.println("GioHangChiTietService.deleteByIdSanPhamChiTietAndIdKhachHang: " + idSanPhamChiTiet + " " + idKhachHang);
     }
 
+    @Transactional
+    public void deleteByIdKhachHang(UUID idKhachHang) {
+        gioHangChiTietRepository.deleteByIdKhachHang(idKhachHang);
+        System.out.println("GioHangChiTietService.deleteByIdKhachHang: " + idKhachHang);
+    }
+
     public BigDecimal getTongTienByIdKhachHang(UUID idKhachHang) {
         if (gioHangChiTietRepository.getTongTienByIdKhachHang(idKhachHang) == null) {
             return new BigDecimal(0);
