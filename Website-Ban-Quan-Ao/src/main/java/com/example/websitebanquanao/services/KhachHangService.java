@@ -4,6 +4,7 @@ import com.example.websitebanquanao.entities.KhachHang;
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.KhachHangRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class KhachHangService {
     @Autowired
     private KhachHangRepository khachHangRepository;
+
 
     //admin
     public Page<KhachHangResponse> getPage(int page, int pageSize) {
@@ -83,7 +85,6 @@ public class KhachHangService {
         }
     }
 
-    // user
     public KhachHangResponse getByEmailAndMatKhau(String email, String matKhau) {
         System.out.println("KhachHangService.getByEmailAndMatKhau: " + email + " " + matKhau);
         return khachHangRepository.getByEmailAndMatKhau(email, matKhau);
