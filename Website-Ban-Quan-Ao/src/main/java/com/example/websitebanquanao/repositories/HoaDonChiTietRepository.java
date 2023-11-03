@@ -20,4 +20,9 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :idHoaDon AND hdct.idSanPhamChiTiet.id = :idSanPhamChiTiet")
     public HoaDonChiTiet findByHoaDonIdAndSanPhamChiTietId(UUID idHoaDon, UUID idSanPhamChiTiet);
+
+    @Query("SELECT hdct.id FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :idHoaDon")
+    public UUID findIdHoaDonChiTietByIdHoaDon(UUID idHoaDon);
+
+
 }

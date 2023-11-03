@@ -2,12 +2,10 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.*;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
+import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
-import com.example.websitebanquanao.services.HoaDonChiTietService;
-import com.example.websitebanquanao.services.HoaDonService;
-import com.example.websitebanquanao.services.KhuyenMaiChiTietService;
-import com.example.websitebanquanao.services.SanPhamChiTietService;
+import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,13 +36,16 @@ public class BanHangController {
     private KhuyenMaiChiTietService khuyenMaiChiTietService;
 
     @Autowired
+    private AnhSanPhamService anhSanPhamService;
+
+    @Autowired
     HttpSession session;
 
     @GetMapping("")
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
-        model.addAttribute("listHoaDon", hoaDonService.getAll());
+        model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
         model.addAttribute("hdct", new HoaDonChiTiet());
         model.addAttribute("view", "/views/admin/ban-hang.jsp");
         return "admin/layout";
@@ -123,15 +124,12 @@ public class BanHangController {
     public String viewHoaDon(@PathVariable("id") UUID id, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         // Lấy thông tin hoá đơn chi tiết dựa trên id hoá đơn
         HoaDon hoaDon = hoaDonService.getById(id);
-
-        // Lấy danh sách sản phẩm trong giỏ hàng (hoặc hoá đơn chi tiết)
-        // Và set vào model để hiển thị trên trang JSP
         List<GioHangResponse> listSanPhamTrongGioHang = hoaDonChiTietService.getHoaDonChiTietByHoaDonId(id);
 
         // Truyền idHoaDon để sử dụng trong form
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
-        model.addAttribute("listHoaDon", hoaDonService.getAll());
+        model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
         model.addAttribute("idHoaDon", id);
         model.addAttribute("hoaDon", hoaDon); // Truyền giá trị hoaDon vào model
 
@@ -194,6 +192,20 @@ public class BanHangController {
             hoaDon.setGhiChu(ghiChu);
             hoaDonService.update(hoaDon, idHoaDon);
             session.setAttribute("successMessage", "Thanh toán thành công");
+        }
+
+        return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+    }
+
+    @PostMapping("/tao-don-hang/{idHoaDon}")
+    public String taoDonHang(@PathVariable("idHoaDon") UUID idHoaDon, Model model) {
+        HoaDon hoaDon = hoaDonService.getById(idHoaDon);
+
+        if (hoaDon != null) {
+            hoaDon.setHinhThucThanhToan(hoaDon.getHinhThucThanhToan());
+            hoaDon.setTrangThai(2);
+            hoaDonService.update(hoaDon, idHoaDon);
+            session.setAttribute("successMessage", "Tạo đơn hàng thành công");
         }
 
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;

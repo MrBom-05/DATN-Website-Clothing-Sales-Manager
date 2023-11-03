@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class HoaDonService {
@@ -26,7 +27,16 @@ public class HoaDonService {
     public List<HoaDon> getAll() {
         return hoaDonRepository.findAll();
     }
+    public List<HoaDon> getAllHoaDonChuaThanhToan() {
+        return hoaDonRepository.findAllHoaDon();
+    }
 
+    public List<HoaDon> getHoaDonByTrangThai(int trangThai) {
+        List<HoaDon> allHoaDon = hoaDonRepository.findAll();
+        return allHoaDon.stream()
+                .filter(hoaDon -> hoaDon.getTrangThai() == trangThai)
+                .collect(Collectors.toList());
+    }
     public String maHDCount() {
         String code = "";
         List<HoaDon> list = hoaDonRepository.findAll();
