@@ -2,9 +2,9 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.*;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
-import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
+import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +38,8 @@ public class BanHangController {
 
     @Autowired
     private AnhSanPhamService anhSanPhamService;
+    @Autowired
+    private KhachHangService khachHangService;
 
     @Autowired
     HttpSession session;
@@ -44,8 +47,10 @@ public class BanHangController {
     @GetMapping("")
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
+        List<KhachHangResponse> listKhachHang = khachHangService.getAll();
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
+        model.addAttribute("listKhachHang", listKhachHang);
         model.addAttribute("hdct", new HoaDonChiTiet());
         model.addAttribute("view", "/views/admin/ban-hang.jsp");
         return "admin/layout";
@@ -59,9 +64,7 @@ public class BanHangController {
         hoaDonRequest.setIdNhanVien(nhanVien);
         Instant currentInstant = Instant.now();
         hoaDonRequest.setNgayTao(currentInstant);
-        hoaDonRequest.setNgayThanhToan(currentInstant);
         hoaDonRequest.setTrangThai(0);
-        hoaDonRequest.setLoaiHoaDon(0);
         hoaDonService.add(hoaDonRequest);
         session.setAttribute("successMessage", "Thêm hoá đơn thành công");
         return "redirect:/admin/ban-hang";
@@ -155,15 +158,11 @@ public class BanHangController {
             if (soLuong > 0) {
                 // Số lượng hiện tại của hoá đơn chi tiết
                 int currentSoLuong = hoaDonChiTiet.getSoLuong();
-                System.out.println("đây là số lượng hiện tại 1" + currentSoLuong);
-                System.out.println("đây là số lượng 1" + soLuong);
 
                 // Cập nhật số lượng sản phẩm chi tiết trước khi xoá
                 ctspService.updateSoLuongAfterDelete(hoaDonChiTiet.getIdSanPhamChiTiet().getId(), soLuongSanPhamChiTiet + soLuong);
 
                 if (soLuong >= currentSoLuong) {
-                    System.out.println("đây là số lượng hiện tại 2" + currentSoLuong);
-                    System.out.println("đây là số lượng 2" + soLuong);
                     // Nếu số lượng nhập lớn hơn hoặc bằng số lượng hiện tại, thì xoá hoá đơn chi tiết
                     hoaDonChiTietService.delete(idHoaDonChiTiet);
                 } else {
@@ -183,13 +182,19 @@ public class BanHangController {
         return "redirect:/admin/ban-hang";
     }
     @PostMapping("/thanh-toan/{idHoaDon}")
-    public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon,@RequestParam("httt") Integer hinhThucThanhToan,@RequestParam("ghiChu") String ghiChu,Model model){
+    public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon,@RequestParam("httt") Integer hinhThucThanhToan,@RequestParam("ghiChu") String ghiChu,
+                            @RequestParam("idKhachHang") UUID idKhachHang){
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
-
+        Instant currentInstant = Instant.now();
+        KhachHang khachHang = new KhachHang();
+        khachHang.setId(idKhachHang);
         if (hoaDon != null) {
             hoaDon.setTrangThai(1);
+            hoaDon.setNgayThanhToan(currentInstant);
             hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
             hoaDon.setGhiChu(ghiChu);
+            hoaDon.setIdKhachHang(khachHang);
+            hoaDon.setLoaiHoaDon(0);
             hoaDonService.update(hoaDon, idHoaDon);
             session.setAttribute("successMessage", "Thanh toán thành công");
         }
@@ -198,17 +203,30 @@ public class BanHangController {
     }
 
     @PostMapping("/tao-don-hang/{idHoaDon}")
-    public String taoDonHang(@PathVariable("idHoaDon") UUID idHoaDon, Model model) {
+    public String taoDonHang(@PathVariable("idHoaDon") UUID idHoaDon,
+                             @RequestParam("nguoiNhan") String nguoiNhan, @RequestParam("sdt") String sdt,
+                             @RequestParam("diaChi") String diaChi, @RequestParam("ghiChu") String ghiChu,
+                             @RequestParam("xaPhuong") String xaPhuong, @RequestParam("quanHuyen") String quanHuyen,
+                             @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen")BigDecimal phiVanChuyen
+                             ) {
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
 
         if (hoaDon != null) {
-            hoaDon.setHinhThucThanhToan(hoaDon.getHinhThucThanhToan());
-            hoaDon.setTrangThai(2);
+            hoaDon.setTrangThai(3);
+            hoaDon.setNguoiNhan(nguoiNhan);
+            hoaDon.setSoDienThoai(sdt);
+            hoaDon.setLoaiHoaDon(2);
+            hoaDon.setDiaChi(diaChi);
+            hoaDon.setGhiChu(ghiChu);
+            hoaDon.setTinhThanhPho(tinhThanh);
+            hoaDon.setQuanHuyen(quanHuyen);
+            hoaDon.setXaPhuong(xaPhuong);
+            hoaDon.setPhiVanChuyen(phiVanChuyen);
             hoaDonService.update(hoaDon, idHoaDon);
             session.setAttribute("successMessage", "Tạo đơn hàng thành công");
         }
 
-        return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+        return "redirect:/admin/ban-hang";
     }
 
 

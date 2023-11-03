@@ -33,11 +33,15 @@
         </div>
     </div>
     <div class="row mt-2">
-        <div class="col-lg-4">
+        <div class="col-12">
             <div class="btn-group">
                 <button class="btn btn-toolbar ms-2 ${param.trangThai == null ? 'selected' : ''}" onclick="filterByStatus('')">Tất cả</button>
-                <button class="btn btn-toolbar ms-2 ${param.trangThai == '1' ? 'selected' : ''}" onclick="filterByStatus('1')">Đã thanh toán</button>
                 <button class="btn btn-toolbar ms-2 ${param.trangThai == '0' ? 'selected' : ''}" onclick="filterByStatus('0')">Chờ thanh toán</button>
+                <button class="btn btn-toolbar ms-2 ${param.trangThai == '1' ? 'selected' : ''}" onclick="filterByStatus('1')">Đã thanh toán</button>
+                <button class="btn btn-toolbar ms-2 ${param.trangThai == '2' ? 'selected' : ''}" onclick="filterByStatus('2')">Chờ xác nhận</button>
+                <button class="btn btn-toolbar ms-2 ${param.trangThai == '3' ? 'selected' : ''}" onclick="filterByStatus('3')">Chờ giao</button>
+                <button class="btn btn-toolbar ms-2 ${param.trangThai == '4' ? 'selected' : ''}" onclick="filterByStatus('4')">Đang giao</button>
+                <button class="btn btn-toolbar ms-2 ${param.trangThai == '5' ? 'selected' : ''}" onclick="filterByStatus('5')">Đã huỷ</button>
             </div>
         </div>
     </div>
@@ -67,9 +71,36 @@
                             <td>Khách Lẻ</td>
                             <td>${hoaDon.ngayTao}</td>
                             <td>
-                                    ${hoaDon.loaiHoaDon == 0 ? "Tại quầy" : "Online"}
+                                <c:if test="${hoaDon.loaiHoaDon == 0}">
+                                    <span class="text-black">Bán tại quầy</span>
+                                </c:if>
+                                <c:if test="${hoaDon.loaiHoaDon == 1}">
+                                    <span class="text-black">Bán Online</span>
+                                </c:if>
+                                <c:if test="${hoaDon.loaiHoaDon == 2}">
+                                    <span class="text-black">Giao Hàng</span>
+                                </c:if>
                             </td>
-                            <td>${hoaDon.trangThai == 0 ? "Chờ thanh toán" : "Đã thanh toán"}</td>
+                            <td>
+                                <c:if test="${hoaDon.trangThai == 0}">
+                                    <span class="text-secondary">Chờ thanh toán</span>
+                                </c:if>
+                                <c:if test="${hoaDon.trangThai == 1}">
+                                    <span class="text-success">Đã thanh toán</span>
+                                </c:if>
+                                <c:if test="${hoaDon.trangThai == 2}">
+                                    <span class="text-secondary">Chờ xác nhận</span>
+                                </c:if>
+                                <c:if test="${hoaDon.trangThai == 3}">
+                                    <span class="text-secondary">Chờ giao</span>
+                                </c:if>
+                                <c:if test="${hoaDon.trangThai == 4}">
+                                    <span class="text-success">Đang giao</span>
+                                </c:if>
+                                <c:if test="${hoaDon.trangThai == 5}">
+                                    <span class="text-danger">Đã huỷ</span>
+                                </c:if>
+                            </td>
                             <td>
                                 <a href="/admin/hoa-don/${hoaDon.id}" class="btn btn-primary detail-link"
                                    data-tab="tabs-${index.count}">Chi tiết</a>
@@ -79,7 +110,6 @@
                     </tbody>
                 </table>
             </div>
-            <!-- Bạn có thể thêm nhiều hàng và giao diện tab liên quan khác ở đây -->
         </section>
     </div>
 </div>

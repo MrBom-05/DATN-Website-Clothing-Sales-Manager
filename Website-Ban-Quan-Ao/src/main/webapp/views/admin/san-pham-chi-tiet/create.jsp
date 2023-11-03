@@ -232,16 +232,10 @@
                     <form:form modelAttribute="ms" method="post" action="/admin/mau-sac/them-nhanh">
                         <div class="row mb-3">
                             <div class="form-group row">
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label for="ten" class="form-label">Tên Màu</label>
                                     <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
                                     <form:errors path="ten" cssClass="text-danger"/>
-                                </div>
-                                <div class="col-6">
-                                    <label for="maMauSac" class="form-label">Mã Màu</label>
-                                    <form:input type="text" path="maMauSac" id="maMauSac" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="maMauSac" cssClass="text-danger"/>
                                 </div>
                             </div>
                         </div>
