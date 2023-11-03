@@ -26,6 +26,9 @@ public class KhachHangService {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return khachHangRepository.getPage(pageable);
     }
+    public List<KhachHangResponse> getAll() {
+        return khachHangRepository.findAllKhachHang();
+    }
 
     public void add(KhachHangRequest khachHangRequest) {
         KhachHang khachHang = new KhachHang();
