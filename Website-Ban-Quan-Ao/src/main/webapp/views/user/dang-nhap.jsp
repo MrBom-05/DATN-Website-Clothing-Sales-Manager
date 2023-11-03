@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <style>
     form {
@@ -29,32 +30,30 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="login" role="tabpanel"
                  aria-labelledby="login-tab">
+
                 <form:form modelAttribute="dangNhap" action="/dang-nhap" method="post">
                     <div class="row">
                         <div class="col-6">
-                            <label for="loginEmail"
-                                   class="form-label">Email (*)</label>
-                            <form:input path="email" type="email" class="form-control" id="loginEmail"
-                                        aria-describedby="emailHelp"/>
-
+                            <label for="loginEmail" class="form-label">Email (*)</label>
+                            <form:input path="email" type="email" class="form-control" id="loginEmail"  aria-describedby="emailHelp" />
                         </div>
                         <div class="col-6">
-                            <label for="loginPassword" class="form-label">Mật
-                                Khẩu (*)</label>
-                            <form:input path="matKhau" type="password" class="form-control"
-                                        id="loginPassword"/>
+                            <label for="loginPassword" class="form-label">Mật Khẩu (*)</label>
+                            <form:input path="matKhau" type="password" class="form-control" id="loginPassword"/>
                         </div>
                     </div>
+                    <br/>
+                    <c:if test="${not empty errorMessage}">
+                        <div class="alert alert-danger">${errorMessage}</div>
+                    </c:if>
                     <div class="row mt-3">
                         <div class="col-9">
                         </div>
                         <div class="col-3">
-                            <a class="link-dark" style="text-decoration: none">Quên
-                                mật khẩu</a>
+                            <a class="link-dark" style="text-decoration: none">Quên mật khẩu</a>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-dark mt-5">Đăng Nhập
-                    </button>
+                    <button type="submit" class="btn btn-dark mt-5">Đăng Nhập</button>
                 </form:form>
             </div>
             <div class="tab-pane fade" id="register" role="tabpanel"
@@ -62,70 +61,72 @@
                 <form:form id="registrationForm" modelAttribute="dangKy" action="/dang-ky" method="post">
                     <div class="row">
                         <div class="col-6">
-                            <label for="registerName" class="form-label">Họ Và
-                                Tên (*)</label>
-                            <form:input path="hoTen" type="text" class="form-control"
-                                        id="registerName"/>
+                            <label for="registerName" class="form-label">Họ Và Tên (*)</label>
+                            <form:input path="hoTen" type="text" class="form-control" id="registerName"/>
                         </div>
                         <div class="col-6">
-                            <label for="registerEmail"
-                                   class="form-label">Email (*)</label>
-                            <form:input path="emailDK" type="email" class="form-control"
-                                        id="registerEmail"/>
+                            <label for="registerEmail" class="form-label">Email (*)</label>
+                            <form:input path="emailDK" type="email" class="form-control" id="registerEmail"/>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-6">
-                            <label for="registerPassword" class="form-label">Mật
-                                Khẩu (*)</label>
-                            <form:input path="matKhauDK" type="password" class="form-control"
-                                        id="registerPassword"/>
+                            <label for="registerPassword" class="form-label">Mật Khẩu (*)</label>
+                            <form:input path="matKhauDK" type="password" class="form-control" id="registerPassword"/>
                         </div>
                         <div class="col-6">
-                            <label for="registerPassword" class="form-label">Xác nhận
-                                Mật Khẩu (*)</label>
-                            <input type="password" class="form-control"
-                                   id="confirmPassword">
+                            <label for="registerPassword" class="form-label">Xác nhận Mật Khẩu (*)</label>
+                            <input type="password" class="form-control" id="confirmPassword">
                         </div>
                     </div>
                     <div class="flex items-center mt-3">
                         <div class="flex items-center">
                             <label class="label-nho text-base">
-                                <input type="checkbox" id="accept" name="accept"
-                                       value="ok"
-                                       class="hidden-checkbox">
+                                <input type="checkbox" id="accept" name="accept" value="ok" class="hidden-checkbox">
                                 <span class="checkmark rounded"></span>
-                                Tôi đồng ý với Chính sách bảo mật và Chính sách đổi
-                                trả của Leninn Skateshop
+                                Tôi đồng ý với Chính sách bảo mật và Chính sách đổi trả của Leninn Skateshop
                             </label>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-dark mt-5">Đăng Ký</button>
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function () {
-                            // Lắng nghe sự kiện khi form được gửi
-                            document.getElementById("registrationForm").addEventListener("submit", function (event) {
-                                // Kiểm tra xem checkbox đã được chọn
-                                var checkbox = document.getElementById("accept");
-                                if (!checkbox.checked) {
-                                    alert("Vui lòng đồng ý với các chính sách trước khi đăng ký.");
-                                    event.preventDefault(); // Ngăn chặn việc gửi form
-                                    return;
-                                }
-
-                                // Kiểm tra xem mật khẩu và xác nhận mật khẩu trùng nhau
-                                var password = document.getElementById("registerPassword").value;
-                                var confirmPassword = document.getElementById("confirmPassword").value;
-                                if (password !== confirmPassword) {
-                                    alert("Mật khẩu và xác nhận mật khẩu phải trùng nhau.");
-                                    event.preventDefault(); // Ngăn chặn việc gửi form
-                                }
-                            });
-                        });
-                    </script>
-
                 </form:form>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Gọi hàm hideErrorMessage khi trang đã tải hoàn toàn
+        hideErrorMessage();
+    });
+
+    function hideErrorMessage() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function() {
+            $('.alert-danger').fadeOut('slow');
+        }, 5000);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lắng nghe sự kiện khi form được gửi
+        document.getElementById("registrationForm").addEventListener("submit", function (event) {
+            // Kiểm tra xem checkbox đã được chọn
+            var checkbox = document.getElementById("accept");
+            if (!checkbox.checked) {
+                alert("Vui lòng đồng ý với các chính sách trước khi đăng ký.");
+                event.preventDefault(); // Ngăn chặn việc gửi form
+                return;
+            }
+
+            // Kiểm tra xem mật khẩu và xác nhận mật khẩu trùng nhau
+            var password = document.getElementById("registerPassword").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            if (password !== confirmPassword) {
+                alert("Mật khẩu và xác nhận mật khẩu phải trùng nhau.");
+                event.preventDefault(); // Ngăn chặn việc gửi form
+            }
+        });
+    });
+</script>
