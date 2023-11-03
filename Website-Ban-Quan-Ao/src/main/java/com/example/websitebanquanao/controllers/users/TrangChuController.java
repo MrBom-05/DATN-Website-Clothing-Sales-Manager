@@ -4,12 +4,14 @@ import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.infrastructures.requests.*;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
 
@@ -181,26 +183,37 @@ public class TrangChuController {
 
     // trang đăng nhập
     @GetMapping("/dang-nhap")
-    public String dangNhap(Model model) {
+    public String dangNhap(Model model, @ModelAttribute("errorMessage") String errorMessage) {
         model.addAttribute("dangNhap", new DangNhapUserRequest());
         model.addAttribute("dangKy", new DangKyUserRequest());
+        model.addAttribute("loginError", errorMessage);
         model.addAttribute("viewContent", "/views/user/dang-nhap.jsp");
         return "user/layout";
     }
 
     // lấy form đăng nhập
     @PostMapping("/dang-nhap")
-    public String dangNhap(@ModelAttribute("dangNhap") DangNhapUserRequest dangNhapUserRequest, Model model) {
+    public String dangNhap(@ModelAttribute("dangNhap") DangNhapUserRequest dangNhapUserRequest, RedirectAttributes redirectAttributes) {
         String email = dangNhapUserRequest.getEmail();
         String matKhau = dangNhapUserRequest.getMatKhau();
 
+
+
+        if (email == null || email.isEmpty() || matKhau == null || matKhau.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            return "redirect:/dang-nhap";
+        }
+
         KhachHangResponse khachHangResponse = khachHangService.getByEmailAndMatKhau(email, matKhau);
+
         if (khachHangResponse != null) {
             session.setAttribute("khachHang", khachHangResponse);
             gioHangService.checkAndAdd(khachHangResponse.getId());
             return "redirect:/";
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng.");
+            return "redirect:/dang-nhap";
         }
-        return "redirect:/dang-nhap";
     }
 
     // lấy form đăng ký
