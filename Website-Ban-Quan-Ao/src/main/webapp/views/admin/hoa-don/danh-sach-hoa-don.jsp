@@ -12,119 +12,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
-<style>
-    /*body {*/
-    /*    font-family: Arial, sans-serif;*/
-    /*    background-color: #f0f0f0;*/
-    /*    display: flex;*/
-    /*    justify-content: center;*/
-    /*    align-items: center;*/
-    /*    min-height: 100vh;*/
-    /*    margin: 0;*/
-    /*}*/
-
-    .timeline {
-        display: flex;
-        align-items: stretch;
-        justify-content: space-between;
-
-    }
-
-    .timeline-item {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .timeline-content {
-        color: #fff;
-        border-radius: 5px;
-        padding: 10px;
-        text-align: center;
-        position: relative;
-        margin: 10px;
-        width: 100%;
-        /* Đảm bảo rằng tất cả các ô có cùng kích thước */
-    }
-
-    .timeline-item:nth-child(odd) .timeline-content {
-        background-color: green;
-    }
-
-    .timeline-arrow {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-    }
-
-    .timeline-arrow i {
-        font-size: 24px;
-    }
-
-    .timeline-arrow i.fas.fa-arrow-right::before {
-        content: "\f061";
-        /* Unicode của mũi tên nơi đây */
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-    }
-</style>
 
 <body>
+<c:set var="tongTien" value="0" />
+<c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
+    <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}" />
+</c:forEach>
+<c:set var="tongTien" value="${tongTien + hoaDon.phiVanChuyen}" />
 <div class="">
     <div class="row">
             <span class="d-flex">
                 <p class="text-warning me-2"> Danh sách hoá đơn</p> / <p class="ms-2">${hoaDon.ma}</p>
             </span>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h2>Đặt hàng</h2>
-                    <p>Ngày 01/01/2023</p>
-                </div>
-            </div>
-            <div class="timeline-arrow">
-                <i class="fas fa-arrow-right"></i>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <i class="fas fa-clock"></i>
-                    <h2>Chờ xác nhận</h2>
-                    <p>Ngày 05/01/2023</p>
-                </div>
-            </div>
-            <div class="timeline-arrow">
-                <i class="fas fa-arrow-right"></i>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <i class="fas fa-truck"></i>
-                    <h2>Chờ giao</h2>
-                    <p>Ngày 10/01/2023</p>
-                </div>
-            </div>
-            <div class="timeline-arrow">
-                <i class="fas fa-arrow-right"></i>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <i class="fas fa-shipping-fast"></i>
-                    <h2>Đang giao</h2>
-                    <p>Ngày 15/01/2023</p>
-                </div>
-            </div>
-            <div class="timeline-arrow">
-                <i class="fas fa-arrow-right"></i>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <i class="fas fa-check-circle"></i>
-                    <h2>Hoàn thành</h2>
-                    <p>Ngày 20/01/2023</p>
-                </div>
-            </div>
-        </div>
+
+    </div>
+    <div class="row">
+       <span class="text-uppercase">
+           Trạng thái hiện tại:
+            <c:if test="${hoaDon.trangThai == 0}">
+                <span class="text-secondary">Chờ thanh toán</span>
+            </c:if>
+            <c:if test="${hoaDon.trangThai == 1}">
+                <span class="text-success">Đã thanh toán</span>
+            </c:if>
+           <c:if test="${hoaDon.trangThai == 2}">
+               <span class="text-secondary">Chờ xác nhận</span>
+           </c:if>
+              <c:if test="${hoaDon.trangThai == 3}">
+                <span class="text-secondary">Chờ giao</span>
+            </c:if>
+            <c:if test="${hoaDon.trangThai == 4}">
+                <span class="text-success">Đang giao</span>
+            </c:if>
+            <c:if test="${hoaDon.trangThai == 5}">
+                <span class="text-danger">Đã huỷ</span>
+            </c:if>
+       </span>
     </div>
 
     <div class="row mt-2">
@@ -151,14 +74,45 @@
                     <p>Ngày lập: ${hoaDon.ngayTao}</p>
                     <p>Khách hàng: Khách lẻ</p>
                     <p>Nhân viên: ${hoaDon.idNhanVien.hoVaTen}</p>
+                    <p>Địa chỉ: ${hoaDon.diaChi}</p>
+
                 </div>
                 <div class="col-4">
-                    <p>Tổng tiền: 1000000</p>
-                    <p>Trạng
-                        thái: ${hoaDon.trangThai == 0 ? "Chờ thanh toán" : "Đã thanh toán"}</p>
+                    <p>Phí vận chuyển: ${hoaDon.phiVanChuyen}</p>
+                    <p id="tong_tien_1">Tổng tiền: ${tongTien}</p>
+                    <p>Trạng thái:
+                        <c:if test="${hoaDon.trangThai == 0}">
+                            <span class="text-secondary">Chờ thanh toán</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 1}">
+                            <span class="text-success">Đã thanh toán</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 2}">
+                            <span class="text-secondary">Chờ xác nhận</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 3}">
+                            <span class="text-secondary">Chờ giao</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 4}">
+                            <span class="text-success">Đang giao</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 5}">
+                            <span class="text-danger">Đã huỷ</span>
+                        </c:if>
+                    </p>
                     <p>Ngày thanh toán: ${hoaDon.ngayThanhToan}</p>
                     <p>Loại hoá
-                        đơn: ${hoaDon.loaiHoaDon == 0 ? "Bán tại quầy" : "Bán Online"}</p>
+                        đơn:
+                        <c:if test="${hoaDon.loaiHoaDon == 0}">
+                            <span class="text-secondary">Bán tại quầy</span>
+                        </c:if>
+                        <c:if test="${hoaDon.loaiHoaDon == 1}">
+                            <span class="text-success">Bán Online</span>
+                        </c:if>
+                        <c:if test="${hoaDon.loaiHoaDon == 2}">
+                            <span class="text-secondary">Giao Hàng</span>
+                        </c:if>
+                    </p>
                 </div>
                 <div class="col-4">
                         <textarea name="" id="" cols="30" rows="5" class="form-control" placeholder="Ghi chú"
@@ -172,14 +126,44 @@
     <div class="card mt-4">
         <div class="card-header">
             <p class="fw-bold text-uppercase float-start">Lịch sử thanh toán</p>
-            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal">
-                Xác nhận thanh toán
-            </button>
+            <c:if test="${hoaDon.trangThai == 1}">
+                <p class="fw-bold text-success float-end">Đơn hàng đã được thanh toán</p>
+            </c:if>
+            <c:if test="${hoaDon.trangThai !=1}">
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    Thanh toán
+                </button>
+            </c:if>
 
         </div>
         <div class="card-body">
-
+            <c:if test="${hoaDon.trangThai == 1}">
+                <div class="">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Số tiền</th>
+                            <th scope="col">Thời gian</th>
+                            <th scope="col">Phương thức thanh toán</th>
+                            <th scope="col">Nhân viên xác nhận</th>
+                            <th scope="col">Ghi chú</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>${tongTien}</td>
+                                <td>${hoaDon.ngayThanhToan}</td>
+                                <td>${hoaDon.hinhThucThanhToan == 1 ? 'Tiền mặt' : 'Chuyển khoản'}</td>
+                                <td>${hoaDon.idNhanVien.hoVaTen}</td>
+                                <td>${hoaDon.ghiChu}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -211,7 +195,8 @@
                                     <div class="carousel-inner" style="width: 150px; height: 150px">
                                         <c:forEach items="${listAnhSanPham}" var="anhSanPham" varStatus="status">
                                             <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                                <img src="${anhSanPham.duongDan}" class="d-block" id="custom-anh" style="width: 150px; height: 150px">
+                                                <img src="${anhSanPham.duongDan}" class="d-block" id="custom-anh"
+                                                     style="width: 150px; height: 150px">
                                             </div>
                                         </c:forEach>
                                     </div>
@@ -227,9 +212,10 @@
                         </tr>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script>
+
+                            // get Anh sp
                             $(document).ready(function () {
                                 var idSanPham = '${sp.idSanPhamChiTiet}';
-                                console.log(idSanPham);
                                 $.ajax({
                                     url: '/get-anh-san-pham/' + idSanPham,
                                     type: 'GET',
@@ -274,11 +260,6 @@
                 <div class="mb-3">
                     <label class="form-label">Tổng tiền cần thanh toán</label>
                     <label class="form-label float-end" id="tong-tien">${tongTien}</label>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Tiền khách đưa</label>
-                    <input type="number" class="form-control" id="tien-khach-dua" name="tienKhachDua"
-                           min="${tongTien}" step="0.01">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Ghi chú </label>
@@ -342,15 +323,6 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 <script>
-    // Lấy đối tượng hình ảnh ban đầu
-    const imgElement = document.getElementById("custom-anh");
-
-    // Tạo một đối tượng hình ảnh mới
-    const newImage = new Image();
-
-    // Gán giá trị base64 từ thuộc tính src của thẻ <img> cho đối tượng hình ảnh mới
-    newImage.src = imgElement.src;
-
 </script>
 </body>
 

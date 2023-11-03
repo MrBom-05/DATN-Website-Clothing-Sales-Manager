@@ -75,12 +75,6 @@ public class HoaDonController {
         return "admin/layout";
     }
 
-    @GetMapping("/get-anh-san-pham/{idCtsp}")
-    @ResponseBody
-    public List<AnhSanPhamResponse> getAnhSanPhamByCtspId(@PathVariable("idCtsp") UUID idCtsp) {
-        List<AnhSanPhamResponse> listAnh = anhSanPhamService.getListAnhByIdSanPhamChiTiet(idCtsp);
-        return listAnh;
-    }
 
     @GetMapping("/admin/hoa-don/filter")
     public String filterHoaDon(@RequestParam("trangThai") Integer trangThai, Model model) {

@@ -181,6 +181,7 @@
                 </thead>
                 <tbody>
                 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
+
                     <tr>
                         <td>${status.index + 1}</td>
                         <td>
@@ -204,6 +205,7 @@
 
                         <td>${sp.gia}</td>
                         <td>${sp.soLuong}</td>
+                        <input type="hidden" id="quantity" value=""/>
                         <td>${sp.soLuong * sp.gia}</td>
                         <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}"/>
                         <td>
@@ -227,28 +229,45 @@
                             </c:if>
                         </td>
                     </tr>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        // Gọi API để lấy dữ liệu sản phẩm
+                        var totalQuantity = 0;
+                        <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
+                        totalQuantity += ${sp.soLuong};
+                        </c:forEach>
+                        document.getElementById('quantity').value = totalQuantity;
+                        console.log(totalQuantity);
+
+                    </script>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
 
         <!-- Khách hàng -->
-        <div class="row border mt-5">
-            <div class="col">
-                <p class="float-start fw-bold">Khách hàng</p>
-            </div>
-            <div class="col-3">
-                <div class="input-group text-end">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm khách hàng">
-                    <button class="btn btn-primary">Tìm kiếm</button>
+        <div class="container border mt-5">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <div class="mb-3">
+                        <label for="khachHangSelect" class="form-label fw-bold">Khách hàng</label>
+                        <select class="form-select" id="khachHangSelect" aria-label="Default select example">
+                            <option selected>Chọn khách hàng</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div class="mb-3">
+                        <p class="fw-bold">Thông tin khách hàng</p>
+                        <p class="text-center" id="tenKhachHang">Tên khách hàng: Khách Lẻ</p>
+                        <p class="text-center" id="emailKhachHang">Email: </p>
+                        <p class="text-center" id="soDienThoaiKhachHang">Số điện thoại: </p>
+                        <p class="text-center" id="diaChiKhachHang">Địa chỉ: </p>
+                    </div>
                 </div>
             </div>
-            <hr>
-            <div class="col">
-                <p class="float-start fw-bold">Khách hàng</p>
-                <p class="text-center">Tên khách hàng: Khách Lẻ</p>
-            </div>
         </div>
+
         <!-- Thanh toán -->
         <form method="post" action="/admin/ban-hang/thanh-toan/${idHoaDon}" id="thong-tin-thanh-toanForm">
             <div class="row border mt-3">
@@ -260,14 +279,15 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="hoVaTen" class="form-label">Họ và tên</label>
-                                    <input type="text" id="hoVaTen" class="form-control"
+                                    <input type="text" id="hoVaTen" class="form-control" name="nguoiNhan"
                                     />
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label class="form-label">SĐT</label>
-                                    <input type="text" class="form-control"/>
+                                    <input type="text" class="form-control" name="sdt"
+                                           id="sdt"/>
                                 </div>
                             </div>
                         </div>
@@ -276,16 +296,19 @@
                                 <select id="provinceSelect" class="form-select">
                                     <option value="" disabled selected>Chọn tỉnh/thành phố</option>
                                 </select>
+                                <input type="hidden" id="provinceName" name="tinhThanh">
                             </div>
                             <div class="col-4">
                                 <select id="districtSelect" class="form-select">
                                     <option value="" disabled selected>Chọn quận/huyện</option>
                                 </select>
+                                <input type="hidden" id="districtName" name="quanHuyen">
                             </div>
                             <div class="col-4">
                                 <select id="wardSelect" class="form-select">
                                     <option value="" disabled selected>Chọn phường/xã</option>
                                 </select>
+                                <input type="hidden" id="wardName" name="xaPhuong">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -297,7 +320,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <input type="text" id="diaChi" class="form-control"
-                                           placeholder="Địa chỉ giao hàng"/>
+                                           placeholder="Địa chỉ giao hàng" name="diaChi">
                                 </div>
                             </div>
                         </div>
@@ -326,7 +349,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tổng tiền</label>
-                                <input type="number" class="float-end" id="tong-tien" name="tong-tien" value="${tongTien}" readonly>
+                            <input type="number" class="float-end" id="tong-tien" name="tong-tien" value="${tongTien}"
+                                   readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Hình thức thanh toán</label>
@@ -351,6 +375,7 @@
                             <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3"
                                       placeholder="Ghi chú"></textarea>
                         </div>
+                        <input type="hidden" name="idKhachHang" id="id-khach-hang">
                         <button type="submit" class="btn btn-primary float-end" id="thanh_toan">Thanh toán</button>
                     </div>
                 </div>
@@ -592,7 +617,6 @@
     var tienKhachDua = document.getElementById('tien-khach-dua-div');
     var tienThua = document.getElementById('tien-thua-div');
     var phiVanChuyen = document.getElementById('phi-van-chuyen-div');
-
     toggleSwitch.addEventListener('change', function () {
         if (this.checked) {
             // Switch is ON (bật)
@@ -624,7 +648,6 @@
         var isDistrictSelected = false;
         var isWardSelected = false;
         var isServiceSelected = false;
-        let items = [];
         // Gọi API để lấy dữ liệu tỉnh/thành phố
         $.ajax({
             url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province',
@@ -636,11 +659,19 @@
             success: function (data) {
                 if (data.code === 200) {
                     const select = document.getElementById('provinceSelect');
+                    const input = document.getElementById('provinceName'); // Get the input element
+
                     data.data.forEach(province => {
                         const option = document.createElement('option');
                         option.value = province.ProvinceID;
                         option.text = province.ProvinceName;
                         select.appendChild(option);
+                    });
+
+                    // Set province name in the input field when a province is selected
+                    $('#provinceSelect').change(function () {
+                        const selectedProvinceName = $('#provinceSelect option:selected').text();
+                        input.value = selectedProvinceName; // Set the value of the input field
                     });
                 }
             },
@@ -668,12 +699,17 @@
                 success: function (data) {
                     if (data.code === 200) {
                         const select = document.getElementById('districtSelect');
+                        const input = document.getElementById('districtName');
                         select.innerHTML = '';
                         data.data.forEach(district => {
                             const option = document.createElement('option');
                             option.value = district.DistrictID;
                             option.text = district.DistrictName;
                             select.appendChild(option);
+                        });
+                        $('#districtSelect').change(function () {
+                            const selectedDistrictName = $('#districtSelect option:selected').text();
+                            input.value = selectedDistrictName; // Set the value of the input field
                         });
                     }
                 },
@@ -702,12 +738,17 @@
                 success: function (data) {
                     if (data.code === 200) {
                         const select = document.getElementById('wardSelect');
+                        const input = document.getElementById('wardName');
                         select.innerHTML = '';
                         data.data.forEach(ward => {
                             const option = document.createElement('option');
                             option.value = ward.WardCode;
                             option.text = ward.WardName;
                             select.appendChild(option);
+                        })
+                        $('#wardSelect').change(function () {
+                            const selectedWardName = $('#wardSelect option:selected').text();
+                            input.value = selectedWardName; // Set the value of the input field
                         });
                     }
                 },
@@ -748,62 +789,14 @@
         });
 
         // Gọi API để lấy dữ liệu dịch vụ khi thay đổi dịch vụ
+        var feeCalculated = false; // Biến cờ để kiểm tra xem đã tính phí hay chưa
+
         $('#service_id').change(function () {
-            isWardSelected = true; // Đánh dấu trạng thái khi đã chọn phường/xã
-
-            if (isDistrictSelected && isWardSelected && isServiceSelected) {
-                // Nếu đã chọn đủ ba trường, gọi API tính thời gian
-                callAPItoCalculateLeadTime();
-            }
-
-            // Tự động chọn dịch vụ đầu tiên
-            const firstServiceOption = $('#service_id option:first-child');
-            if (firstServiceOption.length > 0) {
-                firstServiceOption.prop('selected', true);
-                isServiceSelected = true; // Đánh dấu trạng thái khi đã chọn dịch vụ
-                // Gọi API tính thời gian
-                callAPItoCalculateLeadTime();
+            callAPItoCalculateLeadTime();
+            if (!feeCalculated) {
                 callAPItoFee();
+                feeCalculated = true; // Đánh dấu rằng đã tính phí
             }
-        });
-
-
-        $('#service_id').change(function () {
-            isServiceSelected = true; // Đánh dấu trạng thái khi đã chọn dịch vụ
-
-            if (isDistrictSelected && isWardSelected && isServiceSelected) {
-                // Nếu đã chọn đủ ba trường, gọi API tính thời gian
-                callAPItoCalculateLeadTime();
-            }
-        });
-        // Gọi API để lấy dữ liệu sản phẩm
-        $.ajax({
-            url: 'http://localhost:8080/view/spct/view/13BEB5C7-756E-4968-9298-F3BB01FCE8F0',
-            method: 'GET',
-            success: function (productData) {
-                if (productData && productData.length > 0) {
-                    const items = [];
-
-                    // Lặp qua danh sách sản phẩm và thêm chúng vào mảng "items"
-                    for (const product of productData) {
-                        const item = {
-                            name: product.tenSanPham,
-                            quantity: product.soLuong,
-                            weight: 300, // Chú ý: Trong ví dụ này, tôi sử dụng trường "gia" làm trọng lượng, bạn có thể thay đổi nếu cần
-                            length: 10, // Bạn có thể thay đổi giá trị này theo yêu cầu
-                            width: 10,  // Bạn có thể thay đổi giá trị này theo yêu cầu
-                            height: 10  // Bạn có thể thay đổi giá trị này theo yêu cầu
-                        };
-
-                        items.push(item);
-                    }
-
-                }
-            },
-            error: function (error) {
-                console.error(error);
-            }
-
         });
 
         function callAPItoCalculateLeadTime() {
@@ -829,7 +822,6 @@
                     if (data.code === 200) {
                         const leadtime = data.data.leadtime;
                         const orderDate = data.data.order_date;
-
                         // Chuyển đổi timestamp thành định dạng ngày giờ của Việt Nam
                         const leadtimeDate = moment.unix(leadtime).format("DD-MM-YYYY");
                         $('#leadtime').text(leadtimeDate);
@@ -847,6 +839,8 @@
             const wardCode = $('#wardSelect').val();
             const wardCodeString = wardCode.toString();
             const feeInput = $('#feeInput');
+            const sl = $('#quantity').val();
+            console.log(sl + "số lượng");
             // Gọi API GHN với danh sách sản phẩm đã tạo
             $.ajax({
                 url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
@@ -859,9 +853,9 @@
                     ShopID: 190221,
                     service_type_id: 2,
                     to_district_id: districtID,
-                    weight: 1000,
+                    weight: 150 * sl,
                     to_ward_code: wardCodeString,
-                    item: items // Sử dụng danh sách sản phẩm ở đây
+                    // item: items // Sử dụng danh sách sản phẩm ở đây
                 },
                 success: function (data) {
                     if (data.code === 200) {
@@ -944,6 +938,36 @@
         });
     });
 
+    //
+    function fillCustomerData(customer) {
+        $('#tenKhachHang').text('Tên khách hàng: ' + customer.hoVaTen);
+        $('#emailKhachHang').text('Email: ' + customer.email);
+        $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (customer.soDienThoai ? customer.soDienThoai : 'N/A'));
+        $('#diaChiKhachHang').text('Địa chỉ: ' + (customer.diaChi ? customer.diaChi : 'N/A'));
+    }
+
+    // Fetch customer data from API and populate the select dropdown
+    $(document).ready(function () {
+        $.get('http://localhost:8080/view/thong-tin-khach-hang', function (data) {
+            data.forEach(function (customer) {
+                $('#khachHangSelect').append('<option value="' + customer.id + '">' + customer.hoVaTen + '</option>');
+            });
+            $
+            // Handle select change event
+            $('#khachHangSelect').change(function () {
+                var selectedCustomerId = $(this).val();
+                var selectedCustomer = data.find(function (customer) {
+                    return customer.id === selectedCustomerId;
+                });
+                // Điền thông tin vào các trường tương ứng
+                $('#hoVaTen').val(selectedCustomer.hoVaTen);
+                $('#sdt').val(selectedCustomer.soDienThoai ? selectedCustomer.soDienThoai : '');
+                // Điền ID vào trường input ẩn
+                $('#id-khach-hang').val(selectedCustomerId);
+                fillCustomerData(selectedCustomer);
+            });
+        });
+    });
 
 </script>
 
