@@ -18,6 +18,7 @@ public class GiamGiaService {
     @Autowired
     private GiamGiaRepository giamGiaRepository;
 
+    // admin
     public Page<GiamGiaResponse> getPage(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return giamGiaRepository.getPage(pageable);
@@ -70,6 +71,18 @@ public class GiamGiaService {
             return giamGiaResponse;
         } else {
             System.out.println("GiamGiaService.findById: null");
+            return null;
+        }
+    }
+
+    // user
+    public GiamGiaResponse findByMa(String ma) {
+        GiamGiaResponse giamGiaResponse = giamGiaRepository.findByMa(ma);
+        if (giamGiaResponse != null) {
+            System.out.println("GiamGiaService.findByMa: " + giamGiaResponse.getMa());
+            return giamGiaResponse;
+        } else {
+            System.out.println("GiamGiaService.findByMa: null");
             return null;
         }
     }

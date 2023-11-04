@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.users;
 
 import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.infrastructures.requests.*;
+import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Controller
@@ -41,6 +43,9 @@ public class TrangChuController {
 
     @Autowired
     private KhuyenMaiChiTietService khuyenMaiChiTietService;
+
+    @Autowired
+    private GiamGiaService giamGiaService;
 
     @Autowired
     private HoaDonService hoaDonService;
@@ -114,11 +119,23 @@ public class TrangChuController {
     @GetMapping("/gio-hang")
     public String gioHang(Model model) {
         KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        GiamGiaResponse giamGiaResponse = (GiamGiaResponse) session.getAttribute("giamGia");
         if (khachHangResponse == null) {
             return "redirect:/dang-nhap";
         } else {
+            BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
-            model.addAttribute("tongTien", gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId()));
+            model.addAttribute("tongTien", tongTien);
+            if (giamGiaResponse != null) {
+                int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
+                BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
+                BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
+                model.addAttribute("soTienDuocGiam", soTienDuocGiam);
+                model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam);
+            } else {
+                model.addAttribute("soTienDuocGiam", 0);
+                model.addAttribute("soTienSauKhiGiam", tongTien);
+            }
         }
         model.addAttribute("viewContent", "/views/user/gio-hang.jsp");
         return "user/layout";
@@ -148,15 +165,35 @@ public class TrangChuController {
         return "redirect:/gio-hang";
     }
 
+    // add voucher
+    @PostMapping("/ap-dung-voucher")
+    public String apDungVoucher(@RequestParam("ma") String ma) {
+        GiamGiaResponse giamGiaResponse = giamGiaService.findByMa(ma);
+        session.setAttribute("giamGia", giamGiaResponse);
+        return "redirect:/gio-hang";
+    }
+
     // trang thanh toán
     @GetMapping("thanh-toan")
     public String thanhToan(Model model) {
         KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        GiamGiaResponse giamGiaResponse = (GiamGiaResponse) session.getAttribute("giamGia");
         if (khachHangResponse == null) {
             return "redirect:/dang-nhap";
         } else {
+            BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
-            model.addAttribute("tongTien", gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId()));
+            model.addAttribute("tongTien", tongTien);
+            if (giamGiaResponse != null) {
+                int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
+                BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
+                BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
+                model.addAttribute("soTienDuocGiam", soTienDuocGiam);
+                model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam);
+            } else {
+                model.addAttribute("soTienDuocGiam", 0);
+                model.addAttribute("soTienSauKhiGiam", tongTien);
+            }
         }
         model.addAttribute("viewContent", "/views/user/thanh-toan.jsp");
         return "user/layout";
@@ -171,11 +208,17 @@ public class TrangChuController {
     @PostMapping("thanh-toan")
     public String formThanhToan(@ModelAttribute("formThanhToan") FormThanhToan formThanhToan, Model model) {
         KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        GiamGiaResponse giamGiaResponse = (GiamGiaResponse) session.getAttribute("giamGia");
         if (khachHangResponse == null) {
             return "redirect:/dang-nhap";
         } else {
-            String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse);
-            model.addAttribute("maHoaDon", maHoaDon);
+            if (giamGiaResponse == null) {
+                String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, null);
+                model.addAttribute("maHoaDon", maHoaDon);
+            } else {
+                String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, giamGiaResponse);
+                model.addAttribute("maHoaDon", maHoaDon);
+            }
             model.addAttribute("viewContent", "/views/user/hoan-thanh-thanh-toan.jsp");
         }
         return "user/layout";
@@ -196,8 +239,6 @@ public class TrangChuController {
     public String dangNhap(@ModelAttribute("dangNhap") DangNhapUserRequest dangNhapUserRequest, RedirectAttributes redirectAttributes) {
         String email = dangNhapUserRequest.getEmail();
         String matKhau = dangNhapUserRequest.getMatKhau();
-
-
 
         if (email == null || email.isEmpty() || matKhau == null || matKhau.isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
