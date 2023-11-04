@@ -51,15 +51,16 @@
             </c:forEach>
             </tbody>
         </table>
-        <div class="row">
-            <div class="col-3">
-                <input class="form-control" placeholder="Mã khuyến mại"
-                       required="" value="">
+        <form action="/ap-dung-voucher" method="post">
+            <div class="row">
+                <div class="col-3">
+                    <input type="text" name="ma" class="form-control" placeholder="Mã khuyến mại">
+                </div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-dark">Áp dụng</button>
+                </div>
             </div>
-            <div class="col-6">
-                <button class="btn btn-dark">Áp dụng</button>
-            </div>
-        </div>
+        </form>
     </div>
 
     <div class="col-4 border">
@@ -77,22 +78,15 @@
 
                 <div class="bg-white py-3 border-bottom">
                     <div class="row ms-1 me-1">
-                        <label class="col fw-bold fs-6">Phí vận chuyển</label>
-                        <label class="col text-uppercase fs-6 text-end">0 ₫</label>
-                    </div>
-                </div>
-
-                <div class="bg-white py-3 border-bottom">
-                    <div class="row ms-1 me-1">
                         <label class="col fw-bold fs-6">Mã khuyến mãi</label>
-                        <label class="col text-uppercase fs-6 text-end">-0 ₫</label>
+                        <label class="col fs-6 text-end">${soTienDuocGiam} vn₫</label>
                     </div>
                 </div>
 
                 <div class="bg-white py-3 border-bottom">
                     <div class="row ms-1 me-1">
-                        <label class="col fw-bold fs-5">Tổng</label>
-                        <label class="col text-uppercase fw-bold fs-5 text-end">${tongTien} vnđ</label>
+                        <label class="col-3 fw-bold fs-5">Tổng</label>
+                        <label class="col fw-bold fs-5 text-end">${soTienSauKhiGiam} vnđ</label>
                     </div>
                 </div>
             </div>

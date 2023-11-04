@@ -1,9 +1,11 @@
 package com.example.websitebanquanao.services;
 
+import com.example.websitebanquanao.entities.GiamGia;
 import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.entities.KhachHang;
 import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
+import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +112,7 @@ public class HoaDonService {
     }
 
     // user
-    public String addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse) {
+    public String addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse, GiamGiaResponse giamGiaResponse) {
         HoaDon hoaDon = new HoaDon();
 
         hoaDon.setMa(maHDCount());
@@ -130,6 +132,12 @@ public class HoaDonService {
 
         KhachHang khachHang = new KhachHang();
         khachHang.setId(khachHangResponse.getId());
+
+        if (giamGiaResponse != null) {
+            GiamGia giamGia = new GiamGia();
+            giamGia.setId(giamGiaResponse.getId());
+            hoaDon.setIdGiamGia(giamGia);
+        }
 
         hoaDon.setIdKhachHang(khachHang);
 
