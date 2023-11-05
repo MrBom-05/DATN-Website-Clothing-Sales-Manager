@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
+<%--@elvariable id="formThanhToan" type="java"--%>
 <form:form modelAttribute="formThanhToan" action="/thanh-toan" method="post">
     <div class="row col-10 container offset-1 mt-1">
         <div class="col-6">
@@ -38,6 +39,12 @@
                 <div class="form-label ">Địa chỉ (*)</div>
                 <form:textarea path="diaChi" class="w-100 form-control" placeholder="..." name="" cols="30"
                                rows="3"></form:textarea>
+            </div>
+            <div class="px-md-5 px-3 py-2 form-group">
+                <div class="form-label ">Chọn dịch vụ (*)</div>
+                <select id="service_id" class="w-100 form-control">
+                    <option value="" disabled selected>Chọn dịch vụ</option>
+                </select>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Số điện thoại (*)</div>
@@ -88,7 +95,7 @@
                                 <label class="col-8 text-uppercase">${gioHang.tenSanPham} - ${gioHang.tenMauSac}
                                     - ${gioHang.tenKichCo}
                                     x${gioHang.soLuong}</label>
-                                <label class="col-4 text-end">${gioHang.soLuong * gioHang.gia}
+                                <label class="col-4 fw-bold text-end">${gioHang.soLuong * gioHang.gia}
                                     vn₫</label>
                             </div>
                         </c:forEach>
@@ -104,21 +111,29 @@
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6">Phí vận chuyển</label>
-                            <label class="col fw-bold fs-6 text-end">0 vn₫</label>
+                            <label id="phiVanChuyen" class="col fw-bold fs-6 text-end"></label>
+                            <input type="hidden" id="phiVanChuyenInput"/>
+                        </div>
+                    </div>
+
+                    <div class="bg-white py-3 border-bottom">
+                        <div class="row ms-1 me-1">
+                            <label class="col fw-bold fs-6">Thời gian dự tính</label>
+                            <label id="leadtime" class="col fw-bold fs-6 text-end"></label>
                         </div>
                     </div>
 
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6">Mã khuyến mãi</label>
-                            <label class="col fs-6 text-end">${soTienDuocGiam} vn₫</label>
+                            <label class="col fs-6 fw-bold text-end">${soTienDuocGiam} vn₫</label>
                         </div>
                     </div>
 
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-5">Tổng</label>
-                            <label class="col fw-bold fs-5 text-end">${soTienSauKhiGiam} vn₫</label>
+                            <label id="tongTien" class="col fw-bold fs-5 text-end"></label>
                         </div>
                     </div>
                 </div>
@@ -329,11 +344,8 @@
                 },
                 success: function (data) {
                     if (data.code === 200) {
-                        const leadtime = data.data.leadtime;
-                        const orderDate = data.data.order_date;
-                        // Chuyển đổi timestamp thành định dạng ngày giờ của Việt Nam
-                        const leadtimeDate = moment.unix(leadtime).format("DD-MM-YYYY");
-                        $('#leadtime').text(leadtimeDate);
+                        const leadtime = moment.unix(data.data.leadtime).format("DD-MM-YYYY");
+                        $('#leadtime').text(leadtime);
                     }
                 },
                 error: function (error) {
@@ -347,10 +359,8 @@
             const districtID = $('#districtSelect').val();
             const wardCode = $('#wardSelect').val();
             const wardCodeString = wardCode.toString();
-            const feeInput = $('#feeInput');
-            const sl = $('#quantity').val();
-            console.log(sl + "số lượng");
-            // Gọi API GHN với danh sách sản phẩm đã tạo
+            const sl = 1;
+
             $.ajax({
                 url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
                 method: 'GET',
@@ -369,10 +379,10 @@
                 success: function (data) {
                     if (data.code === 200) {
                         const fee = data.data.total;
-                        const currentTotal = parseFloat($('#tong-tien').val());
-                        const newTotal = currentTotal + fee;
-                        $('#feeInput').val(fee); // Đặt giá trị phí vận chuyển vào trường feeInput
-                        $('#tong-tien').val(newTotal); // Đặt giá trị mới của tổng tiền
+                        const soTienSauKhiGiam = ${soTienSauKhiGiam};
+                        $('#phiVanChuyenInput').val(fee);
+                        $('#phiVanChuyen').text(fee + ' vn₫');
+                        $('#tongTien').text(soTienSauKhiGiam + fee + ' vn₫');
                     }
                 },
                 error: function (error) {
