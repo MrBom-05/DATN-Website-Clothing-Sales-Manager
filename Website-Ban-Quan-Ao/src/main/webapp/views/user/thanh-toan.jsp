@@ -96,7 +96,7 @@
                                     - ${gioHang.tenKichCo}
                                     x${gioHang.soLuong}</label>
                                 <label class="col-4 fw-bold text-end">${gioHang.soLuong * gioHang.gia}
-                                    vn₫</label>
+                                    vnđ</label>
                             </div>
                         </c:forEach>
                     </div>
@@ -104,7 +104,7 @@
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6 ">Tạm tính</label>
-                            <label class="col fw-bold fs-6 text-end">${tongTien} vn₫</label>
+                            <label class="col fw-bold fs-6 text-end">${tongTien} vnđ</label>
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6">Phí vận chuyển</label>
                             <label id="phiVanChuyen" class="col fw-bold fs-6 text-end"></label>
-                            <input type="hidden" id="phiVanChuyenInput"/>
+                            <form:input path="phiVanChuyen" type="hidden" id="phiVanChuyenInput"/>
                         </div>
                     </div>
 
@@ -126,7 +126,7 @@
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6">Mã khuyến mãi</label>
-                            <label class="col fs-6 fw-bold text-end">${soTienDuocGiam} vn₫</label>
+                            <label class="col fs-6 fw-bold text-end">${soTienDuocGiam} vnđ</label>
                         </div>
                     </div>
 
@@ -359,7 +359,7 @@
             const districtID = $('#districtSelect').val();
             const wardCode = $('#wardSelect').val();
             const wardCodeString = wardCode.toString();
-            const sl = 1;
+            const sl = ${sumSoLuong};
 
             $.ajax({
                 url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
@@ -381,8 +381,8 @@
                         const fee = data.data.total;
                         const soTienSauKhiGiam = ${soTienSauKhiGiam};
                         $('#phiVanChuyenInput').val(fee);
-                        $('#phiVanChuyen').text(fee + ' vn₫');
-                        $('#tongTien').text(soTienSauKhiGiam + fee + ' vn₫');
+                        $('#phiVanChuyen').text(fee + ' vnđ');
+                        $('#tongTien').text(soTienSauKhiGiam + fee + ' vnđ');
                     }
                 },
                 error: function (error) {
