@@ -9,11 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class GiamGiaService {
     @Autowired
     private GiamGiaRepository giamGiaRepository;
@@ -85,5 +86,10 @@ public class GiamGiaService {
             System.out.println("GiamGiaService.findByMa: null");
             return null;
         }
+    }
+
+    @Transactional
+    public void updateSoLuongByMa(String ma, int soLuong) {
+        giamGiaRepository.updateSoLuongByMa(ma, soLuong);
     }
 }

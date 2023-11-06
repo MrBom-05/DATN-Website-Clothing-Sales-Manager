@@ -43,8 +43,8 @@
                         </div>
                     </div>
                     <br/>
-                    <c:if test="${not empty errorMessage}">
-                        <div class="alert alert-danger">${errorMessage}</div>
+                    <c:if test="${not empty loginError}">
+                        <div class="alert alert-danger">${loginError}</div>
                     </c:if>
                     <div class="row mt-3">
                         <div class="col-9">
