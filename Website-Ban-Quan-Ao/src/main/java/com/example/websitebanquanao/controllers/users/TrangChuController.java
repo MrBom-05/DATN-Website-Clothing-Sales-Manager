@@ -117,7 +117,7 @@ public class TrangChuController {
 
     // trang giỏ hàng
     @GetMapping("/gio-hang")
-    public String gioHang(Model model) {
+    public String gioHang(Model model, @ModelAttribute("thongBaoGiamGia") String thoangBaoGiamGia) {
         KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
         GiamGiaResponse giamGiaResponse = (GiamGiaResponse) session.getAttribute("giamGia");
         if (khachHangResponse == null) {
@@ -132,9 +132,11 @@ public class TrangChuController {
                 BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
                 model.addAttribute("soTienDuocGiam", soTienDuocGiam);
                 model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam);
+                model.addAttribute("thongBaoGiamGia", thoangBaoGiamGia);
             } else {
                 model.addAttribute("soTienDuocGiam", 0);
                 model.addAttribute("soTienSauKhiGiam", tongTien);
+                model.addAttribute("thongBaoGiamGia", "");
             }
         }
         model.addAttribute("viewContent", "/views/user/gio-hang.jsp");
@@ -167,9 +169,10 @@ public class TrangChuController {
 
     // add voucher
     @PostMapping("/ap-dung-voucher")
-    public String apDungVoucher(@RequestParam("ma") String ma) {
+    public String apDungVoucher(@RequestParam("ma") String ma, RedirectAttributes redirectAttributes) {
         GiamGiaResponse giamGiaResponse = giamGiaService.findByMa(ma);
         session.setAttribute("giamGia", giamGiaResponse);
+        redirectAttributes.addFlashAttribute("thongBaoGiamGia", "Đã áp dụng mã giảm giá.");
         return "redirect:/gio-hang";
     }
 
@@ -218,6 +221,7 @@ public class TrangChuController {
             } else {
                 String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, giamGiaResponse);
                 model.addAttribute("maHoaDon", maHoaDon);
+                session.setAttribute("giamGia", null);
             }
             model.addAttribute("viewContent", "/views/user/hoan-thanh-thanh-toan.jsp");
         }
@@ -226,10 +230,10 @@ public class TrangChuController {
 
     // trang đăng nhập
     @GetMapping("/dang-nhap")
-    public String dangNhap(Model model, @ModelAttribute("errorMessage") String errorMessage) {
+    public String dangNhap(Model model, @ModelAttribute("loginError") String loginError) {
         model.addAttribute("dangNhap", new DangNhapUserRequest());
         model.addAttribute("dangKy", new DangKyUserRequest());
-        model.addAttribute("loginError", errorMessage);
+        model.addAttribute("loginError", loginError);
         model.addAttribute("viewContent", "/views/user/dang-nhap.jsp");
         return "user/layout";
     }

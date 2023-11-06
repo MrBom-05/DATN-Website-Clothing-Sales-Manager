@@ -56,10 +56,13 @@
                 <div class="col-3">
                     <input type="text" name="ma" class="form-control" placeholder="Mã khuyến mại">
                 </div>
-                <div class="col-6">
+                <div class="col-3">
                     <button type="submit" class="btn btn-dark">Áp dụng</button>
                 </div>
             </div>
+            <c:if test="${not empty thongBaoGiamGia}">
+                <div class="alert alert-success col-6 mt-2 text-center">${thongBaoGiamGia}</div>
+            </c:if>
         </form>
     </div>
 
@@ -96,6 +99,21 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Gọi hàm hideErrorMessage khi trang đã tải hoàn toàn
+        hideErrorMessage();
+    });
+
+    function hideErrorMessage() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-success').fadeOut('slow');
+        }, 5000);
+    }
+</script>
+
 <script>
     function decrement() {
         var quantityInput = document.getElementById("quantity");
