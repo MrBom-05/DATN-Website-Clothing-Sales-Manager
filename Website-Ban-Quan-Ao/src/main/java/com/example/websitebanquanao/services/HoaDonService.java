@@ -6,6 +6,7 @@ import com.example.websitebanquanao.entities.KhachHang;
 import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
+import com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class HoaDonService {
     public List<HoaDon> getAll() {
         return hoaDonRepository.findAll();
     }
+
     public List<HoaDon> getAllHoaDonChuaThanhToan() {
         return hoaDonRepository.findAllHoaDon();
     }
@@ -42,6 +44,7 @@ public class HoaDonService {
                 .filter(hoaDon -> hoaDon.getTrangThai() == trangThai)
                 .collect(Collectors.toList());
     }
+
     public String maHDCount() {
         String code = "";
         List<HoaDon> list = hoaDonRepository.findAll();
@@ -115,7 +118,7 @@ public class HoaDonService {
     }
 
     // user
-    public String addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse, GiamGiaResponse giamGiaResponse) {
+    public UUID addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse, GiamGiaResponse giamGiaResponse) {
         HoaDon hoaDon = new HoaDon();
 
         hoaDon.setMa(maHDCount());
@@ -130,8 +133,9 @@ public class HoaDonService {
         hoaDon.setEmail(formThanhToan.getEmail());
         hoaDon.setHinhThucThanhToan(formThanhToan.getHinhThucThanhToan());
         hoaDon.setGhiChu(formThanhToan.getGhiChu());
+        hoaDon.setPhiVanChuyen(formThanhToan.getPhiVanChuyen());
         hoaDon.setLoaiHoaDon(1);
-        hoaDon.setTrangThai(0);
+        hoaDon.setTrangThai(2);
 
         KhachHang khachHang = new KhachHang();
         khachHang.setId(khachHangResponse.getId());
@@ -149,6 +153,11 @@ public class HoaDonService {
         hoaDonRepository.save(hoaDon);
         hoaDonChiTietService.addHoaDonChiTietUser(hoaDon, khachHangResponse.getId());
         System.out.println("HoaDonService.addHoaDonUser: " + hoaDon.getMa());
-        return hoaDon.getMa();
+        return hoaDon.getId();
+    }
+
+    public HoaDonUserResponse findHoaDonUserResponseById(UUID id) {
+        System.out.println("HoaDonService.findHoaDonUserResponseById: " + id);
+        return hoaDonRepository.findHoaDonUserResponseById(id);
     }
 }

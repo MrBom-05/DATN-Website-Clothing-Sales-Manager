@@ -1,11 +1,9 @@
 package com.example.websitebanquanao.controllers.users;
 
-import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.infrastructures.requests.*;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +47,9 @@ public class TrangChuController {
 
     @Autowired
     private HoaDonService hoaDonService;
+
+    @Autowired
+    private HoaDonChiTietService hoaDonChiTietService;
 
     @Autowired
     private HttpSession session;
@@ -186,6 +187,7 @@ public class TrangChuController {
         } else {
             BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
+            model.addAttribute("sumSoLuong", gioHangChiTietService.sumSoLuongByIdKhachHang(khachHangResponse.getId()));
             model.addAttribute("tongTien", tongTien);
             if (giamGiaResponse != null) {
                 int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
@@ -216,15 +218,36 @@ public class TrangChuController {
             return "redirect:/dang-nhap";
         } else {
             if (giamGiaResponse == null) {
-                String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, null);
-                model.addAttribute("maHoaDon", maHoaDon);
+                UUID id = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, null);
+                return "redirect:/hoa-don/" + id;
             } else {
-                String maHoaDon = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, giamGiaResponse);
-                model.addAttribute("maHoaDon", maHoaDon);
+                UUID id = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, giamGiaResponse);
                 session.setAttribute("giamGia", null);
+                return "redirect:/hoa-don/" + id;
             }
-            model.addAttribute("viewContent", "/views/user/hoan-thanh-thanh-toan.jsp");
         }
+    }
+
+    // xem danh sách hoá đơn
+    @GetMapping("/hoa-don")
+    public String hoaDon(Model model) {
+        KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
+        if (khachHangResponse == null) {
+            return "redirect:/dang-nhap";
+        } else {
+            model.addAttribute("listHoaDon", "");
+            model.addAttribute("viewContent", "/views/user/hoa-don.jsp");
+        }
+        return "user/layout";
+    }
+
+    // xem hoá đơn chi tiết
+    @GetMapping("/hoa-don/{id}")
+    public String hoaDonChiTiet(@PathVariable("id") UUID id, Model model) {
+        model.addAttribute("hoaDon", hoaDonService.findHoaDonUserResponseById(id));
+        model.addAttribute("listSanPhamTrongHoaDon", hoaDonChiTietService.getListByIdHoaDon(id));
+        model.addAttribute("tongTien", hoaDonChiTietService.sumTongTienByIdHoaDon(id));
+        model.addAttribute("viewContent", "/views/user/hoa-don-chi-tiet.jsp");
         return "user/layout";
     }
 

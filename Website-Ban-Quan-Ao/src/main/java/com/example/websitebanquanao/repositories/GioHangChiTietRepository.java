@@ -25,4 +25,7 @@ public interface GioHangChiTietRepository extends JpaRepository<GioHangChiTiet, 
 
     @Query("SELECT SUM(ghi.gia * ghi.soLuong) FROM GioHangChiTiet ghi WHERE ghi.idGioHang.idKhachHang.id = :khachHangId")
     public BigDecimal getTongTienByIdKhachHang(@Param("khachHangId") UUID khangHangId);
+
+    @Query("SELECT SUM(ghi.soLuong) FROM GioHangChiTiet ghi WHERE ghi.idGioHang.idKhachHang.id = :khachHangId")
+    public Integer sumSoLuongByIdKhachHang(@Param("khachHangId") UUID khangHangId);
 }

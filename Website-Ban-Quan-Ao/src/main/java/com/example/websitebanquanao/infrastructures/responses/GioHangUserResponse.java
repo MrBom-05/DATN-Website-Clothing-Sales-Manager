@@ -19,7 +19,6 @@ public class GioHangUserResponse {
     private Integer idMauSac;
     private String tenMauSac;
     private String tenKichCo;
-    private String anh;
     private Integer soLuong;
     private BigDecimal gia;
 }

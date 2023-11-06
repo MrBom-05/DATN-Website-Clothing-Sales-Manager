@@ -89,4 +89,13 @@ public class GioHangChiTietService {
             return gioHangChiTietRepository.getTongTienByIdKhachHang(idKhachHang);
         }
     }
+
+    public Integer sumSoLuongByIdKhachHang(UUID idKhachHang) {
+        Integer sumSoLuong = gioHangChiTietRepository.sumSoLuongByIdKhachHang(idKhachHang);
+        if (sumSoLuong == null) {
+            return 0;
+        } else {
+            return sumSoLuong;
+        }
+    }
 }

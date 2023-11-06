@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -79,5 +80,13 @@ public class HoaDonChiTietService {
 
         gioHangChiTietService.deleteByIdKhachHang(idKhachHang);
         System.out.println("HoaDonChiTietService.addHoaDonChiTietUser: " + hoaDon.getMa());
+    }
+
+    public List<GioHangUserResponse> getListByIdHoaDon(UUID idHoaDon) {
+        return hoaDonChiTietRepository.getListByIdHoaDon(idHoaDon);
+    }
+
+    public BigDecimal sumTongTienByIdHoaDon(UUID idHoaDon) {
+        return hoaDonChiTietRepository.sumTongTienByIdHoaDon(idHoaDon);
     }
 }
