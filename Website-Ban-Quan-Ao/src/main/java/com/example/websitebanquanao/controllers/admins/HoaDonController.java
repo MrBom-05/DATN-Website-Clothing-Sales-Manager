@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,7 +71,6 @@ public class HoaDonController {
         model.addAttribute("hoaDon", hoaDon); // Truyền giá trị hoaDon vào model
 
         model.addAttribute("listSanPhamTrongGioHang", listSanPhamTrongGioHang);
-
         model.addAttribute("view", "/views/admin/hoa-don/danh-sach-hoa-don.jsp");
         return "admin/layout";
     }
@@ -82,6 +82,41 @@ public class HoaDonController {
         model.addAttribute("listHoaDon", filteredHoaDon);
         model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
         return "admin/layout";
+    }
+
+    @PostMapping("/admin/hoa-don/update-trang-thai/{id}")
+    public String updateTrangThaiHoaDon(@PathVariable("id") UUID id, @RequestParam("trangThai") Integer trangThai,@RequestParam("ghiChu") String ghiChu, Model model) {
+        HoaDon hoaDon = hoaDonService.getById(id);
+        hoaDon.setGhiChu(ghiChu);
+        hoaDon.setTrangThai(trangThai);
+        hoaDonService.update(hoaDon, id);
+        model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
+        return "redirect:/admin/hoa-don/" + id;
+    }
+    @PostMapping("/admin/hoa-don/xac-nhan-thanh-toan/{id}")
+    public String xacNhanThanhToan(@PathVariable("id") UUID id, @RequestParam("trangThai") Integer trangThai,@RequestParam("ghiChu") String ghiChu
+            ,@RequestParam(value = "httt", required = false) Integer hinhThucThanhToan
+            , Model model) {
+        if (hinhThucThanhToan == null) {
+            HoaDon hoaDon = hoaDonService.getById(id);
+            hoaDon.setGhiChu(ghiChu);
+            Instant instant = Instant.now();
+            hoaDon.setNgayNhan(instant);
+            hoaDon.setNgayThanhToan(instant);
+            hoaDon.setTrangThai(trangThai);
+            hoaDonService.update(hoaDon, id);
+        }else {
+            HoaDon hoaDon = hoaDonService.getById(id);
+            hoaDon.setGhiChu(ghiChu);
+            Instant instant = Instant.now();
+            hoaDon.setNgayNhan(instant);
+            hoaDon.setNgayThanhToan(instant);
+            hoaDon.setTrangThai(trangThai);
+            hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
+            hoaDonService.update(hoaDon, id);
+        }
+        model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
+        return "redirect:/admin/hoa-don/" + id;
     }
 
 
