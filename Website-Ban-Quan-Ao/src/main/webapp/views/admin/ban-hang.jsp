@@ -270,6 +270,7 @@
 
         <!-- Thanh toán -->
         <form method="post" action="/admin/ban-hang/thanh-toan/${idHoaDon}" id="thong-tin-thanh-toanForm">
+            <input type="hidden" name="idKhachHang" id="id-khach-hang">
             <div class="row border mt-3">
                 <p class="fw-bold">Thông tin thanh toán</p>
                 <hr>
@@ -352,7 +353,7 @@
                             <input type="number" class="float-end" id="tong-tien" name="tong-tien" value="${tongTien}"
                                    readonly>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3" id="hinh-thuc-thanh-toan-div" style="display: block">
                             <label class="form-label">Hình thức thanh toán</label>
                             <select class="form-select" id="hinh-thuc-thanh-toan" name="httt"
                                     aria-label="Default select example">
@@ -375,7 +376,6 @@
                             <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3"
                                       placeholder="Ghi chú"></textarea>
                         </div>
-                        <input type="hidden" name="idKhachHang" id="id-khach-hang">
                         <button type="submit" class="btn btn-primary float-end" id="thanh_toan">Thanh toán</button>
                     </div>
                 </div>
@@ -617,6 +617,7 @@
     var tienKhachDua = document.getElementById('tien-khach-dua-div');
     var tienThua = document.getElementById('tien-thua-div');
     var phiVanChuyen = document.getElementById('phi-van-chuyen-div');
+    var hinhThucThanhToan = document.getElementById('hinh-thuc-thanh-toan-div');
     toggleSwitch.addEventListener('change', function () {
         if (this.checked) {
             // Switch is ON (bật)
@@ -626,6 +627,7 @@
             tienKhachDua.style.display = 'none';
             tienThua.style.display = 'none';
             phiVanChuyen.style.display = 'block';
+            hinhThucThanhToan.style.display = 'none';
             //     đổi action
             thongTinThanhToanForm.action = '/admin/ban-hang/tao-don-hang/${idHoaDon}';
 
@@ -637,6 +639,7 @@
             tienKhachDua.style.display = 'block';
             tienThua.style.display = 'block';
             phiVanChuyen.style.display = 'none';
+            hinhThucThanhToan.style.display = 'block';
             //     đổi action
             thongTinThanhToanForm.action = '/admin/ban-hang/thanh-toan/${idHoaDon}';
 
@@ -945,14 +948,12 @@
         $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (customer.soDienThoai ? customer.soDienThoai : 'N/A'));
         $('#diaChiKhachHang').text('Địa chỉ: ' + (customer.diaChi ? customer.diaChi : 'N/A'));
     }
-
     // Fetch customer data from API and populate the select dropdown
     $(document).ready(function () {
         $.get('http://localhost:8080/view/thong-tin-khach-hang', function (data) {
             data.forEach(function (customer) {
                 $('#khachHangSelect').append('<option value="' + customer.id + '">' + customer.hoVaTen + '</option>');
             });
-            $
             // Handle select change event
             $('#khachHangSelect').change(function () {
                 var selectedCustomerId = $(this).val();
@@ -965,7 +966,9 @@
                 // Điền ID vào trường input ẩn
                 $('#id-khach-hang').val(selectedCustomerId);
                 fillCustomerData(selectedCustomer);
+                console.log(selectedCustomer);
             });
+
         });
     });
 
