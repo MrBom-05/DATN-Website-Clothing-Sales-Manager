@@ -39,8 +39,8 @@
                <span class="text-secondary">Chờ xác nhận</span>
            </c:if>
               <c:if test="${hoaDon.trangThai == 3}">
-                <span class="text-secondary">Chờ giao</span>
-            </c:if>
+                  <span class="text-secondary">Chờ giao</span>
+              </c:if>
             <c:if test="${hoaDon.trangThai == 4}">
                 <span class="text-success">Đang giao</span>
             </c:if>
@@ -53,12 +53,16 @@
     <div class="row mt-2">
         <div>
             <div class="float-start">
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHuy">
-                    Huỷ
-                </button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalXacNhan">
-                    Xác nhận
-                </button>
+                <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3}">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHuy">
+                        Huỷ đơn hàng
+                    </button>
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3 }">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalXacNhan">
+                        Xác nhận
+                    </button>
+                </c:if>
             </div>
         </div>
     </div>
@@ -71,7 +75,15 @@
             <div class="row">
                 <div class="col-4">
                     <p>Mã hoá đơn: ${hoaDon.ma}</p>
-                    <p>Ngày lập: ${hoaDon.ngayTao}</p>
+                    <p>Ngày tạo:
+                        <%--format ngày tạo--%>
+                        <span id="ngay-tao-1"></span>
+                        <script>
+                            var originalDate = "${hoaDon.ngayTao}";
+                            var formattedDate = new Date(originalDate).toLocaleString();
+                            document.getElementById("ngay-tao-1").textContent = formattedDate;
+                        </script>
+                    </p>
                     <p>Khách hàng: Khách lẻ</p>
                     <p>Nhân viên: ${hoaDon.idNhanVien.hoVaTen}</p>
                     <p>Địa chỉ: ${hoaDon.diaChi}</p>
@@ -100,7 +112,15 @@
                             <span class="text-danger">Đã huỷ</span>
                         </c:if>
                     </p>
-                    <p>Ngày thanh toán: ${hoaDon.ngayThanhToan}</p>
+                    <p>Ngày thanh toán:
+                        <%--format ngày tạo--%>
+                        <span id="ngay-tt-1"></span>
+                        <script>
+                            var originalDate = "${hoaDon.ngayThanhToan}";
+                            var formattedDate = new Date(originalDate).toLocaleString();
+                            document.getElementById("ngay-tt-1").textContent = formattedDate;
+                        </script>
+                    </p>
                     <p>Loại hoá
                         đơn:
                         <c:if test="${hoaDon.loaiHoaDon == 0}">
@@ -129,7 +149,7 @@
             <c:if test="${hoaDon.trangThai == 1}">
                 <p class="fw-bold text-success float-end">Đơn hàng đã được thanh toán</p>
             </c:if>
-            <c:if test="${hoaDon.trangThai !=1}">
+            <c:if test="${hoaDon.trangThai !=1 && hoaDon.trangThai != 5}">
                 <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">
                     Thanh toán
@@ -152,14 +172,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>${tongTien}</td>
-                                <td>${hoaDon.ngayThanhToan}</td>
-                                <td>${hoaDon.hinhThucThanhToan == 1 ? 'Tiền mặt' : 'Chuyển khoản'}</td>
-                                <td>${hoaDon.idNhanVien.hoVaTen}</td>
-                                <td>${hoaDon.ghiChu}</td>
-                            </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>${tongTien}</td>
+                            <td>
+                                    <%--format ngày tạo--%>
+                                <span id="ngay-tt-2"></span>
+                                <script>
+                                    var originalDate = "${hoaDon.ngayThanhToan}";
+                                    var formattedDate = new Date(originalDate).toLocaleString();
+                                    document.getElementById("ngay-tt-2").textContent = formattedDate;
+                                </script>
+                            </td>
+                            <td>${hoaDon.hinhThucThanhToan == 1 ? 'Tiền mặt' : 'Chuyển khoản'}</td>
+                            <td>${hoaDon.idNhanVien.hoVaTen}</td>
+                            <td>${hoaDon.ghiChu}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -254,32 +282,29 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận thanh toán</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-Đóng" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Tổng tiền cần thanh toán</label>
-                    <label class="form-label float-end" id="tong-tien">${tongTien}</label>
+            <form action="/admin/hoa-don/xac-nhan-thanh-toan/${hoaDon.id}" method="post">
+                <input type="hidden" name="trangThai" value="1">
+                <c:if test="${hoaDon.trangThai == 4}">
+                    <input type="hidden" name="httt" value="1">
+                </c:if>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tổng tiền cần thanh toán</label>
+                        <label class="form-label float-end" id="tong-tien">${tongTien}</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú </label>
+                        <textarea class="form-control" name="ghiChu" rows="3"
+                                  placeholder="Ghi chú"></textarea>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Ghi chú </label>
-                    <textarea class="form-control" name="ghiChu" rows="3"
-                              placeholder="Ghi chú"></textarea>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Hình thức thanh toán</label>
-                    <select class="form-select" id="hinh-thuc-thanh-toan" name="httt"
-                            aria-label="Default select example">
-                        <option selected value="0">Chọn hình thức thanh toán</option>
-                        <option value="1">Tiền mặt</option>
-                        <option value="2">Chuyển khoản</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -287,17 +312,20 @@
 <div class="modal fade" id="modalXacNhan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Ghi chú </label>
-                    <textarea class="form-control" name="ghiChu" rows="3"
-                              placeholder="Ghi chú"></textarea>
+            <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+                <input type="hidden" name="trangThai" value="" id="trang-thai">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú </label>
+                        <textarea class="form-control" name="ghiChu" rows="3"
+                                  placeholder="Ghi chú"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -305,25 +333,40 @@
 <div class="modal fade" id="modalHuy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Ghi chú </label>
-                    <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3"
-                              placeholder="Ghi chú"></textarea>
+            <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+                <input type="hidden" name="trangThai" value="5">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú </label>
+                        <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3"
+                                  placeholder="Ghi chú"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger">Save changes</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger">Lưu</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+    const trangThai = document.getElementById('trang-thai');
+    const trangThaiHoaDon = ${hoaDon.trangThai};
+    if (trangThaiHoaDon == 2 ) {
+        trangThai.value = 3;
+    }
+    if (trangThaiHoaDon == 3 ) {
+        trangThai.value = 4;
+    }
+
 </script>
+
 </body>
 
 </html>

@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -183,20 +184,32 @@ public class BanHangController {
     }
     @PostMapping("/thanh-toan/{idHoaDon}")
     public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon,@RequestParam("httt") Integer hinhThucThanhToan,@RequestParam("ghiChu") String ghiChu,
-                            @RequestParam("idKhachHang") UUID idKhachHang){
+                            @RequestParam(value = "idKhachHang", required = false) UUID idKhachHang){
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
         Instant currentInstant = Instant.now();
-        KhachHang khachHang = new KhachHang();
-        khachHang.setId(idKhachHang);
-        if (hoaDon != null) {
-            hoaDon.setTrangThai(1);
-            hoaDon.setNgayThanhToan(currentInstant);
-            hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
-            hoaDon.setGhiChu(ghiChu);
-            hoaDon.setIdKhachHang(khachHang);
-            hoaDon.setLoaiHoaDon(0);
-            hoaDonService.update(hoaDon, idHoaDon);
-            session.setAttribute("successMessage", "Thanh toán thành công");
+        if(idKhachHang == null){
+            if (hoaDon != null) {
+                hoaDon.setTrangThai(1);
+                hoaDon.setNgayThanhToan(currentInstant);
+                hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
+                hoaDon.setGhiChu(ghiChu);
+                hoaDon.setLoaiHoaDon(0);
+                hoaDonService.update(hoaDon, idHoaDon);
+                session.setAttribute("successMessage", "Thanh toán thành công");
+            }
+        }else{
+            if (hoaDon != null) {
+                hoaDon.setTrangThai(1);
+                hoaDon.setNgayThanhToan(currentInstant);
+                hoaDon.setHinhThucThanhToan(hinhThucThanhToan);
+                hoaDon.setGhiChu(ghiChu);
+                KhachHang khachHang = new KhachHang();
+                khachHang.setId(idKhachHang);
+                hoaDon.setIdKhachHang(khachHang);
+                hoaDon.setLoaiHoaDon(0);
+                hoaDonService.update(hoaDon, idHoaDon);
+                session.setAttribute("successMessage", "Thanh toán thành công");
+            }
         }
 
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
@@ -208,7 +221,7 @@ public class BanHangController {
                              @RequestParam("diaChi") String diaChi, @RequestParam("ghiChu") String ghiChu,
                              @RequestParam("xaPhuong") String xaPhuong, @RequestParam("quanHuyen") String quanHuyen,
                              @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen")BigDecimal phiVanChuyen
-                             ) {
+    ) {
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
 
         if (hoaDon != null) {
