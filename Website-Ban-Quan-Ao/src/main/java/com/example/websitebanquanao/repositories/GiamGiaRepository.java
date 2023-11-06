@@ -5,9 +5,11 @@ import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -23,6 +25,10 @@ public interface GiamGiaRepository extends JpaRepository<GiamGia, UUID> {
     boolean existsByMa(String ma);
 
     // user
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse(g.id, g.ma, g.soPhanTramGiam, g.soLuong, g.ngayBatDau, g.ngayKetThuc) from GiamGia g where g.ma = :ma")
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse(g.id, g.ma, g.soPhanTramGiam, g.soLuong, g.ngayBatDau, g.ngayKetThuc) from GiamGia g where g.ma = :ma and g.soLuong > 0 and g.ngayBatDau <= current_date and g.ngayKetThuc >= current_date")
     public GiamGiaResponse findByMa(@Param("ma") String ma);
+
+    @Modifying
+    @Query("update GiamGia g set g.soLuong = :soLuong where g.ma = :ma")
+    public void updateSoLuongByMa(@Param("ma") String ma, @Param("soLuong") int soLuong);
 }

@@ -10,6 +10,7 @@ import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,6 +25,8 @@ public class HoaDonService {
     @Autowired
     private HoaDonChiTietService hoaDonChiTietService;
 
+    @Autowired
+    private GiamGiaService giamGiaService;
 
     // admin
     public List<HoaDon> getAll() {
@@ -137,6 +140,8 @@ public class HoaDonService {
             GiamGia giamGia = new GiamGia();
             giamGia.setId(giamGiaResponse.getId());
             hoaDon.setIdGiamGia(giamGia);
+
+            giamGiaService.updateSoLuongByMa(giamGiaResponse.getMa(), giamGiaResponse.getSoLuong() - 1);
         }
 
         hoaDon.setIdKhachHang(khachHang);
