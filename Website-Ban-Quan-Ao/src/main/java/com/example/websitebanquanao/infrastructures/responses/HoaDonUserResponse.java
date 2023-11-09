@@ -24,6 +24,8 @@ public class HoaDonUserResponse {
     private String tinhThanhPho;
     private String email;
     private String soDienThoai;
+    private String maVanChuyen;
+    private String tenDonViVanChuyen;
     private BigDecimal phiVanChuyen;
     private String ghiChu;
 }

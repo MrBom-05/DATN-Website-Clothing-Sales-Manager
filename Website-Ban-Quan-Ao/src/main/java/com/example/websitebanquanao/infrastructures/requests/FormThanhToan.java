@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -21,5 +20,4 @@ public class FormThanhToan {
     private String email;
     private int hinhThucThanhToan;
     private String ghiChu;
-    private BigDecimal phiVanChuyen;
 }
