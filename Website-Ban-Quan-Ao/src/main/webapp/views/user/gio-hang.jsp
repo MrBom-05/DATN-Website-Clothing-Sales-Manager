@@ -1,6 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        hideErrorMessage();
+    });
+
+    function hideErrorMessage() {
+        setTimeout(function () {
+            $('.alert-success').fadeOut('slow');
+        }, 5000);
+    }
+</script>
 <div class="row container mt-3 ms-5">
     <div class="col-8">
         <table class="table align-middle">
@@ -34,7 +46,6 @@
                     <script>
                         $(document).ready(function () {
                             var idSanPham = '${gioHang.idSanPhamChiTiet}';
-                            console.log(idSanPham);
                             $.ajax({
                                 url: '/get-anh-san-pham/' + idSanPham,
                                 type: 'GET',
@@ -60,7 +71,7 @@
                         });
                     </script>
 
-                    <td>
+                    <td style="width: 70px">
                         <a class="link-dark text-uppercase" style="text-decoration: none"
                            href="/san-pham/${gioHang.id}/${gioHang.idMauSac}">${gioHang.tenSanPham}-${gioHang.tenMauSac}-${gioHang.tenKichCo}</a>
                     </td>
@@ -71,12 +82,14 @@
                         <form action="/gio-hang/update/${gioHang.idSanPhamChiTiet}" method="post">
                             <div class="input-group mt-3">
                                 <button type="submit" class="btn btn-outline-dark" type="button"
-                                        onclick="decrement()">-
+                                        onclick="decrement_${gioHang.maSanPham}()">-
                                 </button>
-                                <input type="number" class="form-control text-center" style="width: 50px" id="quantity"
-                                       name="soLuong" value="${gioHang.soLuong}" min="1">
+                                <input type="number" class="form-control text-center" style="width: 50px"
+                                       id="quantity_${gioHang.maSanPham}"
+                                       name="soLuong" value="${gioHang.soLuong}" min="1" max="${gioHang.soLuongTonKho}"
+                                       readonly>
                                 <button type="submit" class="btn btn-outline-dark" type="button"
-                                        onclick="increment()">+
+                                        onclick="increment_${gioHang.maSanPham}()">+
                                 </button>
                             </div>
                         </form>
@@ -87,6 +100,21 @@
                            aria-label="Close"></a>
                     </td>
                 </tr>
+                <script>
+                    function decrement_${gioHang.maSanPham}() {
+                        var quantityInput = document.getElementById("quantity_${gioHang.maSanPham}");
+                        var currentValue = parseInt(quantityInput.value);
+                        if (currentValue > 1) {
+                            quantityInput.value = currentValue - 1;
+                        }
+                    }
+
+                    function increment_${gioHang.maSanPham}() {
+                        var quantityInput = document.getElementById("quantity_${gioHang.maSanPham}");
+                        var currentValue = parseInt(quantityInput.value);
+                        quantityInput.value = currentValue + 1;
+                    }
+                </script>
             </c:forEach>
             </tbody>
         </table>
@@ -138,33 +166,3 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        // Gọi hàm hideErrorMessage khi trang đã tải hoàn toàn
-        hideErrorMessage();
-    });
-
-    function hideErrorMessage() {
-        // Sử dụng jQuery để ẩn thông báo sau 5 giây
-        setTimeout(function () {
-            $('.alert-success').fadeOut('slow');
-        }, 5000);
-    }
-</script>
-
-<script>
-    function decrement() {
-        var quantityInput = document.getElementById("quantity");
-        var currentValue = parseInt(quantityInput.value);
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-        }
-    }
-
-    function increment() {
-        var quantityInput = document.getElementById("quantity");
-        var currentValue = parseInt(quantityInput.value);
-        quantityInput.value = currentValue + 1;
-    }
-</script>

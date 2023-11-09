@@ -41,12 +41,6 @@
                                rows="3"></form:textarea>
             </div>
             <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Chọn dịch vụ (*)</div>
-                <select id="service_id" class="w-100 form-control">
-                    <option value="" disabled selected>Chọn dịch vụ</option>
-                </select>
-            </div>
-            <div class="px-md-5 px-3 py-2 form-group">
                 <div class="form-label ">Số điện thoại (*)</div>
                 <form:input path="soDienThoai" class="w-100 form-control" type="text" placeholder="..."/>
             </div>
@@ -67,6 +61,7 @@
                     <form:radiobutton path="hinhThucThanhToan" value="2" name="payment_method" checked="true"/>
                     THANH TOÁN QUA VNPay
                 </label>
+                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và trả phí ship khi nhận hàng.</label>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-group mb-5">
@@ -110,21 +105,6 @@
 
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
-                            <label class="col fw-bold fs-6">Phí vận chuyển</label>
-                            <label id="phiVanChuyen" class="col fw-bold fs-6 text-end"></label>
-                            <form:input path="phiVanChuyen" type="hidden" id="phiVanChuyenInput"/>
-                        </div>
-                    </div>
-
-                    <div class="bg-white py-3 border-bottom">
-                        <div class="row ms-1 me-1">
-                            <label class="col fw-bold fs-6">Thời gian dự tính</label>
-                            <label id="leadtime" class="col fw-bold fs-6 text-end"></label>
-                        </div>
-                    </div>
-
-                    <div class="bg-white py-3 border-bottom">
-                        <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6">Mã khuyến mãi</label>
                             <label class="col fs-6 fw-bold text-end">${soTienDuocGiam} vnđ</label>
                         </div>
@@ -146,7 +126,7 @@
                 <label>Dữ liệu cá nhân của bạn sẽ được sử dụng để
                     xử lý đơn đặt hàng, hỗ trợ trải nghiệm của
                     bạn trên toàn bộ trang web này và cho các
-                    mục đích khác được mô tả trong <a href="">Chính sách bảo mật</a> và <a href="">Chính sách đổi
+                    mục đích khác được mô tả trong <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a> và <a href="/chinh-sach-doi-tra">Chính sách đổi
                         trả</a>.
                 </label>
             </div>
@@ -171,7 +151,6 @@
         // Biến kiểm tra trạng thái đã chọn
         var isDistrictSelected = false;
         var isWardSelected = false;
-        var isServiceSelected = false;
         // Gọi API để lấy dữ liệu tỉnh/thành phố
         $.ajax({
             url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province',
@@ -192,10 +171,9 @@
                         select.appendChild(option);
                     });
 
-                    // Set province name in the input field when a province is selected
                     $('#provinceSelect').change(function () {
                         const selectedProvinceName = $('#provinceSelect option:selected').text();
-                        input.value = selectedProvinceName; // Set the value of the input field
+                        input.value = selectedProvinceName;
                     });
                 }
             },
@@ -233,7 +211,7 @@
                         });
                         $('#districtSelect').change(function () {
                             const selectedDistrictName = $('#districtSelect option:selected').text();
-                            input.value = selectedDistrictName; // Set the value of the input field
+                            input.value = selectedDistrictName;
                         });
                     }
                 },
@@ -280,115 +258,6 @@
                     console.error(error);
                 }
             });
-            // get api dịch vụ
-            $.ajax({
-                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Token': 'a76df0d2-77a1-11ee-b1d4-92b443b7a897'
-                },
-                data: {
-                    from_district: 1482,
-                    to_district: districtID,
-                    shop_id: 190221,
-                },
-                success: function (data) {
-                    if (data.code === 200) {
-                        const select = document.getElementById('service_id');
-                        select.innerHTML = '';
-                        data.data.forEach(service => {
-                            const option = document.createElement('option');
-                            option.value = service.service_id;
-                            option.text = service.short_name;
-                            select.appendChild(option);
-
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
         });
-
-        // Gọi API để lấy dữ liệu dịch vụ khi thay đổi dịch vụ
-        var feeCalculated = false; // Biến cờ để kiểm tra xem đã tính phí hay chưa
-
-        $('#service_id').change(function () {
-            callAPItoCalculateLeadTime();
-            if (!feeCalculated) {
-                callAPItoFee();
-                feeCalculated = true; // Đánh dấu rằng đã tính phí
-            }
-        });
-
-        function callAPItoCalculateLeadTime() {
-            const districtID = $('#districtSelect').val();
-            const wardCode = $('#wardSelect').val();
-            const wardCodeString = wardCode.toString();
-            $.ajax({
-                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Token': 'a76df0d2-77a1-11ee-b1d4-92b443b7a897'
-                },
-                data: {
-                    ShopID: 190221,
-                    from_district_id: 1482,
-                    from_ward_code: "11008",
-                    to_district_id: districtID,
-                    to_ward_code: wardCodeString,
-                    service_id: 53320,
-                },
-                success: function (data) {
-                    if (data.code === 200) {
-                        const leadtime = moment.unix(data.data.leadtime).format("DD-MM-YYYY");
-                        $('#leadtime').text(leadtime);
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
-        }
-
-        // function tính phí
-        function callAPItoFee() {
-            const districtID = $('#districtSelect').val();
-            const wardCode = $('#wardSelect').val();
-            const wardCodeString = wardCode.toString();
-            const sl = ${sumSoLuong};
-
-            $.ajax({
-                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Token': 'a76df0d2-77a1-11ee-b1d4-92b443b7a897'
-                },
-                data: {
-                    ShopID: 190221,
-                    service_type_id: 2,
-                    to_district_id: districtID,
-                    weight: 150 * sl,
-                    to_ward_code: wardCodeString,
-                    // item: items // Sử dụng danh sách sản phẩm ở đây
-                },
-                success: function (data) {
-                    if (data.code === 200) {
-                        const fee = data.data.total;
-                        const soTienSauKhiGiam = ${soTienSauKhiGiam};
-                        $('#phiVanChuyenInput').val(fee);
-                        $('#phiVanChuyen').text(fee + ' vnđ');
-                        $('#tongTien').text(soTienSauKhiGiam + fee + ' vnđ');
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
-        }
     });
 </script>

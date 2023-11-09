@@ -36,7 +36,7 @@
             <p class="fw-bold text-uppercase">Thông tin đơn hàng</p>
         </div>
         <div class="card-body">
-            <div class="row text-uppercase fw-bold">
+            <div class="row fw-bold">
                 <div class="col-4">
                     <p>Mã hoá đơn: ${hoaDon.ma}</p>
                     <p>Ngày lập: <span id="formattedDate${index.count}"></span>
@@ -49,17 +49,36 @@
                     <p>Khách hàng: ${hoaDon.nguoiNhan}</p>
                     <p>Địa chỉ: ${hoaDon.diaChi} / ${hoaDon.xaPhuong} / ${hoaDon.quanHuyen} / ${hoaDon.tinhThanhPho}</p>
                 </div>
-                <div class="col-4">
-                    <p>Phí vận chuyển: ${hoaDon.phiVanChuyen} vnđ</p>
-                    <p id="tong_tien_1">Tổng tiền: ${tongTien + hoaDon.phiVanChuyen} vnđ</p>
-                    <p>Ngày thanh toán: ${hoaDon.ngayThanhToan}</p>
+                <div class="col-5">
+                    <p>Tổng tiền: ${tongTien} vnđ</p>
+                    <p>Ngày thanh toán: <span id="formattedDate1${index.count}"></span>
+                        <script>
+                            var originalDate = "${hoaDon.ngayThanhToan}";
+                            var formattedDate = new Date(originalDate).toLocaleString();
+                            document.getElementById("formattedDate1${index.count}").textContent = formattedDate;
+                        </script>
+                    </p>
                 </div>
-                <div class="col-4">
-                        <textarea name="" id="" cols="30" rows="5" class="form-control" placeholder="Ghi chú"
+                <div class="col-3">
+                        <textarea cols="30" rows="5" class="form-control" placeholder="Ghi chú"
                                   readonly>${hoaDon.ghiChu}
                         </textarea>
                 </div>
             </div>
+            <c:if test="${hoaDon.maVanChuyen != null}">
+                <hr>
+                <div class="row fw-bold">
+                    <div class="col-4">
+                        <p>Mã Vận Chuyển: ${hoaDon.maVanChuyen}</p>
+                    </div>
+                    <div class="col-4">
+                        <p>Tên Đơn Vị Vận Chuyển: ${hoaDon.tenDonViVanChuyen}</p>
+                    </div>
+                    <div class="col-4">
+                        <p>Phí Giao Hàng: ${hoaDon.phiVanChuyen}</p>
+                    </div>
+                </div>
+            </c:if>
         </div>
     </div>
 
@@ -106,8 +125,6 @@
                     </tr>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
-
-                        // get Anh sp
                         $(document).ready(function () {
                             var idSanPham = '${sp.idSanPhamChiTiet}';
                             $.ajax({
@@ -139,8 +156,9 @@
             </table>
         </div>
     </div>
-
     <div>
-
+        <form action="/submit-payment/${id}" method="post">
+            <button type="submit" class="btn btn-success">Xác nhận đã thanh toán</button>
+        </form>
     </div>
 </div>

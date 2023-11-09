@@ -126,17 +126,17 @@ public class TrangChuController {
         } else {
             BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
-            model.addAttribute("tongTien", tongTien);
+            model.addAttribute("tongTien", tongTien.intValue());
             if (giamGiaResponse != null) {
                 int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
                 BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
                 BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
-                model.addAttribute("soTienDuocGiam", soTienDuocGiam);
-                model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam);
+                model.addAttribute("soTienDuocGiam", soTienDuocGiam.intValue());
+                model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam.intValue());
                 model.addAttribute("thongBaoGiamGia", thoangBaoGiamGia);
             } else {
                 model.addAttribute("soTienDuocGiam", 0);
-                model.addAttribute("soTienSauKhiGiam", tongTien);
+                model.addAttribute("soTienSauKhiGiam", tongTien.intValue());
                 model.addAttribute("thongBaoGiamGia", "");
             }
         }
@@ -188,16 +188,16 @@ public class TrangChuController {
             BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
             model.addAttribute("sumSoLuong", gioHangChiTietService.sumSoLuongByIdKhachHang(khachHangResponse.getId()));
-            model.addAttribute("tongTien", tongTien);
+            model.addAttribute("tongTien", tongTien.intValue());
             if (giamGiaResponse != null) {
                 int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
                 BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
                 BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
-                model.addAttribute("soTienDuocGiam", soTienDuocGiam);
-                model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam);
+                model.addAttribute("soTienDuocGiam", soTienDuocGiam.intValue());
+                model.addAttribute("soTienSauKhiGiam", soTienSauKhiGiam.intValue());
             } else {
                 model.addAttribute("soTienDuocGiam", 0);
-                model.addAttribute("soTienSauKhiGiam", tongTien);
+                model.addAttribute("soTienSauKhiGiam", tongTien.intValue());
             }
         }
         model.addAttribute("viewContent", "/views/user/thanh-toan.jsp");
@@ -246,7 +246,9 @@ public class TrangChuController {
     public String hoaDonChiTiet(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("hoaDon", hoaDonService.findHoaDonUserResponseById(id));
         model.addAttribute("listSanPhamTrongHoaDon", hoaDonChiTietService.getListByIdHoaDon(id));
-        model.addAttribute("tongTien", hoaDonChiTietService.sumTongTienByIdHoaDon(id));
+        model.addAttribute("tongTien", hoaDonService.sumTongTienByIdHoaDon(id).intValue());
+        model.addAttribute("id", id);
+        session.setAttribute("idHoaDon", id);
         model.addAttribute("viewContent", "/views/user/hoa-don-chi-tiet.jsp");
         return "user/layout";
     }
