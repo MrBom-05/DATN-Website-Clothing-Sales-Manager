@@ -148,8 +148,6 @@ public class BanHangController {
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
     }
 
-
-
     @GetMapping("/view-hoa-don/{id}")
     public String viewHoaDon(@PathVariable("id") UUID id, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         // Lấy thông tin hoá đơn chi tiết dựa trên id hoá đơn
@@ -174,25 +172,8 @@ public class BanHangController {
     @PostMapping("/delete-gio-hang/{idHoaDonChiTiet}")
     public String deleteGioHang(
             @PathVariable("idHoaDonChiTiet") UUID idHoaDonChiTiet,
-            @RequestParam("soLuong") int soLuong,
-            @PathVariable("id") UUID idHoaDon
+            @RequestParam("soLuong") int soLuong
     ) {
-        //validate full trường
-        if (soLuong == 0) {
-            session.setAttribute("errorMessage", "Vui lòng nhập số lượng");
-            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
-        }
-        // validate số lượng nhập lớn hơn 0
-        if (soLuong < 0) {
-            session.setAttribute("errorMessage", "Vui lòng nhập số lượng lớn hơn 0");
-            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
-        }
-        // validate số lượng phải là số nguyên
-        if (soLuong % 1 != 0) {
-            session.setAttribute("errorMessage", "Vui lòng nhập số lượng là số nguyên");
-            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
-        }
-
         // Lấy thông tin hoá đơn chi tiết dựa trên id
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietService.getById(idHoaDonChiTiet);
         // get so luong san pham chi tiet
@@ -217,7 +198,9 @@ public class BanHangController {
                     hoaDonChiTietService.update(hoaDonChiTiet);
                 }
             }
-            session.setAttribute("successMessage", "Xoá sản phẩm thành công");
+
+            // Lấy id hoá đơn
+            UUID idHoaDon = hoaDonChiTiet.getIdHoaDon().getId();
 
             // Chuyển hướng hoặc trả về trang hiển thị hoá đơn
             return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
@@ -225,18 +208,19 @@ public class BanHangController {
 
         return "redirect:/admin/ban-hang";
     }
+
     @PostMapping("/thanh-toan/{idHoaDon}")
-    public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon,@RequestParam("httt") Integer hinhThucThanhToan,@RequestParam("ghiChu") String ghiChu,
-                            @RequestParam(value = "idKhachHang", required = false) UUID idKhachHang){
+    public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("httt") Integer hinhThucThanhToan, @RequestParam("ghiChu") String ghiChu,
+                            @RequestParam(value = "idKhachHang", required = false) UUID idKhachHang) {
 
         //validate full trường
-        if(hinhThucThanhToan == null || ghiChu.isEmpty()){
+        if (hinhThucThanhToan == null || ghiChu.isEmpty()) {
             session.setAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin");
             return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
         }
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
         Instant currentInstant = Instant.now();
-        if(idKhachHang == null){
+        if (idKhachHang == null) {
             if (hoaDon != null) {
                 hoaDon.setTrangThai(1);
                 hoaDon.setNgayThanhToan(currentInstant);
@@ -246,7 +230,7 @@ public class BanHangController {
                 hoaDonService.update(hoaDon, idHoaDon);
                 session.setAttribute("successMessage", "Thanh toán thành công");
             }
-        }else{
+        } else {
             if (hoaDon != null) {
                 hoaDon.setTrangThai(1);
                 hoaDon.setNgayThanhToan(currentInstant);
@@ -269,8 +253,8 @@ public class BanHangController {
                              @RequestParam("nguoiNhan") String nguoiNhan, @RequestParam("sdt") String sdt,
                              @RequestParam("diaChi") String diaChi, @RequestParam("ghiChu") String ghiChu,
                              @RequestParam("xaPhuong") String xaPhuong, @RequestParam("quanHuyen") String quanHuyen,
-                             @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen")BigDecimal phiVanChuyen,
-                             @RequestParam("maVanChuyen") String maVanChuyen,@RequestParam("tenDonViVanChuyen") String tenDonViVanChuyen
+                             @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen") BigDecimal phiVanChuyen,
+                             @RequestParam("maVanChuyen") String maVanChuyen, @RequestParam("tenDonViVanChuyen") String tenDonViVanChuyen
     ) {
         // validate full trường và session tồn tại 3s
         if (nguoiNhan.isEmpty() || sdt.isEmpty() || diaChi.isEmpty() || ghiChu.isEmpty() || xaPhuong.isEmpty() || quanHuyen.isEmpty() || tinhThanh.isEmpty() || phiVanChuyen == null || maVanChuyen.isEmpty() || tenDonViVanChuyen.isEmpty()) {
@@ -349,5 +333,72 @@ public class BanHangController {
         session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
         return new ResponseEntity<String>("Thêm thành công", HttpStatus.OK);
     }
-}
 
+
+    @PostMapping("/add-gio-hang-ma-san-pham/{idHoaDon}")
+    @ResponseBody
+    public ResponseEntity<String> addGioHangMaSanPham(@PathVariable("idHoaDon") UUID idHoaDon,
+                                                      @RequestParam("maSanPhamChiTiet") String maSanPhamChiTiet,
+                                                      @RequestParam("soLuongMoi") int soLuongMoi) {
+
+        // validate full trường
+        if (maSanPhamChiTiet == null || soLuongMoi == 0) {
+            session.setAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin");
+            return new ResponseEntity<String>("Vui lòng nhập đầy đủ thông tin", HttpStatus.BAD_REQUEST);
+        }
+
+        // Tìm sản phẩm theo mã sản phẩm chi tiết
+        SanPhamChiTiet ctsp = ctspService.findByMaSanPham(maSanPhamChiTiet);
+
+        if (ctsp == null) {
+            session.setAttribute("errorMessage", "Không tìm thấy sản phẩm với mã sản phẩm chi tiết: " + maSanPhamChiTiet);
+            return new ResponseEntity<String>("Không tìm thấy sản phẩm", HttpStatus.BAD_REQUEST);
+        }
+
+        // validate số lượng nhập lớn hơn trong kho
+        if (soLuongMoi > ctsp.getSoLuong()) {
+            session.setAttribute("errorMessage", "Số lượng sản phẩm trong kho không đủ");
+            return new ResponseEntity<String>("Số lượng sản phẩm trong kho không đủ", HttpStatus.BAD_REQUEST);
+        }
+
+        // Lấy giá từ sản phẩm chi tiết
+        BigDecimal gia = ctsp.getGia();
+
+
+        // Lấy idSanPhamChiTiet từ đối tượng ctsp
+        UUID idSanPhamChiTiet = ctsp.getId();
+
+        HoaDonChiTiet existingChiTiet = hoaDonChiTietService.getChiTietByHoaDonAndSanPham(idHoaDon, idSanPhamChiTiet);
+
+        if (existingChiTiet != null) {
+            int soLuongHienTai = existingChiTiet.getSoLuong();
+            existingChiTiet.setSoLuong(soLuongHienTai + soLuongMoi);
+            hoaDonChiTietService.update(existingChiTiet);
+
+        } else {
+            // Sản phẩm chưa tồn tại trong hoá đơn, tạo hoá đơn chi tiết mới
+            HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+            hoaDonChiTiet.setSoLuong(soLuongMoi);
+            hoaDonChiTiet.setGia(gia);
+            hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
+            hoaDonChiTiet.setIdSanPhamChiTiet(ctsp);
+            hoaDonChiTietService.add(hoaDonChiTiet);
+        }
+
+        // Trừ đi số lượng mới từ số lượng hiện tại
+        int soLuongConLai = ctsp.getSoLuong() - soLuongMoi;
+
+        if (soLuongConLai < 0) {
+            soLuongConLai = 0;
+        }
+
+        // Cập nhật số lượng mới của sản phẩm
+        ctsp.setSoLuong(soLuongConLai);
+        ctspService.updateSoLuong(ctsp);
+
+        session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
+        return new ResponseEntity<String>("Thêm thành công", HttpStatus.OK);
+    }
+
+
+}

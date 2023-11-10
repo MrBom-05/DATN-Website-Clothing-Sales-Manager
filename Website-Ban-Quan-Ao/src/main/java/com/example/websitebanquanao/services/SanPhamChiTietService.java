@@ -162,4 +162,8 @@ public class SanPhamChiTietService {
         List<BanHangTaiQuayResponse> filteredProducts = sanPhamChiTietRepository.filterProducts(size, color, searchTerm);
         return filteredProducts;
     }
+
+    public SanPhamChiTiet findByMaSanPham(String maSanPham) {
+        return sanPhamChiTietRepository.findByMaSanPham(maSanPham);
+    }
 }

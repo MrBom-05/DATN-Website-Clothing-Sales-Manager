@@ -183,6 +183,9 @@
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#QRModal">
                     Quét QR
                 </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#MASPModal">
+                   Thêm với mã SP
+                </button>
             </div>
             <table class="table text-center">
                 <thead>
@@ -198,7 +201,6 @@
                 </thead>
                 <tbody>
                 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
-
                     <tr>
                         <td>${status.index + 1}</td>
                         <td>
@@ -427,6 +429,35 @@
     </div>
 </div>
 <!-- End Modal QR -->
+<!-- Modal mã Sản Phẩm -->
+<div class="modal fade" id="MASPModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Thêm sản phẩm vào giỏ hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Thêm các trường để nhập mã sản phẩm và số lượng -->
+                <div class="mb-3">
+                    <label for="maSanPhamChiTiet" class="form-label">Mã Sản Phẩm Chi Tiết:</label>
+                    <input type="text" class="form-control" id="maSanPhamChiTiet">
+                </div>
+                <div class="mb-3">
+                    <label for="soLuongMoi" class="form-label">Số Lượng:</label>
+                    <input type="number" class="form-control" id="soLuongMoi" value="1" min="1">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="themSanPhamVaoGioHang()">Thêm vào giỏ hàng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Modal mã Sản Phẩm -->
 <!-- Modal Sản Phẩm -->
 <div class="modal fade" id="SPModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -721,7 +752,42 @@
     }).catch(function (e) {
         console.error(e);
     });
+    // Hàm được gọi khi nhấn nút "Thêm vào giỏ hàng" trong modal
+    function themSanPhamVaoGioHang() {
+        // Lấy giá trị từ các trường nhập liệu trong modal
+        var maSanPhamChiTiet = $("#maSanPhamChiTiet").val();
+        var soLuongMoi = $("#soLuongMoi").val();
 
+        // Gọi AJAX để thêm sản phẩm vào giỏ hàng
+        $.ajax({
+            url: `/admin/ban-hang/add-gio-hang-ma-san-pham/${idHoaDon}`,
+            method: "POST",
+            data: {
+                maSanPhamChiTiet: maSanPhamChiTiet,
+                soLuongMoi: soLuongMoi,
+            },
+            success: function (response) {
+                // Xử lý khi thêm thành công
+                alert("Đã thêm sản phẩm vào giỏ hàng!");
+                $("#SPModal").modal("hide");  // Đóng modal sau khi thêm sản phẩm thành công
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                // Xử lý khi có lỗi từ server
+                alert("Lỗi: " + xhr.responseText);
+                console.log("Lỗi: " + xhr.responseText);
+                // load lại trang
+                location.reload();
+            }
+        });
+    }
+
+
+    // Hàm để mở modal khi cần nhập thông tin sản phẩm
+    function moModalThemSanPham() {
+        // Xử lý mở modal ở đây nếu cần
+        $("#SPModal").modal("show");
+    }
     //
     function fillCustomerData(customer) {
         $('#tenKhachHang').text('Tên khách hàng: ' + customer.hoVaTen);

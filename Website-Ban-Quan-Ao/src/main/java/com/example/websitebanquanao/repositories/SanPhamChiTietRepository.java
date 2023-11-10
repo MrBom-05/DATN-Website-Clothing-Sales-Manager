@@ -47,4 +47,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse(s.id, s.idSanPham, s.idMauSac, s.idKichCo, s.gia, s.soLuong, s.moTa, s.trangThai) from SanPhamChiTiet s where s.idMauSac.id = :idMauSac or s.idKichCo.id = :idKichCo or s.idSanPham.ten like %:searchTerm%")
     List<BanHangTaiQuayResponse> filterProducts(@Param("idMauSac") String idMauSac, @Param("idKichCo") String idKichCo, @Param("searchTerm") String searchTerm);
+
+    @Query("select s from SanPhamChiTiet s where s.maSanPham = :maSanPham")
+    SanPhamChiTiet findByMaSanPham(@Param("maSanPham") String maSanPham);
 }
