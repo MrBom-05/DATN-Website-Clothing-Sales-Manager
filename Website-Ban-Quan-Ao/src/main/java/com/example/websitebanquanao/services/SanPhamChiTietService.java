@@ -156,4 +156,10 @@ public class SanPhamChiTietService {
         sanPhamChiTietRepository.updateSoLuongAfterDelete(idSanPhamChiTiet, soLuong);
         System.out.println("SanPhamChiTietService.updateSoLuongByIdSanPhamChiTiet: " + idSanPhamChiTiet + " " + soLuong);
     }
+
+    public List<BanHangTaiQuayResponse> filterProducts(String size, String color, String searchTerm) {
+        // Xử lý yêu cầu lọc và trả về danh sách sản phẩm phù hợp
+        List<BanHangTaiQuayResponse> filteredProducts = sanPhamChiTietRepository.filterProducts(size, color, searchTerm);
+        return filteredProducts;
+    }
 }

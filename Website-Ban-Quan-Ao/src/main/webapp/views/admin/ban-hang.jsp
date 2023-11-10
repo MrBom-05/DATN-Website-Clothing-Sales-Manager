@@ -129,6 +129,17 @@
 
 
 <body>
+<c:if test="${not empty successMessage}">
+    <div class="alert alert-success">${successMessage}</div>
+    <script>
+        setTimeout(function () {
+            $('.alert').remove();
+        }, 3000);
+    </script>
+</c:if>
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger">${errorMessage}</div>
+</c:if>
 <div class="card border rounded">
     <div class="card-header  text-black">
         <h3 class="mb-0">Bán hàng tại quầy</h3>

@@ -34,11 +34,11 @@ public class BanHangController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private SanPhamChiTietService ctspService;
-    @Autowired
-    private KhuyenMaiChiTietService khuyenMaiChiTietService;
 
     @Autowired
-    private AnhSanPhamService anhSanPhamService;
+    private KichCoService kichCoService;
+    @Autowired
+    private MauSacService mauSacService;
     @Autowired
     private KhachHangService khachHangService;
 
@@ -49,6 +49,8 @@ public class BanHangController {
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         List<KhachHangResponse> listKhachHang = khachHangService.getAll();
+        model.addAttribute("listSize", kichCoService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
         model.addAttribute("listKhachHang", listKhachHang);
@@ -133,6 +135,8 @@ public class BanHangController {
         // Truyền idHoaDon để sử dụng trong form
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
+        model.addAttribute("listSize", kichCoService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
         model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
         model.addAttribute("idHoaDon", id);
         model.addAttribute("hoaDon", hoaDon); // Truyền giá trị hoaDon vào model
@@ -172,6 +176,7 @@ public class BanHangController {
                     hoaDonChiTietService.update(hoaDonChiTiet);
                 }
             }
+            session.setAttribute("successMessage", "Xoá sản phẩm thành công");
 
             // Lấy id hoá đơn
             UUID idHoaDon = hoaDonChiTiet.getIdHoaDon().getId();
@@ -277,6 +282,7 @@ public class BanHangController {
             ctspService.updateSoLuong(ctsp);
 
         }
+        session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
         return new ResponseEntity<String>("Thêm thành công", HttpStatus.OK);
     }
 }

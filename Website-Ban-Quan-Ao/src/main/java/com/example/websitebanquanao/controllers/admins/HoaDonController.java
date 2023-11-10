@@ -2,6 +2,8 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.entities.HoaDonChiTiet;
+import com.example.websitebanquanao.entities.NhanVien;
+import com.example.websitebanquanao.infrastructures.requests.NhanVienRequest;
 import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
@@ -10,6 +12,7 @@ import com.example.websitebanquanao.services.AnhSanPhamService;
 import com.example.websitebanquanao.services.HoaDonChiTietService;
 import com.example.websitebanquanao.services.HoaDonService;
 import com.example.websitebanquanao.services.SanPhamChiTietService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,8 @@ public class HoaDonController {
     private SanPhamChiTietService sanPhamChiTietService;
     @Autowired
     private AnhSanPhamService anhSanPhamService;
+    @Autowired
+    private HttpSession httpSession;
     @GetMapping("/admin/hoa-don")
     public String index(Model model) {
         model.addAttribute("view", "/views/admin/hoa-don/quan-li-hoa-don.jsp");
@@ -86,7 +91,11 @@ public class HoaDonController {
 
     @PostMapping("/admin/hoa-don/update-trang-thai/{id}")
     public String updateTrangThaiHoaDon(@PathVariable("id") UUID id, @RequestParam("trangThai") Integer trangThai,@RequestParam("ghiChu") String ghiChu, Model model) {
+        NhanVien nhanVien = new NhanVien();
+        NhanVienRequest nhanVienRequest = (NhanVienRequest) httpSession.getAttribute("admin");
+        nhanVien.setId(nhanVienRequest.getId());
         HoaDon hoaDon = hoaDonService.getById(id);
+        hoaDon.setIdNhanVien(nhanVien);
         hoaDon.setGhiChu(ghiChu);
         hoaDon.setTrangThai(trangThai);
         hoaDonService.update(hoaDon, id);
@@ -97,6 +106,7 @@ public class HoaDonController {
     public String xacNhanThanhToan(@PathVariable("id") UUID id, @RequestParam("trangThai") Integer trangThai,@RequestParam("ghiChu") String ghiChu
             ,@RequestParam(value = "httt", required = false) Integer hinhThucThanhToan
             , Model model) {
+
         if (hinhThucThanhToan == null) {
             HoaDon hoaDon = hoaDonService.getById(id);
             hoaDon.setGhiChu(ghiChu);

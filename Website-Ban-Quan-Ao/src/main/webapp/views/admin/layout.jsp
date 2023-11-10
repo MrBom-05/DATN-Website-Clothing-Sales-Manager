@@ -105,6 +105,8 @@
             <c:if test="${admin.chucVu == 1}">
                 <!-- Hiển thị menu cho nhân viên -->
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/nhan-vien/index">Nhân viên</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/san-pham/index">Sản phẩm</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>

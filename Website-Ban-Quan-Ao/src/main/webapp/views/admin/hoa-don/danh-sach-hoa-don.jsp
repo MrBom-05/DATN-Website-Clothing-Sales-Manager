@@ -14,6 +14,7 @@
 
 
 <body>
+
 <c:set var="tongTien" value="0" />
 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
     <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}" />
@@ -84,7 +85,14 @@
                             document.getElementById("ngay-tao-1").textContent = formattedDate;
                         </script>
                     </p>
-                    <p>Khách hàng: Khách lẻ</p>
+                    <p>Khách hàng:
+                        <c:if test="${hoaDon.idKhachHang != null}">
+                            ${hoaDon.idKhachHang.hoVaTen}
+                        </c:if>
+                        <c:if test="${hoaDon.idKhachHang == null}">
+                            Khách lẻ
+                        </c:if>
+                    </p>
                     <p>Nhân viên: ${hoaDon.idNhanVien.hoVaTen}</p>
                     <p>Địa chỉ: ${hoaDon.diaChi}</p>
 
