@@ -129,19 +129,25 @@
 
 
 <body>
-<c:if test="${not empty successMessage}">
-    <div class="alert alert-success">${successMessage}</div>
+<c:if test="${not empty sessionScope.successMessage}">
+    <div class="alert alert-success" role="alert">
+            ${sessionScope.successMessage}
+    </div>
     <script>
         setTimeout(function () {
-            $('.alert').remove();
+            $('.alert').alert('close');
         }, 3000);
     </script>
+    <% session.removeAttribute("successMessage"); %>
 </c:if>
-<c:if test="${not empty errorMessage}">
-    <div class="alert alert-danger">${errorMessage}</div>
+<c:if test="${not empty sessionScope.errorMessage}">
+    <div class="alert alert-danger" role="alert">
+            ${sessionScope.errorMessage}
+    </div>
+    <% session.removeAttribute("errorMessage"); %>
 </c:if>
 <div class="card border rounded">
-    <div class="card-header  text-black">
+    <div class="card-header text-black">
         <h3 class="mb-0">Bán hàng tại quầy</h3>
     </div>
     <div class="card-body">
@@ -214,10 +220,29 @@
                             <p>${sp.tenMau}/${sp.tenSize}</p>
                         </td>
 
-                        <td>${sp.gia}</td>
+                        <td id="formattedGia">
+                                ${sp.gia}
+                        </td>
                         <td>${sp.soLuong}</td>
+                        <td id="formattedTotal">${sp.soLuong * sp.gia}</td>
+
+                        <!-- Thêm script để định dạng giá trị hiển thị -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Lấy phần tử có id là "formattedTotal"
+                                var formattedTotalElement = document.getElementById('formattedTotal');
+                                //format giá
+                                var formattedGiaElement = document.getElementById('formattedGia');
+
+                                // Định dạng lại giá trị hiển thị
+                                var totalValue = parseFloat(formattedTotalElement.textContent);
+                                formattedTotalElement.textContent = totalValue.toLocaleString('en-US');
+                                //format giá
+                                var giaValue = parseFloat(formattedGiaElement.textContent);
+                                formattedGiaElement.textContent = giaValue.toLocaleString('en-US');
+                            });
+                        </script>
                         <input type="hidden" id="quantity" value=""/>
-                        <td>${sp.soLuong * sp.gia}</td>
                         <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}"/>
                         <td>
                             <c:if test="${hoaDon.trangThai == 0}">
@@ -229,7 +254,7 @@
                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                                         <div class="input-group-append mt-2">
                                             <button type="submit" style="border: none" class="ms-2">
-                                                <i class="fas fa-trash" style="color: #e70d0d;"></i>
+                                                <i class="fas fa-trash" style="color: #fb0404;"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -240,17 +265,6 @@
                             </c:if>
                         </td>
                     </tr>
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script>
-                        // Gọi API để lấy dữ liệu sản phẩm
-                        var totalQuantity = 0;
-                        <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
-                        totalQuantity += ${sp.soLuong};
-                        </c:forEach>
-                        document.getElementById('quantity').value = totalQuantity;
-                        console.log(totalQuantity);
-
-                    </script>
                 </c:forEach>
                 </tbody>
             </table>
@@ -286,7 +300,7 @@
                 <p class="fw-bold">Thông tin thanh toán</p>
                 <hr>
                 <div class="row">
-                    <div class="col-6" id="form-khach-hang" style="display: none;">
+                    <div class="col-6" id="form-khach-hang">
                         <div class="row mb-3">
                             <div class="col">
                                 <div class="form-group">
@@ -325,28 +339,23 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-6">
-                                <select id="service_id" class="form-select">
-                                    <option value="" disabled selected>Chọn dịch vụ</option>
-                                </select>
+                                <input type="text" class="form-control" id="ma-van-chuyen" name="maVanChuyen"
+                                       placeholder="Mã vận chuyển">
                             </div>
                             <div class="col-6">
-                                <div class="form-group">
-                                    <input type="text" id="diaChi" class="form-control"
-                                           placeholder="Địa chỉ giao hàng" name="diaChi">
-                                </div>
+                                <input type="text" id="ten-don-vi" name="tenDonViVanChuyen"
+                                       placeholder="Tên đơn vị vận chuyển">
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label class="form-label">Thời gian giao hàng dự kiến:</label>
-                                    <span id="leadtime"></span>
-                                </div>
+                            <div class="col-12">
+    <textarea class="form-control" id="dia-chi" name="diaChi" rows="3"
+              placeholder="Địa chỉ chi tiết"></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div id="thong-tin-thanh-toan">
+                    <div class="col-6" id="thong-tin-thanh-toan">
                         <div class="mb-3 mt-2">
                             <label class="oval-switch">
                                 <input type="checkbox" id="toggleSwitch">
@@ -357,11 +366,13 @@
 
                         <div class="mb-3" id="phi-van-chuyen-div" style="display: none">
                             <label class="form-label">Phí Vận Chuyển</label>
-                            <input class="float-end" type="number" id="feeInput" name="phiVanChuyen" value="0" readonly>
+                            <input class="float-end" type="text" id="feeInput" name="phiVanChuyen"
+                                   oninput="formatCurrency(this); updateTotal()" value="0">
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Tổng tiền</label>
-                            <input type="number" class="float-end" id="tong-tien" name="tong-tien" value="${tongTien}"
+                            <input type="text" class="float-end" id="tong-tien" name="tong-tien" value="${tongTien}"
                                    readonly>
                         </div>
                         <div class="mb-3" id="hinh-thuc-thanh-toan-div" style="display: block">
@@ -375,7 +386,8 @@
                         </div>
                         <div class="mb-3" id="tien-khach-dua-div">
                             <label class="form-label">Tiền khách đưa</label>
-                            <input type="number" class="form-control" id="tien-khach-dua" name="tienKhachDua"
+                            <input oninput="formatCurrency(this);" type="text" class="form-control" id="tien-khach-dua"
+                                   name="tienKhachDua"
                                    min="${tongTien}" step="0.01">
                         </div>
                         <div class="mb-3" id="tien-thua-div">
@@ -394,7 +406,7 @@
         </form>
     </div>
 </div>
-<!--  Modal QR -->
+<!-- Modal QR -->
 <div class="modal fade" id="QRModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -527,9 +539,19 @@
                                         <p>${sp.mauSac.ten}</p>
                                     </td>
                                     <td>
-                                        <p class="fw-bold gia-san-pham" id="gia-san-pham_${sp.id}">${sp.gia} vnđ</p>
+                                        <p class="fw-bold gia-san-pham" id="gia-san-pham_${sp.id}">${sp.gia}</p>
                                         <p class="fw-bold gia-moi" id="gia-moi_${sp.id}"></p>
                                     </td>
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            // Lấy phần tử có id là "gia-san-pham_${sp.id}"
+                                            var giaElement = document.getElementById('gia-san-pham_${sp.id}');
+                                            // Lấy giá trị không định dạng từ thẻ p
+                                            var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
+                                            // Định dạng lại giá trị và gán lại vào thẻ p
+                                            giaElement.textContent = giaValue.toLocaleString('en-US');
+                                        });
+                                    </script>
                                     <td>
                                         <p>${sp.soLuong}</p>
                                     </td>
@@ -557,6 +579,7 @@
                                 <script>
                                     $(document).ready(function () {
                                         var idSanPhamChiTiet = '${sp.id}';
+                                        console.log(idSanPhamChiTiet);
                                         var giaInput = $("#gia_${sp.id}"); // Lấy ô input dựa trên id
                                         $.ajax({
                                             url: "/so-phan-tram-giam/" + idSanPhamChiTiet,
@@ -579,8 +602,11 @@
                                                         giaSpan.hide();
 
                                                         if (data > 0) {
-                                                            giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');
-                                                            giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;">' + giaCu + '</p');
+                                                            var formattedGiaMoi = giaSauGiam.toLocaleString('en-US');
+                                                            var formattedGiaCu = giaCu.toLocaleString('en-US');
+
+                                                            giaSpan.after('<p class="fw-bold gia-moi" id="formattedGiaMoi_' + idSanPhamChiTiet + '">' + formattedGiaMoi + '</p>');
+                                                            giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;" id="formattedGiaCu_' + idSanPhamChiTiet + '">' + formattedGiaCu + '</p>');
 
                                                             // Cập nhật giá mới trong ô input dựa trên id
                                                             giaInput.val(giaSauGiam);
@@ -598,8 +624,8 @@
                                             }
                                         });
                                     });
-
                                 </script>
+
                             </c:forEach>
                             </tbody>
                         </table>
@@ -629,33 +655,106 @@
     var tienThua = document.getElementById('tien-thua-div');
     var phiVanChuyen = document.getElementById('phi-van-chuyen-div');
     var hinhThucThanhToan = document.getElementById('hinh-thuc-thanh-toan-div');
+    var hoVaTen = document.getElementById('hoVaTen');
     toggleSwitch.addEventListener('change', function () {
         if (this.checked) {
             // Switch is ON (bật)
-            formKhachHang.style.display = 'block'; // Hiển thị biểu mẫu khi công tắc bật
-            thongTinThanhToan.className = 'col-6';
             thanhToan.innerHTML = 'Tạo đơn hàng';
-            tienKhachDua.style.display = 'none';
-            tienThua.style.display = 'none';
             phiVanChuyen.style.display = 'block';
+            // đổi action
+            tienKhachDua.style.display = 'none';
             hinhThucThanhToan.style.display = 'none';
-            //     đổi action
+            tienThua.style.display = 'none';
             thongTinThanhToanForm.action = '/admin/ban-hang/tao-don-hang/${idHoaDon}';
 
         } else {
             // Switch is OFF (tắt)
-            formKhachHang.style.display = 'none'; // Ẩn biểu mẫu khi công tắc tắt
-            thongTinThanhToan.className = 'col-12';
+            // disable form input hovaten
             thanhToan.innerHTML = 'Thanh toán';
             tienKhachDua.style.display = 'block';
             tienThua.style.display = 'block';
             phiVanChuyen.style.display = 'none';
             hinhThucThanhToan.style.display = 'block';
-            //     đổi action
+            // đổi action
             thongTinThanhToanForm.action = '/admin/ban-hang/thanh-toan/${idHoaDon}';
 
         }
     });
+
+    const scanner = new Instascan.Scanner({video: document.getElementById('qr-video')});
+    // Thêm sự kiện cho khi quét QR code thành công
+    scanner.addListener('scan', function (content) {
+        if (content !== "") {
+            // Hiển thị kết quả quét được lên giao diện
+            document.getElementById('qr-result').textContent = 'Quét thành công';
+            $.ajax({
+                url: `/admin/ban-hang/add-gio-hang-qr-code/${idHoaDon}`,
+                method: "POST",
+                data: {
+                    idSanPhamChiTiet: content,
+                    gia: $("#gia_" + content).val(),
+                    soLuongMoi: 1,
+                },
+                success: function (response) {
+                    // Xử lý khi thêm thành công
+                    alert("Đã thêm sản phẩm vào giỏ hàng!");
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý khi có lỗi từ server
+                    alert("Lỗi: " + xhr.responseText);
+                    // load lại trang
+                    location.reload();
+                }
+            });
+        }
+    });
+
+
+    // Khi trang web được tải, bắt đầu quét QR code
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+        } else {
+            alert('Không tìm thấy máy ảnh.');
+        }
+    }).catch(function (e) {
+        console.error(e);
+    });
+
+    //
+    function fillCustomerData(customer) {
+        $('#tenKhachHang').text('Tên khách hàng: ' + customer.hoVaTen);
+        $('#emailKhachHang').text('Email: ' + customer.email);
+        $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (customer.soDienThoai ? customer.soDienThoai : 'N/A'));
+        $('#diaChiKhachHang').text('Địa chỉ: ' + (customer.diaChi ? customer.diaChi : 'N/A'));
+    }
+
+    // Fetch customer data from API and populate the select dropdown
+    $(document).ready(function () {
+        $.get('http://localhost:8080/view/thong-tin-khach-hang', function (data) {
+            data.forEach(function (customer) {
+                $('#khachHangSelect').append('<option value="' + customer.id + '">' + customer.hoVaTen + '</option>');
+            });
+            // Handle select change event
+            $('#khachHangSelect').change(function () {
+                var selectedCustomerId = $(this).val();
+                var selectedCustomer = data.find(function (customer) {
+                    return customer.id === selectedCustomerId;
+                });
+                // Điền thông tin vào các trường tương ứng
+                $('#hoVaTen').val(selectedCustomer.hoVaTen);
+                $('#sdt').val(selectedCustomer.soDienThoai ? selectedCustomer.soDienThoai : '');
+                // Điền ID vào trường input ẩn
+                $('#id-khach-hang').val(selectedCustomerId);
+                fillCustomerData(selectedCustomer);
+                console.log(selectedCustomer);
+            });
+
+        });
+
+    });
+
     // api ghn
     $(document).ready(function () {
         // Biến kiểm tra trạng thái đã chọn
@@ -770,216 +869,92 @@
                     console.error(error);
                 }
             });
-            // get api dịch vụ
-            $.ajax({
-                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/available-services',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Token': 'a76df0d2-77a1-11ee-b1d4-92b443b7a897'
-                },
-                data: {
-                    from_district: 1482,
-                    to_district: districtID,
-                    shop_id: 190221,
-                },
-                success: function (data) {
-                    if (data.code === 200) {
-                        const select = document.getElementById('service_id');
-                        select.innerHTML = '';
-                        data.data.forEach(service => {
-                            const option = document.createElement('option');
-                            option.value = service.service_id;
-                            option.text = service.short_name;
-                            select.appendChild(option);
-
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
         });
 
-        // Gọi API để lấy dữ liệu dịch vụ khi thay đổi dịch vụ
-        var feeCalculated = false; // Biến cờ để kiểm tra xem đã tính phí hay chưa
 
-        $('#service_id').change(function () {
-            callAPItoCalculateLeadTime();
-            if (!feeCalculated) {
-                callAPItoFee();
-                feeCalculated = true; // Đánh dấu rằng đã tính phí
+        // tính ti
+        $(document).ready(function () {
+            var selectElement = $("#hinh-thuc-thanh-toan");
+            var tienKhachDuaInput = $("#tien-khach-dua");
+            var tongTienInput = $("#tong-tien"); // Lấy ô input của tổng tiền
+            var tienThuaLabel = $("#tien-thua");
+
+            // Sự kiện change cho hình thức thanh toán
+            selectElement.on("change", function () {
+                updateTienKhachDua(); // Cập nhật tiền khách đưa khi thay đổi hình thức thanh toán
+            });
+
+            // Sự kiện blur cho tiền khách đưa
+            tienKhachDuaInput.on("blur", function () {
+                updateTienThua(); // Cập nhật tiền thừa khi blur khỏi trường tiền khách đưa
+            });
+
+            // Sự kiện khi thay đổi giá trị phí vận chuyển
+            $('#feeInput, #tong-tien').on('input', function () {
+                formatCurrency(this);
+                updateTotal(); // Cập nhật tổng tiền khi giá trị phí vận chuyển hoặc tổng tiền thay đổi
+            });
+
+            // Sự kiện input để ngăn chặn việc nhập chữ trong trường tiền khách đưa
+            tienKhachDuaInput.on("input", function () {
+                formatCurrency(this); // Gọi hàm formatCurrency để giữ lại chỉ số và dấu phẩy
+            });
+
+            function formatCurrency(input) {
+                // Giữ lại chỉ các ký tự số và dấu phẩy
+                let inputValue = input.value.replace(/[^\d,]/g, '');
+
+                // Định dạng lại giá trị
+                inputValue = inputValue.replace(/,/g, '');
+
+                // Gán giá trị đã định dạng lại vào trường input
+                input.value = inputValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             }
-        });
 
-        function callAPItoCalculateLeadTime() {
-            const districtID = $('#districtSelect').val();
-            const wardCode = $('#wardSelect').val();
-            const wardCodeString = wardCode.toString();
-            $.ajax({
-                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/leadtime',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Token': 'a76df0d2-77a1-11ee-b1d4-92b443b7a897'
-                },
-                data: {
-                    ShopID: 190221,
-                    from_district_id: 1482,
-                    from_ward_code: "11008",
-                    to_district_id: districtID,
-                    to_ward_code: wardCodeString,
-                    service_id: 53320,
-                },
-                success: function (data) {
-                    if (data.code === 200) {
-                        const leadtime = data.data.leadtime;
-                        const orderDate = data.data.order_date;
-                        // Chuyển đổi timestamp thành định dạng ngày giờ của Việt Nam
-                        const leadtimeDate = moment.unix(leadtime).format("DD-MM-YYYY");
-                        $('#leadtime').text(leadtimeDate);
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
-        }
+            function updateTotal() {
+                // Use jQuery to get the value of the feeInput
+                let feeInput = $('#feeInput');
 
-        // function tính phí
-        function callAPItoFee() {
-            const districtID = $('#districtSelect').val();
-            const wardCode = $('#wardSelect').val();
-            const wardCodeString = wardCode.toString();
-            const feeInput = $('#feeInput');
-            const sl = $('#quantity').val();
-            console.log(sl + "số lượng");
-            // Gọi API GHN với danh sách sản phẩm đã tạo
-            $.ajax({
-                url: 'https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Token': 'a76df0d2-77a1-11ee-b1d4-92b443b7a897'
-                },
-                data: {
-                    ShopID: 190221,
-                    service_type_id: 2,
-                    to_district_id: districtID,
-                    weight: 150 * sl,
-                    to_ward_code: wardCodeString,
-                    // item: items // Sử dụng danh sách sản phẩm ở đây
-                },
-                success: function (data) {
-                    if (data.code === 200) {
-                        const fee = data.data.total;
-                        const currentTotal = parseFloat($('#tong-tien').val());
-                        const newTotal = currentTotal + fee;
-                        $('#feeInput').val(fee); // Đặt giá trị phí vận chuyển vào trường feeInput
-                        $('#tong-tien').val(newTotal); // Đặt giá trị mới của tổng tiền
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                }
-            });
-        }
-    });
-    const scanner = new Instascan.Scanner({video: document.getElementById('qr-video')});
+                // Giữ lại chỉ các ký tự số và dấu phẩy
+                let phiVanChuyen = parseFloat(feeInput.val().replace(/,/g, '')) || 0;
 
-    // Thêm sự kiện cho khi quét QR code thành công
-    scanner.addListener('scan', function (content) {
-        if (content !== "") {
-            // Hiển thị kết quả quét được lên giao diện
-            document.getElementById('qr-result').textContent = 'Quét thành công';
-            $.ajax({
-                url: `/admin/ban-hang/add-gio-hang-qr-code/${idHoaDon}`,
-                method: "POST",
-                data: {
-                    idSanPhamChiTiet: content,
-                    gia: $("#gia_" + content).val(),
-                    soLuongMoi: 1
-                },
-                success: function (response) {
-                    // Xử lý khi thêm thành công
-                    alert("Đã thêm sản phẩm vào giỏ hàng!");
-                    location.reload();
-                }
-            });
-        }
-    });
+                // Lấy giá trị tổng tiền từ JSP
+                let tongTien = parseFloat('${tongTien}') || 0;
 
-    // Khi trang web được tải, bắt đầu quét QR code
-    Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-            scanner.start(cameras[0]);
-        } else {
-            alert('Không tìm thấy máy ảnh.');
-        }
-    }).catch(function (e) {
-        console.error(e);
-    });
+                // Thêm phí vận chuyển vào tổng tiền
+                tongTien += phiVanChuyen;
 
-    $(document).ready(function () {
-        var selectElement = $("#hinh-thuc-thanh-toan");
-        var tienKhachDuaInput = $("#tien-khach-dua");
-        var tongTienInput = $("#tong-tien"); // Lấy ô input của tổng tiền
-        var tienThuaLabel = $("#tien-thua");
+                // Định dạng lại tổng tiền và hiển thị trên giao diện
+                let formattedTongTien = tongTien.toLocaleString('en-US');
+                tongTienInput.val(formattedTongTien);
 
-        selectElement.on("change", function () {
-            var hinhThucThanhToan = selectElement.val();
-            var tongTien = parseFloat(tongTienInput.val());
-
-            if (hinhThucThanhToan === "2" || hinhThucThanhToan === "3") {
-                tienKhachDuaInput.val(tongTien);
-            } else {
-                tienKhachDuaInput.val("");
+                // Gán giá trị phiVanChuyen cho trường phiVanChuyen ẩn để submit lên server
+                feeInput.val(phiVanChuyen);
             }
-        });
 
-        tienKhachDuaInput.on("blur", function () {
-            var tienKhachDua = parseFloat(tienKhachDuaInput.val());
-            var tongTien = parseFloat(tongTienInput.val());
+            function updateTienKhachDua() {
+                var hinhThucThanhToan = selectElement.val();
+                var tongTien = parseFloat(tongTienInput.val());
 
-            if (tienKhachDua >= tongTien) {
-                var tienThua = tienKhachDua - tongTien;
-                tienThuaLabel.text(tienThua);
-            } else {
-                tienThuaLabel.text("0");
-                alert("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền!");
+                if (hinhThucThanhToan === "2" || hinhThucThanhToan === "3") {
+                    tienKhachDuaInput.val(tongTien.toLocaleString('en-US'));
+                } else {
+                    tienKhachDuaInput.val("");
+                }
             }
-        });
-    });
 
-    //
-    function fillCustomerData(customer) {
-        $('#tenKhachHang').text('Tên khách hàng: ' + customer.hoVaTen);
-        $('#emailKhachHang').text('Email: ' + customer.email);
-        $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (customer.soDienThoai ? customer.soDienThoai : 'N/A'));
-        $('#diaChiKhachHang').text('Địa chỉ: ' + (customer.diaChi ? customer.diaChi : 'N/A'));
-    }
-    // Fetch customer data from API and populate the select dropdown
-    $(document).ready(function () {
-        $.get('http://localhost:8080/view/thong-tin-khach-hang', function (data) {
-            data.forEach(function (customer) {
-                $('#khachHangSelect').append('<option value="' + customer.id + '">' + customer.hoVaTen + '</option>');
-            });
-            // Handle select change event
-            $('#khachHangSelect').change(function () {
-                var selectedCustomerId = $(this).val();
-                var selectedCustomer = data.find(function (customer) {
-                    return customer.id === selectedCustomerId;
-                });
-                // Điền thông tin vào các trường tương ứng
-                $('#hoVaTen').val(selectedCustomer.hoVaTen);
-                $('#sdt').val(selectedCustomer.soDienThoai ? selectedCustomer.soDienThoai : '');
-                // Điền ID vào trường input ẩn
-                $('#id-khach-hang').val(selectedCustomerId);
-                fillCustomerData(selectedCustomer);
-                console.log(selectedCustomer);
-            });
+            function updateTienThua() {
+                var tienKhachDua = parseFloat(tienKhachDuaInput.val().replace(/[^\d]/g, '')) || 0;
+                var tongTien = parseFloat(tongTienInput.val());
 
+                if (tienKhachDua >= tongTien) {
+                    var tienThua = tienKhachDua - tongTien;
+                    tienThuaLabel.text(tienThua.toLocaleString('en-US'));
+                } else {
+                    tienThuaLabel.text("0");
+                    alert("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền!");
+                }
+            }
         });
     });
 
