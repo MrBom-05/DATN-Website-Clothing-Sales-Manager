@@ -86,7 +86,7 @@ public class HoaDonChiTietService {
         return hoaDonChiTietRepository.getListByIdHoaDon(idHoaDon);
     }
 
-    public BigDecimal sumTongTienByIdHoaDon(UUID idHoaDon) {
+    public BigDecimal sumTongTien(UUID idHoaDon) {
         return hoaDonChiTietRepository.sumTongTienByIdHoaDon(idHoaDon);
     }
 }

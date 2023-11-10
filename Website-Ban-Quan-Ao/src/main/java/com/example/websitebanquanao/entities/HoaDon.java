@@ -86,6 +86,12 @@ public class HoaDon {
     @Column(name = "loai_hoa_don")
     private Integer loaiHoaDon;
 
+    @Column(name = "ma_van_chuyen", nullable = false, length = 50)
+    private String maVanChuyen;
+
+    @Column(name = "ten_don_vi_van_chuyen", nullable = false)
+    private String tenDonViVanChuyen;
+
     @Column(name = "phiVanChuyen")
     private BigDecimal phiVanChuyen;
 

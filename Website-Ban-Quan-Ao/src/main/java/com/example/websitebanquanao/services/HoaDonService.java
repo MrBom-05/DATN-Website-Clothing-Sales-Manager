@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class HoaDonService {
     @Autowired
     private HoaDonRepository hoaDonRepository;
@@ -107,10 +109,6 @@ public class HoaDonService {
         }
     }
 
-    public HoaDon findHoaDonByHoaDonChiTietId(UUID idHoaDonChiTiet) {
-        return hoaDonRepository.findHoaDonByHoaDonChiTietId(idHoaDonChiTiet);
-    }
-
     public void update(HoaDon hoaDon, UUID idHoaDon) {
         if (hoaDon != null && idHoaDon != null) {
             hoaDonRepository.save(hoaDon);
@@ -133,7 +131,6 @@ public class HoaDonService {
         hoaDon.setEmail(formThanhToan.getEmail());
         hoaDon.setHinhThucThanhToan(formThanhToan.getHinhThucThanhToan());
         hoaDon.setGhiChu(formThanhToan.getGhiChu());
-        hoaDon.setPhiVanChuyen(formThanhToan.getPhiVanChuyen());
         hoaDon.setLoaiHoaDon(1);
         hoaDon.setTrangThai(2);
 
@@ -159,5 +156,27 @@ public class HoaDonService {
     public HoaDonUserResponse findHoaDonUserResponseById(UUID id) {
         System.out.println("HoaDonService.findHoaDonUserResponseById: " + id);
         return hoaDonRepository.findHoaDonUserResponseById(id);
+    }
+
+    public Integer getSoPhanTramGiamByIdHoaDon(UUID id) {
+        Integer soPhanTramGiam = hoaDonRepository.getSoPhanTramGiamByIdHoaDon(id);
+        if (soPhanTramGiam == null) {
+            return 0;
+        } else {
+            return soPhanTramGiam;
+        }
+    }
+
+    public BigDecimal sumTongTienByIdHoaDon(UUID idHoaDon) {
+        BigDecimal tongTien = hoaDonChiTietService.sumTongTien(idHoaDon);
+        Integer soPhanTramGiam = getSoPhanTramGiamByIdHoaDon(idHoaDon);
+        BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
+        BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
+        return soTienSauKhiGiam;
+    }
+
+    @Transactional
+    public void updateNgayThanhToanByIdHoaDon(String ma, Instant ngayThanhToan) {
+        hoaDonRepository.updateNgayThanhToanByIdHoaDon(ma, ngayThanhToan);
     }
 }
