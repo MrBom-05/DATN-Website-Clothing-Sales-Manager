@@ -34,11 +34,11 @@ public class BanHangController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private SanPhamChiTietService ctspService;
-    @Autowired
-    private KhuyenMaiChiTietService khuyenMaiChiTietService;
 
     @Autowired
-    private AnhSanPhamService anhSanPhamService;
+    private KichCoService kichCoService;
+    @Autowired
+    private MauSacService mauSacService;
     @Autowired
     private KhachHangService khachHangService;
 
@@ -49,6 +49,8 @@ public class BanHangController {
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         List<KhachHangResponse> listKhachHang = khachHangService.getAll();
+        model.addAttribute("listSize", kichCoService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
         model.addAttribute("listProduct", listProduct);
         model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
         model.addAttribute("listKhachHang", listKhachHang);
@@ -75,6 +77,30 @@ public class BanHangController {
     public String addGioHang(@ModelAttribute("hdct") HoaDonChiTiet hoaDonChiTiet, @PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("idSanPhamChiTiet") UUID idSanPhamChiTiet, @RequestParam("gia") int gia, @RequestParam("soLuongMoi") int soLuongMoi) {
         // Lấy chi tiết sản phẩm từ cơ sở dữ liệu dựa trên idSanPhamChiTiet
         SanPhamChiTiet ctsp = ctspService.findById(idSanPhamChiTiet);
+        //validate full trường
+        if (idSanPhamChiTiet == null || gia == 0 || soLuongMoi == 0) {
+            session.setAttribute("errorMessage", "Vui lòng nhập số lượng");
+            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+
+        }
+        // validate số lượng nhập lớn hơn trong kho
+        if (soLuongMoi > ctsp.getSoLuong()) {
+            session.setAttribute("errorMessage", "Số lượng sản phẩm trong kho không đủ");
+            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+
+        }
+        // validate số lượng nhập lớn hơn 0
+        if (soLuongMoi < 0) {
+            session.setAttribute("errorMessage", "Vui lòng nhập số lượng lớn hơn 0");
+            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+
+        }
+        // validate số lượng phải là số nguyên
+        if (soLuongMoi % 1 != 0) {
+            session.setAttribute("errorMessage", "Vui lòng nhập số lượng là số nguyên");
+            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+
+        }
 
         if (ctsp != null) {
             // Kiểm tra xem sản phẩm đã tồn tại trong hoá đơn chưa
@@ -122,8 +148,6 @@ public class BanHangController {
         return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
     }
 
-
-
     @GetMapping("/view-hoa-don/{id}")
     public String viewHoaDon(@PathVariable("id") UUID id, @RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "pageSize", defaultValue = "6") int pageSize, Model model) {
         // Lấy thông tin hoá đơn chi tiết dựa trên id hoá đơn
@@ -133,6 +157,8 @@ public class BanHangController {
         // Truyền idHoaDon để sử dụng trong form
         List<BanHangTaiQuayResponse> listProduct = sanPhamChiTietService.findAllCtsp();
         model.addAttribute("listProduct", listProduct);
+        model.addAttribute("listSize", kichCoService.getAll());
+        model.addAttribute("listMauSac", mauSacService.getAll());
         model.addAttribute("listHoaDon", hoaDonService.getAllHoaDonChuaThanhToan());
         model.addAttribute("idHoaDon", id);
         model.addAttribute("hoaDon", hoaDon); // Truyền giá trị hoaDon vào model
@@ -182,12 +208,19 @@ public class BanHangController {
 
         return "redirect:/admin/ban-hang";
     }
+
     @PostMapping("/thanh-toan/{idHoaDon}")
-    public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon,@RequestParam("httt") Integer hinhThucThanhToan,@RequestParam("ghiChu") String ghiChu,
-                            @RequestParam(value = "idKhachHang", required = false) UUID idKhachHang){
+    public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("httt") Integer hinhThucThanhToan, @RequestParam("ghiChu") String ghiChu,
+                            @RequestParam(value = "idKhachHang", required = false) UUID idKhachHang) {
+
+        //validate full trường
+        if (hinhThucThanhToan == null || ghiChu.isEmpty()) {
+            session.setAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin");
+            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+        }
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
         Instant currentInstant = Instant.now();
-        if(idKhachHang == null){
+        if (idKhachHang == null) {
             if (hoaDon != null) {
                 hoaDon.setTrangThai(1);
                 hoaDon.setNgayThanhToan(currentInstant);
@@ -197,7 +230,7 @@ public class BanHangController {
                 hoaDonService.update(hoaDon, idHoaDon);
                 session.setAttribute("successMessage", "Thanh toán thành công");
             }
-        }else{
+        } else {
             if (hoaDon != null) {
                 hoaDon.setTrangThai(1);
                 hoaDon.setNgayThanhToan(currentInstant);
@@ -220,8 +253,14 @@ public class BanHangController {
                              @RequestParam("nguoiNhan") String nguoiNhan, @RequestParam("sdt") String sdt,
                              @RequestParam("diaChi") String diaChi, @RequestParam("ghiChu") String ghiChu,
                              @RequestParam("xaPhuong") String xaPhuong, @RequestParam("quanHuyen") String quanHuyen,
-                             @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen")BigDecimal phiVanChuyen
+                             @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen") BigDecimal phiVanChuyen,
+                             @RequestParam("maVanChuyen") String maVanChuyen, @RequestParam("tenDonViVanChuyen") String tenDonViVanChuyen
     ) {
+        // validate full trường và session tồn tại 3s
+        if (nguoiNhan.isEmpty() || sdt.isEmpty() || diaChi.isEmpty() || ghiChu.isEmpty() || xaPhuong.isEmpty() || quanHuyen.isEmpty() || tinhThanh.isEmpty() || phiVanChuyen == null || maVanChuyen.isEmpty() || tenDonViVanChuyen.isEmpty()) {
+            session.setAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin");
+            return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+        }
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
 
         if (hoaDon != null) {
@@ -235,6 +274,8 @@ public class BanHangController {
             hoaDon.setQuanHuyen(quanHuyen);
             hoaDon.setXaPhuong(xaPhuong);
             hoaDon.setPhiVanChuyen(phiVanChuyen);
+            hoaDon.setMaVanChuyen(maVanChuyen);
+            hoaDon.setTenDonViVanChuyen(tenDonViVanChuyen);
             hoaDonService.update(hoaDon, idHoaDon);
             session.setAttribute("successMessage", "Tạo đơn hàng thành công");
         }
@@ -246,6 +287,18 @@ public class BanHangController {
     @PostMapping("/add-gio-hang-qr-code/{idHoaDon}")
     @ResponseBody
     public ResponseEntity<String> addGioHangQRCode(@ModelAttribute("hdct") HoaDonChiTiet hoaDonChiTiet, @PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("idSanPhamChiTiet") UUID idSanPhamChiTiet, @RequestParam("gia") int gia, @RequestParam("soLuongMoi") int soLuongMoi) {
+
+        // validate full trường
+        if (idSanPhamChiTiet == null || gia == 0 || soLuongMoi == 0) {
+            session.setAttribute("errorMessage", "Vui lòng nhập số lượng");
+            return new ResponseEntity<String>("Vui lòng nhập đầy đủ thông tin", HttpStatus.BAD_REQUEST);
+        }
+        // validate số lượng nhập lớn hơn trong kho
+        SanPhamChiTiet sanPhamChiTiet = ctspService.findById(idSanPhamChiTiet);
+        if (soLuongMoi > sanPhamChiTiet.getSoLuong()) {
+            session.setAttribute("errorMessage", "Số lượng sản phẩm trong kho không đủ");
+            return new ResponseEntity<String>("Số lượng sản phẩm trong kho không đủ", HttpStatus.BAD_REQUEST);
+        }
         SanPhamChiTiet ctsp = ctspService.findById(idSanPhamChiTiet);
 
         if (ctsp != null) {
@@ -277,7 +330,75 @@ public class BanHangController {
             ctspService.updateSoLuong(ctsp);
 
         }
+        session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
         return new ResponseEntity<String>("Thêm thành công", HttpStatus.OK);
     }
-}
 
+
+    @PostMapping("/add-gio-hang-ma-san-pham/{idHoaDon}")
+    @ResponseBody
+    public ResponseEntity<String> addGioHangMaSanPham(@PathVariable("idHoaDon") UUID idHoaDon,
+                                                      @RequestParam("maSanPhamChiTiet") String maSanPhamChiTiet,
+                                                      @RequestParam("soLuongMoi") int soLuongMoi) {
+
+        // validate full trường
+        if (maSanPhamChiTiet == null || soLuongMoi == 0) {
+            session.setAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin");
+            return new ResponseEntity<String>("Vui lòng nhập đầy đủ thông tin", HttpStatus.BAD_REQUEST);
+        }
+
+        // Tìm sản phẩm theo mã sản phẩm chi tiết
+        SanPhamChiTiet ctsp = ctspService.findByMaSanPham(maSanPhamChiTiet);
+
+        if (ctsp == null) {
+            session.setAttribute("errorMessage", "Không tìm thấy sản phẩm với mã sản phẩm chi tiết: " + maSanPhamChiTiet);
+            return new ResponseEntity<String>("Không tìm thấy sản phẩm", HttpStatus.BAD_REQUEST);
+        }
+
+        // validate số lượng nhập lớn hơn trong kho
+        if (soLuongMoi > ctsp.getSoLuong()) {
+            session.setAttribute("errorMessage", "Số lượng sản phẩm trong kho không đủ");
+            return new ResponseEntity<String>("Số lượng sản phẩm trong kho không đủ", HttpStatus.BAD_REQUEST);
+        }
+
+        // Lấy giá từ sản phẩm chi tiết
+        BigDecimal gia = ctsp.getGia();
+
+
+        // Lấy idSanPhamChiTiet từ đối tượng ctsp
+        UUID idSanPhamChiTiet = ctsp.getId();
+
+        HoaDonChiTiet existingChiTiet = hoaDonChiTietService.getChiTietByHoaDonAndSanPham(idHoaDon, idSanPhamChiTiet);
+
+        if (existingChiTiet != null) {
+            int soLuongHienTai = existingChiTiet.getSoLuong();
+            existingChiTiet.setSoLuong(soLuongHienTai + soLuongMoi);
+            hoaDonChiTietService.update(existingChiTiet);
+
+        } else {
+            // Sản phẩm chưa tồn tại trong hoá đơn, tạo hoá đơn chi tiết mới
+            HoaDonChiTiet hoaDonChiTiet = new HoaDonChiTiet();
+            hoaDonChiTiet.setSoLuong(soLuongMoi);
+            hoaDonChiTiet.setGia(gia);
+            hoaDonChiTiet.setIdHoaDon(hoaDonService.getById(idHoaDon));
+            hoaDonChiTiet.setIdSanPhamChiTiet(ctsp);
+            hoaDonChiTietService.add(hoaDonChiTiet);
+        }
+
+        // Trừ đi số lượng mới từ số lượng hiện tại
+        int soLuongConLai = ctsp.getSoLuong() - soLuongMoi;
+
+        if (soLuongConLai < 0) {
+            soLuongConLai = 0;
+        }
+
+        // Cập nhật số lượng mới của sản phẩm
+        ctsp.setSoLuong(soLuongConLai);
+        ctspService.updateSoLuong(ctsp);
+
+        session.setAttribute("successMessage", "Sản phẩm đã được thêm vào giỏ hàng");
+        return new ResponseEntity<String>("Thêm thành công", HttpStatus.OK);
+    }
+
+
+}

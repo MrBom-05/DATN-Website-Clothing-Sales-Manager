@@ -7,9 +7,8 @@
     <title>Admin</title>
     <link href="/../views/admin/css/styles.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 </head>
 <style>
     <%--    bo tròn hình ảnh--%>
@@ -105,6 +104,8 @@
             <c:if test="${admin.chucVu == 1}">
                 <!-- Hiển thị menu cho nhân viên -->
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/nhan-vien/index">Nhân viên</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/san-pham/index">Sản phẩm</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
@@ -136,11 +137,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                         <li class="nav-item active"><a class="nav-link" href="/admin/ban-hang">
-                            <i class="fa-solid fa-cart-shopping"></i>
+                            <i class="fas fa-cart-plus"></i>
                             Bán hàng tại quầy
                         </a></li>
                         <li class="nav-item active"><a class="nav-link" href="/admin/hoa-don">
-                            <i class="fa-solid fa-file-invoice"></i>
+                            <i class="fas fa-file-invoice"></i>
                             Hoá đơn
                         </a></li>
                     </ul>

@@ -1,14 +1,13 @@
 package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
+import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
-import com.example.websitebanquanao.services.HoaDonChiTietService;
-import com.example.websitebanquanao.services.HoaDonService;
-import com.example.websitebanquanao.services.KhachHangService;
+import com.example.websitebanquanao.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.example.websitebanquanao.services.AnhSanPhamService;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +21,8 @@ public class RestController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private AnhSanPhamService anhSanPhamService;
+    @Autowired
+    private SanPhamChiTietService sanPhamChiTietService;
     // getlist sản phẩm by id giỏ hàng
     @GetMapping("/view/spct/view/{id}")
     public List<GioHangResponse> viewHoaDon(@PathVariable("id") UUID id) {
@@ -39,4 +40,14 @@ public class RestController {
         return listAnh;
     }
 
-}
+    // filter theo size hoặc color hoặc search term
+        @GetMapping("/filter-products")
+        public List<BanHangTaiQuayResponse> filterProducts(
+                @RequestParam(name = "size", required = false) String size,
+                @RequestParam(name = "color", required = false) String color,
+                @RequestParam(name = "searchTerm", required = false) String searchTerm
+        ) {
+            return sanPhamChiTietService.filterProducts(size, color, searchTerm);
+        }
+    }
+
