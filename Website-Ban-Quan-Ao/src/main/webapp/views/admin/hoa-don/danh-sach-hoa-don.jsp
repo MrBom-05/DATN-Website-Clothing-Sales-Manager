@@ -14,11 +14,12 @@
 
 
 <body>
-<c:set var="tongTien" value="0" />
+
+<c:set var="tongTien" value="0"/>
 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
-    <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}" />
+    <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}"/>
 </c:forEach>
-<c:set var="tongTien" value="${tongTien + hoaDon.phiVanChuyen}" />
+<c:set var="tongTien" value="${tongTien + hoaDon.phiVanChuyen}"/>
 <div class="">
     <div class="row">
             <span class="d-flex">
@@ -84,14 +85,48 @@
                             document.getElementById("ngay-tao-1").textContent = formattedDate;
                         </script>
                     </p>
-                    <p>Khách hàng: Khách lẻ</p>
+                    <p>Khách hàng:
+                        <c:if test="${hoaDon.idKhachHang != null}">
+                            ${hoaDon.idKhachHang.hoVaTen}
+                        </c:if>
+                        <c:if test="${hoaDon.idKhachHang == null}">
+                            Khách lẻ
+                        </c:if>
+                    </p>
                     <p>Nhân viên: ${hoaDon.idNhanVien.hoVaTen}</p>
                     <p>Địa chỉ: ${hoaDon.diaChi}</p>
+                    <c:if test="${hoaDon.trangThai == 3}">
+                        <p>Số điện thoại: ${hoaDon.soDienThoai}</p>
+                        <p>Mã vận đơn: ${hoaDon.maVanChuyen}</p>
+                        <p>Đơn vị vận chuyển: ${hoaDon.tenDonViVanChuyen}</p>
+                    </c:if>
 
                 </div>
                 <div class="col-4">
-                    <p>Phí vận chuyển: ${hoaDon.phiVanChuyen}</p>
-                    <p id="tong_tien_1">Tổng tiền: ${tongTien}</p>
+                    <p id="phi-van-chuyen">Phí vận chuyển: ${hoaDon.phiVanChuyen}</p>
+                    <p id="tong_tien_1">${tongTien}</p>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var giaElement = document.getElementById('tong_tien_1');
+                            // Lấy giá trị không định dạng từ thẻ p
+                            var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
+                            // Định dạng lại giá trị và gán lại vào thẻ p
+                            giaElement.textContent = giaValue.toLocaleString('en-US');
+                            // thêm chữ tônhr tiền trước giá trị
+                            giaElement.insertAdjacentText('afterbegin', 'Tổng tiền: ');
+                            giaElement.insertAdjacentHTML('beforeend', 'VNĐ ');
+
+                            // format phí vânj chuyển
+                            var phiVanChuyenElement = document.getElementById('phi-van-chuyen');
+                            // Lấy giá trị không định dạng từ thẻ p
+                            var phiVanChuyenValue = parseFloat(phiVanChuyenElement.textContent.replace(/[^\d.]/g, '')) || 0;
+                            // Định dạng lại giá trị và gán lại vào thẻ p
+                            phiVanChuyenElement.textContent = phiVanChuyenValue.toLocaleString('en-US');
+                            // thêm chữ tônhr tiền trước giá trị
+                            phiVanChuyenElement.insertAdjacentText('afterbegin', 'Phí vận chuyển: ');
+                            phiVanChuyenElement.insertAdjacentHTML('beforeend', 'VNĐ ');
+                        });
+                    </script>
                     <p>Trạng thái:
                         <c:if test="${hoaDon.trangThai == 0}">
                             <span class="text-secondary">Chờ thanh toán</span>
@@ -174,7 +209,18 @@
                         <tbody>
                         <tr>
                             <td>1</td>
-                            <td>${tongTien}</td>
+                            <td id="tong_tien_2">${tongTien}</td>
+                            <script>
+                                // format giá
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var giaElement = document.getElementById('tong_tien_2');
+                                    // Lấy giá trị không định dạng từ thẻ p
+                                    var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
+                                    // Định dạng lại giá trị và gán lại vào thẻ p
+                                    giaElement.textContent = giaValue.toLocaleString('en-US');
+
+                                });
+                            </script>
                             <td>
                                     <%--format ngày tạo--%>
                                 <span id="ngay-tt-2"></span>
@@ -234,9 +280,29 @@
                                 <p>${sp.tenSanPham}</p>
                                 <p>${sp.tenMau}/${sp.tenSize}</p>
                             </td>
-                            <td>${sp.gia}</td>
+                            <td id="gia_sp_${sp.idSanPhamChiTiet}">${sp.gia}</td>
                             <td>${sp.soLuong}</td>
-                            <td>${sp.soLuong * sp.gia}</td>
+                            <td id="tong_tien_${sp.idSanPhamChiTiet}">
+                                    ${sp.soLuong * sp.gia}</td>
+                            <script>
+                                // format tổng tiền
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    var giaElement = document.getElementById('tong_tien_${sp.idSanPhamChiTiet}');
+                                    // Lấy giá trị không định dạng từ thẻ p
+                                    var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
+                                    // Định dạng lại giá trị và gán lại vào thẻ p
+                                    giaElement.textContent = giaValue.toLocaleString('en-US');
+                                    // format giá
+                                    var giaElement = document.getElementById('gia_sp_${sp.idSanPhamChiTiet}');
+                                    // Lấy giá trị không định dạng từ thẻ p
+                                    var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
+                                    // Định dạng lại giá trị và gán lại vào thẻ p
+                                    giaElement.textContent = giaValue.toLocaleString('en-US');
+                                });
+
+
+
+                            </script>
                         </tr>
                         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                         <script>
@@ -312,20 +378,51 @@
 <div class="modal fade" id="modalXacNhan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
-                <input type="hidden" name="trangThai" value="" id="trang-thai">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Ghi chú </label>
-                        <textarea class="form-control" name="ghiChu" rows="3"
-                                  placeholder="Ghi chú"></textarea>
+            <c:if test="${hoaDon.trangThai != 2}">
+                <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+                    <input type="hidden" name="trangThai" value="" id="trang-thai">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Ghi chú </label>
+                            <textarea class="form-control" name="ghiChu" rows="3"
+                                      placeholder="Ghi chú"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Lưu</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </c:if>
+            <c:if test="${hoaDon.trangThai == 2}">
+                <form action="/admin/hoa-don/update-trang-thai-online/${hoaDon.id}" method="post">
+                    <input type="hidden" name="trangThai" value="" id="trang-thai">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Ghi chú </label>
+                            <textarea class="form-control" name="ghiChu" rows="3"
+                                      placeholder="Ghi chú"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mã vận đơn </label>
+                            <input type="text" class="form-control" name="maVanChuyen" placeholder="Mã vận đơn">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Đơn vị vận chuyển </label>
+                            <input type="text" class="form-control" name="tenDonViVanChuyen"
+                                   placeholder="Đơn vị vận chuyển">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phí vận chuyển </label>
+                            <input type="number" class="form-control" name="phiVanChuyen" placeholder="Phí vận chuyển">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </c:if>
         </div>
     </div>
 </div>
@@ -358,10 +455,10 @@
 <script>
     const trangThai = document.getElementById('trang-thai');
     const trangThaiHoaDon = ${hoaDon.trangThai};
-    if (trangThaiHoaDon == 2 ) {
+    if (trangThaiHoaDon == 2) {
         trangThai.value = 3;
     }
-    if (trangThaiHoaDon == 3 ) {
+    if (trangThaiHoaDon == 3) {
         trangThai.value = 4;
     }
 
