@@ -50,7 +50,13 @@
                     <p>Địa chỉ: ${hoaDon.diaChi} / ${hoaDon.xaPhuong} / ${hoaDon.quanHuyen} / ${hoaDon.tinhThanhPho}</p>
                 </div>
                 <div class="col-5">
-                    <p>Tổng tiền: ${tongTien} vnđ</p>
+                    <p id="tongTien">${tongTien}</p>
+                    <script>
+                        var giaSanPhamElement = document.getElementById("tongTien");
+                        var giaSanPhamText = giaSanPhamElement.innerText;
+                        var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                        giaSanPhamElement.innerText = "Tổng tiền: " + formattedGia + " vnđ";
+                    </script>
                     <p>Ngày thanh toán: <span id="formattedDate1${index.count}"></span>
                         <script>
                             var originalDate = "${hoaDon.ngayThanhToan}";
@@ -75,7 +81,13 @@
                         <p>Tên Đơn Vị Vận Chuyển: ${hoaDon.tenDonViVanChuyen}</p>
                     </div>
                     <div class="col-4">
-                        <p>Phí Giao Hàng: ${hoaDon.phiVanChuyen}</p>
+                        <p id="phiVanChuyen">${hoaDon.phiVanChuyen}</p>
+                        <script>
+                            var giaSanPhamElement = document.getElementById("phiVanChuyen");
+                            var giaSanPhamText = giaSanPhamElement.innerText;
+                            var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                            giaSanPhamElement.innerText = "Phí Giao Hàng: " + formattedGia + " vnđ";
+                        </script>
                     </div>
                 </div>
             </c:if>
@@ -119,9 +131,21 @@
                             <p>${sp.tenSanPham}</p>
                             <p>${sp.tenMauSac}/${sp.tenKichCo}</p>
                         </td>
-                        <td>${sp.gia}</td>
+                        <td id="giaSP_${sp.id}">${sp.gia}</td>
+                        <script>
+                            var giaSanPhamElement = document.getElementById("giaSP_${sp.id}");
+                            var giaSanPhamText = giaSanPhamElement.innerText;
+                            var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                            giaSanPhamElement.innerText = formattedGia + " vnđ";
+                        </script>
                         <td>${sp.soLuong}</td>
-                        <td>${sp.soLuong * sp.gia}</td>
+                        <td id="tongGia_${sp.id}">${sp.soLuong * sp.gia}</td>
+                        <script>
+                            var giaSanPhamElement = document.getElementById("tongGia_${sp.id}");
+                            var giaSanPhamText = giaSanPhamElement.innerText;
+                            var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                            giaSanPhamElement.innerText = formattedGia + " vnđ";
+                        </script>
                     </tr>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
