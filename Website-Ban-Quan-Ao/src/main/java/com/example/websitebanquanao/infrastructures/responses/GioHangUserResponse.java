@@ -15,10 +15,12 @@ import java.util.UUID;
 public class GioHangUserResponse {
     private UUID id;
     private UUID idSanPhamChiTiet;
+    private String maSanPham;
     private String tenSanPham;
     private Integer idMauSac;
     private String tenMauSac;
     private String tenKichCo;
     private Integer soLuong;
+    private Integer soLuongTonKho;
     private BigDecimal gia;
 }

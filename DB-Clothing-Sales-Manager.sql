@@ -127,33 +127,35 @@ CREATE TABLE giam_gia
 
 CREATE TABLE hoa_don
 (
-    id                   UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ma                   VARCHAR(50) UNIQUE NOT NULL,
+    id                    UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma                    VARCHAR(50) UNIQUE NOT NULL,
     -- Ngày tạo hoá đơn
-    ngay_tao             DATETIME                     DEFAULT GETDATE(),
+    ngay_tao              DATETIME                     DEFAULT GETDATE(),
     -- Ngày thanh toán
-    ngay_thanh_toan      DATETIME,
+    ngay_thanh_toan       DATETIME,
     -- Ngày vận chuyển
-    ngay_van_chuyen      DATETIME,
+    ngay_van_chuyen       DATETIME,
     -- Ngày nhận hàng
-    ngay_nhan            DATETIME,
+    ngay_nhan             DATETIME,
     -- id người mua
-    id_khach_hang        UNIQUEIDENTIFIER,
+    id_khach_hang         UNIQUEIDENTIFIER,
     -- id người duyệt
-    id_nhan_vien         UNIQUEIDENTIFIER,
-    id_giam_gia          UNIQUEIDENTIFIER,
-    nguoi_nhan           NVARCHAR(100),
-    email                NVARCHAR(50),
-    so_dien_thoai        NVARCHAR(15),
-    hinh_thuc_thanh_toan INT,
-    dia_chi              NVARCHAR(100),
-    xa_phuong            NVARCHAR(80),
-    quan_huyen           NVARCHAR(80),
-    tinh_thanh_pho       NVARCHAR(80),
-    trang_thai           INT,
-    loai_hoa_don         INT,
-    phiVanChuyen         DECIMAL(20, 0)               DEFAULT 0,
-    ghi_chu              NVARCHAR(MAX)
+    id_nhan_vien          UNIQUEIDENTIFIER,
+    id_giam_gia           UNIQUEIDENTIFIER,
+    nguoi_nhan            NVARCHAR(100),
+    email                 NVARCHAR(50),
+    so_dien_thoai         NVARCHAR(15),
+    hinh_thuc_thanh_toan  INT,
+    dia_chi               NVARCHAR(100),
+    xa_phuong             NVARCHAR(80),
+    quan_huyen            NVARCHAR(80),
+    tinh_thanh_pho        NVARCHAR(80),
+    trang_thai            INT,
+    loai_hoa_don          INT,
+    ma_van_chuyen         VARCHAR(50),
+    ten_don_vi_van_chuyen NVARCHAR(MAX),
+    phiVanChuyen          DECIMAL(20, 0)               DEFAULT 0,
+    ghi_chu               NVARCHAR(MAX)
 )
 
 CREATE TABLE hoa_don_chi_tiet
