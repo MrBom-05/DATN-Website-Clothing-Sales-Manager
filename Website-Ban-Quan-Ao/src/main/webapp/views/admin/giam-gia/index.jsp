@@ -72,7 +72,7 @@
                                 <div class="form-group">
                                     <label for="ma">Mã</label>
                                     <form:input type="text" path="ma" id="ma" class="form-control" required="true"/>
-                                    <form:errors path="ma" cssClass="text-danger"/>
+                                        <%--                                    <form:errors path="ma" cssClass="text-danger"/>--%>
                                 </div>
                             </div>
                         </div>
@@ -82,8 +82,8 @@
                                 <div a class="form-group">
                                     <label for="soPhanTramGiam">Số phần trăm</label>
                                     <form:input type="number" path="soPhanTramGiam" id="soPhanTramGiam"
-                                                class="form-control" required="true" min="1" max="100"/>
-                                    <form:errors path="soPhanTramGiam" cssClass="text-danger"/>
+                                                class="form-control"
+                                                required="true"/>
                                 </div>
                             </div>
 
@@ -91,8 +91,7 @@
                                 <div class="form-group">
                                     <label for="soLuong">Số lượng</label>
                                     <form:input type="number" path="soLuong" id="soLuong" class="form-control"
-                                                required="true" min="1" max="10000"/>
-                                    <form:errors path="soLuong" cssClass="text-danger"/>
+                                                required="true"/>
                                 </div>
                             </div>
                         </div>
@@ -101,16 +100,14 @@
                                 <div class="form-group">
                                     <label for="ngayBatDau">Ngày Bắt Đầu</label>
                                     <form:input type="date" path="ngayBatDau" id="ngayBatDau" class="form-control"
-                                                required="true" />
-                                    <form:errors path="ngayBatDau" cssClass="text-danger"/>
+                                                required="true"/>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="ngayKetThuc">Ngày Kết Thúc</label>
                                     <form:input type="date" path="ngayKetThuc" id="ngayKetThuc" class="form-control"
-                                                required="true" />
-                                    <form:errors path="ngayKetThuc" cssClass="text-danger"/>
+                                                required="true"/>
                                 </div>
                             </div>
                         </div>
@@ -168,6 +165,8 @@
         var form = $("#edit-form");
         var ngayBatDau = $("#ngayBatDau");
         var ngayKetThuc = $("#ngayKetThuc");
+        hideErrorMessage();
+        hideErrorMessage2();
 
         form.submit(function (event) {
             var startDate = new Date(ngayBatDau.val());
@@ -180,6 +179,18 @@
         });
     });
 
+    function hideErrorMessage() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('slow');
+        }, 1000);
+    }
 
+    function hideErrorMessage2() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-success').fadeOut('slow');
+        }, 1000);
+    }
 </script>
 

@@ -31,4 +31,7 @@ public interface GiamGiaRepository extends JpaRepository<GiamGia, UUID> {
     @Modifying
     @Query("update GiamGia g set g.soLuong = :soLuong where g.ma = :ma")
     public void updateSoLuongByMa(@Param("ma") String ma, @Param("soLuong") int soLuong);
+
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse(g.id, g.ma, g.soPhanTramGiam, g.soLuong, g.ngayBatDau, g.ngayKetThuc) from GiamGia g where g.ma = :ma")
+    public GiamGiaResponse getByMa(@Param("ma") String ma);
 }

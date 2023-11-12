@@ -56,10 +56,28 @@ public class GiamGiaController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("gg") GiamGiaRequest giamGiaRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        if (giamGiaRequest.isAnyFieldEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ các trường");
+            return redirect;
+        }
+
+        if (giamGiaRequest.isInvalidPercentage()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số phần trăm giảm không hợp lệ");
+            return redirect;
+        }
+
+        if (giamGiaRequest.isInvalidpercent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số lượng không hợp lệ");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
+            redirectAttributes.addFlashAttribute("view", "/views/admin/giam-gia/index.jsp");
             return redirect; // Trả về trang index nếu có lỗi
         }
+
+
 
         // Kiểm tra xem mã giảm giá đã tồn tại
         if (giamGiaRepository.existsByMa(giamGiaRequest.getMa())) {
@@ -67,32 +85,43 @@ public class GiamGiaController {
             return redirect;
         }
 
-        // Kiểm tra số phần trăm giảm và số lượng
-        if (giamGiaRequest.getSoPhanTramGiam() < 1 || giamGiaRequest.getSoPhanTramGiam() > 100 ||
-                giamGiaRequest.getSoLuong() < 1 || giamGiaRequest.getSoLuong() > 10000) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Số lượng và phần trăm giảm không hợp lệ");
-            return redirect;
-        }
-
-
-        // Kiểm tra xem ngày kết thúc sau ngày bắt đầu
-        if (giamGiaRequest.getNgayKetThuc().isBefore(giamGiaRequest.getNgayBatDau())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "ngày bắt đầu và ngày kết thúc không hợp lệ");
-            return redirect;
-        }
-
         giamGiaService.add(giamGiaRequest);
-        // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm giảm giá thành công");
-        return redirect; // Sử dụng redirect để chuyển hướng đến trang danh sách
+        return redirect;
     }
 
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("gg") GiamGiaRequest giamGiaRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+
+        if (giamGiaRequest.isAnyFieldEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ các trường");
+            return redirect;
+        }
+
+        if (giamGiaRequest.isInvalidPercentage()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số phần trăm giảm không hợp lệ");
+            return redirect;
+        }
+
+        if (giamGiaRequest.isInvalidpercent()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Số lượng không hợp lệ");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/giam-gia/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
         }
+
+        GiamGiaResponse existingGiamgia = giamGiaService.getByMa(giamGiaRequest.getMa());
+        if (existingGiamgia != null && !existingGiamgia.getId().equals(id)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật khuyến mãi thất bại. Mã đã tồn tại.");
+            return redirect;
+        }
+
+
+
+
 
         giamGiaService.update(giamGiaRequest, id);
         // Lưu thông báo cập nhật thành công vào session

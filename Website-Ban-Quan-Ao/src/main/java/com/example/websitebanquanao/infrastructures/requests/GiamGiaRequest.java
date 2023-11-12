@@ -1,6 +1,7 @@
 package com.example.websitebanquanao.infrastructures.requests;
 
 import com.example.websitebanquanao.repositories.GiamGiaRepository;
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
@@ -43,5 +44,21 @@ public class GiamGiaRequest {
     @NotNull(message = "Ngày kết thúc không được để trống")
     private LocalDate ngayKetThuc;
 
+
+    public boolean isAnyFieldEmpty() {
+        return StringUtils.isEmpty(ma) ||
+                soPhanTramGiam == null ||
+                soLuong == null ||
+                ngayBatDau == null ||
+                ngayKetThuc == null;
+    }
+
+    public boolean isInvalidPercentage() {
+        return soPhanTramGiam < 1 || soPhanTramGiam > 99;
+    }
+
+    public boolean isInvalidpercent(){
+        return soLuong < 1 || soLuong > 10000;
+    }
 
 }

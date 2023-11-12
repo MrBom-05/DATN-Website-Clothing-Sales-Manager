@@ -39,7 +39,19 @@ public class GiamGiaService {
 
     public void update(GiamGiaRequest giamGiaRequest, UUID id) {
         GiamGia giamGia = giamGiaRepository.findById(id).orElse(null);
+
         if (giamGia != null) {
+            // Check if the updated code already exists excluding the current discount
+            GiamGiaResponse existingGiamGia = giamGiaRepository.findByMa(giamGiaRequest.getMa());
+
+            if (existingGiamGia != null && !existingGiamGia.getId().equals(id)) {
+                // Code is already in use by another discount
+                // You can handle this situation, e.g., throw an exception or set an error message
+                System.out.println("GiamGiaService.update: Code already exists for another discount");
+                return;
+            }
+
+            // Update the discount details
             giamGia.setMa(giamGiaRequest.getMa());
             giamGia.setSoPhanTramGiam(giamGiaRequest.getSoPhanTramGiam());
             giamGia.setSoLuong(giamGiaRequest.getSoLuong());
@@ -87,6 +99,12 @@ public class GiamGiaService {
             return null;
         }
     }
+
+    public GiamGiaResponse getByMa(String ma) {
+        return giamGiaRepository.getByMa(ma);
+    }
+
+
 
     @Transactional
     public void updateSoLuongByMa(String ma, int soLuong) {
