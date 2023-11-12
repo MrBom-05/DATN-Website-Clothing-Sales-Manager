@@ -68,7 +68,14 @@
                             <td>${index.count}</td>
                             <td>${hoaDon.ma}</td>
                             <td>${hoaDon.idNhanVien.hoVaTen}</td>
-                            <td>Khách Lẻ</td>
+                            <td>
+                                <c:if test="${hoaDon.idKhachHang != null}">
+                                    ${hoaDon.idKhachHang.hoVaTen}
+                                </c:if>
+                                <c:if test="${hoaDon.idKhachHang == null}">
+                                    Khách lẻ
+                                </c:if>
+                            </td>
                             <td>${hoaDon.ngayTao}</td>
                             <td>
                                 <c:if test="${hoaDon.loaiHoaDon == 0}">
