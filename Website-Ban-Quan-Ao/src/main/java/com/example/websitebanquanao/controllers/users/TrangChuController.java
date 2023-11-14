@@ -339,6 +339,13 @@ public class TrangChuController {
         return "redirect:/dang-nhap#register";
     }
 
+    // đăng xuất
+    @GetMapping("/dang-xuat")
+    public String dangXuat() {
+        session.setAttribute("khachHang", null);
+        return "redirect:/";
+    }
+
     // trang giới thiệu
     @GetMapping("/gioi-thieu")
     public String gioiThieu(Model model) {
