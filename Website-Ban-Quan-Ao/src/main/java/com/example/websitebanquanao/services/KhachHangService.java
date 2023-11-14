@@ -92,4 +92,16 @@ public class KhachHangService {
         System.out.println("KhachHangService.getByEmailAndMatKhau: " + email + " " + matKhau);
         return khachHangRepository.getByEmailAndMatKhau(email, matKhau);
     }
+
+    public KhachHangResponse getbyEmail(String email){return khachHangRepository.getByEmail(email);}
+
+    //user
+    public boolean isPasswordValid(String password) {
+        return password.matches("^(?=.*[a-zA-Z])(?=.*[0-9]).{6,}$");
+    }
+
+    public boolean isSoDienThoai(String soDienThoai) {
+        return soDienThoai.matches("^0[0-9]{9,10}$");
+    }
+
 }

@@ -7,6 +7,9 @@
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
     </c:if>
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">${errorMessage}</div>
+    </c:if>
 
     <div class="row mt-3">
         <div class="col-9">
@@ -42,8 +45,7 @@
             <form:form id="edit-form" modelAttribute="ms" method="post" action="/admin/mau-sac/store">
                 <div class="form-group text-center">
                     <label for="ten" class="form-label">Tên Màu</label>
-                    <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
-                    <form:errors path="ten" cssClass="text-danger"/>
+                    <form:input type="text" path="ten" id="ten" class="form-control"/>
                     <button type="submit" class="btn btn-success mt-3">Lưu</button>
                 </div>
             </form:form>
@@ -114,6 +116,24 @@
 
         });
     });
+    $(document).ready(function () {
+        hideErrorMessage();
+        hideErrorMessage2();
+    });
+
+    function hideErrorMessage() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('slow');
+        }, 1000);
+    }
+
+    function hideErrorMessage2() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-success').fadeOut('slow');
+        }, 1000);
+    }
 </script>
 </body>
 </html>

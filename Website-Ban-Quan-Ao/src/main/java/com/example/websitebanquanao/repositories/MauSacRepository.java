@@ -27,4 +27,5 @@ public interface MauSacRepository extends JpaRepository<MauSac, Integer> {
     @Query("SELECT DISTINCT new com.example.websitebanquanao.infrastructures.responses.MauSacResponse(ms.id, ms.ten) FROM MauSac ms INNER JOIN ms.sanPhamChiTiets spct INNER JOIN spct.idSanPham sp WHERE sp.id = :idSanPham AND spct.soLuong > 0 AND spct.trangThai = 1")
     public List<MauSacResponse> getListMauSacByIdSanPham(@Param("idSanPham") UUID idSanPham);
 
+    boolean existsByTen(String ten);
 }

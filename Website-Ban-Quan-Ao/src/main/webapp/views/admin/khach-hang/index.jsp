@@ -7,6 +7,9 @@
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success">${successMessage}</div>
     </c:if>
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger">${errorMessage}</div>
+    </c:if>
     <div class="row mt-3">
         <div class="col-6">
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -72,9 +75,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="hoVaTen" class="form-label">Họ và tên</label>
-                                    <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="hoVaTen" cssClass="text-danger"/>
+                                    <form:input type="text" path="hoVaTen" id="hoVaTen" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                         </div>
@@ -82,17 +84,15 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="soDienThoai" class="form-label">Số điện thoại</label>
-                                    <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="soDienThoai" cssClass="text-danger"/>
+                                    <form:input type="tel" path="soDienThoai" id="soDienThoai" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="email" class="form-label">Email</label>
-                                    <form:input type="email" path="email" id="email" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="email" cssClass="text-danger"/>
+                                    <form:input type="email" path="email" id="email" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                         </div>
@@ -100,17 +100,15 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="diaChi" class="form-label">Địa chỉ</label>
-                                    <form:input type="text" path="diaChi" id="diaChi" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="diaChi" cssClass="text-danger"/>
+                                    <form:input type="text" path="diaChi" id="diaChi" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="xaPhuong" class="form-label">Xã/Phường</label>
-                                    <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="xaPhuong" cssClass="text-danger"/>
+                                    <form:input type="text" path="xaPhuong" id="xaPhuong" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                         </div>
@@ -118,17 +116,15 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="quanHuyen" class="form-label">Quận/Huyện</label>
-                                    <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="quanHuyen" cssClass="text-danger"/>
+                                    <form:input type="text" path="quanHuyen" id="quanHuyen" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="tinhThanhPho" class="form-label">Thành phố/Tỉnh</label>
-                                    <form:input type="text" path="tinhThanhPho" id="tinhThanhPho" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="tinhThanhPho" cssClass="text-danger"/>
+                                    <form:input type="text" path="tinhThanhPho" id="tinhThanhPho" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                         </div>
@@ -136,9 +132,8 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="matKhau" class="form-label">Mật khẩu</label>
-                                    <form:input type="password" path="matKhau" id="matKhau" class="form-control"
-                                                required="true"/>
-                                    <form:errors path="matKhau" cssClass="text-danger"/>
+                                    <form:input type="password" path="matKhau" id="matKhau" class="form-control"/>
+<%--                                                required="true"/>--%>
                                 </div>
                             </div>
                         </div>
@@ -230,4 +225,22 @@
 
         });
     });
+    $(document).ready(function () {
+        hideErrorMessage();
+        hideErrorMessage2();
+    });
+
+    function hideErrorMessage() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('slow');
+        }, 1000);
+    }
+
+    function hideErrorMessage2() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-success').fadeOut('slow');
+        }, 1000);
+    }
 </script>

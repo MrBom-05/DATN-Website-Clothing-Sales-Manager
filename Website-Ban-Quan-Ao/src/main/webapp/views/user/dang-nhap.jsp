@@ -72,7 +72,7 @@
                     <div class="row mt-3">
                         <div class="col-6">
                             <label for="registerPassword" class="form-label">Mật Khẩu (*)</label>
-                            <form:input path="matKhauDK" type="password" class="form-control" id="registerPassword"/>
+                            <form:input path="matKhauDK" type="password" class="form-control" id="registerPassword" />
                         </div>
                         <div class="col-6">
                             <label for="registerPassword" class="form-label">Xác nhận Mật Khẩu (*)</label>
@@ -88,6 +88,13 @@
                             </label>
                         </div>
                     </div>
+                    <c:if test="${not empty loginError}">
+                        <div class="alert alert-danger">${loginError}</div>
+                    </c:if>
+
+                    <c:if test="${not empty successMessage}">
+                        <div class="alert alert-success">${successMessage}</div>
+                    </c:if>
                     <button type="submit" class="btn btn-dark mt-5">Đăng Ký</button>
                 </form:form>
             </div>
@@ -100,6 +107,16 @@
     $(document).ready(function() {
         // Gọi hàm hideErrorMessage khi trang đã tải hoàn toàn
         hideErrorMessage();
+        hideErrorMessage2();
+
+        // Xác định fragment identifier trong URL và chuyển đến tab tương ứng
+        var hash = window.location.hash;
+        if (hash) {
+            $('.nav-link').removeClass('active');
+            $('.tab-pane').removeClass('active show');
+            $('a[href="' + hash + '"]').addClass('active');
+            $(hash).addClass('active show');
+        }
     });
 
     function hideErrorMessage() {
@@ -108,6 +125,14 @@
             $('.alert-danger').fadeOut('slow');
         }, 5000);
     }
+
+    function hideErrorMessage2() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function() {
+            $('.alert-success').fadeOut('slow');
+        }, 5000);
+    }
+
 
     document.addEventListener("DOMContentLoaded", function () {
         // Lắng nghe sự kiện khi form được gửi

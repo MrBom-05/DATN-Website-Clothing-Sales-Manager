@@ -1,15 +1,35 @@
 package com.example.websitebanquanao.controllers.users;
 
-import com.example.websitebanquanao.infrastructures.requests.*;
+import com.example.websitebanquanao.infrastructures.requests.DangKyUserRequest;
+import com.example.websitebanquanao.infrastructures.requests.DangNhapUserRequest;
+import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
+import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
+import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
-import com.example.websitebanquanao.services.*;
+import com.example.websitebanquanao.repositories.KhachHangRepository;
+import com.example.websitebanquanao.services.AnhSanPhamService;
+import com.example.websitebanquanao.services.GiamGiaService;
+import com.example.websitebanquanao.services.GioHangChiTietService;
+import com.example.websitebanquanao.services.GioHangService;
+import com.example.websitebanquanao.services.HoaDonChiTietService;
+import com.example.websitebanquanao.services.HoaDonService;
+import com.example.websitebanquanao.services.KhachHangService;
+import com.example.websitebanquanao.services.KhuyenMaiChiTietService;
+import com.example.websitebanquanao.services.KichCoService;
+import com.example.websitebanquanao.services.MauSacService;
+import com.example.websitebanquanao.services.SanPhamService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
@@ -53,6 +73,8 @@ public class TrangChuController {
 
     @Autowired
     private HttpSession session;
+    @Autowired
+    private KhachHangRepository khachHangRepository;
 
     // trang chủ
     @GetMapping("")
@@ -270,7 +292,7 @@ public class TrangChuController {
         String matKhau = dangNhapUserRequest.getMatKhau();
 
         if (email == null || email.isEmpty() || matKhau == null || matKhau.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            redirectAttributes.addFlashAttribute("loginError", "Vui lòng điền đầy đủ thông tin.");
             return "redirect:/dang-nhap";
         }
 
@@ -281,17 +303,30 @@ public class TrangChuController {
             gioHangService.checkAndAdd(khachHangResponse.getId());
             return "redirect:/";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng.");
+            redirectAttributes.addFlashAttribute("loginError", "Tài khoản hoặc mật khẩu không đúng.");
             return "redirect:/dang-nhap";
         }
     }
 
     // lấy form đăng ký
     @PostMapping("/dang-ky")
-    public String dangKy(@ModelAttribute("dangKy") DangKyUserRequest dangKyUserRequest, Model model) {
+    public String dangKy(@ModelAttribute("dangKy") DangKyUserRequest dangKyUserRequest, RedirectAttributes redirectAttributes) {
         String email = dangKyUserRequest.getEmailDK();
         String matKhau = dangKyUserRequest.getMatKhauDK();
         String hoTen = dangKyUserRequest.getHoTen();
+
+        if (hoTen == null || hoTen.isEmpty() || matKhau == null || matKhau.isEmpty() || hoTen == null || hoTen.isEmpty()) {
+            redirectAttributes.addFlashAttribute("loginError", "Vui lòng điền đầy đủ thông tin");
+            return "redirect:/dang-nhap#register";
+        }
+        if (!khachHangService.isPasswordValid(matKhau)) {
+            redirectAttributes.addFlashAttribute("loginError", "Mật khẩu phải có ít nhất 6 ký tự và chứa ít nhất một chữ và một số");
+            return "redirect:/dang-nhap#register";
+        }
+        if (khachHangRepository.existsByEmail(dangKyUserRequest.getEmailDK())) {
+            redirectAttributes.addFlashAttribute("loginError", "Tài khoản đã tồn tại");
+            return "redirect:/dang-nhap#register";
+        }
 
         KhachHangRequest khachHangRequest = new KhachHangRequest();
         khachHangRequest.setEmail(email);
@@ -299,8 +334,9 @@ public class TrangChuController {
         khachHangRequest.setHoVaTen(hoTen);
 
         khachHangService.add(khachHangRequest);
+        redirectAttributes.addFlashAttribute("successMessage", "Đăng ký thành công");
 
-        return "redirect:/dang-nhap";
+        return "redirect:/dang-nhap#register";
     }
 
     // đăng xuất

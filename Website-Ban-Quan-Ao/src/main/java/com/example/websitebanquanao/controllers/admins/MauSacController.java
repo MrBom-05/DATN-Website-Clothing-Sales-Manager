@@ -1,8 +1,8 @@
 package com.example.websitebanquanao.controllers.admins;
 
-import com.example.websitebanquanao.entities.MauSac;
 import com.example.websitebanquanao.infrastructures.requests.MauSacRequest;
 import com.example.websitebanquanao.infrastructures.responses.MauSacResponse;
+import com.example.websitebanquanao.repositories.MauSacRepository;
 import com.example.websitebanquanao.services.MauSacService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,8 @@ public class MauSacController {
     private MauSacRequest mauSacRequest;
 
     private static final String redirect = "redirect:/admin/mau-sac/index";
+    @Autowired
+    private MauSacRepository mauSacRepository;
 
     @GetMapping("index")
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
@@ -50,10 +52,21 @@ public class MauSacController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (mauSacRequest.validNull()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không được để trống");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
             return "admin/layout";
         }
+
+        if (mauSacRepository.existsByTen(mauSacRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm Loại thất bại");
+            return redirect;
+        }
+
         mauSacService.add(mauSacRequest);
         // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm màu sắc thành công");
@@ -62,10 +75,21 @@ public class MauSacController {
 
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (mauSacRequest.validNull()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không được để trống");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/mau-sac/index.jsp");
             return "admin/layout";
         }
+
+        if (mauSacRepository.existsByTen(mauSacRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật sắc thất bại,Tên màu hiện đã có");
+            return redirect;
+        }
+
         mauSacService.update(mauSacRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật màu sắc thành công");
         return redirect;
@@ -76,6 +100,7 @@ public class MauSacController {
     public ResponseEntity<MauSacResponse> getMauSac(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(mauSacService.getById(id));
     }
+
     @PostMapping("/them-nhanh")
     public String themNhanh(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {

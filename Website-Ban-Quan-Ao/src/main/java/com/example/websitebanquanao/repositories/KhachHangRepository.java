@@ -25,4 +25,8 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, UUID> {
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.KhachHangResponse(kh.id, kh.hoVaTen, kh.soDienThoai, kh.email, kh.diaChi, kh.xaPhuong, kh.quanHuyen, kh.tinhThanhPho) from KhachHang kh")
     List<KhachHangResponse> findAllKhachHang();
+
+    boolean existsByEmail(String email);
+
+    KhachHangResponse getByEmail(String email);
 }
