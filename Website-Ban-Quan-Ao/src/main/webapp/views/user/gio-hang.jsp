@@ -76,7 +76,14 @@
                            href="/san-pham/${gioHang.id}/${gioHang.idMauSac}">${gioHang.tenSanPham}-${gioHang.tenMauSac}-${gioHang.tenKichCo}</a>
                     </td>
 
-                    <td>${gioHang.gia} ₫</td>
+                    <td id="giaSP_${gioHang.maSanPham}">${gioHang.gia}</td>
+                    <script>
+                        var giaSanPhamElement = document.getElementById("giaSP_${gioHang.maSanPham}");
+                        var giaSanPhamText = giaSanPhamElement.innerText;
+                        var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                        giaSanPhamElement.innerText = formattedGia + " vnđ";
+                    </script>
+
 
                     <td>
                         <form action="/gio-hang/update/${gioHang.idSanPhamChiTiet}" method="post">
@@ -94,7 +101,13 @@
                             </div>
                         </form>
                     </td>
-                    <td>${gioHang.soLuong * gioHang.gia} vnđ</td>
+                    <td id="tongGiaSP_${gioHang.maSanPham}">${gioHang.soLuong * gioHang.gia}</td>
+                    <script>
+                        var tongGiaSanPhamElement = document.getElementById("tongGiaSP_${gioHang.maSanPham}");
+                        var tongGiaSanPhamText = tongGiaSanPhamElement.innerText;
+                        var formattedTongGia = parseInt(tongGiaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                        tongGiaSanPhamElement.innerText = formattedTongGia + " vnđ";
+                    </script>
                     <td>
                         <a href="/gio-hang/${gioHang.idSanPhamChiTiet}" type="button" class="btn-close"
                            aria-label="Close"></a>
@@ -142,21 +155,39 @@
                 <div class="py-3 border-bottom">
                     <div class="row ms-1 me-1">
                         <label class="col fw-bold fs-6 ">Tạm tính</label>
-                        <label class="col fs-6 text-end">${tongTien} vnđ</label>
+                        <label class="col fs-6 text-end" id="tongTien">${tongTien}</label>
+                        <script>
+                            var tongTienElement = document.getElementById("tongTien");
+                            var tongTienText = tongTienElement.innerText;
+                            var formattedTongTien = parseInt(tongTienText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                            tongTienElement.innerText = formattedTongTien + " vnđ";
+                        </script>
                     </div>
                 </div>
 
                 <div class="bg-white py-3 border-bottom">
                     <div class="row ms-1 me-1">
                         <label class="col fw-bold fs-6">Mã khuyến mãi</label>
-                        <label class="col fs-6 text-end">${soTienDuocGiam} vnđ</label>
+                        <label class="col fs-6 text-end" id="soTienDuocGiam">${soTienDuocGiam}</label>
+                        <script>
+                            var soTienDuocGiamElement = document.getElementById("soTienDuocGiam");
+                            var soTienDuocGiamText = soTienDuocGiamElement.innerText;
+                            var formattedSoTienDuocGiam = parseInt(soTienDuocGiamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                            soTienDuocGiamElement.innerText = formattedSoTienDuocGiam + " vnđ";
+                        </script>
                     </div>
                 </div>
 
                 <div class="bg-white py-3 border-bottom">
                     <div class="row ms-1 me-1">
                         <label class="col-3 fw-bold fs-5">Tổng</label>
-                        <label class="col fw-bold fs-5 text-end">${soTienSauKhiGiam} vnđ</label>
+                        <label class="col fw-bold fs-5 text-end" id="soTienSauKhiGiam">${soTienSauKhiGiam}</label>
+                        <script>
+                            var soTienSauKhiGiamElement = document.getElementById("soTienSauKhiGiam");
+                            var soTienSauKhiGiamText = soTienSauKhiGiamElement.innerText;
+                            var formattedSoTienSauKhiGiam = parseInt(soTienSauKhiGiamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                            soTienSauKhiGiamElement.innerText = formattedSoTienSauKhiGiam + " vnđ";
+                        </script>
                     </div>
                 </div>
             </div>
