@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,6 +20,10 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
 
     @Query("SELECT hd FROM HoaDon hd where hd.trangThai = 0 order by hd.ma desc ")
     List<HoaDon> findAllHoaDon();
+    @Modifying
+    @Transactional
+    @Query("update HoaDon hd set hd.trangThai = 1 where hd.id = :id")
+    public void updateDaThanhToanHoaDon(@Param("id") UUID id);
 
     // user
     @Query("select new com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse(hd.ma, hd.trangThai, hd.ngayTao, hd.ngayThanhToan, hd.nguoiNhan, hd.diaChi, hd.xaPhuong, hd.quanHuyen, hd.tinhThanhPho, hd.email, hd.soDienThoai, hd.maVanChuyen, hd.tenDonViVanChuyen, hd.phiVanChuyen, hd.ghiChu) from HoaDon hd where hd.id = :id")

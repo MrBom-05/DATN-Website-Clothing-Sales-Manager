@@ -129,6 +129,7 @@
 
 
 <body>
+
 <c:if test="${not empty sessionScope.successMessage}">
     <div class="alert alert-success" role="alert">
             ${sessionScope.successMessage}
@@ -145,6 +146,11 @@
             ${sessionScope.errorMessage}
     </div>
     <% session.removeAttribute("errorMessage"); %>
+    <script>
+        setTimeout(function () {
+            $('.alert').alert('close');
+        }, 3000);
+    </script>
 </c:if>
 <div class="card border rounded">
     <div class="card-header text-black">
@@ -200,6 +206,12 @@
                 </tr>
                 </thead>
                 <tbody>
+                <form id="paymentForm" action="/create-payment-link" method="post">
+                    <button type="submit" style="display: none">Tạo Link thanh toán</button>
+                    <input type="hidden" name="tongTien" value="" id="total">
+                    <input type="hidden" name="ma" value="${hoaDon.ma}" >
+                    <input type="hidden" name="idHoaDon" value="${idHoaDon}" >
+                </form>
                 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
                     <tr>
                         <td>${status.index + 1}</td>
@@ -945,6 +957,7 @@
             var tongTienInput = $("#tong-tien"); // Lấy ô input của tổng tiền
             var tienThuaLabel = $("#tien-thua");
 
+
             // Sự kiện change cho hình thức thanh toán
             selectElement.on("change", function () {
                 updateTienKhachDua(); // Cập nhật tiền khách đưa khi thay đổi hình thức thanh toán
@@ -981,7 +994,7 @@
                 // Use jQuery to get the value of the feeInput
                 let feeInput = $('#feeInput');
 
-                // Giữ lại chỉ các ký tự số và dấu phẩy
+                    // Giữ lại chỉ các ký tự số và dấu phẩy
                 let phiVanChuyen = parseFloat(feeInput.val().replace(/,/g, '')) || 0;
 
                 // Lấy giá trị tổng tiền từ JSP
@@ -1022,65 +1035,87 @@
                 }
             }
         });
+        <%--// api vietqr--%>
+        <%--$(document).ready(function () {--%>
+        <%--    var clientId = '01d6d8e1-f32f-49c2-b2ed-569c35d2d407';--%>
+        <%--    var apiKey = 'd662918e-19bd-4947-8ddd-fb8a1474dfe0';--%>
+        <%--    var apiUrl = 'https://api.vietqr.io/v2/generate';--%>
+
+        <%--    // Sự kiện change trên phần tử select--%>
+        <%--    $('#hinh-thuc-thanh-toan').on('change', function () {--%>
+        <%--        var selectedValue = $(this).val();--%>
+
+        <%--        // Kiểm tra giá trị được chọn và hiển thị modal tương ứng--%>
+        <%--        if (selectedValue === '1') {--%>
+        <%--            // Tiền mặt - không hiển thị modal--%>
+        <%--            // Có thể ẩn modal nếu nó đang hiển thị--%>
+        <%--            $('#qrCodeModal').modal('hide');--%>
+        <%--        } else if (selectedValue === '2') {--%>
+        <%--            // Chuyển khoản - hiển thị modal và gửi yêu cầu API--%>
+        <%--            $('#qrCodeModal').modal('show');--%>
+        <%--            sendApiRequest();--%>
+        <%--        }--%>
+        <%--    });--%>
+
+        <%--    function sendApiRequest() {--%>
+        <%--        // Dữ liệu để gửi lên API--%>
+        <%--        let tongTien = parseFloat('${tongTien}') || 0;--%>
+        <%--        const maHoaDon = '${hoaDon.ma}';--%>
+        <%--        var requestData = {--%>
+        <%--            "accountNo": "0866613082003",--%>
+        <%--            "accountName": "PHAM LE QUYEN ANH",--%>
+        <%--            "acqId": "970422",--%>
+        <%--            "addInfo": "Thanh toan hoa don " + maHoaDon,--%>
+        <%--            "amount": tongTien,--%>
+        <%--            "template": "compact",--%>
+        <%--        };--%>
+
+        <%--        // Gửi yêu cầu API sử dụng jQuery AJAX--%>
+        <%--        $.ajax({--%>
+        <%--            url: apiUrl,--%>
+        <%--            type: 'POST',--%>
+        <%--            headers: {--%>
+        <%--                'x-client-id': clientId,--%>
+        <%--                'x-api-key': apiKey,--%>
+        <%--                'Content-Type': 'application/json'--%>
+        <%--            },--%>
+        <%--            data: JSON.stringify(requestData),--%>
+        <%--            success: function (response) {--%>
+        <%--                $('#qrCodeModal .modal-body').html('<img src="' + response.data.qrDataURL + '" class="img-fluid" />');--%>
+        <%--            },--%>
+        <%--            error: function (error) {--%>
+        <%--                // Xử lý lỗi nếu có--%>
+        <%--                console.error('API Error:', error);--%>
+        <%--            }--%>
+        <%--        });--%>
+        <%--    }--%>
+        <%--});--%>
         // api vietqr
         $(document).ready(function () {
-            var clientId = '01d6d8e1-f32f-49c2-b2ed-569c35d2d407';
-            var apiKey = 'd662918e-19bd-4947-8ddd-fb8a1474dfe0';
-            var apiUrl = 'https://api.vietqr.io/v2/generate';
-
             // Sự kiện change trên phần tử select
             $('#hinh-thuc-thanh-toan').on('change', function () {
                 var selectedValue = $(this).val();
 
-                // Kiểm tra giá trị được chọn và hiển thị modal tương ứng
+                // Kiểm tra giá trị được chọn và thực hiện hành động tương ứng
                 if (selectedValue === '1') {
-                    // Tiền mặt - không hiển thị modal
-                    // Có thể ẩn modal nếu nó đang hiển thị
-                    $('#qrCodeModal').modal('hide');
+                    // Tiền mặt - ẩn form
+                    $('#paymentForm').hide();
                 } else if (selectedValue === '2') {
-                    // Chuyển khoản - hiển thị modal và gửi yêu cầu API
-                    $('#qrCodeModal').modal('show');
-                    sendApiRequest();
+                    // Chuyển khoản - hiển thị form và tự động submit form
+                    $('#paymentForm').show().submit();
                 }
             });
-
-            function sendApiRequest() {
-                // Dữ liệu để gửi lên API
-                let tongTien = parseFloat('${tongTien}') || 0;
-                const maHoaDon = '${hoaDon.ma}';
-                var requestData = {
-                    "accountNo": "0866613082003",
-                    "accountName": "PHAM LE QUYEN ANH",
-                    "acqId": "970422",
-                    "addInfo": "Thanh toan hoa don " + maHoaDon,
-                    "amount": tongTien,
-                    "template": "compact",
-                };
-
-                // Gửi yêu cầu API sử dụng jQuery AJAX
-                $.ajax({
-                    url: apiUrl,
-                    type: 'POST',
-                    headers: {
-                        'x-client-id': clientId,
-                        'x-api-key': apiKey,
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(requestData),
-                    success: function (response) {
-                        $('#qrCodeModal .modal-body').html('<img src="' + response.data.qrDataURL + '" class="img-fluid" />');
-                    },
-                    error: function (error) {
-                        // Xử lý lỗi nếu có
-                        console.error('API Error:', error);
-                    }
-                });
-            }
         });
+        // Lấy giá trị từ input có id="tong-tien"
+        var tongTienInput = document.getElementById('tong-tien');
+        var tongTienValue = tongTienInput.value;
+
+        // Gán giá trị vào input có id="total"
+        var totalInput = document.getElementById('total');
+        totalInput.value = tongTienValue;
     });
 
 </script>
-
 </body>
 
 </html>
