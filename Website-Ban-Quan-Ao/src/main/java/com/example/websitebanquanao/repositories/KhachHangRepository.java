@@ -27,4 +27,6 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, UUID> {
     List<KhachHangResponse> findAllKhachHang();
 
     boolean existsByEmail(String email);
+
+    KhachHangResponse getByEmail(String email);
 }

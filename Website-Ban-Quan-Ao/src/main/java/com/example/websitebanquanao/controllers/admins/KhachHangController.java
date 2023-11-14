@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
+import com.example.websitebanquanao.repositories.KhachHangRepository;
 import com.example.websitebanquanao.services.KhachHangService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class KhachHangController {
     private KhachHangRequest khachHangRequest;
 
     private static final String redirect = "redirect:/admin/khach-hang/index";
+    @Autowired
+    private KhachHangRepository khachHangRepository;
 
     @GetMapping("index")
     public String index(@RequestParam(name = "page", defaultValue = "1") int page, Model model, @ModelAttribute("successMessage") String successMessage) {
@@ -51,22 +54,55 @@ public class KhachHangController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if(khachHangRequest.validNull()){
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            return redirect;
+        }
+
+        if(!khachHangService.isSoDienThoai(khachHangRequest.getSoDienThoai())){
+            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại không đúng định dạng.");
+            return redirect;
+        }
+
+        if (!khachHangService.isPasswordValid(khachHangRequest.getMatKhau())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu phải có ít nhất 6 ký tự và chứa ít nhất một chữ và một số");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";
         }
+
+        if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Email đã tồn tại.");
+            return redirect;
+        }
+
         khachHangService.add(khachHangRequest);
-        // Lưu thông báo thêm thành công vào session
         redirectAttributes.addFlashAttribute("successMessage", "Thêm khách hàng thành công");
         return redirect;
     }
 
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if(!khachHangService.isSoDienThoai(khachHangRequest.getSoDienThoai())){
+            redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại không đúng định dạng.");
+            return redirect;
+        }
+
+        if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật thất bại, Email đã tồn tại.");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
             return "admin/layout";
         }
+
+
+
         khachHangService.update(khachHangRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khách hàng thành công");
         return redirect;
