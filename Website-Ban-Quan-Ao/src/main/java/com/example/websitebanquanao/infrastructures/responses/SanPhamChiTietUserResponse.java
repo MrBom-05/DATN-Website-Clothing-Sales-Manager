@@ -15,7 +15,6 @@ import java.util.UUID;
 public class SanPhamChiTietUserResponse {
     private UUID id;
     private String ten;
-    private BigDecimal giaNhoNhat;
-    private BigDecimal giaLonNhat;
+    private BigDecimal gia;
     private String moTa;
 }

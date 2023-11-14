@@ -61,7 +61,8 @@
                     <form:radiobutton path="hinhThucThanhToan" value="2" name="payment_method" checked="true"/>
                     THANH TOÁN QUA VNPay
                 </label>
-                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và trả phí ship khi nhận hàng.</label>
+                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và trả phí ship
+                    khi nhận hàng.</label>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-group mb-5">
@@ -90,8 +91,14 @@
                                 <label class="col-8 text-uppercase">${gioHang.tenSanPham} - ${gioHang.tenMauSac}
                                     - ${gioHang.tenKichCo}
                                     x${gioHang.soLuong}</label>
-                                <label class="col-4 fw-bold text-end">${gioHang.soLuong * gioHang.gia}
-                                    vnđ</label>
+                                <label class="col-4 fw-bold text-end"
+                                       id="giaSP_${gioHang.maSanPham}">${gioHang.soLuong * gioHang.gia}</label>
+                                <script>
+                                    var giaSanPhamElement = document.getElementById("giaSP_${gioHang.maSanPham}");
+                                    var giaSanPhamText = giaSanPhamElement.innerText;
+                                    var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                                    giaSanPhamElement.innerText = formattedGia + " vnđ";
+                                </script>
                             </div>
                         </c:forEach>
                     </div>
@@ -99,21 +106,39 @@
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6 ">Tạm tính</label>
-                            <label class="col fw-bold fs-6 text-end">${tongTien} vnđ</label>
+                            <label class="col fw-bold fs-6 text-end" id="tongTien">${tongTien}</label>
+                            <script>
+                                var giaSanPhamElement = document.getElementById("tongTien");
+                                var giaSanPhamText = giaSanPhamElement.innerText;
+                                var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                                giaSanPhamElement.innerText = formattedGia + " vnđ";
+                            </script>
                         </div>
                     </div>
 
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-6">Mã khuyến mãi</label>
-                            <label class="col fs-6 fw-bold text-end">${soTienDuocGiam} vnđ</label>
+                            <label class="col fs-6 fw-bold text-end" id="soTienDuocGiam">${soTienDuocGiam}</label>
+                            <script>
+                                var giaSanPhamElement = document.getElementById("soTienDuocGiam");
+                                var giaSanPhamText = giaSanPhamElement.innerText;
+                                var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                                giaSanPhamElement.innerText = formattedGia + " vnđ";
+                            </script>
                         </div>
                     </div>
 
                     <div class="bg-white py-3 border-bottom">
                         <div class="row ms-1 me-1">
                             <label class="col fw-bold fs-5">Tổng</label>
-                            <label id="tongTien" class="col fw-bold fs-5 text-end"></label>
+                            <label class="col fw-bold fs-5 text-end" id="soTienSauKhiGiam">${soTienSauKhiGiam}</label>
+                            <script>
+                                var giaSanPhamElement = document.getElementById("soTienSauKhiGiam");
+                                var giaSanPhamText = giaSanPhamElement.innerText;
+                                var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                                giaSanPhamElement.innerText = formattedGia + " vnđ";
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -126,7 +151,8 @@
                 <label>Dữ liệu cá nhân của bạn sẽ được sử dụng để
                     xử lý đơn đặt hàng, hỗ trợ trải nghiệm của
                     bạn trên toàn bộ trang web này và cho các
-                    mục đích khác được mô tả trong <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a> và <a href="/chinh-sach-doi-tra">Chính sách đổi
+                    mục đích khác được mô tả trong <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a> và <a
+                            href="/chinh-sach-doi-tra">Chính sách đổi
                         trả</a>.
                 </label>
             </div>

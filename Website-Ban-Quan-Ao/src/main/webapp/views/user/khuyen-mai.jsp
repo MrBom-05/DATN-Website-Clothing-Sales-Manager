@@ -2,17 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <section class="container pt-5">
-    <%--    <div class="row text-center">--%>
-    <%--        <div class="col-1 ms-5">--%>
-    <%--            <a class="link-dark" style="text-decoration: none" href="/san-pham">Tất cả</a>--%>
-    <%--        </div>--%>
-    <%--        <c:forEach items="${listLoai}" var="loai">--%>
-    <%--            <div class="col-1">--%>
-    <%--                <a class="link-dark" style="text-decoration: none" href="/san-pham/${loai.id}">${loai.ten}</a>--%>
-    <%--            </div>--%>
-    <%--        </c:forEach>--%>
-    <%--    </div>--%>
-
     <style>
         .discount-percentage {
             position: absolute; /* Vị trí tuyệt đối */
@@ -55,9 +44,13 @@
                             <span class="discount-percentage" id="so-phan-tram-giam_${sanPham.id}"></span>
                             <div class="card-body text-center">
                                 <p class="text-uppercase">${sanPham.ten}</p>
-
-                                <p class="fw-bold gia-san-pham"
-                                   id="gia-san-pham_${sanPham.id}">${sanPham.gia} vnđ</p>
+                                <p class="fw-bold gia-san-pham" id="gia-san-pham_${sanPham.id}">${sanPham.gia}</p>
+                                <script>
+                                    var giaSanPhamElement = document.getElementById("gia-san-pham_${sanPham.id}");
+                                    var giaSanPhamText = giaSanPhamElement.innerText;
+                                    var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                                    giaSanPhamElement.innerText = formattedGia + " vnđ";
+                                </script>
                                 <p class="fw-bold gia-moi" id="gia-moi_${sanPham.id}"></p>
                             </div>
                         </div>
@@ -90,7 +83,7 @@
                                     giaSauGiam = Math.floor(giaSauGiam);
                                     giaSpan.hide();
                                     if (data > 0) {
-                                        giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam + ' vnđ</p>');
+                                        giaSpan.after('<p class="fw-bold gia-moi">' + giaSauGiam.toLocaleString('en-US') + ' vnđ</p>');
                                         giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;">' + giaCu + '</p>');
                                     } else {
                                         giaSpan.show();
