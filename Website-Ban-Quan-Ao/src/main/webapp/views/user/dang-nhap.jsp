@@ -43,8 +43,8 @@
                         </div>
                     </div>
                     <br/>
-                    <c:if test="${not empty errorMessage}">
-                        <div class="alert alert-danger">${errorMessage}</div>
+                    <c:if test="${not empty loginError}">
+                        <div class="alert alert-danger">${loginError}</div>
                     </c:if>
                     <div class="row mt-3">
                         <div class="col-9">
@@ -88,8 +88,8 @@
                             </label>
                         </div>
                     </div>
-                    <c:if test="${not empty errorMessage}">
-                        <div class="alert alert-danger">${errorMessage}</div>
+                    <c:if test="${not empty loginError}">
+                        <div class="alert alert-danger">${loginError}</div>
                     </c:if>
 
                     <c:if test="${not empty successMessage}">
@@ -123,14 +123,14 @@
         // Sử dụng jQuery để ẩn thông báo sau 5 giây
         setTimeout(function() {
             $('.alert-danger').fadeOut('slow');
-        }, 1000);
+        }, 5000);
     }
 
     function hideErrorMessage2() {
         // Sử dụng jQuery để ẩn thông báo sau 5 giây
         setTimeout(function() {
             $('.alert-success').fadeOut('slow');
-        }, 1000);
+        }, 5000);
     }
 
 

@@ -277,10 +277,10 @@ public class TrangChuController {
 
     // trang đăng nhập
     @GetMapping("/dang-nhap")
-    public String dangNhap(Model model, @ModelAttribute("errorMessage") String errorMessage) {
+    public String dangNhap(Model model, @ModelAttribute("loginError") String loginError) {
         model.addAttribute("dangNhap", new DangNhapUserRequest());
         model.addAttribute("dangKy", new DangKyUserRequest());
-        model.addAttribute("loginError", errorMessage);
+        model.addAttribute("loginError", loginError);
         model.addAttribute("viewContent", "/views/user/dang-nhap.jsp");
         return "user/layout";
     }
@@ -292,7 +292,7 @@ public class TrangChuController {
         String matKhau = dangNhapUserRequest.getMatKhau();
 
         if (email == null || email.isEmpty() || matKhau == null || matKhau.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            redirectAttributes.addFlashAttribute("loginError", "Vui lòng điền đầy đủ thông tin.");
             return "redirect:/dang-nhap";
         }
 
@@ -303,7 +303,7 @@ public class TrangChuController {
             gioHangService.checkAndAdd(khachHangResponse.getId());
             return "redirect:/";
         } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tài khoản hoặc mật khẩu không đúng.");
+            redirectAttributes.addFlashAttribute("loginError", "Tài khoản hoặc mật khẩu không đúng.");
             return "redirect:/dang-nhap";
         }
     }
@@ -316,15 +316,15 @@ public class TrangChuController {
         String hoTen = dangKyUserRequest.getHoTen();
 
         if (hoTen == null || hoTen.isEmpty() || matKhau == null || matKhau.isEmpty() || hoTen == null || hoTen.isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin");
+            redirectAttributes.addFlashAttribute("loginError", "Vui lòng điền đầy đủ thông tin");
             return "redirect:/dang-nhap#register";
         }
         if (!khachHangService.isPasswordValid(matKhau)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu phải có ít nhất 6 ký tự và chứa ít nhất một chữ và một số");
+            redirectAttributes.addFlashAttribute("loginError", "Mật khẩu phải có ít nhất 6 ký tự và chứa ít nhất một chữ và một số");
             return "redirect:/dang-nhap#register";
         }
         if (khachHangRepository.existsByEmail(dangKyUserRequest.getEmailDK())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Tài khoản đã tồn tại");
+            redirectAttributes.addFlashAttribute("loginError", "Tài khoản đã tồn tại");
             return "redirect:/dang-nhap#register";
         }
 
