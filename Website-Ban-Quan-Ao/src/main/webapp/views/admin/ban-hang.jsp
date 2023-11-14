@@ -229,21 +229,7 @@
                         <td id="formattedTotal">${sp.soLuong * sp.gia}</td>
 
                         <!-- Thêm script để định dạng giá trị hiển thị -->
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                // Lấy phần tử có id là "formattedTotal"
-                                var formattedTotalElement = document.getElementById('formattedTotal');
-                                //format giá
-                                var formattedGiaElement = document.getElementById('formattedGia');
 
-                                // Định dạng lại giá trị hiển thị
-                                var totalValue = parseFloat(formattedTotalElement.textContent);
-                                formattedTotalElement.textContent = totalValue.toLocaleString('en-US');
-                                //format giá
-                                var giaValue = parseFloat(formattedGiaElement.textContent);
-                                formattedGiaElement.textContent = giaValue.toLocaleString('en-US');
-                            });
-                        </script>
                         <input type="hidden" id="quantity" value=""/>
                         <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}"/>
                         <td>
@@ -377,10 +363,9 @@
                             <input type="text" class="float-end" id="tong-tien" name="tong-tien" value="${tongTien}"
                                    readonly>
                         </div>
-                        <div class="mb-3" id="hinh-thuc-thanh-toan-div" style="display: block">
+                        <div class="mb-3" id="hinh-thuc-thanh-toan-div">
                             <label class="form-label">Hình thức thanh toán</label>
-                            <select class="form-select" id="hinh-thuc-thanh-toan" name="httt"
-                                    aria-label="Default select example">
+                            <select class="form-select" id="hinh-thuc-thanh-toan" name="httt" aria-label="Default select example">
                                 <option selected value="0">Chọn hình thức thanh toán</option>
                                 <option value="1">Tiền mặt</option>
                                 <option value="2">Chuyển khoản</option>
@@ -666,7 +651,22 @@
         </div>
     </div>
 </div>
-
+<!-- Modal hiển thị mã QR -->
+<div class="modal fade" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrCodeModalLabel">Mã QR Code</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung mã QR sẽ được hiển thị ở đây -->
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -938,7 +938,7 @@
         });
 
 
-        // tính ti
+        // tính tiền
         $(document).ready(function () {
             var selectElement = $("#hinh-thuc-thanh-toan");
             var tienKhachDuaInput = $("#tien-khach-dua");
@@ -1020,6 +1020,61 @@
                     tienThuaLabel.text("0");
                     alert("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền!");
                 }
+            }
+        });
+        // api vietqr
+        $(document).ready(function () {
+            var clientId = '01d6d8e1-f32f-49c2-b2ed-569c35d2d407';
+            var apiKey = 'd662918e-19bd-4947-8ddd-fb8a1474dfe0';
+            var apiUrl = 'https://api.vietqr.io/v2/generate';
+
+            // Sự kiện change trên phần tử select
+            $('#hinh-thuc-thanh-toan').on('change', function () {
+                var selectedValue = $(this).val();
+
+                // Kiểm tra giá trị được chọn và hiển thị modal tương ứng
+                if (selectedValue === '1') {
+                    // Tiền mặt - không hiển thị modal
+                    // Có thể ẩn modal nếu nó đang hiển thị
+                    $('#qrCodeModal').modal('hide');
+                } else if (selectedValue === '2') {
+                    // Chuyển khoản - hiển thị modal và gửi yêu cầu API
+                    $('#qrCodeModal').modal('show');
+                    sendApiRequest();
+                }
+            });
+
+            function sendApiRequest() {
+                // Dữ liệu để gửi lên API
+                let tongTien = parseFloat('${tongTien}') || 0;
+                const maHoaDon = '${hoaDon.ma}';
+                var requestData = {
+                    "accountNo": "0866613082003",
+                    "accountName": "PHAM LE QUYEN ANH",
+                    "acqId": "970422",
+                    "addInfo": "Thanh toan hoa don " + maHoaDon,
+                    "amount": tongTien,
+                    "template": "compact",
+                };
+
+                // Gửi yêu cầu API sử dụng jQuery AJAX
+                $.ajax({
+                    url: apiUrl,
+                    type: 'POST',
+                    headers: {
+                        'x-client-id': clientId,
+                        'x-api-key': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(requestData),
+                    success: function (response) {
+                        $('#qrCodeModal .modal-body').html('<img src="' + response.data.qrDataURL + '" class="img-fluid" />');
+                    },
+                    error: function (error) {
+                        // Xử lý lỗi nếu có
+                        console.error('API Error:', error);
+                    }
+                });
             }
         });
     });
