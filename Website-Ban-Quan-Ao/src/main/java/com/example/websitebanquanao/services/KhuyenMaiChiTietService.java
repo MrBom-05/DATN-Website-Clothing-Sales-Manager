@@ -50,13 +50,16 @@ public class KhuyenMaiChiTietService {
 
     // user
     public Integer getSoPhanTramGiamByIdSanPham(UUID idSanPham) {
+        if (khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPham) == null) {
+            return 0;
+        }
         return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPham);
     }
 
     public Integer getSoPhanTramGiamByIdSanPhamChiTiet(UUID idSanPhamChiTiet) {
-        if (khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPhamChiTiet) == null) {
+        if (khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPhamChiTiet) == null) {
             return 0;
         }
-        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPham(idSanPhamChiTiet);
+        return khuyenMaiChiTietRepository.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPhamChiTiet);
     }
 }

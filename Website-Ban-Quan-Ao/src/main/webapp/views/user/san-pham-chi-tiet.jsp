@@ -2,6 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <div class="container pt-3">
     <div class="row">
         <section class="col-lg-6">
@@ -50,16 +53,45 @@
             </div>
             <div class="justify-content-between mt-4">
                 <div>
-                    <c:choose>
-                        <c:when test="${sanPham.giaNhoNhat == sanPham.giaLonNhat}">
-                            <h5>${sanPham.giaNhoNhat} vnđ</h5>
-                        </c:when>
-                        <c:otherwise>
-                            <h5>${sanPham.giaNhoNhat} -- </h5>
-                            <h5>${sanPham.giaLonNhat} vnđ</h5>
-                        </c:otherwise>
-                    </c:choose>
+                    <h5 class="fw-bold gia-cu" id="gia-san-pham">${sanPham.gia}</h5>
+                    <script>
+                        var giaSanPhamElement = document.getElementById("gia-san-pham");
+                        var giaSanPhamText = giaSanPhamElement.innerText;
+                        var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                        giaSanPhamElement.innerText = formattedGia + " vnđ";
+                    </script>
+                    <h5 class="fw-bold gia-moi" id="gia-moi"></h5>
                 </div>
+                <script>
+                    $(document).ready(function () {
+                        var idSanPham = '${sanPham.id}';
+                        $.ajax({
+                            url: "/so-phan-tram-giam/" + idSanPham,
+                            method: "GET",
+                            success: function (data) {
+                                var giaSpan = $("#gia-san-pham");
+                                var giaCu = giaSpan.html();
+
+                                if (data != null) {
+                                    var giaSanPham = ${sanPham.gia};
+                                    var soPhanTramGiam = data;
+                                    var giaSauGiam = giaSanPham - (giaSanPham * soPhanTramGiam / 100);
+                                    giaSauGiam = Math.floor(giaSauGiam);
+                                    giaSpan.hide();
+                                    if (data > 0) {
+                                        giaSpan.after('<h5 class="fw-bold gia-moi">' + giaSauGiam.toLocaleString('en-US') + ' vnđ</h5>');
+                                        giaSpan.after('<h5 class="fw-bold gia-cu " style="text-decoration: line-through;">' + giaCu + '</h5>');
+                                    } else {
+                                        giaSpan.show();
+                                    }
+                                }
+                            },
+                            error: function () {
+                            }
+                        });
+                    });
+                </script>
+
             </div>
 
             <hr/>
@@ -126,7 +158,7 @@
                                 </button>
                                 <form:input path="soLuong" type="number" class="form-control text-center w-50"
                                             id="quantity" name="quantity"
-                                            value="1" min="1"/>
+                                            value="1" min="1" readonly="true"/>
                                 <button class="btn btn-outline-dark" type="button"
                                         onclick="increment()">+
                                 </button>
@@ -159,61 +191,6 @@
         </section>
 
     </div>
-    <hr>
-    <div class="row">
-        <h3 class="text-center">Sản phẩm liên quan</h3>
-        <div class="d-flex justify-content-between">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                <!-- Sử dụng col-lg-3 để hiển thị 4 sản phẩm trong mỗi hàng và làm cho sản phẩm lớn hơn -->
-                <div class="col-lg-3">
-                    <a href="/product/light-blue-denim-baggy-short" class="text-decoration-none text-dark">
-                        <div class="card border-0">
-                            <img src="../../img/quan.png" class="card-img-top" alt="LIGHT BLUE DENIM BAGGY SHORT">
-                            <div class="card-body text-center">
-                                <p>Light Blue Denim Baggy Short</p>
-                                <p class="fw-bold">1.200.000đ</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3">
-                    <a href="/product/light-blue-denim-baggy-short" class="text-decoration-none text-dark">
-                        <div class="card border-0">
-                            <img src="../../img/quan.png" class="card-img-top" alt="LIGHT BLUE DENIM BAGGY SHORT">
-                            <div class="card-body text-center">
-                                <p>Light Blue Denim Baggy Short</p>
-                                <p class="fw-bold">1.200.000đ</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3">
-                    <a href="/product/light-blue-denim-baggy-short" class="text-decoration-none text-dark">
-                        <div class="card border-0">
-                            <img src="../../img/quan.png" class="card-img-top" alt="LIGHT BLUE DENIM BAGGY SHORT">
-                            <div class="card-body text-center">
-                                <p>Light Blue Denim Baggy Short</p>
-                                <p class="fw-bold">1.200.000đ</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3">
-                    <a href="/product/light-blue-denim-baggy-short" class="text-decoration-none text-dark">
-                        <div class="card border-0">
-                            <img src="../../img/quan.png" class="card-img-top" alt="LIGHT BLUE DENIM BAGGY SHORT">
-                            <div class="card-body text-center">
-                                <p>Light Blue Denim Baggy Short</p>
-                                <p class="fw-bold">1.200.000đ</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
-<%--cdn jquery--%>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
