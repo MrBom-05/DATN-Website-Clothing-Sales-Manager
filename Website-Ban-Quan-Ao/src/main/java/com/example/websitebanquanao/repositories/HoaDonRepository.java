@@ -1,7 +1,7 @@
 package com.example.websitebanquanao.repositories;
 
 import com.example.websitebanquanao.entities.HoaDon;
-import com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse;
+import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,8 +26,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     public void updateDaThanhToanHoaDon(@Param("id") UUID id);
 
     // user
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse(hd.ma, hd.trangThai, hd.ngayTao, hd.ngayThanhToan, hd.nguoiNhan, hd.diaChi, hd.xaPhuong, hd.quanHuyen, hd.tinhThanhPho, hd.email, hd.soDienThoai, hd.maVanChuyen, hd.tenDonViVanChuyen, hd.phiVanChuyen, hd.ghiChu) from HoaDon hd where hd.id = :id")
-    public HoaDonUserResponse findHoaDonUserResponseById(@Param("id") UUID id);
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse(hd.ma, hd.trangThai, hd.ngayTao, hd.ngayThanhToan, hd.nguoiNhan, hd.diaChi, hd.xaPhuong, hd.quanHuyen, hd.tinhThanhPho, hd.email, hd.soDienThoai, hd.maVanChuyen, hd.tenDonViVanChuyen, hd.phiVanChuyen, hd.ghiChu) from HoaDon hd where hd.id = :id")
+    public HoaDonChiTietUserResponse findHoaDonUserResponseById(@Param("id") UUID id);
 
     @Query("select hd.idGiamGia.soPhanTramGiam from HoaDon hd where hd.id = :id")
     public Integer getSoPhanTramGiamByIdHoaDon(@Param("id") UUID id);

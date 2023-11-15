@@ -7,7 +7,6 @@ import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
-import com.example.websitebanquanao.repositories.KhachHangRepository;
 import com.example.websitebanquanao.services.AnhSanPhamService;
 import com.example.websitebanquanao.services.GiamGiaService;
 import com.example.websitebanquanao.services.GioHangChiTietService;
@@ -73,8 +72,6 @@ public class TrangChuController {
 
     @Autowired
     private HttpSession session;
-    @Autowired
-    private KhachHangRepository khachHangRepository;
 
     // trang chủ
     @GetMapping("")
@@ -257,9 +254,9 @@ public class TrangChuController {
         if (khachHangResponse == null) {
             return "redirect:/dang-nhap";
         } else {
-            model.addAttribute("listHoaDon", "");
-            model.addAttribute("viewContent", "/views/user/hoa-don.jsp");
+            model.addAttribute("listHoaDon", hoaDonChiTietService.findListHoaDonByKhachHang(khachHangResponse.getId()));
         }
+        model.addAttribute("viewContent", "/views/user/hoa-don.jsp");
         return "user/layout";
     }
 
@@ -323,7 +320,7 @@ public class TrangChuController {
             redirectAttributes.addFlashAttribute("loginError", "Mật khẩu phải có ít nhất 6 ký tự và chứa ít nhất một chữ và một số");
             return "redirect:/dang-nhap#register";
         }
-        if (khachHangRepository.existsByEmail(dangKyUserRequest.getEmailDK())) {
+        if (khachHangService.existsByEmail(dangKyUserRequest.getEmailDK())) {
             redirectAttributes.addFlashAttribute("loginError", "Tài khoản đã tồn tại");
             return "redirect:/dang-nhap#register";
         }

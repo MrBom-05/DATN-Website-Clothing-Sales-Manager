@@ -5,6 +5,7 @@ import com.example.websitebanquanao.entities.HoaDonChiTiet;
 import com.example.websitebanquanao.entities.SanPhamChiTiet;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
+import com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse;
 import com.example.websitebanquanao.repositories.HoaDonChiTietRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Service
 public class HoaDonChiTietService {
+
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
 
@@ -88,5 +90,9 @@ public class HoaDonChiTietService {
 
     public BigDecimal sumTongTien(UUID idHoaDon) {
         return hoaDonChiTietRepository.sumTongTienByIdHoaDon(idHoaDon);
+    }
+
+    public List<HoaDonUserResponse> findListHoaDonByKhachHang(UUID idKhachHang) {
+        return hoaDonChiTietRepository.findListHoaDonByKhachHang(idKhachHang);
     }
 }
