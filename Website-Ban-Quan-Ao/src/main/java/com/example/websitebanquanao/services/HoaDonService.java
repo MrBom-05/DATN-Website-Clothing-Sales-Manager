@@ -6,7 +6,7 @@ import com.example.websitebanquanao.entities.KhachHang;
 import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
-import com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse;
+import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,7 +156,7 @@ public class HoaDonService {
         return hoaDon.getId();
     }
 
-    public HoaDonUserResponse findHoaDonUserResponseById(UUID id) {
+    public HoaDonChiTietUserResponse findHoaDonUserResponseById(UUID id) {
         System.out.println("HoaDonService.findHoaDonUserResponseById: " + id);
         return hoaDonRepository.findHoaDonUserResponseById(id);
     }

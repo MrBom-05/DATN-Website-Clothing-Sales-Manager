@@ -3,6 +3,7 @@ package com.example.websitebanquanao.repositories;
 import com.example.websitebanquanao.entities.HoaDonChiTiet;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
+import com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,17 +16,11 @@ import java.util.UUID;
 @Repository
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UUID> {
     // admin
-    @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.GioHangResponse(MIN(hdct.id), hdct.idSanPhamChiTiet.id, " +
-            "hdct.idSanPhamChiTiet.maSanPham, hdct.idSanPhamChiTiet.idSanPham.ten,MIN(hdct.idSanPhamChiTiet.idMauSac.ten),MIN(hdct.idSanPhamChiTiet.idKichCo.ten), SUM(hdct.soLuong), min(hdct.gia)) " +
-            "FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :hoaDonId " +
-            "GROUP BY hdct.idSanPhamChiTiet.id, hdct.idSanPhamChiTiet.maSanPham, hdct.idSanPhamChiTiet.idSanPham.ten, hdct.idSanPhamChiTiet.gia")
+    @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.GioHangResponse(MIN(hdct.id), hdct.idSanPhamChiTiet.id, hdct.idSanPhamChiTiet.maSanPham, hdct.idSanPhamChiTiet.idSanPham.ten, MIN(hdct.idSanPhamChiTiet.idMauSac.ten), MIN(hdct.idSanPhamChiTiet.idKichCo.ten), SUM(hdct.soLuong), min(hdct.gia)) FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :hoaDonId GROUP BY hdct.idSanPhamChiTiet.id, hdct.idSanPhamChiTiet.maSanPham, hdct.idSanPhamChiTiet.idSanPham.ten, hdct.idSanPhamChiTiet.gia")
     List<GioHangResponse> findTotalQuantityByHoaDonId(@Param("hoaDonId") UUID hoaDonId);
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :idHoaDon AND hdct.idSanPhamChiTiet.id = :idSanPhamChiTiet")
     public HoaDonChiTiet findByHoaDonIdAndSanPhamChiTietId(UUID idHoaDon, UUID idSanPhamChiTiet);
-
-    @Query("SELECT hdct.id FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :idHoaDon")
-    public UUID findIdHoaDonChiTietByIdHoaDon(UUID idHoaDon);
 
     // user
     @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse(sp.id, spct.id, spct.maSanPham, sp.ten, ms.id, ms.ten, kc.ten, hdct.soLuong, spct.soLuong, hdct.gia) FROM HoaDonChiTiet hdct JOIN hdct.idSanPhamChiTiet spct JOIN spct.idSanPham sp LEFT JOIN spct.idMauSac ms LEFT JOIN spct.idKichCo kc WHERE hdct.idHoaDon.id = :idHoaDon")
@@ -33,4 +28,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 
     @Query("SELECT SUM(hdct.gia * hdct.soLuong) FROM HoaDonChiTiet hdct WHERE hdct.idHoaDon.id = :idHoaDon")
     public BigDecimal sumTongTienByIdHoaDon(@Param("idHoaDon") UUID idHoaDon);
+
+    @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse(hd.id, hd.ma, hd.ngayTao, hd.trangThai, SUM(hdct.gia * hdct.soLuong)) FROM HoaDonChiTiet hdct JOIN hdct.idHoaDon hd WHERE hd.idKhachHang.id = :idKhachHang GROUP BY hd.id, hd.ma, hd.ngayTao, hd.trangThai")
+    public List<HoaDonUserResponse> findListHoaDonByKhachHang(@Param("idKhachHang") UUID idKhachHang);
 }

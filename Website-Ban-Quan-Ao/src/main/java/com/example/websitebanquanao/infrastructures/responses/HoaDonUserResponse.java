@@ -7,25 +7,17 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.UUID;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class HoaDonUserResponse {
+    private UUID id;
     private String ma;
-    private Integer trangThai;
     private Instant ngayTao;
-    private Instant ngayThanhToan;
-    private String nguoiNhan;
-    private String diaChi;
-    private String xaPhuong;
-    private String quanHuyen;
-    private String tinhThanhPho;
-    private String email;
-    private String soDienThoai;
-    private String maVanChuyen;
-    private String tenDonViVanChuyen;
-    private BigDecimal phiVanChuyen;
-    private String ghiChu;
+    private Integer trangThai;
+    private BigDecimal tongTien;
 }
