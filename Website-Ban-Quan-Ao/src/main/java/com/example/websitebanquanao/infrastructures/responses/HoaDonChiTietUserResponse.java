@@ -15,8 +15,11 @@ import java.time.Instant;
 public class HoaDonChiTietUserResponse {
     private String ma;
     private Integer trangThai;
+    private Integer hinhThucThanhToan;
     private Instant ngayTao;
     private Instant ngayThanhToan;
+    private Instant ngayVanChuyen;
+    private Instant ngayNhan;
     private String nguoiNhan;
     private String diaChi;
     private String xaPhuong;
