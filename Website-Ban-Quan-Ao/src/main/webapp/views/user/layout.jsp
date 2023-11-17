@@ -13,58 +13,82 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
           integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous"/>
 </head>
+<style>
+    <%--        fixed navbar--%>
+    body {
+        padding-top: 70px; /* Adjust this value based on your navbar height */
+    }
 
+    .custom-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        transition: background-color 0.3s;
+    }
+
+    .custom-nav.scrolled {
+        background-color: #ffffff;
+    }
+    .menu-div-2 {
+        display: flex;
+        align-items: center;
+    }
+    /* Optional: Add margin to the right of the last item to separate it from the dropdown */
+    .menu-div-2 .nav-item.dropdown {
+        margin-right: 10px; /* Adjust as needed */
+    }
+
+
+</style>
 <body>
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark custom-nav">
         <div class="container">
             <a class="navbar-brand" href="/">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse ps-5" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav m-auto"> <!-- Use 'mr-auto' here -->
+                    <li class="nav-item  ">
                         <a style="color: #ffffff" class="nav-link" href="/san-pham">Sản Phẩm</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item  ">
                         <a style="color: #ffffff" class="nav-link" href="/sale">Sale</a>
                     </li>
                     <li class="nav-item">
                         <a style="color: #ffffff" class="nav-link" href="/gioi-thieu">Giới Thiệu</a>
                     </li>
                 </ul>
-            </div>
-            <div class="menu-div-2">
-                <div class="menu-img">
-                    <a href="#" class="text-dark">
-                        <i class="fas fa-search" style="color: #ffffff"></i>
-                    </a>
-                </div>
-                <div class="menu-img">
-                    <a href="/gio-hang" class="menu-overlap-group">
-                        <i class="fas fa-shopping-cart" style="color: #ffffff;"></i>
-                    </a>
-                </div>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        <i class="fas fa-user" style="color: #ffffff;"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.khachHang}">
-                                <li><a class="dropdown-item" href="/hoa-don">Hoá đơn của tôi</a></li>
-                                <li><a class="dropdown-item" href="/dang-xuat">Đăng xuất</a></li>
-                            </c:when>
-                            <c:otherwise>
-                                <li><a class="dropdown-item" href="/dang-nhap">Đăng nhập</a></li>
-                            </c:otherwise>
-                        </c:choose>
+                <div class="menu-div-2 ">
+                  <div class="d-flex">
 
-                    </ul>
-                </li>
+                      <li class="nav-item dropdown">
+                          <a class="nav-link" href="/gio-hang" role="button">
+                              <i class="fas fa-shopping-cart" style="color: #ffffff;"></i>
+                          </a>
+                      </li>
+                      <li class="nav-item dropdown">
+                          <a class="nav-link mb-4 ms-4 " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="fas fa-user" style="color: #ffffff;"></i>
+                          </a>
+                          <ul class="dropdown-menu">
+                              <c:choose>
+                                  <c:when test="${not empty sessionScope.khachHang}">
+                                      <li><a class="dropdown-item" href="/hoa-don">Hoá đơn của tôi</a></li>
+                                      <li><a class="dropdown-item" href="/dang-xuat">Đăng xuất</a></li>
+                                  </c:when>
+                                  <c:otherwise>
+                                      <li><a class="dropdown-item" href="/dang-nhap">Đăng nhập</a></li>
+                                  </c:otherwise>
+                              </c:choose>
+                          </ul>
+                      </li>
+                  </div>
+                </div>
             </div>
         </div>
     </nav>
