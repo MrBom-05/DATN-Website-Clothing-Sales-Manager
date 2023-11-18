@@ -114,9 +114,6 @@ public class HoaDonService {
             hoaDonRepository.save(hoaDon);
         }
     }
-    public void updateDaThanhToanHoaDon(UUID id) {
-        hoaDonRepository.updateDaThanhToanHoaDon(id);
-    }
 
     // user
     public UUID addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse, GiamGiaResponse giamGiaResponse) {
