@@ -6,6 +6,7 @@ import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
+import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.AnhSanPhamService;
 import com.example.websitebanquanao.services.GiamGiaService;
@@ -106,7 +107,7 @@ public class TrangChuController {
     // lấy số phần trăm khuyến mãi để hiển thị lên sản phẩm
     @GetMapping("/so-phan-tram-giam/{idSanPham}")
     @ResponseBody
-    public ResponseEntity<Integer> soPhanTramGiam(@PathVariable("idSanPham") UUID idSanPham) {
+    public ResponseEntity<Integer> soPhanTramGiamKhuyenMai(@PathVariable("idSanPham") UUID idSanPham) {
         return ResponseEntity.ok(khuyenMaiChiTietService.getSoPhanTramGiamByIdSanPham(idSanPham));
     }
 
@@ -260,14 +261,29 @@ public class TrangChuController {
         return "user/layout";
     }
 
+    @GetMapping("/so-phan-tram-giam-gia/{id}")
+    @ResponseBody
+    public ResponseEntity<Integer> soPhanTramGiamGiamGia(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(hoaDonService.getSoPhanTramGiamByIdHoaDon(id));
+    }
+
     // xem hoá đơn chi tiết
     @GetMapping("/hoa-don/{id}")
     public String hoaDonChiTiet(@PathVariable("id") UUID id, Model model) {
         model.addAttribute("hoaDon", hoaDonService.findHoaDonUserResponseById(id));
         model.addAttribute("listSanPhamTrongHoaDon", hoaDonChiTietService.getListByIdHoaDon(id));
-        model.addAttribute("tongTien", hoaDonService.sumTongTienByIdHoaDon(id).intValue());
+
         model.addAttribute("id", id);
         session.setAttribute("idHoaDon", id);
+
+        BigDecimal tongTien = hoaDonService.sumTongTienByIdHoaDon(id);
+        Integer soPhanTramGiam = hoaDonService.getSoPhanTramGiamByIdHoaDon(id);
+        BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
+
+        model.addAttribute("soTienTruocGiam", hoaDonChiTietService.sumTongTien(id).intValue());
+        model.addAttribute("soTienDuocGiam", soTienDuocGiam.intValue());
+        model.addAttribute("soTienSauKhiGiam", tongTien.intValue());
+
         model.addAttribute("viewContent", "/views/user/hoa-don-chi-tiet.jsp");
         return "user/layout";
     }

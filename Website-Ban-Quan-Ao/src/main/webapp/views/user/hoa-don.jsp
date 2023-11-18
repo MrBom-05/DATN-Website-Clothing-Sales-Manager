@@ -34,39 +34,48 @@
 
                                 <div class="col-2">
                                     <p>Tổng Tiền</p>
-                                    <p class="text-truncate text-danger" id="tongTien_${hoaDon.ma}">
-                                            ${hoaDon.tongTien}
-                                    </p>
+                                    <p class="text-truncate text-danger" id="tongTien_${hoaDon.ma}"></p>
                                     <script>
-                                        var giaSanPhamElement = document.getElementById("tongTien_${hoaDon.ma}");
-                                        var giaSanPhamText = giaSanPhamElement.innerText;
-                                        var formattedGia = parseInt(giaSanPhamText.replace(/[^\d]/g, '')).toLocaleString('en-US');
-                                        giaSanPhamElement.innerText = formattedGia + " vnđ";
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            var giaSanPhamElement = document.getElementById("tongTien_${hoaDon.ma}");
+
+                                            fetch(`/so-phan-tram-giam-gia/${hoaDon.id}`)
+                                                .then(response => response.json())
+                                                .then(data => {
+
+                                                    var soPhanTramGiam = data;
+                                                    var soTienBanDau = ${hoaDon.tongTien};
+                                                    var soTienSauGiam = soTienBanDau - (soTienBanDau * (soPhanTramGiam / 100));
+                                                    var formattedTienSauGiam = soTienSauGiam.toLocaleString('en-US');
+                                                    giaSanPhamElement.innerText = formattedTienSauGiam + " vnđ";
+                                                })
+                                                .catch(error => console.error('Lỗi:', error));
+                                        });
                                     </script>
                                 </div>
 
                                 <div class="col-2">
                                     <p>Trạng Thái</p>
                                     <p class="text-truncate text-danger">
-                                    <c:if test="${hoaDon.trangThai == 0}">
-                                        <span class="text-secondary">Chờ thanh toán</span>
-                                    </c:if>
-                                    <c:if test="${hoaDon.trangThai == 1}">
-                                        <span class="text-success">Đã thanh toán</span>
-                                    </c:if>
-                                    <c:if test="${hoaDon.trangThai == 2}">
-                                        <span class="text-secondary">Chờ xác nhận</span>
-                                    </c:if>
-                                    <c:if test="${hoaDon.trangThai == 3}">
-                                        <span class="text-secondary">Chờ giao</span>
-                                    </c:if>
-                                    <c:if test="${hoaDon.trangThai == 4}">
-                                        <span class="text-success">Đang giao</span>
-                                    </c:if>
-                                    <c:if test="${hoaDon.trangThai == 5}">
-                                        <span class="text-danger">Đã huỷ</span>
-                                    </c:if>
-                                </p>
+                                        <c:if test="${hoaDon.trangThai == 0}">
+                                            <span class="text-secondary">Chờ thanh toán</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 1}">
+                                            <span class="text-success">Đã thanh toán</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 2}">
+                                            <span class="text-secondary">Chờ xác nhận</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 3}">
+                                            <span class="text-secondary">Chờ giao</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 4}">
+                                            <span class="text-success">Đang giao</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 5}">
+                                            <span class="text-danger">Đã huỷ</span>
+                                        </c:if>
+                                    </p>
                                 </div>
                             </div>
                         </div>

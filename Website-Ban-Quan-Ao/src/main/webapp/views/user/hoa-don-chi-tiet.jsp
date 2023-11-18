@@ -33,22 +33,21 @@
         <div class="col-9">
         </div>
         <div class="col-3">
-            <c:if test="${hoaDon.trangThai != 1 && hoaDon.hinhThucThanhToan == 2}">
+            <c:if test="${hoaDon.ngayThanhToan == null && hoaDon.hinhThucThanhToan == 2}">
                 <div>
                     <form action="/submit-payment/${id}" method="post">
-                        <button type="submit" class="btn btn-success col-12">Xác nhận đã thanh toán</button>
+                        <button type="submit" class="btn btn-success col-12">Xác nhận thanh toán</button>
                     </form>
                 </div>
             </c:if>
-            <c:if test="${hoaDon.trangThai == 1 && hoaDon.hinhThucThanhToan == 2}">
-                <div>
-                    <form action="/submit-payment/${id}" method="post">
-                        <button type="submit" class="btn btn-success col-12" disabled>Đã thanh toán</button>
-                    </form>
-                </div>
+            <c:if test="${hoaDon.ngayThanhToan != null && hoaDon.hinhThucThanhToan == 2}">
+                <button class="btn btn-success col-12 mb-2" disabled>Đã thanh toán</button>
             </c:if>
             <c:if test="${hoaDon.trangThai == 0}">
                 <a type="button" class="btn btn-danger col-12">Huỷ đơn hàng</a>
+            </c:if>
+            <c:if test="${hoaDon.trangThai != 0}">
+                <button class="btn btn-danger col-12" disabled>Huỷ đơn hàng</button>
             </c:if>
         </div>
     </div>
@@ -182,7 +181,7 @@
         <div class="row">
             <div class="col-9 d-flex justify-content-end">Tổng tiền hàng</div>
             <div class="col-3">
-                <p id="tongTien">${tongTien}</p>
+                <p id="tongTien">${soTienTruocGiam}</p>
                 <script>
                     var giaSanPhamElement = document.getElementById("tongTien");
                     var giaSanPhamText = giaSanPhamElement.innerText;
@@ -192,6 +191,21 @@
             </div>
         </div>
         <hr>
+        <c:if test="${soTienDuocGiam != 0}">
+            <div class="row">
+                <div class="col-9 d-flex justify-content-end">Được giảm</div>
+                <div class="col-3">
+                    <p id="tienDuocGiam">${soTienDuocGiam}</p>
+                    <script>
+                        var giamGiaElement = document.getElementById("tienDuocGiam");
+                        var giamGiaText = giamGiaElement.innerText;
+                        var formattedGiamGia = parseInt(giamGiaText.replace(/[^\d]/g, '')).toLocaleString('en-US');
+                        giamGiaElement.innerText = formattedGiamGia + " vnđ";
+                    </script>
+                </div>
+            </div>
+            <hr>
+        </c:if>
         <div class="row">
             <div class="col-9 d-flex justify-content-end">Phí vận chuyển</div>
             <div class="col-3">
@@ -226,20 +240,20 @@
                 <p id="phaiTra"></p>
                 <script>
                     var phaiTraElement = document.getElementById("phaiTra");
-                    var giaSanPhamElement = document.getElementById("tongTien");
-                    var giaSanPhamText = giaSanPhamElement.innerText;
+                    var soTienSauKhiGiam = ${soTienSauKhiGiam};
+
                     var giaVanChuyenElement = document.getElementById("phiVanChuyen");
                     var giaVanChuyenText = giaVanChuyenElement.innerText;
                     var hinhThucThanhToan = '${hoaDon.hinhThucThanhToan}';
 
                     var tong = 0;
                     if (giaVanChuyenText !== 'Chưa tính') {
-                        var giaSanPham = parseInt(giaSanPhamText.replace(/[^\d]/g, ''));
+                        var soTienSauKhiGiam = parseInt(giaSanPhamText.replace(/[^\d]/g, ''));
                         var giaVanChuyen = parseInt(giaVanChuyenText.replace(/[^\d]/g, ''));
 
-                        if (!isNaN(giaSanPham) && !isNaN(giaVanChuyen)) {
+                        if (!isNaN(soTienSauKhiGiam) && !isNaN(giaVanChuyen)) {
                             if (hinhThucThanhToan == 1) {
-                                tong = giaSanPham + giaVanChuyen;
+                                tong = soTienSauKhiGiam + giaVanChuyen;
                             } else {
                                 tong = giaVanChuyen;
                             }

@@ -30,5 +30,4 @@ public class HoaDonChiTietUserResponse {
     private String maVanChuyen;
     private String tenDonViVanChuyen;
     private BigDecimal phiVanChuyen;
-    private String ghiChu;
 }
