@@ -26,33 +26,29 @@
                 </c:if>
             </span>
         </p>
-        <hr>
         </p>
     </div>
-    <div class="row">
-        <div class="col-9">
+    <c:if test="${hoaDon.hinhThucThanhToan == 2}">
+        <div class="row">
+            <hr>
+            <div class="col-9">
+            </div>
+            <div class="col-3">
+                <c:if test="${hoaDon.ngayThanhToan == null && hoaDon.hinhThucThanhToan == 2}">
+                    <div>
+                        <form action="/submit-payment/${id}" method="post">
+                            <button type="submit" class="btn btn-success col-12">Xác nhận thanh toán</button>
+                        </form>
+                    </div>
+                </c:if>
+                <c:if test="${hoaDon.ngayThanhToan != null && hoaDon.hinhThucThanhToan == 2}">
+                    <button class="btn btn-success col-12 mb-2" disabled>Đã thanh toán</button>
+                </c:if>
+            </div>
         </div>
-        <div class="col-3">
-            <c:if test="${hoaDon.ngayThanhToan == null && hoaDon.hinhThucThanhToan == 2}">
-                <div>
-                    <form action="/submit-payment/${id}" method="post">
-                        <button type="submit" class="btn btn-success col-12">Xác nhận thanh toán</button>
-                    </form>
-                </div>
-            </c:if>
-            <c:if test="${hoaDon.ngayThanhToan != null && hoaDon.hinhThucThanhToan == 2}">
-                <button class="btn btn-success col-12 mb-2" disabled>Đã thanh toán</button>
-            </c:if>
-            <c:if test="${hoaDon.trangThai == 0}">
-                <a type="button" class="btn btn-danger col-12">Huỷ đơn hàng</a>
-            </c:if>
-            <c:if test="${hoaDon.trangThai != 0}">
-                <button class="btn btn-danger col-12" disabled>Huỷ đơn hàng</button>
-            </c:if>
-        </div>
-    </div>
+    </c:if>
 
-    <div class="mt-4 row">
+    <div class="mt-2 row">
         <hr>
         <div class="col-4 border-end">
             <p class="fw-bold text-uppercase">Địa chỉ nhận hàng</p>
@@ -124,7 +120,7 @@
                     <td>${status.index + 1}</td>
                     <td>
                         <div id="carouselExampleSlidesOnly_${sp.idSanPhamChiTiet}"
-                             class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+                             class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
                             <div class="carousel-inner" style="width: 150px; height: 150px">
                                 <c:forEach items="${listAnhSanPham}" var="anhSanPham" varStatus="status">
                                     <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
