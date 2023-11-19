@@ -245,7 +245,7 @@ public class BanHangController {
             }
         }
 
-        return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
+        return "redirect:/admin/ban-hang";
     }
 
     @PostMapping("/tao-don-hang/{idHoaDon}")

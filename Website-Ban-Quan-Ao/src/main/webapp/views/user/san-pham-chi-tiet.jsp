@@ -112,7 +112,6 @@
                         </div>
                         <form:select path="idMauSac" class="form-select w-75" aria-label="Color Select"
                                      id="mauSacSelect">
-                            <option selected>Chọn</option>
                             <c:forEach items="${listMauSac}" var="mauSac">
                                 <option value="${mauSac.id}" ${mauSac.id == idMauSac ? "selected" : ""}>${mauSac.ten}</option>
                             </c:forEach>
@@ -140,7 +139,7 @@
                         <div class="title">
                             <p>Kích cỡ:</p>
                         </div>
-                        <form:select path="idKichCo" class="form-select w-75" aria-label="Size Select">
+                        <form:select path="idKichCo" class="form-select w-75" aria-label="Size Select" id="kichCoSelect">
                             <option selected>Chọn</option>
                             <c:forEach items="${listKichCo}" var="kichCo">
                                 <option value="${kichCo.id}">${kichCo.ten}</option>
@@ -184,7 +183,15 @@
 
                 <div class="mt-5">
                     <div class="justify-content-between">
-                        <button type="submit" class="btn btn-dark">Thêm vào giỏ hàng</button>
+                        <c:if test="${khachHang != null}">
+                            <button type="submit" id="btnThemVaoGioHang"
+                                    class="btn btn-outline-dark btn-lg">Thêm vào giỏ hàng</button>
+                            <p class="text-danger ms-1 mt-2" id="textKichCo" style="display: none">Bạn cần chọn kích cỡ</p>
+                            <p class="text-danger ms-1 mt-2" id="textMauSac" style="display: none">Bạn cần chọn màu sắc</p>
+                        </c:if>
+                        <c:if test="${khachHang == null}">
+                            <a href="/dang-nhap" class="btn btn-outline-dark btn-lg">Bạn cần đăng nhập để mua hàng</a>
+                        </c:if>
                     </div>
                 </div>
             </form:form>
@@ -193,4 +200,30 @@
     </div>
 
 </div>
+<script>
+// nếu khi ấn nút thêm vào giỏ hàng mà chưa chọn kích cỡ thì yêu cầu chọn kích cỡ
+    $(document).ready(function () {
+        $("#btnThemVaoGioHang").click(function () {
+            var kichCo = $("#kichCoSelect").val();
+            if (kichCo == "Chọn") {
+                $("#textKichCo").show();
+                return false;
+            }
+        });
+    });
+//    nếu đã chọn kích cỡ thì ẩn thông báo
+    $(document).ready(function () {
+        $("#kichCoSelect").change(function () {
+            $("#textKichCo").hide();
+        });
+    });
+// không cho phép click vào option "chọn" ở màu sắc. disable option "chọn" ở màu sắc, không được phép chọn
+    $(document).ready(function () {
+        $("#mauSacSelect").change(function () {
+            $("#mauSacSelect option[value='']").attr("disabled", "disabled");
+        });
+    });
+
+
+</script>
 
