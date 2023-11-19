@@ -127,35 +127,36 @@ CREATE TABLE giam_gia
 
 CREATE TABLE hoa_don
 (
-    id                    UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    ma                    VARCHAR(50) UNIQUE NOT NULL,
+    id                       UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ma                       VARCHAR(50) UNIQUE NOT NULL,
     -- Ngày tạo hoá đơn
-    ngay_tao              DATETIME                     DEFAULT GETDATE(),
+    ngay_tao                 DATETIME                     DEFAULT GETDATE(),
     -- Ngày thanh toán
-    ngay_thanh_toan       DATETIME,
+    ngay_thanh_toan          DATETIME,
     -- Ngày vận chuyển
-    ngay_van_chuyen       DATETIME,
+    ngay_van_chuyen          DATETIME,
     -- Ngày nhận hàng
-    ngay_nhan             DATETIME,
+    ngay_nhan                DATETIME,
     -- id người mua
-    id_khach_hang         UNIQUEIDENTIFIER,
+    id_khach_hang            UNIQUEIDENTIFIER,
     -- id người duyệt
-    id_nhan_vien          UNIQUEIDENTIFIER,
-    id_giam_gia           UNIQUEIDENTIFIER,
-    nguoi_nhan            NVARCHAR(100),
-    email                 NVARCHAR(50),
-    so_dien_thoai         NVARCHAR(15),
-    hinh_thuc_thanh_toan  INT,
-    dia_chi               NVARCHAR(100),
-    xa_phuong             NVARCHAR(80),
-    quan_huyen            NVARCHAR(80),
-    tinh_thanh_pho        NVARCHAR(80),
-    trang_thai            INT,
-    loai_hoa_don          INT,
-    ma_van_chuyen         VARCHAR(50),
-    ten_don_vi_van_chuyen NVARCHAR(MAX),
-    phiVanChuyen          DECIMAL(20, 0)               DEFAULT 0,
-    ghi_chu               NVARCHAR(MAX)
+    id_nhan_vien             UNIQUEIDENTIFIER,
+    id_giam_gia              UNIQUEIDENTIFIER,
+    nguoi_nhan               NVARCHAR(100),
+    email                    NVARCHAR(50),
+    so_dien_thoai            NVARCHAR(15),
+    hinh_thuc_thanh_toan     INT,
+    dia_chi                  NVARCHAR(100),
+    xa_phuong                NVARCHAR(80),
+    quan_huyen               NVARCHAR(80),
+    tinh_thanh_pho           NVARCHAR(80),
+    trang_thai               INT,
+    loai_hoa_don             INT,
+    ma_van_chuyen            VARCHAR(50),
+    ten_don_vi_van_chuyen    NVARCHAR(MAX),
+    phi_van_chuyen           DECIMAL(20, 0)               DEFAULT 0,
+    anh_hoa_don_chuyen_khoan NVARCHAR(MAX),
+    ghi_chu                  NVARCHAR(MAX)
 )
 
 CREATE TABLE hoa_don_chi_tiet
@@ -166,18 +167,6 @@ CREATE TABLE hoa_don_chi_tiet
     id_khuyen_mai        UNIQUEIDENTIFIER,
     gia                  DECIMAL(20, 0)               DEFAULT 0,
     so_luong             INT
-)
-
-CREATE TABLE doi_tra
-(
-    id            UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    id_khach_hang UNIQUEIDENTIFIER,
-    id_hoa_don    UNIQUEIDENTIFIER,
-    id_nhan_vien  UNIQUEIDENTIFIER,
-    ngay_doi_tra  DATETIME                     DEFAULT GETDATE(),
-    ghi_chu       NVARCHAR(MAX),
-
-    trang_thai    INT
 )
 
 -- loai - san_pham
@@ -235,14 +224,5 @@ ALTER TABLE hoa_don_chi_tiet
 -- san_pham_chi_tiet - hoa_don_chi_tiet
 ALTER TABLE hoa_don_chi_tiet
     ADD FOREIGN KEY (id_san_pham_chi_tiet) REFERENCES san_pham_chi_tiet (id)
--- khach_hang - doi_tra
-ALTER TABLE doi_tra
-    ADD FOREIGN KEY (id_khach_hang) REFERENCES khach_hang (id)
--- nhan_vien - doi_tra
-ALTER TABLE doi_tra
-    ADD FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien (id)
--- hoa_don - doi_tra
-ALTER TABLE doi_tra
-    ADD FOREIGN KEY (id_hoa_don) REFERENCES hoa_don (id)
 
 

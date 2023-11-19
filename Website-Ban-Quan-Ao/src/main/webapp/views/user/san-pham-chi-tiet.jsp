@@ -186,8 +186,8 @@
                         <c:if test="${khachHang != null}">
                             <button type="submit" id="btnThemVaoGioHang"
                                     class="btn btn-outline-dark btn-lg">Thêm vào giỏ hàng</button>
-                            <p class="text-danger ms-1 mt-2" id="textKichCo" style="display: none">Bạn cần chọn kích cỡ</p>
-                            <p class="text-danger ms-1 mt-2" id="textMauSac" style="display: none">Bạn cần chọn màu sắc</p>
+                            <p class="text-danger ms-3 mt-2" id="textKichCo" style="display: none">Bạn cần chọn kích cỡ</p>
+                            <p class="text-danger ms-3 mt-2" id="textMauSac" style="display: none">Bạn cần chọn màu sắc</p>
                         </c:if>
                         <c:if test="${khachHang == null}">
                             <a href="/dang-nhap" class="btn btn-outline-dark btn-lg">Bạn cần đăng nhập để mua hàng</a>

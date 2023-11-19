@@ -52,9 +52,6 @@ public class KhachHang {
     private String tinhThanhPho;
 
     @OneToMany(mappedBy = "idKhachHang")
-    private Set<DoiTra> doiTras = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idKhachHang")
     private Set<GioHang> gioHangs = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idKhachHang")

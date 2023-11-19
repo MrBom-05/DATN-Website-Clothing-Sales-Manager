@@ -92,14 +92,14 @@ public class HoaDon {
     @Column(name = "ten_don_vi_van_chuyen", nullable = false)
     private String tenDonViVanChuyen;
 
-    @Column(name = "phiVanChuyen")
+    @Column(name = "phi_van_chuyen")
     private BigDecimal phiVanChuyen;
 
     @Column(name = "ghi_chu")
     private String ghiChu;
 
-    @OneToMany(mappedBy = "idHoaDon")
-    private Set<DoiTra> doiTras = new LinkedHashSet<>();
+    @Column(name = "anh_hoa_don_chuyen_khoan")
+    private String anhHoaDonChuyenKhoan;
 
     @OneToMany(mappedBy = "idHoaDon")
     private Set<HoaDonChiTiet> hoaDonChiTiets = new LinkedHashSet<>();
