@@ -33,7 +33,7 @@ public class HoaDonService {
 
     // admin
     public List<HoaDon> getAll() {
-        return hoaDonRepository.findAll();
+        return hoaDonRepository.findAllHd();
     }
 
     public List<HoaDon> getAllHoaDonChuaThanhToan() {

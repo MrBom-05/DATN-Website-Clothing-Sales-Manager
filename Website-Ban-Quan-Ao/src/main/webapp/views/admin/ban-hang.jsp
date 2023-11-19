@@ -190,7 +190,7 @@
                     Quét QR
                 </button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#MASPModal">
-                   Thêm với mã SP
+                    Thêm với mã SP
                 </button>
             </div>
             <table class="table text-center">
@@ -215,6 +215,35 @@
                 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
                     <tr>
                         <td>${status.index + 1}</td>
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                var idSanPham = '${sp.idSanPhamChiTiet}';
+                                console.log(idSanPham);
+                                $.ajax({
+                                    url: '/get-anh-san-pham/' + idSanPham,
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        // Xử lý phản hồi từ máy chủ và cập nhật danh sách ảnh
+                                        var listAnhSanPham = data;
+                                        var carouselInner = $('#carouselExampleSlidesOnly_${sp.idSanPhamChiTiet} .carousel-inner');
+                                        carouselInner.empty();
+
+                                        $.each(listAnhSanPham, function (index, anhSanPham) {
+                                            var isActive = index === 0 ? 'active' : '';
+                                            var carouselItem = '<div class="carousel-item ' + isActive + '">'
+                                                + '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">'
+                                                + '</div>';
+                                            carouselInner.append(carouselItem);
+                                        });
+                                    },
+                                    error: function () {
+                                        console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
+                                    }
+                                });
+                            });
+                        </script>
                         <td>
                             <!-- Ảnh -->
                             <div id="carouselExampleSlidesOnly_${sp.idSanPhamChiTiet}"
@@ -318,30 +347,30 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-4">
+                            <div class="col-6">
                                 <select id="provinceSelect" class="form-select">
                                     <option value="" disabled selected>Chọn tỉnh/thành phố</option>
                                 </select>
                                 <input type="hidden" id="provinceName" name="tinhThanh">
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <select id="districtSelect" class="form-select">
                                     <option value="" disabled selected>Chọn quận/huyện</option>
                                 </select>
                                 <input type="hidden" id="districtName" name="quanHuyen">
                             </div>
-                            <div class="col-4">
+                            <div class="col-6 mt-3">
                                 <select id="wardSelect" class="form-select">
                                     <option value="" disabled selected>Chọn phường/xã</option>
                                 </select>
                                 <input type="hidden" id="wardName" name="xaPhuong">
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-6">
+                            <div class="col-6 mt-3">
                                 <input type="text" class="form-control" id="ma-van-chuyen" name="maVanChuyen"
                                        placeholder="Mã vận chuyển">
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-6">
                                 <input type="text" id="ten-don-vi" name="tenDonViVanChuyen"
                                        placeholder="Tên đơn vị vận chuyển">
@@ -466,39 +495,17 @@
             </div>
             <div class="modal-body">
                 <!-- thêm các filter với combox box -->
-                <div class="row">
-                    <div class="col-4">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Chọn loại sản phẩm</option>
-                            <option value="1">Điện thoại</option>
-                            <option value="2">Laptop</option>
-                            <option value="3">Máy tính bảng</option>
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Chọn loại sản phẩm</option>
-                            <option value="1">Điện thoại</option>
-                            <option value="2">Laptop</option>
-                            <option value="3">Máy tính bảng</option>
-                        </select>
-                    </div>
-                    <div class="col-4">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Chọn loại sản phẩm</option>
-                            <option value="1">Điện thoại</option>
-                            <option value="2">Laptop</option>
-                            <option value="3">Máy tính bảng</option>
-                        </select>
-                    </div>
-                </div>
                 <div class="row mt-2">
-                    <!-- tìm kiếm theo tên sp -->
-                    <div class="col-5 offset-3">
+                    <!-- Tìm kiếm theo tên sản phẩm -->
+                    <div class="col-6">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
-                            <button class="btn btn-primary ">Tìm kiếm</button>
+                            <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                            <button id="searchButton" class="btn btn-primary">Tìm kiếm</button>
                         </div>
+                    </div>
+                    <div class="col-6 ">
+                        <button class="btn btn-primary w100 " id="allProduct">Tất cả sản phẩm</button>
+                    </div>
                     </div>
                     <div class="row">
                         <table class="table text-center">
@@ -512,151 +519,175 @@
                                 <th scope="col">Thao tác</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <c:forEach items="${listProduct}" var="sp" varStatus="status">
-                                <tr>
-                                    <td>${status.index + 1}</td>
-                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                    <script>
-                                        $(document).ready(function () {
-                                            var idSanPham = '${sp.id}';
-                                            $.ajax({
-                                                url: '/get-anh-san-pham/' + idSanPham,
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                success: function (data) {
-                                                    // Xử lý phản hồi từ máy chủ và cập nhật danh sách ảnh
-                                                    var listAnhSanPham = data;
-                                                    var carouselInner = $('#carouselExampleSlidesOnly_${sp.id} .carousel-inner');
-                                                    carouselInner.empty();
-
-                                                    $.each(listAnhSanPham, function (index, anhSanPham) {
-                                                        var isActive = index === 0 ? 'active' : '';
-                                                        var carouselItem = '<div class="carousel-item ' + isActive + '">'
-                                                            + '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">'
-                                                            + '</div>';
-                                                        carouselInner.append(carouselItem);
-                                                    });
-                                                },
-                                                error: function () {
-                                                    console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
-                                                }
-                                            });
-                                        });
-                                    </script>
-                                    <td>
-                                        <!-- Ảnh -->
-                                        <div id="carouselExampleSlidesOnly_${sp.id}"
-                                             class="carousel slide"
-                                             data-bs-ride="carousel"
-                                             data-bs-interval="1000">
-                                            <div class="carousel-inner" style="width: 150px; height: 150px">
-                                                <c:forEach items="${listAnhSanPham}" var="anhSanPham"
-                                                           varStatus="status">
-                                                    <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                                        <img src="${anhSanPham.duongDan}" class="d-block"
-                                                             id="custom-anh"
-                                                             style="width: 150px; height: 150px">
-                                                    </div>
-                                                </c:forEach>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p>${sp.sanPham.ten}</p>
-                                        <p>${sp.mauSac.ten}</p>
-                                    </td>
-                                    <td>
-                                        <p class="fw-bold gia-san-pham" id="gia-san-pham_${sp.id}">${sp.gia}</p>
-                                        <p class="fw-bold gia-moi" id="gia-moi_${sp.id}"></p>
-                                    </td>
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            // Lấy phần tử có id là "gia-san-pham_${sp.id}"
-                                            var giaElement = document.getElementById('gia-san-pham_${sp.id}');
-                                            // Lấy giá trị không định dạng từ thẻ p
-                                            var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
-                                            // Định dạng lại giá trị và gán lại vào thẻ p
-                                            giaElement.textContent = giaValue.toLocaleString('en-US');
-                                        });
-                                    </script>
-                                    <td>
-                                        <p>${sp.soLuong}</p>
-                                    </td>
-                                    <td>
-                                        <form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">
-                                            <input type="hidden" name="idSanPhamChiTiet" value="${sp.id}"/>
-                                            <input type="hidden" name="gia" value="${sp.gia} " id="gia_${sp.id}"/>
-                                            <input type="hidden" name="soLuong" value="${sp.soLuong}"/>
-                                            <c:if test="${sp.soLuong > 0}">
-                                                <input type="number" name="soLuongMoi" id="soLuongMoi"
-                                                       class="form-control" min="1" max="${sp.soLuong}"
-                                                       value="1" style="width: 100px; display: inline-block;"
-                                                       required="true"
-                                                       oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                                                <button type="submit" class="btn btn-primary mt-1 w-25 ">Thêm</button>
-                                            </c:if>
-                                            <c:if test="${sp.soLuong == 0}">
-                                                <span class="text-danger">Hết hàng</span>
-                                            </c:if>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                <script>
-                                    $(document).ready(function () {
-                                        var idSanPhamChiTiet = '${sp.id}';
-                                        console.log(idSanPhamChiTiet);
-                                        var giaInput = $("#gia_${sp.id}"); // Lấy ô input dựa trên id
-                                        $.ajax({
-                                            url: "/so-phan-tram-giam/" + idSanPhamChiTiet,
-                                            method: "GET",
-                                            success: function (data) {
-                                                var span = $("#so-phan-tram-giam_" + idSanPhamChiTiet);
-                                                var giaSpan = $("#gia-san-pham_" + idSanPhamChiTiet);
-                                                var giaCu = giaSpan.html();
-                                                if (data != null) {
-                                                    // Kiểm tra xem có khuyến mãi không
-                                                    if (data > 0) {
-                                                        span.show();
-                                                        span.html(data + "% off");
-
-                                                        // Tính giá sản phẩm sau khi giảm
-                                                        var giaSanPham = ${sp.gia};
-                                                        var soPhanTramGiam = data;
-                                                        var giaSauGiam = giaSanPham - (giaSanPham * soPhanTramGiam / 100);
-                                                        giaSauGiam = Math.floor(giaSauGiam);
-                                                        giaSpan.hide();
-
-                                                        if (data > 0) {
-                                                            var formattedGiaMoi = giaSauGiam.toLocaleString('en-US');
-                                                            var formattedGiaCu = giaCu.toLocaleString('en-US');
-
-                                                            giaSpan.after('<p class="fw-bold gia-moi" id="formattedGiaMoi_' + idSanPhamChiTiet + '">' + formattedGiaMoi + '</p>');
-                                                            giaSpan.after('<p class="fw-bold gia-cu " style="text-decoration: line-through;" id="formattedGiaCu_' + idSanPhamChiTiet + '">' + formattedGiaCu + '</p>');
-
-                                                            // Cập nhật giá mới trong ô input dựa trên id
-                                                            giaInput.val(giaSauGiam);
-                                                        } else {
-                                                            giaSpan.show();
-                                                            $(".gia-moi").remove();
-                                                            $(".gia-cu").remove();
-                                                            giaInput.val(giaSanPham);
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            error: function () {
-                                                // Xử lý lỗi nếu có
-                                            }
-                                        });
-                                    });
-                                </script>
-
-                            </c:forEach>
+                            <tbody id="productTableBody">
+                            <!-- Các dòng sản phẩm sẽ được thêm vào đây -->
                             </tbody>
                         </table>
+
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                                var allProducts; // Variable to store all products for filtering
+                            $(document).ready(function () {
+                                // Tải sản phẩm từ API
+                                $.ajax({
+                                    url: '/view/san-pham-chi-tiet',
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        // Hiển thị sản phẩm trong bảng
+                                        allProducts = data;
+                                        renderProducts(allProducts );
+                                    },
+                                    error: function () {
+                                        console.log('Lỗi khi tải sản phẩm từ API');
+                                    }
+                                });
+                                $('#searchButton').on('click', function () {
+                                    var searchTerm = $('#searchInput').val().toLowerCase();
+                                    searchProducts(searchTerm);
+                                });
+                                // Xử lý sự kiện khi nhấn nút "Tất cả sản phẩm"
+                                $('#allProduct').on('click', function () {
+                                    renderProducts(allProducts);
+                                });
+                            });
+
+                            function renderProducts(products) {
+                                // Xóa nội dung bảng hiện tại
+                                $('#productTableBody').empty();
+
+                                // Duyệt qua các sản phẩm và thêm dòng vào bảng
+                                $.each(products, function (index, product) {
+                                    var productRow = '<tr>' +
+                                        '<td>' + (index + 1) + '</td>' +
+                                        '<td>' +
+                                        '<div id="carouselExampleSlidesOnly_' + product.id + '" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1000">' +
+                                        '<div class="carousel-inner" style="width: 150px; height: 150px"></div>' +
+                                        '</div>' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '<p>' + product.tenSanPham + '</p>' +
+                                        '<p>' + product.tenMauSac + '</p>' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '<p class="fw-bold gia-san-pham" id="gia-san-pham_' + product.id + '">' + product.gia + '</p>' +
+                                        '<p class="fw-bold gia-moi" id="gia-moi_' + product.id + '"></p>' +
+                                        '</td>' +
+                                        '<td>' +
+                                        '<p>' + product.soLuong + '</p>' +
+                                        '</td>' +
+                                        '<td>';
+
+                                    if (product.soLuong > 0) {
+                                        productRow += '<form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">' +
+                                            '<input type="hidden" name="idSanPhamChiTiet" value="' + product.id + '"/>' +
+                                            '<input type="hidden" name="gia" value="' + product.gia + ' " id="gia_' + product.id + '"/>' +
+                                            '<input type="hidden" name="soLuong" value="' + product.soLuong + '"/>' +
+                                            '<input type="number" name="soLuongMoi" id="soLuongMoi_' + product.id + '" class="form-control" min="1" max="' + product.soLuong + '" value="1" style="width: 100px; display: inline-block;" required="true" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" onchange="updatePromotion(' + product.id + ')">' +
+                                            '<button type="submit" class="btn btn-primary mt-1 w-25">Thêm</button>';
+                                    } else {
+                                        productRow += '<span class="text-danger">Hết hàng</span>';
+                                    }
+
+                                    productRow += '</td></tr>';
+
+                                    $('#productTableBody').append(productRow);
+
+                                    // Load ảnh sản phẩm
+                                    loadProductImages(product.id);
+
+                                    // Load discount percentage
+                                    getDiscountPercentage(product.id);
+                                });
+                            }
+
+                            function loadProductImages(productId) {
+                                var idSanPham = productId;
+                                $.ajax({
+                                    url: '/get-anh-san-pham/' + idSanPham,
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        // Xử lý phản hồi từ máy chủ và cập nhật danh sách ảnh
+                                        var listAnhSanPham = data;
+                                        var carouselInner = $('#carouselExampleSlidesOnly_' + productId + ' .carousel-inner');
+                                        carouselInner.empty();
+
+                                        $.each(listAnhSanPham, function (index, anhSanPham) {
+                                            var isActive = index === 0 ? 'active' : '';
+                                            var carouselItem = '<div class="carousel-item ' + isActive + '">' +
+                                                '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">' +
+                                                '</div>';
+                                            carouselInner.append(carouselItem);
+                                        });
+                                    },
+                                    error: function () {
+                                        console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
+                                    }
+                                });
+                            }
+
+                            function getDiscountPercentage(productId) {
+                                $.ajax({
+                                    url: '/phan-tram-giam/' + productId,
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        // Update the UI to display the discount percentage
+                                        updateDiscountPercentage(productId, data);
+                                    },
+                                    error: function () {
+                                        console.log('Lỗi khi tải phần trăm giảm từ API');
+                                    }
+                                });
+                            }
+
+                            function updateDiscountPercentage(productId, discountPercentage) {
+                                var giaSanPhamId = '#gia-san-pham_' + productId;
+                                var giaMoiId = '#gia-moi_' + productId;
+                                const giaInput = document.getElementById('gia_' + productId);
+                                var giaSanPhamElement = $(giaSanPhamId);
+                                var giaMoiElement = $(giaMoiId);
+
+                                var giaSanPham = parseFloat(giaSanPhamElement.text());
+
+                                if (discountPercentage > 0) {
+                                    var giaMoi = giaSanPham - (giaSanPham * discountPercentage) / 100;
+                                    console.log(giaMoi);
+                                    giaInput.value = giaMoi;
+                                    console.log(giaInput.value);
+                                    // Update the UI with the discount percentage and the new price
+                                    giaMoiElement.text('Giảm ' + discountPercentage + '%: ' + giaMoi);
+                                    giaSanPhamElement.addClass('text-decoration-line-through');
+                                } else {
+                                    // If there is no discount, hide the giaMoiElement
+                                    giaMoiElement.hide();
+                                }
+                            }
+
+                            function updatePromotion(productId) {
+                                // Your existing code for updating promotion
+
+                                // After updating promotion, fetch and display the discount percentage
+                                getDiscountPercentage(productId);
+                            }
+                            function searchProducts(searchTerm) {
+                                // Lọc sản phẩm dựa trên từ khóa tìm kiếm
+                                var filteredProducts = [];
+
+                                // Duyệt qua tất cả sản phẩm và kiểm tra tên sản phẩm
+                                $.each(allProducts, function (index, product) {
+                                    if (product.tenSanPham.toLowerCase().includes(searchTerm)) {
+                                        filteredProducts.push(product);
+                                    }
+                                });
+
+                                // Hiển thị sản phẩm được lọc
+                                renderProducts(filteredProducts);
+                            }
+
+                            // filter
+                        </script>
                     </div>
                 </div>
             </div>
@@ -994,7 +1025,7 @@
                 // Use jQuery to get the value of the feeInput
                 let feeInput = $('#feeInput');
 
-                    // Giữ lại chỉ các ký tự số và dấu phẩy
+                // Giữ lại chỉ các ký tự số và dấu phẩy
                 let phiVanChuyen = parseFloat(feeInput.val().replace(/,/g, '')) || 0;
 
                 // Lấy giá trị tổng tiền từ JSP

@@ -40,7 +40,6 @@ public class SanPhamChiTietService {
         return sanPhamChiTietRepository.findAllCtsp();
     }
 
-
     public void add(SanPhamChiTietRequest sanPhamChiTietRequest) {
         SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
         sanPhamChiTiet.setMaSanPham(sanPhamChiTietRequest.getMaSanPham());

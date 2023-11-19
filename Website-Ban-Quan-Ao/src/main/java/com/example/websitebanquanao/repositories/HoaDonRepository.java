@@ -18,6 +18,9 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     @Query("SELECT hd FROM HoaDon hd JOIN hd.hoaDonChiTiets hdct WHERE hdct.id = :idHoaDonChiTiet")
     HoaDon findHoaDonByHoaDonChiTietId(@Param("idHoaDonChiTiet") UUID idHoaDonChiTiet);
 
+    @Query("SELECT hd FROM HoaDon hd order by hd.ma desc ")
+    List<HoaDon> findAllHd();
+
     @Query("SELECT hd FROM HoaDon hd where hd.trangThai = 0 order by hd.ma desc ")
     List<HoaDon> findAllHoaDon();
     @Modifying

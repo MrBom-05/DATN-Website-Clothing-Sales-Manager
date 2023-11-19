@@ -230,7 +230,22 @@
                                     document.getElementById("ngay-tt-2").textContent = formattedDate;
                                 </script>
                             </td>
-                            <td>${hoaDon.hinhThucThanhToan == 1 ? 'Tiền mặt' : 'Chuyển khoản'}</td>
+                            <td>
+                                <c:if test="${hoaDon.loaiHoaDon == 2}">
+                                    <span class="text-success">Đã thanh toán trước</span>
+                                </c:if>
+                                <c:if test="${hoaDon.loaiHoaDon != 2}">
+                                    <c:if test="${hoaDon.hinhThucThanhToan == 1}">
+                                        Tiền mặt
+                                    </c:if>
+                                    <c:if test="${hoaDon.hinhThucThanhToan == 0}">
+                                        Chuyển khoản
+                                    </c:if>
+                                    <c:if test="${hoaDon.hinhThucThanhToan == 2}">
+                                        Thanh toán VNPay
+                                    </c:if>
+                                </c:if>
+                            </td>
                             <td>${hoaDon.idNhanVien.hoVaTen}</td>
                             <td>${hoaDon.ghiChu}</td>
                         </tr>
@@ -353,7 +368,7 @@
             <form action="/admin/hoa-don/xac-nhan-thanh-toan/${hoaDon.id}" method="post">
                 <input type="hidden" name="trangThai" value="1">
                 <c:if test="${hoaDon.trangThai == 4}">
-                    <input type="hidden" name="httt" value="1">
+                    <input type="hidden" name="httt" value="0">
                 </c:if>
                 <div class="modal-body">
                     <div class="mb-3">

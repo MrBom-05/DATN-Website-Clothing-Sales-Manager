@@ -1,11 +1,10 @@
 package com.example.websitebanquanao.controllers.admins;
 
-import com.example.websitebanquanao.infrastructures.responses.AnhSanPhamResponse;
-import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
-import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
-import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
+import com.example.websitebanquanao.entities.SanPhamChiTiet;
+import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +22,8 @@ public class RestController {
     private AnhSanPhamService anhSanPhamService;
     @Autowired
     private SanPhamChiTietService sanPhamChiTietService;
+    @Autowired
+    private KhuyenMaiChiTietService khuyenMaiChiTietService;
     // getlist sản phẩm by id giỏ hàng
     @GetMapping("/view/spct/view/{id}")
     public List<GioHangResponse> viewHoaDon(@PathVariable("id") UUID id) {
@@ -33,6 +34,16 @@ public class RestController {
         return KhachHangService.getAll();
     }
 
+    @GetMapping("/view/san-pham-chi-tiet")
+    public List<SanPhamChiTietResponse> viewSanPhamChiTiet() {
+        List<SanPhamChiTietResponse> listProduct = sanPhamChiTietService.getAll();
+        return listProduct;
+    }
+    @GetMapping("/phan-tram-giam/{idSanPham}")
+    @ResponseBody
+    public ResponseEntity<Integer> soPhanTramGiamKhuyenMai(@PathVariable("idSanPham") UUID idSanPham) {
+        return ResponseEntity.ok(khuyenMaiChiTietService.getSoPhanTramGiamByIdSanPhamChiTiet(idSanPham));
+    }
     @GetMapping("/get-anh-san-pham/{idCtsp}")
     @ResponseBody
     public List<AnhSanPhamResponse> getAnhSanPhamByCtspId(@PathVariable("idCtsp") UUID idCtsp) {
