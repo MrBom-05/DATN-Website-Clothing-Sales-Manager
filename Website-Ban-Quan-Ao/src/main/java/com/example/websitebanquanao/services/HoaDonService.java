@@ -177,6 +177,6 @@ public class HoaDonService {
 
     @Transactional
     public void updateNgayThanhToanByIdHoaDon(String ma, Instant ngayThanhToan) {
-        hoaDonRepository.updateNgayThanhToanByIdHoaDon(ma, ngayThanhToan);
+        hoaDonRepository.updateNgayThanhToanByIdHoaDon(ma, ngayThanhToan, 6);
     }
 }
