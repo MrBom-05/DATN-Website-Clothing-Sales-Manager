@@ -61,8 +61,7 @@
                     <form:radiobutton path="hinhThucThanhToan" value="2" name="payment_method" checked="true"/>
                     THANH TOÁN QUA VNPay
                 </label>
-                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và trả phí ship
-                    khi nhận hàng.</label>
+                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và phí ship sẽ trả khi nhận hàng.</label>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-group mb-5">
