@@ -10,44 +10,68 @@
             <div class="text-center py-3 fw-bold  text-xl-center text-uppercase">
                 Thông tin người nhận
             </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Họ và Tên (*)</div>
-                <form:input path="hoTen" class="w-100 form-control" type="text" placeholder="Họ và Tên"/>
+            <hr>
+
+            <c:if test="${khachHang.diaChi =! null}">
+                <input type="checkbox" id="hideInfoCheckbox" name="diaChiMacDinh" class="ms-5" onchange="updateCheckboxValue(this)">
+                <label class="ms-3" for="hideInfoCheckbox">Sử dụng địa chỉ đã đăng ký</label>
+                <script>
+                    function updateCheckboxValue(checkbox) {
+                        if (checkbox.checked) {
+                            checkbox.value = 1;
+                        } else {
+                            checkbox.value = 0;
+                        }
+                    }
+                </script>
+                <hr>
+            </c:if>
+            <c:if test="${khachHang.diaChi == null}">
+                <a href="">Thêm địa chỉ mặc định</a>
+                <hr>
+            </c:if>
+
+            <div id="infoContainer">
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Họ và Tên (*)</div>
+                    <form:input path="hoTen" class="w-100 form-control" type="text" placeholder="Họ và Tên"/>
+                </div>
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Tỉnh/Thành Phố (*)</div>
+                    <select id="provinceSelect" class="w-100 form-control">
+                        <option value="" disabled selected>Chọn tỉnh/thành phố</option>
+                    </select>
+                    <form:input path="tinhThanhPho" type="hidden" id="provinceName" name="tinhThanh"/>
+                </div>
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Quận/Huyện (*)</div>
+                    <select id="districtSelect" class="w-100 form-control">
+                        <option value="" disabled selected>Chọn quận/huyện</option>
+                    </select>
+                    <form:input path="quanHuyen" type="hidden" id="districtName" name="quanHuyen"/>
+                </div>
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Xã/Phường (*)</div>
+                    <select id="wardSelect" class="w-100 form-control">
+                        <option value="" disabled selected>Chọn xã/phường</option>
+                    </select>
+                    <form:input path="xaPhuong" type="hidden" id="wardName" name="xaPhuong"/>
+                </div>
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Địa chỉ (*)</div>
+                    <form:textarea path="diaChi" class="w-100 form-control" placeholder="..." name="" cols="30"
+                                   rows="3"></form:textarea>
+                </div>
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Số điện thoại (*)</div>
+                    <form:input path="soDienThoai" class="w-100 form-control" type="text" placeholder="..."/>
+                </div>
+                <div class="px-md-5 px-3 py-2 form-group">
+                    <div class="form-label ">Email (*)</div>
+                    <form:input path="email" class="w-100 form-control" type="text" placeholder="..."/>
+                </div>
             </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Tỉnh/Thành Phố (*)</div>
-                <select id="provinceSelect" class="w-100 form-control">
-                    <option value="" disabled selected>Chọn tỉnh/thành phố</option>
-                </select>
-                <form:input path="tinhThanhPho" type="hidden" id="provinceName" name="tinhThanh"/>
-            </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Quận/Huyện (*)</div>
-                <select id="districtSelect" class="w-100 form-control">
-                    <option value="" disabled selected>Chọn quận/huyện</option>
-                </select>
-                <form:input path="quanHuyen" type="hidden" id="districtName" name="quanHuyen"/>
-            </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Xã/Phường (*)</div>
-                <select id="wardSelect" class="w-100 form-control">
-                    <option value="" disabled selected>Chọn xã/phường</option>
-                </select>
-                <form:input path="xaPhuong" type="hidden" id="wardName" name="xaPhuong"/>
-            </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Địa chỉ (*)</div>
-                <form:textarea path="diaChi" class="w-100 form-control" placeholder="..." name="" cols="30"
-                               rows="3"></form:textarea>
-            </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Số điện thoại (*)</div>
-                <form:input path="soDienThoai" class="w-100 form-control" type="text" placeholder="..."/>
-            </div>
-            <div class="px-md-5 px-3 py-2 form-group">
-                <div class="form-label ">Email (*)</div>
-                <form:input path="email" class="w-100 form-control" type="text" placeholder="..."/>
-            </div>
+
             <div class="px-md-5 px-3 py-2 form-check  border-bottom">
                 <div class="form-label ">Phương thức thanh toán (*)</div>
                 <label class="form-check-label text-sm-left fw-bold ">
@@ -56,12 +80,24 @@
                 </label>
             </div>
 
+            <script>
+                document.getElementById('hideInfoCheckbox').addEventListener('change', function () {
+                    var infoContainer = document.getElementById('infoContainer');
+                    if (this.checked) {
+                        infoContainer.style.display = 'none'; // Ẩn thông tin khi checkbox được tích vào
+                    } else {
+                        infoContainer.style.display = 'block'; // Hiển thị thông tin khi checkbox được bỏ tích
+                    }
+                });
+            </script>
+
             <div class="px-md-5 px-3 py-2 form-check">
                 <label class="form-check-label text-sm-left fw-bold ">
                     <form:radiobutton path="hinhThucThanhToan" value="2" name="payment_method" checked="true"/>
                     THANH TOÁN QUA VNPay
                 </label>
-                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và phí ship sẽ trả khi nhận hàng.</label>
+                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và phí ship sẽ trả
+                    khi nhận hàng.</label>
             </div>
 
             <div class="px-md-5 px-3 py-2 form-group mb-5">
@@ -162,7 +198,8 @@
                 </label>
             </div>
             <div class="mt-3">
-                <button type="submit" class="w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</button>
+                <button type="submit" class="mb-3 w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG
+                </button>
             </div>
         </div>
     </div>
