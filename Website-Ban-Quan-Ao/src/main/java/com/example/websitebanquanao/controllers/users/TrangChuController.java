@@ -208,6 +208,7 @@ public class TrangChuController {
             BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
             model.addAttribute("sumSoLuong", gioHangChiTietService.sumSoLuongByIdKhachHang(khachHangResponse.getId()));
+            model.addAttribute("khachHang", khachHangResponse);
             model.addAttribute("tongTien", tongTien.intValue());
             if (giamGiaResponse != null) {
                 int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
@@ -231,17 +232,22 @@ public class TrangChuController {
 
     // form thanh toán
     @PostMapping("thanh-toan")
-    public String formThanhToan(@ModelAttribute("formThanhToan") FormThanhToan formThanhToan, Model model) {
+    public String formThanhToan(@ModelAttribute("formThanhToan") FormThanhToan formThanhToan, @RequestParam(value = "diaChiMacDinh", required = false) Integer diaChiMacDinh) {
         KhachHangResponse khachHangResponse = (KhachHangResponse) session.getAttribute("khachHang");
         GiamGiaResponse giamGiaResponse = (GiamGiaResponse) session.getAttribute("giamGia");
         if (khachHangResponse == null) {
             return "redirect:/dang-nhap";
         } else {
+
+            if (diaChiMacDinh == null) {
+                diaChiMacDinh = 0;
+            }
+
             if (giamGiaResponse == null) {
-                UUID id = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, null);
+                UUID id = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, null, diaChiMacDinh);
                 return "redirect:/hoa-don/" + id;
             } else {
-                UUID id = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, giamGiaResponse);
+                UUID id = hoaDonService.addHoaDonUser(formThanhToan, khachHangResponse, giamGiaResponse, diaChiMacDinh);
                 session.setAttribute("giamGia", null);
                 return "redirect:/hoa-don/" + id;
             }

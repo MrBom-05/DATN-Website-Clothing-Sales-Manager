@@ -116,19 +116,28 @@ public class HoaDonService {
     }
 
     // user
-    public UUID addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse, GiamGiaResponse giamGiaResponse) {
+    public UUID addHoaDonUser(FormThanhToan formThanhToan, KhachHangResponse khachHangResponse, GiamGiaResponse giamGiaResponse, int diaChiMacDinh) {
         HoaDon hoaDon = new HoaDon();
 
         hoaDon.setMa(maHDCount());
         Instant currentInstant = Instant.now();
         hoaDon.setNgayTao(currentInstant);
         hoaDon.setNguoiNhan(formThanhToan.getHoTen());
-        hoaDon.setTinhThanhPho(formThanhToan.getTinhThanhPho());
-        hoaDon.setQuanHuyen(formThanhToan.getQuanHuyen());
-        hoaDon.setXaPhuong(formThanhToan.getXaPhuong());
-        hoaDon.setDiaChi(formThanhToan.getDiaChi());
-        hoaDon.setSoDienThoai(formThanhToan.getSoDienThoai());
-        hoaDon.setEmail(formThanhToan.getEmail());
+        if (diaChiMacDinh == 1) {
+            hoaDon.setTinhThanhPho(khachHangResponse.getTinhThanhPho());
+            hoaDon.setQuanHuyen(khachHangResponse.getQuanHuyen());
+            hoaDon.setXaPhuong(khachHangResponse.getXaPhuong());
+            hoaDon.setDiaChi(khachHangResponse.getDiaChi());
+            hoaDon.setSoDienThoai(khachHangResponse.getSoDienThoai());
+            hoaDon.setEmail(khachHangResponse.getEmail());
+        } else {
+            hoaDon.setTinhThanhPho(formThanhToan.getTinhThanhPho());
+            hoaDon.setQuanHuyen(formThanhToan.getQuanHuyen());
+            hoaDon.setXaPhuong(formThanhToan.getXaPhuong());
+            hoaDon.setDiaChi(formThanhToan.getDiaChi());
+            hoaDon.setSoDienThoai(formThanhToan.getSoDienThoai());
+            hoaDon.setEmail(formThanhToan.getEmail());
+        }
         hoaDon.setHinhThucThanhToan(formThanhToan.getHinhThucThanhToan());
         hoaDon.setGhiChu(formThanhToan.getGhiChu());
         hoaDon.setLoaiHoaDon(1);
