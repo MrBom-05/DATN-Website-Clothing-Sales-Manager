@@ -5,6 +5,30 @@
 
 <html lang="en">
 <style>
+    #searchResults {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .result-item {
+        padding: 8px;
+        background-color: white;
+        border: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    .result-item:hover {
+        background-color: #f5f5f5;
+    }
+
+    .not-found {
+        padding: 8px;
+        background-color: white;
+        color: red;
+        font-style: italic;
+    }
+
     .oval-switch {
         display: inline-block;
         width: 50px;
@@ -209,8 +233,8 @@
                 <form id="paymentForm" action="/create-payment-link" method="post">
                     <button type="submit" style="display: none">Tạo Link thanh toán</button>
                     <input type="hidden" name="tongTien" value="" id="total">
-                    <input type="hidden" name="ma" value="${hoaDon.ma}" >
-                    <input type="hidden" name="idHoaDon" value="${idHoaDon}" >
+                    <input type="hidden" name="ma" value="${hoaDon.ma}">
+                    <input type="hidden" name="idHoaDon" value="${idHoaDon}">
                 </form>
                 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
                     <tr>
@@ -304,11 +328,11 @@
             <div class="row">
                 <div class="col-12 col-md-3">
                     <div class="mb-3">
-                        <label for="khachHangSelect" class="form-label fw-bold">Khách hàng</label>
-                        <select class="form-select" id="khachHangSelect" aria-label="Default select example">
-                            <option selected>Chọn khách hàng</option>
-                        </select>
+                        <label for="searchInputKh" class="form-label fw-bold">Tìm kiếm khách hàng</label>
+                        <input type="text" class="form-control" id="searchInputKh" placeholder="Nhập tên khách hàng">
                     </div>
+                    <!-- Dropdown sẽ hiển thị kết quả tìm kiếm -->
+                    <ul id="searchResults" class="list-group" style="display: none;"></ul>
                 </div>
                 <div class="col-12 col-md-9">
                     <div class="mb-3">
@@ -320,6 +344,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="idKhachHangInput" value="">
         </div>
 
         <!-- Thanh toán -->
@@ -406,7 +431,8 @@
                         </div>
                         <div class="mb-3" id="hinh-thuc-thanh-toan-div">
                             <label class="form-label">Hình thức thanh toán</label>
-                            <select class="form-select" id="hinh-thuc-thanh-toan" name="httt" aria-label="Default select example">
+                            <select class="form-select" id="hinh-thuc-thanh-toan" name="httt"
+                                    aria-label="Default select example">
                                 <option selected value="0">Chọn hình thức thanh toán</option>
                                 <option value="1">Tiền mặt</option>
                                 <option value="2">Chuyển khoản</option>
@@ -477,7 +503,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="themSanPhamVaoGioHang()">Thêm vào giỏ hàng</button>
+                <button type="button" class="btn btn-primary" onclick="themSanPhamVaoGioHang()">Thêm vào giỏ hàng
+                </button>
             </div>
         </div>
     </div>
@@ -506,196 +533,198 @@
                     <div class="col-6 ">
                         <button class="btn btn-primary w100 " id="allProduct">Tất cả sản phẩm</button>
                     </div>
-                    </div>
-                    <div class="row">
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col" style="width: 150px;"><i class="fas fa-image"></i></th>
-                                <th scope="col">Sản phẩm</th>
-                                <th scope="col">Giá</th>
-                                <th scope="col">Số lượng</th>
-                                <th scope="col">Thao tác</th>
-                            </tr>
-                            </thead>
-                            <tbody id="productTableBody">
-                            <!-- Các dòng sản phẩm sẽ được thêm vào đây -->
-                            </tbody>
-                        </table>
+                </div>
+                <div class="row">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" style="width: 150px;"><i class="fas fa-image"></i></th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                        <!-- Các dòng sản phẩm sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
 
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script>
-                                var allProducts; // Variable to store all products for filtering
-                            $(document).ready(function () {
-                                // Tải sản phẩm từ API
-                                $.ajax({
-                                    url: '/view/san-pham-chi-tiet',
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        // Hiển thị sản phẩm trong bảng
-                                        allProducts = data;
-                                        renderProducts(allProducts );
-                                    },
-                                    error: function () {
-                                        console.log('Lỗi khi tải sản phẩm từ API');
-                                    }
-                                });
-                                $('#searchButton').on('click', function () {
-                                    var searchTerm = $('#searchInput').val().toLowerCase();
-                                    searchProducts(searchTerm);
-                                });
-                                // Xử lý sự kiện khi nhấn nút "Tất cả sản phẩm"
-                                $('#allProduct').on('click', function () {
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        var allProducts; // Variable to store all products for filtering
+                        $(document).ready(function () {
+                            // Tải sản phẩm từ API
+                            $.ajax({
+                                url: '/view/san-pham-chi-tiet',
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Hiển thị sản phẩm trong bảng
+                                    allProducts = data;
                                     renderProducts(allProducts);
-                                });
+                                },
+                                error: function () {
+                                    console.log('Lỗi khi tải sản phẩm từ API');
+                                }
+                            });
+                            $('#searchButton').on('click', function () {
+                                var searchTerm = $('#searchInput').val().toLowerCase();
+                                searchProducts(searchTerm);
+                            });
+                            // Xử lý sự kiện khi nhấn nút "Tất cả sản phẩm"
+                            $('#allProduct').on('click', function () {
+                                renderProducts(allProducts);
+                            });
+                        });
+
+                        function renderProducts(products) {
+                            // Xóa nội dung bảng hiện tại
+                            $('#productTableBody').empty();
+
+                            // Duyệt qua các sản phẩm và thêm dòng vào bảng
+                            $.each(products, function (index, product) {
+                                var productRow = '<tr>' +
+                                    '<td>' + (index + 1) + '</td>' +
+                                    '<td>' +
+                                    '<div id="carouselExampleSlidesOnly_' + product.id + '" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1000">' +
+                                    '<div class="carousel-inner" style="width: 150px; height: 150px"></div>' +
+                                    '</div>' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<p>' + product.tenSanPham + '</p>' +
+                                    '<p>' + product.tenMauSac + '</p>' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<p class="fw-bold gia-san-pham" id="gia-san-pham_' + product.id + '">' + product.gia + '</p>' +
+                                    '<p class="fw-bold gia-moi" id="gia-moi_' + product.id + '"></p>' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<p>' + product.soLuong + '</p>' +
+                                    '</td>' +
+                                    '<td>';
+
+                                if (product.soLuong > 0) {
+                                    productRow += '<form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">' +
+                                        '<input type="hidden" name="idSanPhamChiTiet" value="' + product.id + '"/>' +
+                                        '<input type="hidden" name="gia" value="' + product.gia + ' " id="gia_' + product.id + '"/>' +
+                                        '<input type="hidden" name="soLuong" value="' + product.soLuong + '"/>' +
+                                        '<input type="number" name="soLuongMoi" id="soLuongMoi_' + product.id + '" class="form-control" min="1" max="' + product.soLuong + '" value="1" style="width: 100px; display: inline-block;" required="true" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" onchange="updatePromotion(' + product.id + ')">' +
+                                        '<button type="submit" class="btn btn-primary mt-1 w-25">Thêm</button>';
+                                } else {
+                                    productRow += '<span class="text-danger">Hết hàng</span>';
+                                }
+
+                                productRow += '</td></tr>';
+
+                                $('#productTableBody').append(productRow);
+
+                                // Load ảnh sản phẩm
+                                loadProductImages(product.id);
+
+                                // Load discount percentage
+                                getDiscountPercentage(product.id);
+                            });
+                        }
+
+                        function loadProductImages(productId) {
+                            var idSanPham = productId;
+                            $.ajax({
+                                url: '/get-anh-san-pham/' + idSanPham,
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Xử lý phản hồi từ máy chủ và cập nhật danh sách ảnh
+                                    var listAnhSanPham = data;
+                                    var carouselInner = $('#carouselExampleSlidesOnly_' + productId + ' .carousel-inner');
+                                    carouselInner.empty();
+
+                                    $.each(listAnhSanPham, function (index, anhSanPham) {
+                                        var isActive = index === 0 ? 'active' : '';
+                                        var carouselItem = '<div class="carousel-item ' + isActive + '">' +
+                                            '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">' +
+                                            '</div>';
+                                        carouselInner.append(carouselItem);
+                                    });
+                                },
+                                error: function () {
+                                    console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
+                                }
+                            });
+                        }
+
+                        function getDiscountPercentage(productId) {
+                            $.ajax({
+                                url: '/phan-tram-giam/' + productId,
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    // Update the UI to display the discount percentage
+                                    updateDiscountPercentage(productId, data);
+                                },
+                                error: function () {
+                                    console.log('Lỗi khi tải phần trăm giảm từ API');
+                                }
+                            });
+                        }
+
+                        function updateDiscountPercentage(productId, discountPercentage) {
+                            var giaSanPhamId = '#gia-san-pham_' + productId;
+                            var giaMoiId = '#gia-moi_' + productId;
+                            const giaInput = document.getElementById('gia_' + productId);
+                            var giaSanPhamElement = $(giaSanPhamId);
+                            var giaMoiElement = $(giaMoiId);
+
+                            var giaSanPham = parseFloat(giaSanPhamElement.text());
+
+                            if (discountPercentage > 0) {
+                                var giaMoi = giaSanPham - (giaSanPham * discountPercentage) / 100;
+                                console.log(giaMoi);
+                                giaInput.value = giaMoi;
+                                console.log(giaInput.value);
+                                // Update the UI with the discount percentage and the new price
+                                giaMoiElement.text('Giảm ' + discountPercentage + '%: ' + giaMoi);
+                                giaSanPhamElement.addClass('text-decoration-line-through');
+                            } else {
+                                // If there is no discount, hide the giaMoiElement
+                                giaMoiElement.hide();
+                            }
+                        }
+
+                        function updatePromotion(productId) {
+                            // Your existing code for updating promotion
+
+                            // After updating promotion, fetch and display the discount percentage
+                            getDiscountPercentage(productId);
+                        }
+
+                        function searchProducts(searchTerm) {
+                            // Lọc sản phẩm dựa trên từ khóa tìm kiếm
+                            var filteredProducts = [];
+
+                            // Duyệt qua tất cả sản phẩm và kiểm tra tên sản phẩm
+                            $.each(allProducts, function (index, product) {
+                                if (product.tenSanPham.toLowerCase().includes(searchTerm)) {
+                                    filteredProducts.push(product);
+                                }
                             });
 
-                            function renderProducts(products) {
-                                // Xóa nội dung bảng hiện tại
-                                $('#productTableBody').empty();
+                            // Hiển thị sản phẩm được lọc
+                            renderProducts(filteredProducts);
+                        }
 
-                                // Duyệt qua các sản phẩm và thêm dòng vào bảng
-                                $.each(products, function (index, product) {
-                                    var productRow = '<tr>' +
-                                        '<td>' + (index + 1) + '</td>' +
-                                        '<td>' +
-                                        '<div id="carouselExampleSlidesOnly_' + product.id + '" class="carousel slide" data-bs-ride="carousel" data-bs-interval="1000">' +
-                                        '<div class="carousel-inner" style="width: 150px; height: 150px"></div>' +
-                                        '</div>' +
-                                        '</td>' +
-                                        '<td>' +
-                                        '<p>' + product.tenSanPham + '</p>' +
-                                        '<p>' + product.tenMauSac + '</p>' +
-                                        '</td>' +
-                                        '<td>' +
-                                        '<p class="fw-bold gia-san-pham" id="gia-san-pham_' + product.id + '">' + product.gia + '</p>' +
-                                        '<p class="fw-bold gia-moi" id="gia-moi_' + product.id + '"></p>' +
-                                        '</td>' +
-                                        '<td>' +
-                                        '<p>' + product.soLuong + '</p>' +
-                                        '</td>' +
-                                        '<td>';
-
-                                    if (product.soLuong > 0) {
-                                        productRow += '<form method="post" action="/admin/ban-hang/add-gio-hang/${idHoaDon}">' +
-                                            '<input type="hidden" name="idSanPhamChiTiet" value="' + product.id + '"/>' +
-                                            '<input type="hidden" name="gia" value="' + product.gia + ' " id="gia_' + product.id + '"/>' +
-                                            '<input type="hidden" name="soLuong" value="' + product.soLuong + '"/>' +
-                                            '<input type="number" name="soLuongMoi" id="soLuongMoi_' + product.id + '" class="form-control" min="1" max="' + product.soLuong + '" value="1" style="width: 100px; display: inline-block;" required="true" oninput="this.value = this.value.replace(/[^0-9]/g, \'\');" onchange="updatePromotion(' + product.id + ')">' +
-                                            '<button type="submit" class="btn btn-primary mt-1 w-25">Thêm</button>';
-                                    } else {
-                                        productRow += '<span class="text-danger">Hết hàng</span>';
-                                    }
-
-                                    productRow += '</td></tr>';
-
-                                    $('#productTableBody').append(productRow);
-
-                                    // Load ảnh sản phẩm
-                                    loadProductImages(product.id);
-
-                                    // Load discount percentage
-                                    getDiscountPercentage(product.id);
-                                });
-                            }
-
-                            function loadProductImages(productId) {
-                                var idSanPham = productId;
-                                $.ajax({
-                                    url: '/get-anh-san-pham/' + idSanPham,
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        // Xử lý phản hồi từ máy chủ và cập nhật danh sách ảnh
-                                        var listAnhSanPham = data;
-                                        var carouselInner = $('#carouselExampleSlidesOnly_' + productId + ' .carousel-inner');
-                                        carouselInner.empty();
-
-                                        $.each(listAnhSanPham, function (index, anhSanPham) {
-                                            var isActive = index === 0 ? 'active' : '';
-                                            var carouselItem = '<div class="carousel-item ' + isActive + '">' +
-                                                '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">' +
-                                                '</div>';
-                                            carouselInner.append(carouselItem);
-                                        });
-                                    },
-                                    error: function () {
-                                        console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
-                                    }
-                                });
-                            }
-
-                            function getDiscountPercentage(productId) {
-                                $.ajax({
-                                    url: '/phan-tram-giam/' + productId,
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        // Update the UI to display the discount percentage
-                                        updateDiscountPercentage(productId, data);
-                                    },
-                                    error: function () {
-                                        console.log('Lỗi khi tải phần trăm giảm từ API');
-                                    }
-                                });
-                            }
-
-                            function updateDiscountPercentage(productId, discountPercentage) {
-                                var giaSanPhamId = '#gia-san-pham_' + productId;
-                                var giaMoiId = '#gia-moi_' + productId;
-                                const giaInput = document.getElementById('gia_' + productId);
-                                var giaSanPhamElement = $(giaSanPhamId);
-                                var giaMoiElement = $(giaMoiId);
-
-                                var giaSanPham = parseFloat(giaSanPhamElement.text());
-
-                                if (discountPercentage > 0) {
-                                    var giaMoi = giaSanPham - (giaSanPham * discountPercentage) / 100;
-                                    console.log(giaMoi);
-                                    giaInput.value = giaMoi;
-                                    console.log(giaInput.value);
-                                    // Update the UI with the discount percentage and the new price
-                                    giaMoiElement.text('Giảm ' + discountPercentage + '%: ' + giaMoi);
-                                    giaSanPhamElement.addClass('text-decoration-line-through');
-                                } else {
-                                    // If there is no discount, hide the giaMoiElement
-                                    giaMoiElement.hide();
-                                }
-                            }
-
-                            function updatePromotion(productId) {
-                                // Your existing code for updating promotion
-
-                                // After updating promotion, fetch and display the discount percentage
-                                getDiscountPercentage(productId);
-                            }
-                            function searchProducts(searchTerm) {
-                                // Lọc sản phẩm dựa trên từ khóa tìm kiếm
-                                var filteredProducts = [];
-
-                                // Duyệt qua tất cả sản phẩm và kiểm tra tên sản phẩm
-                                $.each(allProducts, function (index, product) {
-                                    if (product.tenSanPham.toLowerCase().includes(searchTerm)) {
-                                        filteredProducts.push(product);
-                                    }
-                                });
-
-                                // Hiển thị sản phẩm được lọc
-                                renderProducts(filteredProducts);
-                            }
-
-                            // filter
-                        </script>
-                    </div>
+                        // filter
+                    </script>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 <!-- Modal hiển thị mã QR -->
-<div class="modal fade" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModalLabel" aria-hidden="true">
+<div class="modal fade" id="qrCodeModal" tabindex="-1" role="dialog" aria-labelledby="qrCodeModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -795,6 +824,7 @@
     }).catch(function (e) {
         console.error(e);
     });
+
     // Hàm được gọi khi nhấn nút "Thêm vào giỏ hàng" trong modal
     function themSanPhamVaoGioHang() {
         // Lấy giá trị từ các trường nhập liệu trong modal
@@ -831,6 +861,7 @@
         // Xử lý mở modal ở đây nếu cần
         $("#SPModal").modal("show");
     }
+
     //
     function fillCustomerData(customer) {
         $('#tenKhachHang').text('Tên khách hàng: ' + customer.hoVaTen);
@@ -839,27 +870,73 @@
         $('#diaChiKhachHang').text('Địa chỉ: ' + (customer.diaChi ? customer.diaChi : 'N/A'));
     }
 
-    // Fetch customer data from API and populate the select dropdown
+    // khách hàng
     $(document).ready(function () {
+        // Lấy dữ liệu khách hàng từ API
         $.get('http://localhost:8080/view/thong-tin-khach-hang', function (data) {
-            data.forEach(function (customer) {
-                $('#khachHangSelect').append('<option value="' + customer.id + '">' + customer.hoVaTen + '</option>');
-            });
-            // Handle select change event
-            $('#khachHangSelect').change(function () {
-                var selectedCustomerId = $(this).val();
-                var selectedCustomer = data.find(function (customer) {
+            // Lưu trữ dữ liệu khách hàng để sử dụng sau này
+            var customerData = data;
+
+            // Hàm cập nhật thông tin khách hàng dựa trên ID khách hàng được chọn
+            function updateCustomerInfo(selectedCustomerId) {
+                var selectedCustomer = customerData.find(function (customer) {
                     return customer.id === selectedCustomerId;
                 });
-                // Điền thông tin vào các trường tương ứng
-                $('#hoVaTen').val(selectedCustomer.hoVaTen);
-                $('#sdt').val(selectedCustomer.soDienThoai ? selectedCustomer.soDienThoai : '');
-                // Điền ID vào trường input ẩn
-                $('#id-khach-hang').val(selectedCustomerId);
+                // Cập nhật thông tin khách hàng trên giao diện
+                $('#tenKhachHang').text('Tên khách hàng: ' + selectedCustomer.hoVaTen);
+                $('#emailKhachHang').text('Email: ' + (selectedCustomer.email ? selectedCustomer.email : ''));
+                $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (selectedCustomer.soDienThoai ? selectedCustomer.soDienThoai : ''));
+                $('#diaChiKhachHang').text('Địa chỉ: ' + (selectedCustomer.diaChi ? selectedCustomer.diaChi : ''));
+
+                // Cập nhật giá trị ID khách hàng được chọn trong input ẩn
+                $('#idKhachHangInput').val(selectedCustomerId);
+
                 fillCustomerData(selectedCustomer);
                 console.log(selectedCustomer);
+            }
+
+            // Hàm lọc và cập nhật danh sách khách hàng dựa trên từ khóa tìm kiếm
+            function filterCustomers(searchTerm) {
+                var filteredCustomers = customerData.filter(function (customer) {
+                    // Tìm kiếm không phân biệt chữ hoa, chữ thường trong tên khách hàng
+                    return customer.hoVaTen.toLowerCase().includes(searchTerm.toLowerCase());
+                });
+
+                // Xóa các lựa chọn hiện tại trong danh sách kết quả
+                $('#searchResults').empty();
+
+                if (filteredCustomers.length === 0) {
+                    // Hiển thị thông báo khi không tìm thấy khách hàng
+                    $('#searchResults').append('<li class="result-item not-found">Không tìm thấy khách hàng</li>');
+                } else {
+                    // Thêm khách hàng đã lọc vào danh sách kết quả
+                    filteredCustomers.forEach(function (customer) {
+                        $('#searchResults').append('<li class="result-item" data-id="' + customer.id + '">' + customer.hoVaTen + '</li>');
+                    });
+                }
+            }
+
+            // Xử lý sự kiện input cho ô tìm kiếm khách hàng (tìm kiếm thời gian thực)
+            $('#searchInputKh').on('input', function () {
+                var searchTerm = $(this).val();
+                filterCustomers(searchTerm);
+
+                // Hiện dropdown khi có kết quả tìm kiếm
+                if (searchTerm) {
+                    $('#searchResults').show();
+                } else {
+                    $('#searchResults').hide();
+                }
             });
 
+            // Xử lý sự kiện click cho việc cập nhật thông tin khách hàng
+            $(document).on('click', '.result-item', function () {
+                var selectedCustomerId = $(this).data('id');
+                updateCustomerInfo(selectedCustomerId);
+
+                // Ẩn dropdown khi chọn một kết quả
+                $('#searchResults').hide();
+            });
         });
 
     });
