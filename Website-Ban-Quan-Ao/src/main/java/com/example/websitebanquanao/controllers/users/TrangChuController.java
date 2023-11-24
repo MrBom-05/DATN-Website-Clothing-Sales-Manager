@@ -208,7 +208,8 @@ public class TrangChuController {
             BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
             model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
             model.addAttribute("sumSoLuong", gioHangChiTietService.sumSoLuongByIdKhachHang(khachHangResponse.getId()));
-            model.addAttribute("khachHang", khachHangResponse);
+            model.addAttribute("khachHang", khachHangService.getById(khachHangResponse.getId()));
+            model.addAttribute("kh", khachHangResponse);
             model.addAttribute("tongTien", tongTien.intValue());
             if (giamGiaResponse != null) {
                 int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();
