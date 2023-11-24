@@ -98,6 +98,9 @@
                    href="/admin/giam-gia/index">Giảm giá</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/khuyen-mai/index">Khuyến mãi</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                   href="/admin/thong-ke/index">Thống kê</a>
+
 
 
             </c:if>

@@ -31,4 +31,201 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 
     @Query("SELECT new com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse(hd.id, hd.ma, hd.ngayTao, hd.trangThai, SUM(hdct.gia * hdct.soLuong)) FROM HoaDonChiTiet hdct JOIN hdct.idHoaDon hd WHERE hd.idKhachHang.id = :idKhachHang GROUP BY hd.id, hd.ma, hd.ngayTao, hd.trangThai order by hd.ngayTao desc")
     public List<HoaDonUserResponse> findListHoaDonByKhachHang(@Param("idKhachHang") UUID idKhachHang);
+
+
+
+    // thống kê
+    @Query("SELECT SUM(hdct.gia * hdct.soLuong) FROM HoaDonChiTiet hdct " +
+            "WHERE hdct.idHoaDon.trangThai = 1")
+    Double TongDoanhThu();
+
+    @Query("SELECT SUM(hdct.gia * hdct.soLuong) " +
+            "FROM HoaDonChiTiet hdct " +
+            "WHERE hdct.idHoaDon.trangThai = 1 " +
+            "AND CAST(hdct.idHoaDon.ngayThanhToan AS date) = CAST(CURRENT_TIMESTAMP AS date)")
+    Double TongDoanhThuNgayHienTai();
+
+    @Query("SELECT SUM(hdct.gia * hdct.soLuong) " +
+            "FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.idHoaDon hoaDon " +
+            "WHERE hoaDon.trangThai = 1 " +
+            "AND FUNCTION('YEAR', hoaDon.ngayThanhToan) = FUNCTION('YEAR', CURRENT_DATE) " +
+            "AND FUNCTION('MONTH', hoaDon.ngayThanhToan) = FUNCTION('MONTH', CURRENT_DATE)")
+    Double TongDoanhThuThangHienTai();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND DATEPART(WEEK, hoaDon.ngay_thanh_toan) = DATEPART(WEEK, GETDATE()) " +
+            "AND DATEPART(YEAR, hoaDon.ngay_thanh_toan) = DATEPART(YEAR, GETDATE())",
+            nativeQuery = true)
+    Double TongDoanhThuTuanHienTai();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND MONTH(hoaDon.ngay_thanh_toan) = MONTH(GETDATE()) - 1 " +
+            "AND YEAR(hoaDon.ngay_thanh_toan) = YEAR(GETDATE())", nativeQuery = true)
+    Double TongDoanhThuThangHienTaiTru1();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND MONTH(hoaDon.ngay_thanh_toan) = MONTH(GETDATE()) - 2 " +
+            "AND YEAR(hoaDon.ngay_thanh_toan) = YEAR(GETDATE())", nativeQuery = true)
+    Double TongDoanhThuThangHienTaiTru2();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND MONTH(hoaDon.ngay_thanh_toan) = MONTH(GETDATE()) - 3 " +
+            "AND YEAR(hoaDon.ngay_thanh_toan) = YEAR(GETDATE())", nativeQuery = true)
+    Double TongDoanhThuThangHienTaiTru3();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND MONTH(hoaDon.ngay_thanh_toan) = MONTH(GETDATE()) - 4 " +
+            "AND YEAR(hoaDon.ngay_thanh_toan) = YEAR(GETDATE())", nativeQuery = true)
+    Double TongDoanhThuThangHienTaiTru4();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND MONTH(hoaDon.ngay_thanh_toan) = MONTH(GETDATE()) - 5 " +
+            "AND YEAR(hoaDon.ngay_thanh_toan) = YEAR(GETDATE())", nativeQuery = true)
+    Double TongDoanhThuThangHienTaiTru5();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND MONTH(hoaDon.ngay_thanh_toan) = MONTH(GETDATE()) - 6 " +
+            "AND YEAR(hoaDon.ngay_thanh_toan) = YEAR(GETDATE())", nativeQuery = true)
+    Double TongDoanhThuThangHienTaiTru6();
+
+    @Query("SELECT SUM(hdct.gia * hdct.soLuong) " +
+            "FROM HoaDonChiTiet hdct " +
+            "WHERE hdct.idHoaDon.trangThai = 1 " +
+            "AND YEAR(hdct.idHoaDon.ngayThanhToan) = YEAR(CURRENT_DATE)")
+    Double TongDoanhThuNamHienTai();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND hoaDon.ngay_thanh_toan BETWEEN DATEADD(MONTH, -6, GETDATE()) AND GETDATE()",
+            nativeQuery = true)
+    Double TongDoanhThu6ThangQua();
+
+    @Query(value = "SELECT SUM(hdct.gia * hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hoaDon ON hdct.id_hoa_don = hoaDon.id " +
+            "WHERE hoaDon.trang_thai = 1 " +
+            "AND hoaDon.ngay_thanh_toan BETWEEN DATEADD(MONTH, -12, GETDATE()) AND GETDATE()",
+            nativeQuery = true)
+    Double TongDoanhThu1NamQua();
+
+    @Query(value = "SELECT TOP 1 nv.ho_va_ten " +
+            "FROM nhan_vien nv " +
+            "JOIN hoa_don hd ON nv.id = hd.id_nhan_vien " +
+            "JOIN hoa_don_chi_tiet hdt ON hd.id = hdt.id_hoa_don " +
+            "GROUP BY nv.ho_va_ten " +
+            "ORDER BY SUM(hdt.so_luong) DESC", nativeQuery = true)
+    String NhanVienBanDcNhieuNhat();
+
+
+
+    //Thống kê sản phẩm bán chạy theo doanh thu, nếu muốn thống kê bán chạy theo số lượng thì bỏ nhân với giá tiền trong câu query
+    @Query(value = "SELECT TOP 1 sp.ten " +
+            "FROM san_pham sp " +
+            "JOIN san_pham_chi_tiet spt ON sp.id = spt.id_san_pham " +
+            "JOIN hoa_don_chi_tiet hdct ON spt.id = hdct.id_san_pham_chi_tiet " +
+            "JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
+            "WHERE hd.trang_thai = 1 " +
+            "GROUP BY sp.ten " +
+            "ORDER BY SUM(hdct.gia * hdct.so_luong) DESC", nativeQuery = true)
+    String SanPhamBanChayNhat();
+
+    @Query(value = "SELECT TOP 1 sp.ten " +
+            "FROM san_pham sp " +
+            "JOIN san_pham_chi_tiet spt ON sp.id = spt.id_san_pham " +
+            "JOIN hoa_don_chi_tiet hdct ON spt.id = hdct.id_san_pham_chi_tiet " +
+            "JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
+            "WHERE hd.trang_thai = 1 " +
+            "AND CAST(hd.ngay_thanh_toan AS date) = CAST(GETDATE() AS date) " +
+            "GROUP BY sp.ten " +
+            "ORDER BY SUM(hdct.gia * hdct.so_luong) DESC ", nativeQuery = true)
+    String SanPhamBanChayNhatTrongNgay();
+
+    @Query(value = "WITH TongGiaTriTheoSanPham AS ( " +
+            "SELECT " +
+            "    sp.id AS id_san_pham, " +
+            "    sp.ten AS ten_san_pham, " +
+            "    SUM(hdct.gia * hdct.so_luong) AS tong_gia_tri " +
+            "FROM " +
+            "    hoa_don_chi_tiet hdct " +
+            "    INNER JOIN san_pham_chi_tiet spct ON hdct.id_san_pham_chi_tiet = spct.id " +
+            "    INNER JOIN san_pham sp ON spct.id_san_pham = sp.id " +
+            "    INNER JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
+            "WHERE " +
+            "    hd.trang_thai = 1 " +
+            "    AND DATEPART(WEEK, hd.ngay_thanh_toan) = DATEPART(WEEK, GETDATE()) " +
+            "    AND YEAR(hd.ngay_thanh_toan) = YEAR(GETDATE()) " +
+            "GROUP BY " +
+            "    sp.id, sp.ten " +
+            ") " +
+            "SELECT TOP 1 ten_san_pham " +
+            "FROM TongGiaTriTheoSanPham " +
+            "ORDER BY tong_gia_tri DESC", nativeQuery = true)
+    String SanPhamBanChayNhatTrongTuan();
+
+    @Query(value = "WITH TongGiaTriTheoSanPham AS ( " +
+            "    SELECT " +
+            "        sp.id AS id_san_pham, " +
+            "        sp.ten AS ten_san_pham, " +
+            "        SUM(hdct.gia * hdct.so_luong) AS tong_gia_tri " +
+            "    FROM " +
+            "        hoa_don_chi_tiet hdct " +
+            "        INNER JOIN san_pham_chi_tiet spct ON hdct.id_san_pham_chi_tiet = spct.id " +
+            "        INNER JOIN san_pham sp ON spct.id_san_pham = sp.id " +
+            "        INNER JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
+            "    WHERE " +
+            "        hd.trang_thai = 1 " +
+            "        AND MONTH(hd.ngay_thanh_toan) = MONTH(GETDATE()) " +
+            "        AND YEAR(hd.ngay_thanh_toan) = YEAR(GETDATE()) " +
+            "    GROUP BY " +
+            "        sp.id, sp.ten " +
+            ") " +
+            "SELECT TOP 1 ten_san_pham " +
+            "FROM TongGiaTriTheoSanPham " +
+            "ORDER BY tong_gia_tri DESC", nativeQuery = true)
+    String SanPhamBanChayNhatTrongThang();
+
+
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -0, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru0ThangTruoc();
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -1, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru1ThangTruoc();
+
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -2, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru2ThangTruoc();
+
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -3, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru3ThangTruoc();
+
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -4, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru4ThangTruoc();
+
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -5, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru5ThangTruoc();
+
+    @Query(value = "SELECT FORMAT(DATEADD(MONTH, -6, GETDATE()), 'MM-yyyy')", nativeQuery = true)
+    String Tru6ThangTruoc();
 }
