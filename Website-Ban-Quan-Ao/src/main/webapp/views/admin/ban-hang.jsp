@@ -141,6 +141,39 @@
     .fw-bold {
         font-weight: bold;
     }
+    .image-input {
+        display: none;
+    }
+
+    .image-preview-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin: 10px;
+        border: 1px dashed #ccc;
+        text-align: center;
+        cursor: pointer; /* Sử dụng con trỏ kiểu tay khi di chuột vào */
+    }
+
+    .image-preview {
+        max-width: 100%;
+        max-height: 100%;
+        display: none;
+    }
+
+    .image-placeholder {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 36px;
+        color: #333;
+    }
+
+    /* Ẩn label khi đã chọn ảnh */
+    .image-input-label.selected {
+        display: none;
+    }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -348,7 +381,7 @@
         </div>
 
         <!-- Thanh toán -->
-        <form method="post" action="/admin/ban-hang/thanh-toan/${idHoaDon}" id="thong-tin-thanh-toanForm">
+        <form method="post" action="/admin/ban-hang/thanh-toan/${idHoaDon}" id="thong-tin-thanh-toanForm"  enctype="multipart/form-data">
             <input type="hidden" name="idKhachHang" id="id-khach-hang">
             <div class="row border mt-3">
                 <p class="fw-bold">Thông tin thanh toán</p>
@@ -403,10 +436,60 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-    <textarea class="form-control" id="dia-chi" name="diaChi" rows="3"
+                        <textarea class="form-control" id="dia-chi" name="diaChi" rows="3"
               placeholder="Địa chỉ chi tiết"></textarea>
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="imageInput" class="image-preview-container">
+                                    <label class="form-label">Ảnh chuyển khoản</label>
+                                    <img id="imageDisplay" class="image-preview" src="" alt="Image">
+                                    <span class="image-placeholder" id="placeholder1">+</span>
+                                </label>
+                                <input name="anh" type="file" id="imageInput" class="image-input" accept="image/*"
+                                       onchange="displayImage();">
+                            </div>
+                        </div>
+                        <script>
+                            function displayImage() {
+                                var input = document.getElementById('imageInput');
+                                var imageDisplay = document.getElementById('imageDisplay');
+                                var placeholder = document.getElementById('placeholder1'); // Đã thêm id vào placeholder
+
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+
+                                    reader.onload = function (e) {
+                                        imageDisplay.src = e.target.result;
+                                        imageDisplay.style.display = 'block';
+                                        placeholder.style.display = 'none';
+                                        // Chuyển đổi ảnh thành base64 và hiển thị nó
+                                        convertToBase64(input.files[0], function (base64Image) {
+                                            // Lưu base64Image vào một biến hoặc gửi nó điều kiện cần thiết
+                                        });
+                                    };
+                                    console.log(input.files[0]);
+
+                                    reader.readAsDataURL(input.files[0]);
+                                } else {
+                                    imageDisplay.src = ''; // Xóa ảnh nếu không có tệp được chọn
+                                    imageDisplay.style.display = 'none';
+                                    placeholder.style.display = 'block';
+                                }
+                            }
+                            function convertToBase64(file, callback) {
+                                var reader = new FileReader();
+                                reader.readAsDataURL(file);
+                                reader.onload = function () {
+                                    var base64Image = reader.result.split(',')[1];
+                                    callback(base64Image);
+                                };
+                                reader.onerror = function (error) {
+                                    console.error('Error reading file: ', error);
+                                };
+                            }
+                        </script>
                     </div>
 
                     <div class="col-6" id="thong-tin-thanh-toan">
