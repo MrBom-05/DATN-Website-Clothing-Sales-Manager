@@ -12,9 +12,16 @@
             </div>
             <hr>
 
-            <c:if test="${khachHang.diaChi =! null}">
-                <input type="checkbox" id="hideInfoCheckbox" name="diaChiMacDinh" class="ms-5" onchange="updateCheckboxValue(this)">
+            <c:if test="${kh.diaChi =! null}">
+                <input type="checkbox" id="hideInfoCheckbox" name="diaChiMacDinh" class="ms-5"
+                       onchange="updateCheckboxValue(this)">
                 <label class="ms-3" for="hideInfoCheckbox">Sử dụng địa chỉ đã đăng ký</label>
+                <br>
+                <label class="ms-5 mt-3">Tên người nhận: ${khachHang.hoVaTen}</label>
+                <br>
+                <label class="ms-5">Số điện thoại: ${khachHang.soDienThoai}</label>
+                <br>
+                <label class="ms-5">Địa chỉ: ${khachHang.diaChi}/${khachHang.xaPhuong}/${khachHang.quanHuyen}/${khachHang.tinhThanhPho}</label>
                 <script>
                     function updateCheckboxValue(checkbox) {
                         if (checkbox.checked) {
@@ -26,7 +33,7 @@
                 </script>
                 <hr>
             </c:if>
-            <c:if test="${khachHang.diaChi == null}">
+            <c:if test="${kh.diaChi == null}">
                 <a href="">Thêm địa chỉ mặc định</a>
                 <hr>
             </c:if>
