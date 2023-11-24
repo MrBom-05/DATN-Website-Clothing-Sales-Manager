@@ -66,9 +66,6 @@ public class NhanVien {
     private Integer chucVu;
 
     @OneToMany(mappedBy = "idNhanVien")
-    private Set<DoiTra> doiTras = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "idNhanVien")
     private Set<GioHang> gioHangs = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "idNhanVien")

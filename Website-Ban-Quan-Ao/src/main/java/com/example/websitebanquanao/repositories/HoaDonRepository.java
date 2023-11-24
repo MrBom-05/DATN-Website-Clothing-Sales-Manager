@@ -23,6 +23,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
 
     @Query("SELECT hd FROM HoaDon hd where hd.trangThai = 0 order by hd.ma desc ")
     List<HoaDon> findAllHoaDon();
+
     @Modifying
     @Transactional
     @Query("update HoaDon hd set hd.trangThai = 1 where hd.id = :id")
@@ -36,6 +37,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     public Integer getSoPhanTramGiamByIdHoaDon(@Param("id") UUID id);
 
     @Modifying
-    @Query("update HoaDon hd set hd.ngayThanhToan = :ngayThanhToan where hd.ma = :ma")
-    public void updateNgayThanhToanByIdHoaDon(@Param("ma") String id, @Param("ngayThanhToan") Instant ngayThanhToan);
+    @Query("update HoaDon hd set hd.ngayThanhToan = :ngayThanhToan, hd.trangThai = :trangThai where hd.ma = :ma")
+    public void updateNgayThanhToanByIdHoaDon(@Param("ma") String ma, @Param("ngayThanhToan") Instant ngayThanhToan, @Param("trangThai") Integer trangThai);
 }

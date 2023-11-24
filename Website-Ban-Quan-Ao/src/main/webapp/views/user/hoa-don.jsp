@@ -75,6 +75,9 @@
                                         <c:if test="${hoaDon.trangThai == 5}">
                                             <span class="text-danger">Đã huỷ</span>
                                         </c:if>
+                                        <c:if test="${hoaDon.trangThai == 6}">
+                                            <span class="text-secondary">Đã xác nhận</span>
+                                        </c:if>
                                     </p>
                                 </div>
                             </div>
