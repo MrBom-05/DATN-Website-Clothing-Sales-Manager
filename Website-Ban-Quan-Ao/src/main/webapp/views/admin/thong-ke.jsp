@@ -28,13 +28,13 @@
         function drawStuff() {
             var data = new google.visualization.arrayToDataTable([
                 ['Move', 'Vnđ:'],
-                ["${Tru0ThangTruoc}", ${TongDoanhThuThangHienTai}],
-                ["${Tru1ThangTruoc}", ${TongDoanhThuThangHienTaiTru1}],
-                ["${Tru2ThangTruoc}", ${TongDoanhThuThangHienTaiTru2}],
-                ["${Tru3ThangTruoc}", ${TongDoanhThuThangHienTaiTru3}],
-                ["${Tru4ThangTruoc}", ${TongDoanhThuThangHienTaiTru4}],
-                ["${Tru5ThangTruoc}", ${TongDoanhThuThangHienTaiTru5}],
-                ["${Tru6ThangTruoc}", ${TongDoanhThuThangHienTaiTru6}]
+                ["Tháng ${Tru0ThangTruoc}", ${TongDoanhThuThangHienTai}],
+                ["Tháng ${Tru1ThangTruoc}", ${TongDoanhThuThangHienTaiTru1}],
+                ["Tháng ${Tru2ThangTruoc}", ${TongDoanhThuThangHienTaiTru2}],
+                ["Tháng ${Tru3ThangTruoc}", ${TongDoanhThuThangHienTaiTru3}],
+                ["Tháng ${Tru4ThangTruoc}", ${TongDoanhThuThangHienTaiTru4}],
+                ["Tháng ${Tru5ThangTruoc}", ${TongDoanhThuThangHienTaiTru5}],
+                ["Tháng ${Tru6ThangTruoc}", ${TongDoanhThuThangHienTaiTru6}]
             ]);
 
             var options = {
