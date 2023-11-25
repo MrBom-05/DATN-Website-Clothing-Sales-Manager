@@ -93,7 +93,7 @@
                                     <span class="text-secondary">Chờ thanh toán</span>
                                 </c:if>
                                 <c:if test="${hoaDon.trangThai == 1}">
-                                    <span class="text-success">Đã thanh toán</span>
+                                    <span class="text-success">Đã hoàn thành</span>
                                 </c:if>
                                 <c:if test="${hoaDon.trangThai == 2}">
                                     <span class="text-secondary">Chờ xác nhận</span>
@@ -106,6 +106,9 @@
                                 </c:if>
                                 <c:if test="${hoaDon.trangThai == 5}">
                                     <span class="text-danger">Đã huỷ</span>
+                                </c:if>
+                                <c:if test="${hoaDon.trangThai == 6}">
+                                    <span class="text-secondary">Đã xác nhận</span>
                                 </c:if>
                             </td>
                             <td>

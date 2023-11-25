@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,18 +26,32 @@ public class KhuyenMaiService {
         return khuyenMaiRepository.getPage(pageable);
     }
 
+    public List<KhuyenMai> getAll() {
+        return khuyenMaiRepository.findAll();
+    }
+    public void checkNgayKetThuc() {
+        List<KhuyenMai> khuyenMaiList = khuyenMaiRepository.findAll();
+        Date date = new Date(System.currentTimeMillis());
+        System.out.println(date);
+        for (KhuyenMai khuyenMai : khuyenMaiList) {
+            if (khuyenMai.getNgayKetThuc().before(date)) {
+                khuyenMaiRepository.updateTrangThaiById(khuyenMai.getId(), 1);
+            }
+        }
+    }
+
     public void add(KhuyenMaiRequest khuyenMaiRequest) {
-            KhuyenMai khuyenMai = new KhuyenMai();
-            khuyenMai.setMa(khuyenMaiRequest.getMa());
-            khuyenMai.setTen(khuyenMaiRequest.getTen());
-            khuyenMai.setSoPhanTramGiam(khuyenMaiRequest.getSoPhanTramGiam());
-            khuyenMai.setNgayBatDau(Date.valueOf(khuyenMaiRequest.getNgayBatDau()));
-            khuyenMai.setNgayKetThuc(Date.valueOf(khuyenMaiRequest.getNgayKetThuc()));
-            khuyenMai.setTrangThai(0);
+        KhuyenMai khuyenMai = new KhuyenMai();
+        khuyenMai.setMa(khuyenMaiRequest.getMa());
+        khuyenMai.setTen(khuyenMaiRequest.getTen());
+        khuyenMai.setSoPhanTramGiam(khuyenMaiRequest.getSoPhanTramGiam());
+        khuyenMai.setNgayBatDau(Date.valueOf(khuyenMaiRequest.getNgayBatDau()));
+        khuyenMai.setNgayKetThuc(Date.valueOf(khuyenMaiRequest.getNgayKetThuc()));
+        khuyenMai.setTrangThai(0);
 
-            khuyenMaiRepository.save(khuyenMai);
+        khuyenMaiRepository.save(khuyenMai);
 
-            System.out.println("KhuyenMaiService.add: " + khuyenMai.getMa());
+        System.out.println("KhuyenMaiService.add: " + khuyenMai.getMa());
 
     }
 

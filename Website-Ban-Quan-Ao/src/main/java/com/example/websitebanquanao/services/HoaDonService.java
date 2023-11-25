@@ -9,10 +9,13 @@ import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -76,7 +79,10 @@ public class HoaDonService {
         }
         return code;
     }
-
+    private String encodeImageToBase64(MultipartFile file) throws IOException {
+        byte[] fileContent = file.getBytes();
+        return Base64.encodeBase64String(fileContent);
+    }
     public void add(HoaDonRequest hoaDonRequest) {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMa(maHDCount());
@@ -111,6 +117,16 @@ public class HoaDonService {
 
     public void update(HoaDon hoaDon, UUID idHoaDon) {
         if (hoaDon != null && idHoaDon != null) {
+            hoaDonRepository.save(hoaDon);
+        }
+    }
+    public void updateHoaDonAnh(HoaDon hoaDon, UUID idHoaDon, MultipartFile anh) {
+        if (hoaDon != null && idHoaDon != null) {
+            try {
+                hoaDon.setAnhHoaDonChuyenKhoan("data:image/png;base64," + encodeImageToBase64(anh));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             hoaDonRepository.save(hoaDon);
         }
     }

@@ -1,7 +1,10 @@
 package com.example.websitebanquanao.controllers.admins;
 
+import com.example.websitebanquanao.entities.KhuyenMai;
 import com.example.websitebanquanao.infrastructures.requests.LoginAdminRequest;
 import com.example.websitebanquanao.infrastructures.requests.NhanVienRequest;
+import com.example.websitebanquanao.services.KhachHangService;
+import com.example.websitebanquanao.services.KhuyenMaiService;
 import com.example.websitebanquanao.services.NhanVienService;
 import jakarta.servlet.http.HttpSession;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
@@ -13,16 +16,22 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.sql.Date;
+import java.time.Instant;
+
 @Controller
 public class LoginController {
     @Autowired
     private NhanVienService nhanVienService;
     @Autowired
     private HttpSession session;
+    @Autowired
+    private KhuyenMaiService khuyenMaiService;
 
     @GetMapping("/login-admin")
     public String login(Model model) {
         model.addAttribute("nv", new LoginAdminRequest());
+        khuyenMaiService.checkNgayKetThuc();
         return "admin/login/login";
     }
 

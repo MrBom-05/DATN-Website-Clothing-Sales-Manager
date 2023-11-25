@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -254,7 +255,8 @@ public class BanHangController {
                              @RequestParam("diaChi") String diaChi, @RequestParam("ghiChu") String ghiChu,
                              @RequestParam("xaPhuong") String xaPhuong, @RequestParam("quanHuyen") String quanHuyen,
                              @RequestParam("tinhThanh") String tinhThanh, @RequestParam("phiVanChuyen") BigDecimal phiVanChuyen,
-                             @RequestParam("maVanChuyen") String maVanChuyen, @RequestParam("tenDonViVanChuyen") String tenDonViVanChuyen
+                             @RequestParam("maVanChuyen") String maVanChuyen, @RequestParam("tenDonViVanChuyen") String tenDonViVanChuyen,
+                             @RequestParam("anh") MultipartFile anh
     ) {
         // validate full trường và session tồn tại 3s
         if (nguoiNhan.isEmpty() || sdt.isEmpty() || diaChi.isEmpty() || ghiChu.isEmpty() || xaPhuong.isEmpty() || quanHuyen.isEmpty() || tinhThanh.isEmpty() || phiVanChuyen == null || maVanChuyen.isEmpty() || tenDonViVanChuyen.isEmpty()) {
@@ -276,7 +278,7 @@ public class BanHangController {
             hoaDon.setPhiVanChuyen(phiVanChuyen);
             hoaDon.setMaVanChuyen(maVanChuyen);
             hoaDon.setTenDonViVanChuyen(tenDonViVanChuyen);
-            hoaDonService.update(hoaDon, idHoaDon);
+            hoaDonService.updateHoaDonAnh(hoaDon, idHoaDon, anh);
             session.setAttribute("successMessage", "Tạo đơn hàng thành công");
         }
 
