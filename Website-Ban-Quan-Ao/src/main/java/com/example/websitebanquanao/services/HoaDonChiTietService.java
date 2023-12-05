@@ -7,6 +7,7 @@ import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.HoaDonUserResponse;
 import com.example.websitebanquanao.repositories.HoaDonChiTietRepository;
+import com.example.websitebanquanao.repositories.HoaDonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class HoaDonChiTietService {
     private HoaDonChiTietRepository hoaDonChiTietRepository;
 
     @Autowired
+    private HoaDonRepository hoaDonRepository;
+
+    @Autowired
     private GioHangService gioHangService;
 
     @Autowired
@@ -29,6 +33,9 @@ public class HoaDonChiTietService {
 
     @Autowired
     private SanPhamChiTietService sanPhamChiTietService;
+
+    @Autowired
+    private CreatePDF createPDF;
 
     // admin
     public void add(HoaDonChiTiet hoaDonChiTiet) {
@@ -79,9 +86,28 @@ public class HoaDonChiTietService {
             hoaDonChiTietRepository.save(hoaDonChiTiet);
             sanPhamChiTietService.updateSoLuongByIdSanPhamChiTiet(gioHangUserResponse.getIdSanPhamChiTiet(), gioHangUserResponse.getSoLuong());
         }
-
         gioHangChiTietService.deleteByIdKhachHang(idKhachHang);
+        createPDF.exportPDFBill(hoaDon, listSanPhamGioHang, sumTongTienByIdHoaDon(hoaDon.getId()).toString());
         System.out.println("HoaDonChiTietService.addHoaDonChiTietUser: " + hoaDon.getMa());
+    }
+
+
+
+    public Integer getSoPhanTramGiamByIdHoaDon(UUID id) {
+        Integer soPhanTramGiam = hoaDonRepository.getSoPhanTramGiamByIdHoaDon(id);
+        if (soPhanTramGiam == null) {
+            return 0;
+        } else {
+            return soPhanTramGiam;
+        }
+    }
+
+    public BigDecimal sumTongTienByIdHoaDon(UUID idHoaDon) {
+        BigDecimal tongTien = sumTongTien(idHoaDon);
+        Integer soPhanTramGiam = getSoPhanTramGiamByIdHoaDon(idHoaDon);
+        BigDecimal soTienDuocGiam = tongTien.multiply(new BigDecimal(soPhanTramGiam).divide(new BigDecimal(100)));
+        BigDecimal soTienSauKhiGiam = tongTien.subtract(soTienDuocGiam);
+        return soTienSauKhiGiam;
     }
 
     public List<GioHangUserResponse> getListByIdHoaDon(UUID idHoaDon) {
@@ -102,48 +128,51 @@ public class HoaDonChiTietService {
         return hoaDonChiTietRepository.TongDoanhThu();
     }
 
-    public Double TongDoanhThuNgayHienTai(){
+    public Double TongDoanhThuNgayHienTai() {
         return hoaDonChiTietRepository.TongDoanhThuNgayHienTai();
     }
-    public Double TongDoanhThuThangHienTai(){
+
+    public Double TongDoanhThuThangHienTai() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTai();
     }
 
-    public Double TongDoanhThuThangHienTaiTru1(){
+    public Double TongDoanhThuThangHienTaiTru1() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTaiTru1();
     }
 
-    public Double TongDoanhThuThangHienTaiTru2(){
+    public Double TongDoanhThuThangHienTaiTru2() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTaiTru2();
     }
 
-    public Double TongDoanhThuThangHienTaiTru3(){
+    public Double TongDoanhThuThangHienTaiTru3() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTaiTru3();
     }
 
-    public Double TongDoanhThuThangHienTaiTru4(){
+    public Double TongDoanhThuThangHienTaiTru4() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTaiTru4();
     }
-    public Double TongDoanhThuThangHienTaiTru5(){
+
+    public Double TongDoanhThuThangHienTaiTru5() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTaiTru5();
     }
 
-    public Double TongDoanhThuThangHienTaiTru6(){
+    public Double TongDoanhThuThangHienTaiTru6() {
         return hoaDonChiTietRepository.TongDoanhThuThangHienTaiTru6();
     }
 
-    public Double TongDoanhThuTuanHienTai(){
+    public Double TongDoanhThuTuanHienTai() {
         return hoaDonChiTietRepository.TongDoanhThuTuanHienTai();
     }
-    public Double TongDoanhThuNamHienTai(){
+
+    public Double TongDoanhThuNamHienTai() {
         return hoaDonChiTietRepository.TongDoanhThuNamHienTai();
     }
 
-    public Double TongDoanhThu6ThangQua(){
+    public Double TongDoanhThu6ThangQua() {
         return hoaDonChiTietRepository.TongDoanhThu6ThangQua();
     }
 
-    public Double TongDoanhThu1NamQua(){
+    public Double TongDoanhThu1NamQua() {
         return hoaDonChiTietRepository.TongDoanhThu1NamQua();
     }
 
@@ -155,8 +184,6 @@ public class HoaDonChiTietService {
         return hoaDonChiTietRepository.SanPhamBanChayNhat();
 
     }
-
-
 
     public String SanPhamBanChayNhatTrongNgay() {
         return hoaDonChiTietRepository.SanPhamBanChayNhatTrongNgay();
@@ -171,31 +198,31 @@ public class HoaDonChiTietService {
     }
 
 
-    public String Tru0ThangTruoc(){
+    public String Tru0ThangTruoc() {
         return hoaDonChiTietRepository.Tru0ThangTruoc();
     }
 
-    public String Tru1ThangTruoc(){
+    public String Tru1ThangTruoc() {
         return hoaDonChiTietRepository.Tru1ThangTruoc();
     }
 
-    public String Tru2ThangTruoc(){
+    public String Tru2ThangTruoc() {
         return hoaDonChiTietRepository.Tru2ThangTruoc();
     }
 
-    public String Tru3ThangTruoc(){
+    public String Tru3ThangTruoc() {
         return hoaDonChiTietRepository.Tru3ThangTruoc();
     }
 
-    public String Tru4ThangTruoc(){
+    public String Tru4ThangTruoc() {
         return hoaDonChiTietRepository.Tru4ThangTruoc();
     }
 
-    public String Tru5ThangTruoc(){
+    public String Tru5ThangTruoc() {
         return hoaDonChiTietRepository.Tru5ThangTruoc();
     }
 
-    public String Tru6ThangTruoc(){
+    public String Tru6ThangTruoc() {
         return hoaDonChiTietRepository.Tru6ThangTruoc();
     }
 }
