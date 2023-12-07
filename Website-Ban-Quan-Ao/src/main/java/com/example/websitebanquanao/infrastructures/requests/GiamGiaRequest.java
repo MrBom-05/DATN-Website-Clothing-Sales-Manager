@@ -45,20 +45,4 @@ public class GiamGiaRequest {
     private LocalDate ngayKetThuc;
 
 
-    public boolean isAnyFieldEmpty() {
-        return StringUtils.isEmpty(ma) ||
-                soPhanTramGiam == null ||
-                soLuong == null ||
-                ngayBatDau == null ||
-                ngayKetThuc == null;
-    }
-
-    public boolean isInvalidPercentage() {
-        return soPhanTramGiam < 1 || soPhanTramGiam > 99;
-    }
-
-    public boolean isInvalidpercent(){
-        return soLuong < 1 || soLuong > 10000;
-    }
-
 }

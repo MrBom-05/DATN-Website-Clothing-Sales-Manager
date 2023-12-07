@@ -73,4 +73,7 @@ public class KichCoService {
     public List<KichCoResponse> getListKichCoByIdSanPhamAndMauSac(UUID idSanPham, Integer idMauSac){
         return kichCoRepository.getListKichCoByIdSanPhamAndMauSac(idSanPham, idMauSac);
     }
+
+    public boolean isTenValid(String ten) {
+        return ten != null && !ten.trim().isEmpty(); }
 }
