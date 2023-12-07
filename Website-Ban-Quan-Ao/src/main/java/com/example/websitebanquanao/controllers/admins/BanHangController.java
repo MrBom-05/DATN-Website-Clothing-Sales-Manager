@@ -35,13 +35,14 @@ public class BanHangController {
     private HoaDonChiTietService hoaDonChiTietService;
     @Autowired
     private SanPhamChiTietService ctspService;
-
     @Autowired
     private KichCoService kichCoService;
     @Autowired
     private MauSacService mauSacService;
     @Autowired
     private KhachHangService khachHangService;
+    @Autowired
+    private CreatePDF createPDF;
 
     @Autowired
     HttpSession session;
@@ -229,6 +230,7 @@ public class BanHangController {
                 hoaDon.setGhiChu(ghiChu);
                 hoaDon.setLoaiHoaDon(0);
                 hoaDonService.update(hoaDon, idHoaDon);
+                createPDF.exportPDFBill(hoaDon, hoaDonChiTietService.getListByIdHoaDon(hoaDon.getId()), hoaDonService.sumTongTienByIdHoaDon(hoaDon.getId()).toString());
                 session.setAttribute("successMessage", "Thanh toán thành công");
             }
         } else {
@@ -242,6 +244,7 @@ public class BanHangController {
                 hoaDon.setIdKhachHang(khachHang);
                 hoaDon.setLoaiHoaDon(0);
                 hoaDonService.update(hoaDon, idHoaDon);
+                createPDF.exportPDFBill(hoaDon, hoaDonChiTietService.getListByIdHoaDon(hoaDon.getId()), hoaDonService.sumTongTienByIdHoaDon(hoaDon.getId()).toString());
                 session.setAttribute("successMessage", "Thanh toán thành công");
             }
         }

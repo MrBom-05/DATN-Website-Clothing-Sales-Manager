@@ -43,9 +43,9 @@ public class CreatePDF {
             document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------"));
             document.add(new Paragraph(" "));
 
-            PdfPTable table = new PdfPTable(6);
+            PdfPTable table = new PdfPTable(5);
             PdfPCell cell = new PdfPCell(new Paragraph("Danh sách sản phẩm", font));
-            cell.setColspan(6);
+            cell.setColspan(5);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
             table.addCell(cell);
