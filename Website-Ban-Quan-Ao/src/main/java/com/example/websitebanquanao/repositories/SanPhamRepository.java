@@ -15,12 +15,27 @@ import java.util.UUID;
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
 
+
     // admin
     @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public List<SanPhamResponse> getAll();
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse(s.id, s.ten, s.idLoai.ten) from SanPham s")
     public List<KhuyenMaiChiTietResponse> getAllKhuyenMai();
+
+    @Query(value = "SELECT distinct sp.*\n" +
+            "FROM san_pham sp\n" +
+            "         LEFT JOIN san_pham_chi_tiet spct ON sp.id = spct.id_san_pham\n" +
+            "         LEFT JOIN khuyen_mai_chi_tiet kmct ON spct.id = kmct.id_san_pham_chi_tiet\n" +
+            "        left join khuyen_mai km on kmct.id_khuyen_mai = km.id\n" +
+            "        left join loai lsp on sp.id_loai = lsp.id\n" +
+            "WHERE\n" +
+            "      not exists(select  km.*\n" +
+            "                 from khuyen_mai km join khuyen_mai_chi_tiet kmct on km.id = kmct.id_khuyen_mai\n" +
+            "                 where km.trang_thai = 0\n" +
+            "                   and kmct.id_san_pham_chi_tiet = spct.id\n" +
+            "                )",nativeQuery = true)
+        List<SanPham> getAllKhuyenMai2();
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public Page<SanPhamResponse> getPage(Pageable pageable);

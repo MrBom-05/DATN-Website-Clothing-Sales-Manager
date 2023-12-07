@@ -8,6 +8,9 @@
     <link href="/../views/admin/css/styles.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 
 </head>
 <style>
@@ -63,6 +66,27 @@
         font-weight: 400;
         margin-bottom: 0;
     }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-left: 50px;
+    }
+
+    /* Adjusted style to handle mouseout */
+    .dropdown-menu:hover {
+        display: block;
+    }
+
+    .dropdown-menu a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #212529;
+    }
+
 </style>
 <body>
 <div class="d-flex " id="wrapper">
@@ -80,18 +104,22 @@
         <div class="list-group list-group-flush">
             <c:if test="${admin.chucVu == 0}">
                 <!-- Hiển thị menu cho quản lý -->
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/san-pham/index">Sản phẩm</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/mau-sac/index">Màu sắc</a>
+                <div class="dropdown">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Quản lí sản phẩm
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <a class="dropdown-item" href="/admin/san-pham/index">Sản phẩm</a>
+                        <a class="dropdown-item"  href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
+                        <a class="dropdown-item"  href="/admin/loai/index">Loại</a>
+                        <a class="dropdown-item"  href="/admin/kich-co/index">Kích cỡ</a>
+                        <a class="dropdown-item"  href="/admin/mau-sac/index">Màu sắc</a>
+                    </ul>
+                </div>
+
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/khach-hang/index">Khách Hàng</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/loai/index">Loại</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/kich-co/index">Kích cỡ</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/nhan-vien/index">Nhân viên</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
@@ -101,25 +129,24 @@
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/thong-ke/index">Thống kê</a>
 
-
-
             </c:if>
             <c:if test="${admin.chucVu == 1}">
                 <!-- Hiển thị menu cho nhân viên -->
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/nhan-vien/index">Nhân viên</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/san-pham/index">Sản phẩm</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/mau-sac/index">Màu sắc</a>
+                <div class="dropdown">
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Quản lí sản phẩm
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <a class="dropdown-item" href="/admin/san-pham/index">Sản phẩm</a>
+                        <a class="dropdown-item"  href="/admin/san-pham-chi-tiet/index">Sản Phẩm Chi Tiết</a>
+                        <a class="dropdown-item"  href="/admin/loai/index">Loại</a>
+                        <a class="dropdown-item"  href="/admin/kich-co/index">Kích cỡ</a>
+                        <a class="dropdown-item"  href="/admin/mau-sac/index">Màu sắc</a>
+                    </ul>
+                </div>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/khach-hang/index">Khách Hàng</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/loai/index">Loại</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                   href="/admin/kich-co/index">Kích cỡ</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
                    href="/admin/giam-gia/index">Giảm giá</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
@@ -166,17 +193,28 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <script>
-    window.addEventListener('DOMContentLoaded', event => {
+    window.addEventListener('load', event => {
         const sidebarToggle = document.body.querySelector('#sidebarToggle');
+
+        // Function to toggle sidebar and save the state to localStorage
+        const toggleSidebar = () => {
+            document.body.classList.toggle('sb-sidenav-toggled');
+            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+        };
+
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', event => {
                 event.preventDefault();
-                document.body.classList.toggle('sb-sidenav-toggled');
-                localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                toggleSidebar();
             });
         }
-    });
 
+        // Check localStorage for the sidebar state and apply it
+        const savedSidebarState = localStorage.getItem('sb|sidebar-toggle');
+        if (savedSidebarState && savedSidebarState === 'true') {
+            document.body.classList.add('sb-sidenav-toggled');
+        }
+    });
 </script>
 </body>
 </html>

@@ -126,7 +126,7 @@ public class KhuyenMaiController {
     // KhuyenMaiChiTiet
     @GetMapping("/chi-tiet/{id}")
     public String chiTiet(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("khuyenMaiChiTietPage", sanPhamService.getAllKhuyenMai());
+        model.addAttribute("khuyenMaiChiTietPage", sanPhamService.getAllKhuyenMai2());
         model.addAttribute("idKhuyenMai", id);
         model.addAttribute("view", "/views/admin/khuyen-mai/chi-tiet.jsp");
         return "admin/layout";

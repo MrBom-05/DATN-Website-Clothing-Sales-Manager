@@ -34,6 +34,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 
 
 
+
     // thống kê
     @Query("SELECT SUM(hdct.gia * hdct.soLuong) FROM HoaDonChiTiet hdct " +
             "WHERE hdct.idHoaDon.trangThai = 1")
@@ -142,16 +143,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 
 
 
-    //Thống kê sản phẩm bán chạy theo doanh thu, nếu muốn thống kê bán chạy theo số lượng thì bỏ nhân với giá tiền trong câu query
-    @Query(value = "SELECT TOP 1 sp.ten " +
-            "FROM san_pham sp " +
-            "JOIN san_pham_chi_tiet spt ON sp.id = spt.id_san_pham " +
-            "JOIN hoa_don_chi_tiet hdct ON spt.id = hdct.id_san_pham_chi_tiet " +
-            "JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
-            "WHERE hd.trang_thai = 1 " +
-            "GROUP BY sp.ten " +
-            "ORDER BY SUM(hdct.gia * hdct.so_luong) DESC", nativeQuery = true)
-    String SanPhamBanChayNhat();
 
     @Query(value = "SELECT TOP 1 sp.ten " +
             "FROM san_pham sp " +
@@ -228,4 +219,59 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
 
     @Query(value = "SELECT FORMAT(DATEADD(MONTH, -6, GETDATE()), 'MM-yyyy')", nativeQuery = true)
     String Tru6ThangTruoc();
+
+    @Query(value = "SELECT SUM(hdct.so_luong) " +
+            "FROM hoa_don_chi_tiet hdct " +
+            "JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
+            "WHERE hd.trang_thai = 1", nativeQuery = true)
+   public Integer TongSanPhamDaBan();
+
+    @Query(value = "SELECT COUNT(hd.id) " +
+            "FROM hoa_don hd " +
+            "WHERE hd.trang_thai = 1", nativeQuery = true)
+   public Integer TongDonHang();
+    // tổng khách hàng đã mua hàng
+    @Query(value = "SELECT COUNT(DISTINCT hd.id_khach_hang) " +
+            "FROM hoa_don hd " +
+            "WHERE hd.trang_thai = 1", nativeQuery = true)
+   public Integer TongKhachHang();
+
+    // tìm nhân viên bán được doanh thu cao nhất và lấy ra tên nhân viên đó,số lượng sản phẩm bán được và doanh thu
+    @Query(value = "SELECT TOP 1 nv.ho_va_ten AS ten_nhan_vien, COUNT(DISTINCT hd.ma) AS so_luong_san_pham_ban_duoc, SUM(hdct.gia * hdct.so_luong) AS doanh_thu " +
+            "FROM hoa_don hd " +
+            "JOIN hoa_don_chi_tiet hdct ON hd.id = hdct.id_hoa_don " +
+            "JOIN nhan_vien nv ON hd.id_nhan_vien = nv.id " +
+            "WHERE hd.trang_thai = 1 " +
+            "GROUP BY nv.ho_va_ten " +
+            "ORDER BY doanh_thu DESC", nativeQuery = true)
+    public Object NhanVienBanDuocNhieuSanPhamNhat();
+    //Thống kê sản phẩm bán chạy theo doanh thu, nếu muốn thống kê bán chạy theo số lượng thì bỏ nhân với giá tiền trong câu query
+    @Query(value = "SELECT TOP 1 sp.ten AS ten_san_pham, hdct.so_luong AS so_luong_da_ban\n" +
+            "FROM hoa_don_chi_tiet hdct join san_pham_chi_tiet spct on hdct.id_san_pham_chi_tiet = spct.id\n" +
+            "join hoa_don hd on hd.id = hdct.id_hoa_don\n" +
+            "join san_pham sp on sp.id = spct.id_san_pham\n" +
+            "WHERE hd.trang_thai = 1\n" +
+            "GROUP BY sp.ten, hdct.so_luong\n" +
+            "ORDER BY so_luong_da_ban DESC", nativeQuery = true)
+    public Object SanPhamBanChayNhat();
+
+    @Query(value = "SELECT TOP 5 sp.ten AS ten_san_pham, hdct.so_luong AS so_luong_da_ban, sp.anh " +
+            "FROM hoa_don_chi_tiet hdct join san_pham_chi_tiet spct on hdct.id_san_pham_chi_tiet = spct.id " +
+            "join hoa_don hd on hd.id = hdct.id_hoa_don " +
+            "join san_pham sp on sp.id = spct.id_san_pham " +
+            "WHERE hd.trang_thai = 1 " +
+            "GROUP BY sp.ten, hdct.so_luong, sp.anh " +
+            "ORDER BY so_luong_da_ban DESC", nativeQuery = true)
+    List<Object> top5SanPhamBanChay();
+    @Query(value = "SELECT TOP 5 sp.ten AS ten_san_pham, hdct.so_luong AS so_luong_da_ban, sp.anh " +
+            "FROM hoa_don_chi_tiet hdct join san_pham_chi_tiet spct on hdct.id_san_pham_chi_tiet = spct.id " +
+            "join hoa_don hd on hd.id = hdct.id_hoa_don " +
+            "join san_pham sp on sp.id = spct.id_san_pham " +
+            "WHERE hd.trang_thai = 1 " +
+            "GROUP BY sp.ten, hdct.so_luong, sp.anh " +
+            "ORDER BY so_luong_da_ban asc", nativeQuery = true)
+    List<Object> top5SanPhamBanCham();
+
 }
+
+

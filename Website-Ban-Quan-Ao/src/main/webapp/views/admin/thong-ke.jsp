@@ -1,203 +1,405 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="f" uri="jakarta.tags.functions" %>
-<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-
-
-
-
-
-<!doctype html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Document</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.4.1/css/all.min.css"
+            integrity="sha512-/RUbtHakVMJrg1ILtwvDIceb/cDkk97rWKvfnFSTOmNbytCyEylutDqeEr9adIBye3suD3RfcsXLOLBqYRW4gw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <%--    bieu do--%>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['bar']});
-        google.charts.setOnLoadCallback(drawStuff);
+        .section-1 .box {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
 
-        function drawStuff() {
-            var data = new google.visualization.arrayToDataTable([
-                ['Move', 'Vnđ:'],
-                ["Tháng ${Tru0ThangTruoc}", ${TongDoanhThuThangHienTai}],
-                ["Tháng ${Tru1ThangTruoc}", ${TongDoanhThuThangHienTaiTru1}],
-                ["Tháng ${Tru2ThangTruoc}", ${TongDoanhThuThangHienTaiTru2}],
-                ["Tháng ${Tru3ThangTruoc}", ${TongDoanhThuThangHienTaiTru3}],
-                ["Tháng ${Tru4ThangTruoc}", ${TongDoanhThuThangHienTaiTru4}],
-                ["Tháng ${Tru5ThangTruoc}", ${TongDoanhThuThangHienTaiTru5}],
-                ["Tháng ${Tru6ThangTruoc}", ${TongDoanhThuThangHienTaiTru6}]
-            ]);
+        .section-1 .box .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f08080;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            var options = {
-                width: 1050,
-                legend: { position: 'none' },
-                chart: {
-                    title: 'Biểu đồ :',
-                    subtitle: '' },
-                axes: {
-                    x: {
-                        0: { side: 'top', label: 'Biểu đồ thống kê doanh thu theo từng tháng.'} // Top x-axis.
-                    }
-                },
-                bar: { groupWidth: "90%" }
-            };
+        .section-1 .box .text {
+            font-size: 20px;
+            font-weight: 600;
+            float: left;
+            overflow: auto;
+            margin-left: 1.25rem;
+        }
 
-            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-            // Convert the Classic options to Material options.
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        };
-    </script>
+        /* section 2 */
+        .section-2 .box {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
 
+        .section-2 .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f08080;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-2 .text {
+            font-size: 20px;
+            font-weight: 600;
+            float: left;
+            overflow: auto;
+            margin-left: 0;
+        }
+
+        .section-2 .box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-2 .box-1 {
+            /*background-color: darkorange;*/
+        }
+
+        .section-2 .box-2 {
+            /*background-color: #f08080;*/
+        }
+
+        /* section 3 */
+        .section-3 .box {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .section-3 .box .title {
+            font-size: 20px;
+            font-weight: 600;
+            float: left;
+            overflow: auto;
+            margin-left: 0;
+        }
+
+        .section-3 .box {
+            gap: 20px;
+        }
+
+        .section-3 .row-1 {
+            display: flex;
+            gap: 20px;
+        }
+
+        .section-3 .table th:first-child {
+            width: 10%;
+        }
+
+        .section-3 .table th:nth-child(2) {
+            width: 20%;
+        }
+
+        .section-3 .table th:nth-child(3) {
+            width: 30%;
+        }
+
+        .section-3 .table th:nth-child(4) {
+            width: 20%;
+        }
+
+        #top_x_div {
+            width: 43rem;
+            height: 500px;
+        }
+    </style>
 </head>
-<body class="bg-light">
-
-
-<div class="col-8 offset-2 py-5">
-    <div class="row ">
-        <div class="fw-bold text-xl text-uppercase py-2 ">
-            Thống kê
-        </div>
-
+<body>
+<section class="section-1 mt-4">
+    <div class="container">
         <div class="row">
-            <div class="form-group py-1 col">
-                <select id="selectOption" class="w-50 form-control">
-                    <option value="TongDoanhThu" >Doanh thu</option>
-                    <option value="TongDoanhThuNgayHienTai" >Ngày</option>
-                    <option value="TongDoanhThuTuanHienTai" >Tuần này</option>
-                    <option value="TongDoanhThuThangHienTai" >Tháng này</option>
-                    <option value="TongDoanhThuNamHienTai" >Năm này</option>
-                    <option value="TongDoanhThu6ThangQua" >6 tháng qua</option>
-                    <option value="TongDoanhThu1NamQua" >1 năm qua</option>
-                </select>
+            <div class="col-md-3 col-sm-6">
+                <div class="box">
+                    <div class="icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="text">
+                        <span class="fw-bold money">
+                            ${TongDoanhThu}Vnđ
+                        </span>
+                        <p>Tổng tiền bán ra</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-1"></div>
-            <div class="form-group py-1 col">
-                <select id="selectOption2" class="w-50 form-control">
-                    <option value="SanPhamBanChayNhat" >Sản phẩm chạy nhất</option>
-                    <option value="SanPhamBanChayNhatTrongNgay" >Ngày</option>
-                    <option value="SanPhamBanChayNhatTrongTuan" >Tuần này</option>
-                    <option value="SanPhamBanChayNhatTrongThang" >Tháng này</option>
-
-                </select>
+            <div class="col-md-3 col-sm-6">
+                <div class="box">
+                    <div class="icon">
+                        <i class="fas fa-cart-plus"></i>
+                    </div>
+                    <div class="text">
+                        <span class="fw-bold">${tongSanPhamDaBan}</span>
+                        <p>Sản phẩm đã bán</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-4"></div>
+            <div class="col-md-3 col-sm-6">
+                <div class="box">
+                    <div class="icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="text">
+                        <span class="fw-bold">${tongDonHangDaBan}</span>
+                        <p class="fs-5">Số lượng đơn hàng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="box">
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="text">
+                        <span class="fw-bold">${tongKhachHangDaMua}</span>
+                        <p>Số lượng khách hàng</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
     </div>
-
-    <div class="row">
-        <!-- Định dạng doanh thu thành kiểu số -->
-        <fmt:formatNumber value="${TongDoanhThu}" pattern="#,##0" var="formattedTongDoanhThu" />
-        <fmt:formatNumber value="${TongDoanhThuNgayHienTai}" pattern="#,##0" var="formattedTongDoanhThuNgayHienTai" />
-        <fmt:formatNumber value="${TongDoanhThuTuanHienTai}" pattern="#,##0" var="formattedTongDoanhThuTuanHienTai" />
-        <fmt:formatNumber value="${TongDoanhThuThangHienTai}" pattern="#,##0" var="formattedTongDoanhThuThangHienTai" />
-        <fmt:formatNumber value="${TongDoanhThuNamHienTai}" pattern="#,##0" var="formattedTongDoanhThuNamHienTai" />
-        <fmt:formatNumber value="${TongDoanhThu6ThangQua}" pattern="#,##0" var="formattedTongDoanhThu6ThangQua" />
-        <fmt:formatNumber value="${TongDoanhThu1NamQua}" pattern="#,##0" var="formattedTongDoanhThu1NamQua" />
-
-        <div class="col bg-white">
-            <h4 class="col py-2">Doanh thu</h4>
-                <div class="col-2"></div>
-                <h2  id="displayValue" class="col py-1"> ${formattedTongDoanhThu} vnđ</h2>
-
-
-
-
+</section>
+<section class="section-2 mt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="box box-1">
+                    <div class="text">
+                        <div class="count">
+                  <span>
+                    Nhân viên có doanh số cao nhất ${tenNhanVien}
+                  </span>
+                        </div>
+                        <div class="desc">với doanh thu
+                            <span class="money_2">${tongTien}VNĐ</span> và ${soLuong} đơn
+                        </div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="box box-2">
+                    <div class="text">
+                        <div class="count">
+                  <span class="fw-bold">
+                    Sản phẩm bán chạy nhất ${tenSanPham}
+                  </span>
+                        </div>
+                        <div class="desc">với số lượng ${soLuongSanPham} sản phẩm</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-cart-plus"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="col-1"></div>
-
-        <div class=" col bg-white">
-            <h4 class="py-2">Sản phẩm chạy nhất</h4>
-            <h2 id="displayValue2" class="col py-1">${SanPhamBanChayNhat}</h2>
-        </div>
-
-        <div class="col-1"></div>
-
-        <div class="col bg-white">
-            <h5 class="py-2">Nhân viên chăm chỉ</h5>
-            <h2 class="col py-1">${NhanVienBanDcNhieuNhat}</h2>
-        </div>
-
     </div>
+</section>
+<section class="section-3 mt-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-left">
+                <div class="box">
+                    <div class="row-1">
+                        <div class="title">
+                  <span class="text-uppercase text-danger">
+                    Biểu đồ thống kê doanh thu theo từng tháng
+                  </span>
+
+                        </div>
+                        <%--                        <div class="filter">--%>
+                        <%--                            <select--%>
+                        <%--                                    class="form-select"--%>
+                        <%--                                    aria-label="Default select example"--%>
+                        <%--                            >--%>
+                        <%--                                <option value="">Tháng 1</option>--%>
+                        <%--                                <option value="">Tháng 2</option>--%>
+                        <%--                                <option value="">Tháng 3</option>--%>
+                        <%--                                <option value="">Tháng 4</option>--%>
+                        <%--                                <option value="">Tháng 5</option>--%>
+                        <%--                                <option value="">Tháng 6</option>--%>
+                        <%--                                <option value="">Tháng 7</option>--%>
+                        <%--                                <option value="">Tháng 8</option>--%>
+                        <%--                                <option value="">Tháng 9</option>--%>
+                        <%--                                <option value="">Tháng 10</option>--%>
+                        <%--                                <option value="">Tháng 11</option>--%>
+                        <%--                                <option value="">Tháng 12</option>--%>
+                        <%--                            </select>--%>
+                        <%--                        </div>--%>
+                    </div>
+                    <div class="chart">
+                        <div id="top_x_div"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-right">
+                <div class="box">
+                    <div class="title mb-3">
+                        <span class="top_sp">Top sản phẩm</span>
+                    </div>
+                    <select id="orderBy" name="orderBy" class="ms-1 form-select-sm w-25">
+                        <option value="desc">Giảm dần</option>
+                        <option value="asc">Tăng dần</option>
+                    </select>
+                    <button onclick="loadTop5SanPham()" class="btn btn-sm btn-outline-success">Lọc</button>
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Ảnh</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Số lượng đã bán</th>
+                        </tr>
+                        </thead>
+                        <tbody  id="sanPhamTable">
+                        <!-- Dữ liệu sẽ được cập nhật ở đây -->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    // Đặt giá trị mặc định cho #orderBy và tải dữ liệu
+                    $("#orderBy").val("desc");
+
+                    loadTop5SanPham();
+                });
+
+                function loadTop5SanPham() {
+                    // top sp
+
+                    var orderBy = $("#orderBy").val();
+                    var apiUrl = (orderBy === "desc") ? "/topbanchay" : "/topbancham";
+                    var top_sp = $('.top_sp').text();
+                    $.ajax({
+                        type: "GET",
+                        url: apiUrl,
+                        data: { orderBy: orderBy },
+                        dataType: "json",
+                        success: function (data) {
+                            updateTable(data);
+                        },
+                        error: function () {
+                            alert("Đã xảy ra lỗi khi tải dữ liệu.");
+                        }
+                    });
+                }
+
+                function updateTable(data) {
+                    var tableBody = $("#sanPhamTable");
+                    tableBody.empty();
+
+                    if (data && data.length > 0) {
+                        $.each(data, function (index, sanPhamInfo) {
+                            var row = "<tr>" +
+                                "<td>" + (index + 1) + "</td>" +
+                                "<td><img src='" + sanPhamInfo[2] + "' alt='' width='50px' height='50px' /></td>" +
+                                "<td>" + sanPhamInfo[0] + "</td>" +
+                                "<td>" + sanPhamInfo[1] + "</td>" +
+                                "</tr>";
+
+                            tableBody.append(row);
+                        });
+                    } else {
+                        // Thêm một thông báo hoặc xử lý khác khi không có dữ liệu
+                        console.log("Không có dữ liệu");
+                        tableBody.append("<tr><td colspan='4'>Không có dữ liệu</td></tr>");
+                    }
+                }
+
+            </script>
 
 
-    <%--    bieu do--%>
-    <div class="py-5" id="top_x_div" style="width: 800px; height: 600px;"></div>
+        </div>
+    </div>
+</section>
 
-</div>
+<%--    bieu do--%>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['bar']});
+    google.charts.setOnLoadCallback(drawStuff);
 
-<script>
-    // Sử dụng JavaScript để xử lý sự kiện thay đổi của thẻ select
-    document.getElementById('selectOption').addEventListener('change', function () {
-        var selectedOption = this.value;
-        var displayValue = document.getElementById('displayValue');
+    function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+            ['', 'Vnđ:'],
+            ["${Tru0ThangTruoc}", ${TongDoanhThuThangHienTai}],
+            ["${Tru1ThangTruoc}", ${TongDoanhThuThangHienTaiTru1}],
+            ["${Tru2ThangTruoc}", ${TongDoanhThuThangHienTaiTru2}],
+            ["${Tru3ThangTruoc}", ${TongDoanhThuThangHienTaiTru3}],
+            ["${Tru4ThangTruoc}", ${TongDoanhThuThangHienTaiTru4}],
+            ["${Tru5ThangTruoc}", ${TongDoanhThuThangHienTaiTru5}],
+            ["${Tru6ThangTruoc}", ${TongDoanhThuThangHienTaiTru6}]
+        ]);
 
-        // Cập nhật giá trị trong thẻ h2 tương ứng với lựa chọn
-        switch (selectedOption) {
-            case 'TongDoanhThu':
-                displayValue.innerText = "${formattedTongDoanhThu} vnđ";
-                break;
-            case 'TongDoanhThuNgayHienTai':
-                displayValue.innerText = "${formattedTongDoanhThuNgayHienTai} vnđ";
-                break;
-            case 'TongDoanhThuTuanHienTai':
-                displayValue.innerText = "${formattedTongDoanhThuTuanHienTai} vnđ";
-                break;
-            case 'TongDoanhThuThangHienTai':
-                displayValue.innerText = "${formattedTongDoanhThuThangHienTai} vnđ";
-                break;
-            case 'TongDoanhThuNamHienTai':
-                displayValue.innerText = "${formattedTongDoanhThuNamHienTai} vnđ";
-                break;
+        var options = {
+            legend: {position: 'none'},
+            chart: {
+                title: 'Biểu đồ :',
+                subtitle: ''
+            },
+            axes: {
+                x: {
+                    0: {side: 'top'} // Top x-axis.
+                }
+            },
+            bar: {groupWidth: "90%"}
+        };
 
-            case 'TongDoanhThu6ThangQua':
-                displayValue.innerText = "${formattedTongDoanhThu6ThangQua} vnđ";
-                break;
+        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+        // Convert the Classic options to Material options.
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    };
+    $(document).ready(function () {
+        var money = $('.money').text();
+        var money_2 = $('.money_2').text();
+        // format theo tiền việt nam
+        var money1 = money.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        money_2 = money_2.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        $('.money').text(money1);
+        $('.money_2').text(money_2);
+        console.log(money1);
 
-            case 'TongDoanhThu1NamQua':
-                displayValue.innerText = "${formattedTongDoanhThu1NamQua} vnđ";
-                break;
-            // Các trường hợp khác...
-            default:
-                displayValue.innerText = "";
-                break;
-        }
-    });
-
-    document.getElementById('selectOption2').addEventListener('change', function () {
-        var selectedOption2 = this.value;
-        var displayValue2 = document.getElementById('displayValue2');
-
-        // Cập nhật giá trị trong thẻ h2 tương ứng với lựa chọn
-        switch (selectedOption2) {
-            case 'SanPhamBanChayNhat':
-                displayValue2.innerText = "${SanPhamBanChayNhat}";
-                break;
-            case 'SanPhamBanChayNhatTrongNgay':
-                displayValue2.innerText = "${SanPhamBanChayNhatTrongNgay}";
-                break;
-            case 'SanPhamBanChayNhatTrongTuan':
-                displayValue2.innerText = "${SanPhamBanChayNhatTrongTuan}";
-                break;
-            case 'SanPhamBanChayNhatTrongThang':
-                displayValue2.innerText = "${SanPhamBanChayNhatTrongThang}";
-                break;
-            // Các trường hợp khác...
-            default:
-                displayValue2.innerText = "";
-                break;
-        }
     });
 </script>
 </body>
