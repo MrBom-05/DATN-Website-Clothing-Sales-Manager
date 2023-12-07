@@ -25,7 +25,7 @@
             <tr>
                 <td>${index.index + 1}</td>
                 <td>${kmct.ten}</td>
-                <td>${kmct.tenLoai}</td>
+                <td>${kmct.idLoai.ten}</td>
                 <td>
                     <div id="trangThai_${kmct.id}">
                     </div>

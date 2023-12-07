@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
 @Controller
 @RequestMapping("/admin/thong-ke")
 public class ThongKeController {
@@ -44,19 +45,19 @@ public class ThongKeController {
 
         Double TongDoanhThu1NamQua = hoaDonChiTietService.TongDoanhThu1NamQua();
 
-        //Ten nhan Vien :
+//        //Ten nhan Vien :
+//
+//        String NhanVienBanDcNhieuNhat = hoaDonChiTietService.NhanVienBanDcNhieuNhat();
+//
+//        //Ten san pham :
+//
+//        String SanPhamBanChayNhatTrongNgay = hoaDonChiTietService.SanPhamBanChayNhatTrongNgay();
+//
+//        String SanPhamBanChayNhatTrongThang = hoaDonChiTietService.SanPhamBanChayNhatTrongThang();
+//
+//        String SanPhamBanChayNhatTrongTuan = hoaDonChiTietService.SanPhamBanChayNhatTrongTuan();
 
-        String NhanVienBanDcNhieuNhat = hoaDonChiTietService.NhanVienBanDcNhieuNhat();
 
-        //Ten san pham :
-
-        String SanPhamBanChayNhatTrongNgay = hoaDonChiTietService.SanPhamBanChayNhatTrongNgay();
-
-        String SanPhamBanChayNhatTrongThang = hoaDonChiTietService.SanPhamBanChayNhatTrongThang();
-
-        String SanPhamBanChayNhatTrongTuan = hoaDonChiTietService.SanPhamBanChayNhatTrongTuan();
-
-        String SanPhamBanChayNhat = hoaDonChiTietService.SanPhamBanChayNhat();
 
         //Lay ra thang nam trc :
         String Tru0ThangTruoc = hoaDonChiTietService.Tru0ThangTruoc();
@@ -115,25 +116,6 @@ public class ThongKeController {
             TongDoanhThu1NamQua = 0.0;
         }
 
-        //Check null nhan vien :
-        if(NhanVienBanDcNhieuNhat == null){
-            NhanVienBanDcNhieuNhat = "Chưa có nhân viên nào";
-        }
-
-        //Check null san pham :
-        if (SanPhamBanChayNhat == null) {
-            SanPhamBanChayNhat = "Chưa có sản phẩm nào";
-        }
-        if (SanPhamBanChayNhatTrongNgay == null) {
-            SanPhamBanChayNhatTrongNgay = "Chưa có sản phẩm nào";
-        }
-        if (SanPhamBanChayNhatTrongTuan == null) {
-            SanPhamBanChayNhatTrongTuan = "Chưa có sản phẩm nào";
-        }
-        if (SanPhamBanChayNhatTrongThang == null) {
-            SanPhamBanChayNhatTrongThang = "Chưa có sản phẩm nào";
-        }
-
         //Doanh thu :
         model.addAttribute("TongDoanhThu", TongDoanhThu );
 
@@ -161,21 +143,6 @@ public class ThongKeController {
 
         model.addAttribute("TongDoanhThu1NamQua", TongDoanhThu1NamQua);
 
-        //Ten nhan Vien :
-
-        model.addAttribute("NhanVienBanDcNhieuNhat", NhanVienBanDcNhieuNhat);
-
-        //Ten san pham :
-
-        model.addAttribute("SanPhamBanChayNhat", SanPhamBanChayNhat);
-
-        model.addAttribute("SanPhamBanChayNhatTrongNgay", SanPhamBanChayNhatTrongNgay);
-
-        model.addAttribute("SanPhamBanChayNhatTrongTuan", SanPhamBanChayNhatTrongTuan);
-
-        model.addAttribute("SanPhamBanChayNhatTrongThang", SanPhamBanChayNhatTrongThang);
-
-
         //Thang nam trc :
 
         model.addAttribute("Tru0ThangTruoc", Tru0ThangTruoc);
@@ -191,6 +158,28 @@ public class ThongKeController {
         model.addAttribute("Tru5ThangTruoc", Tru5ThangTruoc);
 
         model.addAttribute("Tru6ThangTruoc", Tru6ThangTruoc);
+        // anhplq
+
+        // tổng sản phẩm đã bán
+        model.addAttribute("tongSanPhamDaBan", hoaDonChiTietService.TongSanPhamDaBan());
+        // tổng đơn hàng đã bán
+        model.addAttribute("tongDonHangDaBan", hoaDonChiTietService.TongDonHang());
+        // tổng khách hàng đã mua
+        model.addAttribute("tongKhachHangDaMua", hoaDonChiTietService.TongKhachHang());
+        Object[] nhanVienInfo = (Object[]) hoaDonChiTietService.NhanVienBanDuocNhieuSanPhamNhat();
+        String tenNhanVien = (String) nhanVienInfo[0];
+        Integer soLuongSanPham = (Integer) nhanVienInfo[1];
+        BigDecimal doanhThu = (BigDecimal) nhanVienInfo[2];
+            model.addAttribute("tenNhanVien", tenNhanVien);
+            model.addAttribute("soLuong", soLuongSanPham);
+            model.addAttribute("tongTien", doanhThu);
+
+            // top 1 sản phẩm bán chạy nhất
+        Object[] sanPhamInfo = (Object[]) hoaDonChiTietService.SanPhamBanChayNhat();
+        String tenSanPham = (String) sanPhamInfo[0];
+        Integer soLuong = (Integer) sanPhamInfo[1];
+        model.addAttribute("tenSanPham", tenSanPham);
+        model.addAttribute("soLuongSanPham", soLuong);
 
         model.addAttribute("view", "/views/admin/thong-ke.jsp");
         return "admin/layout";

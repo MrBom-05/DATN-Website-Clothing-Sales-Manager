@@ -161,4 +161,7 @@ public class SanPhamService {
     public SanPhamChiTietUserResponse getByIdSanPham(UUID idSanPham) {
         return sanPhamRepository.getByIdSanPham(idSanPham);
     }
+    public List<SanPham> getAllKhuyenMai2() {
+        return sanPhamRepository.getAllKhuyenMai2();
+    }
 }

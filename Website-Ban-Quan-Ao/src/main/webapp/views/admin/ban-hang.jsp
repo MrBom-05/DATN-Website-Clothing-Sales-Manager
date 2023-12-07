@@ -536,7 +536,8 @@
                             <textarea class="form-control" id="ghi-chu" name="ghiChu" rows="3"
                                       placeholder="Ghi chú"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary float-end" id="thanh_toan">Thanh toán</button>
+                        <button type="submit" class="btn btn-primary float-end" id="thanh_toan" onclick="exportPDFBill()">Thanh toán</button>
+                            Thanh toán</button>
                     </div>
                 </div>
             </div>
@@ -1305,6 +1306,7 @@
         var totalInput = document.getElementById('total');
         totalInput.value = tongTienValue;
     });
+
 
 </script>
 </body>

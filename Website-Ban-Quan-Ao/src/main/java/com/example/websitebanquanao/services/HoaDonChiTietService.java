@@ -151,9 +151,16 @@ public class HoaDonChiTietService {
         return hoaDonChiTietRepository.NhanVienBanDcNhieuNhat();
     }
 
-    public String SanPhamBanChayNhat() {
+    public Object SanPhamBanChayNhat() {
         return hoaDonChiTietRepository.SanPhamBanChayNhat();
+    }
 
+    public List<Object> top5SanPhamBanChay() {
+        return hoaDonChiTietRepository.top5SanPhamBanChay();
+    }
+
+    public List<Object> top5SanPhamBanCham() {
+        return hoaDonChiTietRepository.top5SanPhamBanCham();
     }
 
 
@@ -197,5 +204,23 @@ public class HoaDonChiTietService {
 
     public String Tru6ThangTruoc(){
         return hoaDonChiTietRepository.Tru6ThangTruoc();
+    }
+
+
+    // tính tổng sản phẩm đã bán
+    public Integer TongSanPhamDaBan(){
+        return hoaDonChiTietRepository.TongSanPhamDaBan();
+    }
+    // tổng đơn hàng với trạng thái là 1
+    public Integer TongDonHang(){
+        return hoaDonChiTietRepository.TongDonHang();
+    }
+    // tổng khách hàng đã mua hàng
+    public Integer TongKhachHang(){
+        return hoaDonChiTietRepository.TongKhachHang();
+    }
+    //
+    public Object NhanVienBanDuocNhieuSanPhamNhat() {
+        return hoaDonChiTietRepository.NhanVienBanDuocNhieuSanPhamNhat();
     }
 }
