@@ -6,6 +6,7 @@ import com.example.websitebanquanao.entities.KhachHang;
 import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
+import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.repositories.HoaDonRepository;
@@ -33,6 +34,7 @@ public class HoaDonService {
 
     @Autowired
     private GiamGiaService giamGiaService;
+
 
     // admin
     public List<HoaDon> getAll() {
@@ -79,10 +81,12 @@ public class HoaDonService {
         }
         return code;
     }
+
     private String encodeImageToBase64(MultipartFile file) throws IOException {
         byte[] fileContent = file.getBytes();
         return Base64.encodeBase64String(fileContent);
     }
+
     public void add(HoaDonRequest hoaDonRequest) {
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMa(maHDCount());
@@ -120,6 +124,7 @@ public class HoaDonService {
             hoaDonRepository.save(hoaDon);
         }
     }
+
     public void updateHoaDonAnh(HoaDon hoaDon, UUID idHoaDon, MultipartFile anh) {
         if (hoaDon != null && idHoaDon != null) {
             try {

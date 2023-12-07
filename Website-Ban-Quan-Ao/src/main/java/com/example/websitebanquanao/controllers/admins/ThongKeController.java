@@ -85,8 +85,8 @@ public class ThongKeController {
         if (TongDoanhThuThangHienTai == null) {
             TongDoanhThuThangHienTai = 0.0;
         }
-        if(TongDoanhThuThangHienTai == null){
-            TongDoanhThuThangHienTai = 0.0;
+        if(TongDoanhThuTuanHienTai == null){
+            TongDoanhThuTuanHienTai = 0.0;
         }
         if (TongDoanhThuThangHienTaiTru1 == null) {
             TongDoanhThuThangHienTaiTru1 = 0.0;
