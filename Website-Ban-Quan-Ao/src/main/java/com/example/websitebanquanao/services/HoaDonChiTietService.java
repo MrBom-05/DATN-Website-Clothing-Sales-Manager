@@ -86,8 +86,8 @@ public class HoaDonChiTietService {
             hoaDonChiTietRepository.save(hoaDonChiTiet);
             sanPhamChiTietService.updateSoLuongByIdSanPhamChiTiet(gioHangUserResponse.getIdSanPhamChiTiet(), gioHangUserResponse.getSoLuong());
         }
-        gioHangChiTietService.deleteByIdKhachHang(idKhachHang);
         createPDF.exportPDFBill(hoaDon, listSanPhamGioHang, sumTongTienByIdHoaDon(hoaDon.getId()).toString());
+        gioHangChiTietService.deleteByIdKhachHang(idKhachHang);
         System.out.println("HoaDonChiTietService.addHoaDonChiTietUser: " + hoaDon.getMa());
     }
 
