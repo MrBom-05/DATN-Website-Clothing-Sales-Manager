@@ -101,9 +101,9 @@ public class KhuyenMaiService {
         }
     }
 
-    public KhuyenMaiResponse getByMa(String ma) {
-        return khuyenMaiRepository.getByMa(ma);
-    }
+//    public KhuyenMaiResponse getByMa(String ma) {
+//        return khuyenMaiRepository.getByMa(ma);
+//    }
 
     public boolean ismaValid(String ma) {
         return ma != null && !ma.trim().isEmpty() && ma.length() <= 10;
