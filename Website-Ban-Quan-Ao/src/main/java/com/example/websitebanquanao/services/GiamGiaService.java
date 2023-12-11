@@ -88,6 +88,13 @@ public class GiamGiaService {
         }
     }
 
+    public boolean isMaValid(String ma) {
+        return ma != null && !ma.trim().isEmpty(); }
+
+    public GiamGiaResponse getByMa(String ma) {
+        return giamGiaRepository.getByMa(ma);
+    }
+
     // user
     public GiamGiaResponse findByMa(String ma) {
         GiamGiaResponse giamGiaResponse = giamGiaRepository.findByMa(ma);
@@ -99,12 +106,6 @@ public class GiamGiaService {
             return null;
         }
     }
-
-    public GiamGiaResponse getByMa(String ma) {
-        return giamGiaRepository.getByMa(ma);
-    }
-
-
 
     @Transactional
     public void updateSoLuongByMa(String ma, int soLuong) {
