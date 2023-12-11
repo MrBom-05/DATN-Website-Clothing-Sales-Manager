@@ -6,6 +6,7 @@ import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
 import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
+import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.AnhSanPhamService;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -145,7 +147,13 @@ public class TrangChuController {
             return "redirect:/dang-nhap";
         } else {
             BigDecimal tongTien = gioHangChiTietService.getTongTienByIdKhachHang(khachHangResponse.getId());
-            model.addAttribute("listGioHang", gioHangService.getListByIdKhachHang(khachHangResponse.getId()));
+            List<GioHangUserResponse> listGioHang = gioHangService.getListByIdKhachHang(khachHangResponse.getId());
+            model.addAttribute("listGioHang", listGioHang);
+            if (listGioHang.isEmpty()) {
+                model.addAttribute("nutThanhToan", 0);
+            } else {
+                model.addAttribute("nutThanhToan", 1);
+            }
             model.addAttribute("tongTien", tongTien.intValue());
             if (giamGiaResponse != null) {
                 int soPhanTramGiam = giamGiaResponse.getSoPhanTramGiam();

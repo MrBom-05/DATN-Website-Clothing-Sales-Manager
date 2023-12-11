@@ -1,6 +1,5 @@
 package com.example.websitebanquanao.controllers.admins;
 
-import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.infrastructures.requests.LoaiRequest;
 import com.example.websitebanquanao.infrastructures.responses.LoaiResponse;
 import com.example.websitebanquanao.repositories.LoaiRepository;
@@ -55,6 +54,11 @@ public class LoaiController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("l") LoaiRequest loaiRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (!loaiService.isTenValid(loaiRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên toàn khoảng trắng không hợp lệ");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/loai/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi
@@ -73,6 +77,11 @@ public class LoaiController {
 
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("l") LoaiRequest loaiRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (!loaiService.isTenValid(loaiRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên toàn khoảng trắng không hợp lệ");
+            return redirect;
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("view", "/views/admin/loai/index.jsp");
             return "admin/layout"; // Trả về trang index nếu có lỗi

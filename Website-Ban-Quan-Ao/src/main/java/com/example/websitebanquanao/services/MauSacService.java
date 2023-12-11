@@ -72,6 +72,9 @@ public class MauSacService {
         }
     }
 
+    public boolean isTenValid(String ten) {
+        return ten != null && !ten.trim().isEmpty(); }
+
     // user
     public List<MauSacResponse> getListMauSacByIdSanPham(UUID idSanPham) {
         return mauSacRepository.getListMauSacByIdSanPham(idSanPham);

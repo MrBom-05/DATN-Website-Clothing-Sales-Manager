@@ -2,6 +2,7 @@ package com.example.websitebanquanao.services;
 
 import com.example.websitebanquanao.entities.KhuyenMai;
 import com.example.websitebanquanao.infrastructures.requests.KhuyenMaiRequest;
+import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhuyenMaiResponse;
 import com.example.websitebanquanao.repositories.KhuyenMaiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,4 +100,17 @@ public class KhuyenMaiService {
             return null;
         }
     }
+
+    public KhuyenMaiResponse getByMa(String ma) {
+        return khuyenMaiRepository.getByMa(ma);
+    }
+
+    public boolean ismaValid(String ma) {
+        return ma != null && !ma.trim().isEmpty() && ma.length() <= 10;
+    }
+
+    public boolean isTenValid(String ten) {
+        return ten != null && !ten.trim().isEmpty();
+    }
+
 }
