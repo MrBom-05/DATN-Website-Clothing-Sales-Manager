@@ -192,8 +192,18 @@
                 </div>
             </div>
             <div class="mt-3 mb-3 text-center">
-                <a href="/thanh-toan" class="bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</a>
+                <a id="thanh-toan-link" href="/thanh-toan" class="bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</a>
             </div>
+            <script>
+                var thanhToanLink = document.getElementById('thanh-toan-link');
+
+                var nutThanhToan = ${nutThanhToan};
+
+                if (nutThanhToan === 0) {
+                    thanhToanLink.classList.add('disabled');
+                    thanhToanLink.removeAttribute('href');
+                }
+            </script>
         </div>
     </div>
 </div>
