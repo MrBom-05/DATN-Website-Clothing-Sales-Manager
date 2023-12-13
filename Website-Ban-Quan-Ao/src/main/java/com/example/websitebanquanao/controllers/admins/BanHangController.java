@@ -4,6 +4,7 @@ import com.example.websitebanquanao.entities.*;
 import com.example.websitebanquanao.infrastructures.requests.HoaDonRequest;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.GioHangResponse;
+import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
 import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
 import com.example.websitebanquanao.services.*;
 import jakarta.servlet.http.HttpSession;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -221,6 +223,10 @@ public class BanHangController {
             return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
         }
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
+        session.setAttribute("hoaDon", hoaDon);
+        session.setAttribute("listHoaDonChiTiet", hoaDonChiTietService.getListByIdHoaDon(hoaDon.getId()));
+        session.setAttribute("tongTien", hoaDonService.sumTongTienByIdHoaDon(hoaDon.getId()).toString());
+
         Instant currentInstant = Instant.now();
         if (idKhachHang == null) {
             if (hoaDon != null) {
@@ -247,10 +253,23 @@ public class BanHangController {
                 createPDF.exportPDFBill(hoaDon, hoaDonChiTietService.getListByIdHoaDon(hoaDon.getId()), hoaDonService.sumTongTienByIdHoaDon(hoaDon.getId()).toString());
                 session.setAttribute("successMessage", "Thanh toán thành công");
             }
-        }
 
+        }
         return "redirect:/admin/ban-hang";
     }
+    @GetMapping("/hien-thi-hoa-don/{idHoaDon}")
+    public String hienThiHoaDon(@PathVariable("idHoaDon") UUID idHoaDon, Model model, HttpSession session) {
+        HoaDon hoaDon = (HoaDon) session.getAttribute("hoaDon");
+        List<GioHangUserResponse> listHoaDonChiTiet = hoaDonChiTietService.getListByIdHoaDon(idHoaDon);
+        String tongTien = (String) session.getAttribute("tongTien");
+        model.addAttribute("hoaDon", hoaDon);
+        model.addAttribute("listHoaDonChiTiet", listHoaDonChiTiet);
+        model.addAttribute("tongTien", tongTien);
+
+        return "/billPdf";
+
+    }
+
 
     @PostMapping("/tao-don-hang/{idHoaDon}")
     public String taoDonHang(@PathVariable("idHoaDon") UUID idHoaDon,
