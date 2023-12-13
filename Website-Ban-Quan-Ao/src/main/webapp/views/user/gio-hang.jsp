@@ -137,7 +137,7 @@
                     <input type="text" name="ma" class="form-control" placeholder="Mã khuyến mại">
                 </div>
                 <div class="col-3">
-                    <button type="submit" class="btn btn-dark">Áp dụng</button>
+                    <button id="ap-dung-btn" type="submit" class="btn btn-dark">Áp dụng</button>
                 </div>
             </div>
             <c:if test="${not empty thongBaoGiamGia}">
@@ -202,6 +202,14 @@
                 if (nutThanhToan === 0) {
                     thanhToanLink.classList.add('disabled');
                     thanhToanLink.removeAttribute('href');
+                }
+
+                var apDungBtn = document.getElementById('ap-dung-btn');
+
+                if (nutThanhToan === 0) {
+                    apDungBtn.disabled = true;
+                } else {
+                    apDungBtn.disabled = false;
                 }
             </script>
         </div>
