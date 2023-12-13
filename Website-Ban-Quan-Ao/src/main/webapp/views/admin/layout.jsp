@@ -97,7 +97,7 @@
                 <h3>Quản lý</h3>
             </c:if>
             <c:if test="${admin.chucVu == 1}">
-
+                <h3>Nhân viên</h3>
             </c:if>
             <img src="/../views/admin/css/logo.png" alt="" class="img-fluid" style="width: 150px">
         </div>
