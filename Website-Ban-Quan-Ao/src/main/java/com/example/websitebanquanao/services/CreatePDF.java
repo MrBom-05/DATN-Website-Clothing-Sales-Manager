@@ -3,6 +3,7 @@ package com.example.websitebanquanao.services;
 import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +24,38 @@ public class CreatePDF {
             String fileName = hoaDon.getMa() + ".pdf";
             String filePath = "src/main/java/com/example/websitebanquanao/bills" + "/" + fileName;
 
-            Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
+            BaseFont bf = BaseFont.createFont("Roboto/Roboto-Medium.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font font = new Font(bf, 10, Font.NORMAL);
+            Font font2 = new Font(bf, 15, Font.BOLD);
 
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
 
-            document.add(new Paragraph("Hoá đơn Leninn", font));
+            String tenKhachHang = null;
+            if (tenKhachHang == null) {
+                tenKhachHang = "Khách lẻ";
+            }else {
+                tenKhachHang = hoaDon.getIdKhachHang().getHoVaTen();
+            }
+            String diaChi = null;
+            if (diaChi == null) {
+                diaChi = "Khách mua tại cửa hàng";
+            }else {
+                diaChi =  hoaDon.getDiaChi() + ", " + hoaDon.getXaPhuong() + ", " + hoaDon.getQuanHuyen() + ", " + hoaDon.getTinhThanhPho();
+            }
+            // thêm logo và căn giữa
+            Image image = Image.getInstance("src/main/java/com/example/websitebanquanao/images/logo.png");
+            image.setAlignment(Element.ALIGN_CENTER);
+            image.scaleAbsolute(100, 100);
+            document.add(image);
+            document.add(new Paragraph("Hoá đơn Leninn", font2));
             document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------"));
 
             document.add(new Paragraph("Mã hoá đơn: " + hoaDon.getMa(), font));
-            document.add(new Paragraph("Tên Khách hàng: " + hoaDon.getIdKhachHang().getHoVaTen(), font));
+            document.add(new Paragraph("Tên Khách hàng: " + tenKhachHang, font));
             document.add(new Paragraph("Số điện thoại: " + hoaDon.getSoDienThoai(), font));
-            document.add(new Paragraph("Địa chỉ: " + hoaDon.getDiaChi() + ", " + hoaDon.getXaPhuong() + ", " + hoaDon.getQuanHuyen() + ", " + hoaDon.getTinhThanhPho(), font));
+            document.add(new Paragraph("Địa chỉ: " +diaChi, font));
             document.add(new Paragraph("Ghi Chú: " + hoaDon.getGhiChu(), font));
             document.add(new Paragraph("Nhân Viên: " + (hoaDon.getIdNhanVien() != null ? hoaDon.getIdNhanVien().getHoVaTen() : "Không có nhân viên"), font));
             document.add(new Paragraph("Ngày Tạo: " + hoaDon.getNgayTao(), font));
@@ -44,16 +64,16 @@ public class CreatePDF {
             document.add(new Paragraph(" "));
 
             PdfPTable table = new PdfPTable(5);
-            PdfPCell cell = new PdfPCell(new Paragraph("Danh sách sản phẩm", font));
+            PdfPCell cell = new PdfPCell(new Paragraph("Danh sách sản phẩm", font2));
             cell.setColspan(5);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
             table.addCell(cell);
-            table.addCell(new Paragraph("STT", font));
-            table.addCell(new Paragraph("Tên sản phẩm", font));
-            table.addCell(new Paragraph("Số lượng", font));
-            table.addCell(new Paragraph("Đơn giá", font));
-            table.addCell(new Paragraph("Thành tiền", font));
+            table.addCell(new Paragraph("STT", font2));
+            table.addCell(new Paragraph("Tên sản phẩm", font2));
+            table.addCell(new Paragraph("Số lượng", font2));
+            table.addCell(new Paragraph("Đơn giá", font2));
+            table.addCell(new Paragraph("Thành tiền", font2));
 
             int count = 0;
             for (GioHangUserResponse hoaDonChiTiet : listHoaDonChiTiet) {
@@ -70,9 +90,9 @@ public class CreatePDF {
 
             document.add(table);
             document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------"));
-            document.add(new Paragraph("Tổng tiền : " + tongTien, font));
+            document.add(new Paragraph("Tổng tiền : " + tongTien, font2));
             document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------"));
-            document.add(new Paragraph("Cảm ơn quý khách đã mua hàng!", font));
+            document.add(new Paragraph("Cảm ơn quý khách đã mua hàng!", font2));
             document.close();
 
             document.close();
