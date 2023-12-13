@@ -71,8 +71,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="ma">Mã</label>
-                                    <form:input type="text" path="ma" id="ma" class="form-control" required="true"/>
-                                        <%--                                    <form:errors path="ma" cssClass="text-danger"/>--%>
+                                    <form:input type="text" path="ma" id="ma" class="form-control" required="true" maxlength="10"/>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +82,7 @@
                                     <label for="soPhanTramGiam">Số phần trăm</label>
                                     <form:input type="number" path="soPhanTramGiam" id="soPhanTramGiam"
                                                 class="form-control"
-                                                required="true"/>
+                                                min="1" max="99" required="true"/>
                                 </div>
                             </div>
 
@@ -91,7 +90,7 @@
                                 <div class="form-group">
                                     <label for="soLuong">Số lượng</label>
                                     <form:input type="number" path="soLuong" id="soLuong" class="form-control"
-                                                required="true"/>
+                                               min="1" max="10000"  required="true"/>
                                 </div>
                             </div>
                         </div>

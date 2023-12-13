@@ -52,8 +52,8 @@ public class MauSacController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        if (mauSacRequest.validNull()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không được để trống");
+        if (!mauSacService.isTenValid(mauSacRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên toàn khoảng trắng không hợp lệ");
             return redirect;
         }
 
@@ -63,7 +63,7 @@ public class MauSacController {
         }
 
         if (mauSacRepository.existsByTen(mauSacRequest.getTen())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Thêm Loại thất bại");
+            redirectAttributes.addFlashAttribute("errorMessage", "Thêm màu thất bại");
             return redirect;
         }
 
@@ -75,8 +75,8 @@ public class MauSacController {
 
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") Integer id, @Valid @ModelAttribute("ms") MauSacRequest mauSacRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        if (mauSacRequest.validNull()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Không được để trống");
+        if (!mauSacService.isTenValid(mauSacRequest.getTen())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên toàn khoảng trắng không hợp lệ");
             return redirect;
         }
 
