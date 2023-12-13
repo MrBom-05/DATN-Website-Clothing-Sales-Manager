@@ -67,4 +67,7 @@ public class LoaiService {
             return null;
         }
     }
+
+    public boolean isTenValid(String ten) {
+        return ten != null && !ten.trim().isEmpty(); }
 }

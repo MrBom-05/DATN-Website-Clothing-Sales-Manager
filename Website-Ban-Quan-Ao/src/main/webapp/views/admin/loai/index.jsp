@@ -47,7 +47,6 @@
                 <div class="form-group text-center">
                     <label for="ten" class="form-label">Tên Loại</label>
                     <form:input type="text" path="ten" id="ten" class="form-control" required="true"/>
-                    <form:errors path="ten" cssClass="text-danger"/>
                     <button type="submit" class="btn btn-success mt-3">Lưu</button>
                 </div>
             </form:form>
@@ -91,6 +90,24 @@
             },
         });
     });
+    $(document).ready(function () {
+        hideErrorMessage();
+        hideErrorMessage2();
+    });
+
+    function hideErrorMessage() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-danger').fadeOut('slow');
+        }, 1000);
+    }
+
+    function hideErrorMessage2() {
+        // Sử dụng jQuery để ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            $('.alert-success').fadeOut('slow');
+        }, 1000);
+    }
 </script>
 </body>
 </html>
