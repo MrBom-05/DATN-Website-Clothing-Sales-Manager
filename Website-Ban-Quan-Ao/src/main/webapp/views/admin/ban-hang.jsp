@@ -242,11 +242,13 @@
         <div class="row border mt-5">
             <p class="fw-bold mb-2">Giỏ Hàng</p>
             <div class="col text-end">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SPModal">Thêm sản phẩm</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#QRModal">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#SPModal" id="SPModal_btn">
+                    Thêm sản phẩm
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#QRModal" id="QRModal_btn">
                     Quét QR
                 </button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#MASPModal">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#MASPModal" id="MASPModal_btn">
                     Thêm với mã SP
                 </button>
             </div>
@@ -538,6 +540,18 @@
                         </div>
                         <button type="submit" class="btn btn-primary float-end" id="thanh_toan" onclick="exportPDFBill()">Thanh toán</button>
                             Thanh toán</button>
+                        <script>
+                            // nếu url không phải view-hoa-don thì không cho thanh toán và tạo đơn hàng
+                            var url = window.location.href;
+                            if (url.indexOf("view-hoa-don") == -1) {
+                                document.getElementById("thanh_toan").disabled = true;
+                                // disable modal thêm sản phẩm, thêm với mã sản phẩm, quét mã QR
+                                document.getElementById("SPModal_btn").disabled = true;
+                                document.getElementById("MASPModal_btn").disabled = true;
+                                document.getElementById("QRModal_btn").disabled = true;
+                            }
+
+                        </script>
                     </div>
                 </div>
             </div>

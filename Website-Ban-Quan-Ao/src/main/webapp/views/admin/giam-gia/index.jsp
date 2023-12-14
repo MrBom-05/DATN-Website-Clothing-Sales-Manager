@@ -42,8 +42,8 @@
                 <td>${gg.ngayKetThuc}</td>
 
                 <td>
-                    <a href="/admin/giam-gia/delete/${gg.id}" class="btn btn-danger"
-                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                    <a href="/admin/giam-gia/delete/${gg.id}" class="btn btn-danger"--%>
+<%--                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                     <a href="#" class="btn btn-primary update-button"
                        data-bs-toggle="modal" data-bs-target="#exampleModal"
                        data-id="${gg.id}" data-hoVaTen="${gg.ma}" data-soDienThoai="${gg.soPhanTramGiam}"

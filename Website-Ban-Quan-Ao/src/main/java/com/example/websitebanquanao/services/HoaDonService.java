@@ -209,4 +209,20 @@ public class HoaDonService {
     public void updateNgayThanhToanByIdHoaDon(String ma, Instant ngayThanhToan) {
         hoaDonRepository.updateNgayThanhToanByIdHoaDon(ma, ngayThanhToan, 6);
     }
+
+    // nếu số lượng hoá đơn có trạng thái là 0 > 5 hoá đơn thì không cho tạo đơn hàng
+    public Boolean checkSoLuongHoaDonChuaThanhToan() {
+        List<HoaDon> hoaDonList = hoaDonRepository.findAll();
+        int count = 0;
+        for (HoaDon hoaDon : hoaDonList) {
+            if (hoaDon.getTrangThai() == 0) {
+                count++;
+            }
+        }
+        if (count > 4) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

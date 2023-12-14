@@ -1,10 +1,13 @@
 package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
+import com.example.websitebanquanao.infrastructures.responses.MauSacResponse;
+import com.example.websitebanquanao.infrastructures.responses.SanPhamResponse;
 import com.example.websitebanquanao.services.LoaiService;
 import com.example.websitebanquanao.services.SanPhamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,20 +48,36 @@ public class SanPhamController {
     }
 
     @PostMapping("store")
-    public String store(@Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
+    public String store(@Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh,
+            @RequestParam(name = "page", defaultValue = "1") int page) {
+
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
             return "admin/layout";
         }
-        redirectAttributes.addFlashAttribute("successMessage", "Thêm mới sản phẩm thành công");
-        sanPhamService.add(sanPhamRequest, anh);
-        return redirect;
+        Boolean check = sanPhamService.checkTen(sanPhamRequest.getTen());
+        if (check) {
+            model.addAttribute("sanPhamPage", sanPhamService.getPage(page, 5));
+            model.addAttribute("listLoai", loaiService.getAll());
+            model.addAttribute("sp", sanPhamRequest);
+            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
+            model.addAttribute("errorMessage", "Tên sản phẩm đã tồn tại");
+            return "admin/layout";
+        }else {
+            redirectAttributes.addFlashAttribute("successMessage", "Thêm mới sản phẩm thành công");
+            sanPhamService.add(sanPhamRequest, anh);
+            return redirect;
+        }
     }
-
+    @GetMapping("get/{id}")
+    @ResponseBody
+    public ResponseEntity<SanPhamResponse> get(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(sanPhamService.getById(id));
+    }
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
             return "admin/layout";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật sản phẩm thành công");
@@ -68,7 +87,7 @@ public class SanPhamController {
     @PostMapping("/them-nhanh")
     public String themNhanh(@Valid @ModelAttribute("sp") SanPhamRequest sanPhamRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes, @RequestParam("anh") MultipartFile anh) {
         if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/san-pham/chi-tiet.jsp");
+            model.addAttribute("view", "/views/admin/san-pham/index.jsp");
             return "admin/layout";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Thêm mới sản phẩm thành công");

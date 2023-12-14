@@ -49,6 +49,9 @@
     <c:if test="${not empty successMessage}">
         <div class="alert alert-success mt-2">${successMessage}</div>
     </c:if>
+    <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger mt-2">${errorMessage}</div>
+    </c:if>
 
     <div class="row">
         <div>
@@ -84,8 +87,8 @@
                             >
                                 Cập Nhật
                             </a>
-                            <a href="/admin/san-pham/delete/${sp.id}" class="btn btn-danger"
-                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                            <a href="/admin/san-pham/delete/${sp.id}" class="btn btn-danger"--%>
+<%--                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                         </td>
                     </tr>
                 </c:forEach>
@@ -117,7 +120,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label class="form-label">Loại</label>
-                                    <form:select class="form-select" path="idLoai">
+                                    <form:select class="form-select" path="idLoai" id="idLoai">
                                         <c:forEach items="${listLoai}" var="loai">
                                             <option value="${loai.id}">${loai.ten}</option>
                                         </c:forEach>
@@ -170,46 +173,54 @@
 <!-- Bao gồm các tập lệnh Spring form và các tập lệnh khác -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // $(".update-button").click(function () {
-    //     let id = $(this).data("id");
-    //
-    //     // Thực hiện yêu cầu AJAX để lấy dữ liệu khách hàng dựa trên id
-    //     $.ajax({
-    //         url: "/admin/mau-sac/get/" + id,
-    //         type: "GET",
-    //         success: function (data) {
-    //             $("#maMauSac").val(data.maMauSac);
-    //             $("#ten").val(data.ten);
-    //
-    //             $("#edit-form").attr("action", "/admin/mau-sac/update/" + id);
-    //         },
-    //         error: function (error) {
-    //             console.error("Error:", error);
-    //         },
-    //     });
-    // });
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     var updateButtons = document.querySelectorAll(".update-button");
-    //     var clickClose = document.querySelector(".btn-close");
-    //
-    //     updateButtons.forEach(function (button) {
-    //         button.addEventListener("click", function () {
-    //             var modalTitle = document.querySelector(".modal-title");
-    //
-    //             modalTitle.textContent = "Cập Nhật Màu Sắc";
-    //
-    //         });
-    //     });
-    //     clickClose.addEventListener("click", function () {
-    //         var modalTitle = document.querySelector(".modal-title");
-    //
-    //         modalTitle.textContent = "Thêm Màu Sắc";
-    //
-    //         $("#edit-form").trigger("reset");
-    //         $("#edit-form").attr("action", "/admin/mau-sac/store");
-    //
-    //     });
-    // });
+    $(".update-button").click(function () {
+        let id = $(this).data("id");
+
+        // Thực hiện yêu cầu AJAX để lấy dữ liệu khách hàng dựa trên id
+        $.ajax({
+            url: "/admin/san-pham/get/" + id,
+            type: "GET",
+            success: function (data) {
+                $("#ten").val(data.ten);
+                $("#ngayTao").val(data.ngayTao);
+                $("#anh").val(data.anh);
+                $("#idLoai").val(data.idLoai);
+                $("#imageDisplay").attr("src", data.anh);
+                $("#placeholder1").hide();
+                $("#imageDisplay").show();
+
+
+                $("#edit-form").attr("action", "/admin/san-pham/update/" + id);
+            },
+            error: function (error) {
+                console.error("Error:", error);
+            },
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        var updateButtons = document.querySelectorAll(".update-button");
+        var clickClose = document.querySelector(".btn-close");
+
+        updateButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var modalTitle = document.querySelector(".modal-title");
+
+                modalTitle.textContent = "Cập Nhật Sản Phẩm";
+
+            });
+        });
+        clickClose.addEventListener("click", function () {
+            var modalTitle = document.querySelector(".modal-title");
+
+            modalTitle.textContent = "Thêm Sản Phẩm";
+
+            $("#edit-form").trigger("reset");
+            // reset input ảnh
+            $("#imageDisplay").attr("src", "");
+            $("#edit-form").attr("action", "/admin/san-pham/store");
+
+        });
+    });
 
     function displayImage() {
         var input = document.getElementById('imageInput');

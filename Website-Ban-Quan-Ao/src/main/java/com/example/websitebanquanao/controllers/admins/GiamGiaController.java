@@ -61,6 +61,10 @@ public class GiamGiaController {
             redirectAttributes.addFlashAttribute("errorMessage", "Mã toàn khoảng trắng không hợp lệ");
             return redirect;
         }
+        if (giamGiaRequest.getMa().length() > 15) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Mã giảm giá không được vượt quá 15 ký tự");
+            return redirect;
+        }
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("view", "/views/admin/giam-gia/index.jsp");

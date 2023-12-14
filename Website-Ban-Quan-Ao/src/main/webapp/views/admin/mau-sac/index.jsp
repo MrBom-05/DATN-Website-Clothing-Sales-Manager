@@ -32,8 +32,8 @@
                                data-id="${ms.id}" data-ten="${ms.ten}">
                                 Cập Nhật
                             </a>
-                            <a href="/admin/mau-sac/delete/${ms.id}" class="btn btn-danger"
-                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                            <a href="/admin/mau-sac/delete/${ms.id}" class="btn btn-danger"--%>
+<%--                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                         </td>
                     </tr>
                 </c:forEach>

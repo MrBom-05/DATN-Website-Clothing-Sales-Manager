@@ -29,8 +29,8 @@
                         <td>${index.index + kichCoPage.number * kichCoPage.size + 1}</td>
                         <td>${kc.ten}</td>
                         <td>
-                            <a href="/admin/kich-co/delete/${kc.id}" class="btn btn-danger"
-                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                            <a href="/admin/kich-co/delete/${kc.id}" class="btn btn-danger"--%>
+<%--                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                             <a href="#" class="btn btn-primary update-button"
                                data-bs-toggle="modal" data-bs-target="#exampleModal"
                                data-id="${kc.id}" data-ten="${kc.ten}">

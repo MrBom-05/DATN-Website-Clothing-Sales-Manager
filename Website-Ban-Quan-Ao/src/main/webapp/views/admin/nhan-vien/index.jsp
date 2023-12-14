@@ -65,8 +65,8 @@
                        data-trangThai="${nv.trangThai}" data-chucVu="${nv.chucVu}">
                         Cập Nhật
                     </a>
-                    <a href="/admin/nhan-vien/delete/${nv.id}" class="btn btn-danger mt-1 col-10"
-                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                    <a href="/admin/nhan-vien/delete/${nv.id}" class="btn btn-danger mt-1 col-10"--%>
+<%--                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                 </td>
             </tr>
         </c:forEach>
@@ -96,7 +96,7 @@
     <!-- Modal Thêm và Cập Nhật -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
          data-bs-backdrop="static">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Thêm Nhân Viên</h5>
@@ -105,13 +105,6 @@
                 <div class="modal-body">
                     <form:form id="edit-form" modelAttribute="nv" method="post" action="/admin/nhan-vien/store">
                         <div class="row mb-3">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="ma" class="form-label">Mã</label>
-                                    <form:input type="text" path="ma" id="ma" class="form-control"/>
-                                    <form:errors path="ma" cssClass="text-danger"/>
-                                </div>
-                            </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="hoVaTen" class="form-label">Họ Và Tên</label>
