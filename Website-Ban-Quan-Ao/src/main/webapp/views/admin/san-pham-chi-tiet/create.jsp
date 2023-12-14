@@ -128,18 +128,12 @@
                        method="post" modelAttribute="sanPhamChiTiet">
                 <div class="row">
                     <div class="col-4">
-                        <label for="maSanPham" class="form-label">Mã Sản Phẩm</label>
-                        <form:input path="maSanPham" id="maSanPham" class="form-control"
-                                    value="${sanPhamChiTiet.maSanPham}"
-                                    required="true"/>
-                    </div>
-                    <div class="col-4">
                         <label for="idSanPham" class="form-label">Sản Phẩm</label>
                         <i class="fas fa-plus-circle" data-bs-toggle="modal" data-bs-target="#modalSanPham"
                            title="Thêm Sản phẩm"></i>
                         <form:select path="idSanPham" id="idSanPham" class="form-select">
                             <c:forEach items="${listSanPham}" var="sanPham">
-                                <option value="${sanPham.id}" ${sanPham.id == spct.idSanPham ? 'selected' : ''}>${sanPham.ten}</option>
+                                <option value="${sanPham.id}" ${sanPham.id == sanPhamChiTiet.idSanPham.id ? 'selected' : ''}>${sanPham.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>
@@ -149,7 +143,7 @@
                            title="Thêm màu sắc"></i>
                         <form:select path="idMauSac" id="idMauSac" class="form-select">
                             <c:forEach items="${listMauSac}" var="mauSac">
-                                <option value="${mauSac.id}" ${mauSac.id == spct.idMauSac ? 'selected' : ''}>${mauSac.ten}</option>
+                                <option value="${mauSac.id}" ${mauSac.id == sanPhamChiTiet.idMauSac.id ? 'selected' : ''}>${mauSac.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>
@@ -162,7 +156,7 @@
                         <form:select path="idKichCo" id="idKichCo" class="form-select">
                             <c:forEach items="${listKichCo}" var="kichCo">
                                 <option value="${kichCo.id}"
-                                        label="${kichCo.ten}" ${kichCo.id == spct.idKichCo ? 'selected' : ''}>${kichCo.ten}</option>
+                                        label="${kichCo.ten}" ${kichCo.id == sanPhamChiTiet.idKichCo.id ? 'selected' : ''}>${kichCo.ten}</option>
                             </c:forEach>
                         </form:select>
                     </div>

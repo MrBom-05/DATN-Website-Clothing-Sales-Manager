@@ -17,7 +17,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
 
 
     // admin
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id,sp.idLoai.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public List<SanPhamResponse> getAll();
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.KhuyenMaiChiTietResponse(s.id, s.ten, s.idLoai.ten) from SanPham s")
@@ -37,10 +37,10 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
             "                )",nativeQuery = true)
         List<SanPham> getAllKhuyenMai2();
 
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id,sp.idLoai.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp ORDER BY sp.ten")
     public Page<SanPhamResponse> getPage(Pageable pageable);
 
-    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp where sp.id = :id")
+    @Query("select new com.example.websitebanquanao.infrastructures.responses.SanPhamResponse(sp.id,sp.idLoai.id, sp.ten, sp.ngayTao, sp.anh, sp.idLoai.ten) from SanPham sp where sp.id = :id")
     public SanPhamResponse getByIdResponse(@Param("id") UUID id);
 
 
@@ -59,4 +59,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
 
     @Query("SELECT DISTINCT new com.example.websitebanquanao.infrastructures.responses.LoaiResponse(sp.idLoai.id, sp.idLoai.ten) FROM SanPham sp ORDER BY sp.idLoai.ten")
     public List<LoaiResponse> getListLoai();
+
+    @Query("select sp from SanPham sp where sp.ten = :ten")
+    SanPham findByTen(String ten);
 }

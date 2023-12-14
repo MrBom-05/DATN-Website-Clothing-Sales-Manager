@@ -1,10 +1,7 @@
 package com.example.websitebanquanao.services;
 
 import com.example.websitebanquanao.configs.QRCodeGenerator;
-import com.example.websitebanquanao.entities.KichCo;
-import com.example.websitebanquanao.entities.MauSac;
-import com.example.websitebanquanao.entities.SanPham;
-import com.example.websitebanquanao.entities.SanPhamChiTiet;
+import com.example.websitebanquanao.entities.*;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamChiTietRequest;
 import com.example.websitebanquanao.infrastructures.responses.BanHangTaiQuayResponse;
 import com.example.websitebanquanao.infrastructures.responses.NhanVienResponse;
@@ -32,6 +29,7 @@ public class SanPhamChiTietService {
 
     // admin
 
+
     public List<SanPhamChiTietResponse> getAll() {
         return sanPhamChiTietRepository.getAll();
     }
@@ -39,10 +37,40 @@ public class SanPhamChiTietService {
     public List<BanHangTaiQuayResponse> findAllCtsp() {
         return sanPhamChiTietRepository.findAllCtsp();
     }
+    // mã sp tự tăng :
+    public String maSPCount() {
+        String code = "";
+        List<SanPhamChiTiet> list = sanPhamChiTietRepository.findAll();
+        if (list.isEmpty()) {
+            code = "SP0001";
+        } else {
+            int max = 0;
+            for (SanPhamChiTiet sp : list) {
+                String ma = sp.getMaSanPham();
+                if (ma.length() >= 4) {
+                    int so = Integer.parseInt(ma.substring(3));
+                    if (so > max) {
+                        max = so;
+                    }
+                }
+            }
+            max++;
+            if (max < 10) {
+                code = "SP000" + max;
+            } else if (max < 100) {
+                code = "SP00" + max;
+            } else if (max < 1000) {
+                code = "SP0" + max;
+            } else {
+                code = "SP" + max;
+            }
+        }
+        return code;
+    }
 
     public void add(SanPhamChiTietRequest sanPhamChiTietRequest) {
         SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
-        sanPhamChiTiet.setMaSanPham(sanPhamChiTietRequest.getMaSanPham());
+        sanPhamChiTiet.setMaSanPham(maSPCount());
         sanPhamChiTiet.setGia(sanPhamChiTietRequest.getGia());
         sanPhamChiTiet.setSoLuong(sanPhamChiTietRequest.getSoLuong());
         sanPhamChiTiet.setMoTa(sanPhamChiTietRequest.getMoTa());

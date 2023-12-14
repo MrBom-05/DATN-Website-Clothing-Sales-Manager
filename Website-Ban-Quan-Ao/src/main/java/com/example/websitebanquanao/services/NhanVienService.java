@@ -1,6 +1,7 @@
 package com.example.websitebanquanao.services;
 
 import com.example.websitebanquanao.entities.NhanVien;
+import com.example.websitebanquanao.entities.SanPhamChiTiet;
 import com.example.websitebanquanao.infrastructures.requests.NhanVienRequest;
 import com.example.websitebanquanao.infrastructures.responses.NhanVienResponse;
 import com.example.websitebanquanao.repositories.NhanVienRepository;
@@ -26,10 +27,39 @@ public class NhanVienService {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         return nhanVienRepository.getPage(pageable);
     }
-
+    // mã NV tự tăng
+    public String maNVCount() {
+        String code = "";
+        List<NhanVien> list = nhanVienRepository.findAll();
+        if (list.isEmpty()) {
+            code = "NV0001";
+        } else {
+            int max = 0;
+            for (NhanVien nv : list) {
+                String ma = nv.getMa();
+                if (ma.length() >= 4) {
+                    int so = Integer.parseInt(ma.substring(3));
+                    if (so > max) {
+                        max = so;
+                    }
+                }
+            }
+            max++;
+            if (max < 10) {
+                code = "NV000" + max;
+            } else if (max < 100) {
+                code = "NV00" + max;
+            } else if (max < 1000) {
+                code = "NV0" + max;
+            } else {
+                code = "NV" + max;
+            }
+        }
+        return code;
+    }
     public void add(NhanVienRequest nhanVienRequest) {
         NhanVien nhanVien = new NhanVien();
-        nhanVien.setMa(nhanVienRequest.getMa());
+        nhanVien.setMa(maNVCount());
         nhanVien.setHoVaTen(nhanVienRequest.getHoVaTen());
         nhanVien.setEmail(nhanVienRequest.getEmail());
         nhanVien.setSoDienThoai(nhanVienRequest.getSoDienThoai());

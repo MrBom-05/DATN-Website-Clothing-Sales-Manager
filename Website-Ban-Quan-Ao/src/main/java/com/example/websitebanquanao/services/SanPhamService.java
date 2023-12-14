@@ -1,7 +1,9 @@
 package com.example.websitebanquanao.services;
 
+import com.example.websitebanquanao.entities.HoaDon;
 import com.example.websitebanquanao.entities.Loai;
 import com.example.websitebanquanao.entities.SanPham;
+import com.example.websitebanquanao.entities.SanPhamChiTiet;
 import com.example.websitebanquanao.infrastructures.requests.SanPhamRequest;
 import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.repositories.SanPhamRepository;
@@ -47,6 +49,7 @@ public class SanPhamService {
     }
 
     public void add(SanPhamRequest sanPhamRequest, MultipartFile anh) {
+
         try {
             SanPham sanPham = new SanPham();
             sanPham.setTen(sanPhamRequest.getTen());
@@ -67,7 +70,15 @@ public class SanPhamService {
             e.printStackTrace();
         }
     }
-
+    // check trùng tên
+    public Boolean checkTen(String ten) {
+        SanPham sanPham = sanPhamRepository.findByTen(ten);
+        if (sanPham != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public void update(SanPhamRequest sanPhamRequest, UUID id, MultipartFile anh) {
         SanPham sanPham = sanPhamRepository.findById(id).orElse(null);
         if (sanPham != null) {
