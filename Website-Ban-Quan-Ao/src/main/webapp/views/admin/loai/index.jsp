@@ -28,8 +28,8 @@
                         <td>${index.index + loaiPage.number * loaiPage.size + 1}</td>
                         <td>${l.ten}</td>
                         <td>
-                            <a href="/admin/loai/delete/${l.id}" class="btn btn-danger"
-                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                            <a href="/admin/loai/delete/${l.id}" class="btn btn-danger"--%>
+<%--                               onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                             <a href="#" class="btn btn-primary update-button"
                                data-bs-toggle="modal" data-bs-target="#exampleModal"
                                data-id="${l.id}" data-ten="${l.ten}">

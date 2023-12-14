@@ -45,8 +45,8 @@
                 <td>${kh.tinhThanhPho}</td>
 
                 <td>
-                    <a href="/admin/khach-hang/delete/${kh.id}" class="btn btn-danger"
-                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                    <a href="/admin/khach-hang/delete/${kh.id}" class="btn btn-danger"--%>
+<%--                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                     <a href="#" class="btn btn-primary update-button"
                        data-bs-toggle="modal" data-bs-target="#exampleModal"
                        data-id="${kh.id}" data-hoVaTen="${kh.hoVaTen}" data-soDienThoai="${kh.soDienThoai}"

@@ -57,8 +57,8 @@
                        data-km.ngayBatDau="${km.ngayBatDau}" data-km.ngayKetThuc="${km.ngayKetThuc}">
                         Cập Nhật
                     </a>
-                    <a href="/admin/khuyen-mai/delete/${km.id}" class="btn btn-danger"
-                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>
+<%--                    <a href="/admin/khuyen-mai/delete/${km.id}" class="btn btn-danger"--%>
+<%--                       onclick="return confirm('Bạn có chắc chắn muốn xoá không?')">Xoá</a>--%>
                     <a href="/admin/khuyen-mai/chi-tiet/${km.id}" class="btn btn-success">Thêm</a>
                 </td>
             </tr>

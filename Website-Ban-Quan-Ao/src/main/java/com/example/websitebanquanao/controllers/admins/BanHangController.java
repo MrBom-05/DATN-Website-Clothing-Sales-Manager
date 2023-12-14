@@ -72,8 +72,14 @@ public class BanHangController {
         Instant currentInstant = Instant.now();
         hoaDonRequest.setNgayTao(currentInstant);
         hoaDonRequest.setTrangThai(0);
-        hoaDonService.add(hoaDonRequest);
-        session.setAttribute("successMessage", "Thêm hoá đơn thành công");
+        Boolean check = hoaDonService.checkSoLuongHoaDonChuaThanhToan();
+        if (check == false) {
+            session.setAttribute("errorMessage", "Số lượng hoá đơn chờ vượt quá 5 hoá đơn");
+            return "redirect:/admin/ban-hang";
+        }else {
+            hoaDonService.add(hoaDonRequest);
+            session.setAttribute("successMessage", "Thêm hoá đơn thành công");
+        }
         return "redirect:/admin/ban-hang";
     }
 
@@ -216,8 +222,6 @@ public class BanHangController {
     @PostMapping("/thanh-toan/{idHoaDon}")
     public String thanhToan(@PathVariable("idHoaDon") UUID idHoaDon, @RequestParam("httt") Integer hinhThucThanhToan, @RequestParam("ghiChu") String ghiChu,
                             @RequestParam(value = "idKhachHang", required = false) UUID idKhachHang) {
-
-        //validate full trường
         if (hinhThucThanhToan == null || ghiChu.isEmpty()) {
             session.setAttribute("errorMessage", "Vui lòng nhập đầy đủ thông tin");
             return "redirect:/admin/ban-hang/view-hoa-don/" + idHoaDon;
@@ -225,8 +229,6 @@ public class BanHangController {
         HoaDon hoaDon = hoaDonService.getById(idHoaDon);
         session.setAttribute("hoaDon", hoaDon);
         session.setAttribute("listHoaDonChiTiet", hoaDonChiTietService.getListByIdHoaDon(hoaDon.getId()));
-        session.setAttribute("tongTien", hoaDonService.sumTongTienByIdHoaDon(hoaDon.getId()).toString());
-
         Instant currentInstant = Instant.now();
         if (idKhachHang == null) {
             if (hoaDon != null) {
@@ -257,19 +259,6 @@ public class BanHangController {
         }
         return "redirect:/admin/ban-hang";
     }
-    @GetMapping("/hien-thi-hoa-don/{idHoaDon}")
-    public String hienThiHoaDon(@PathVariable("idHoaDon") UUID idHoaDon, Model model, HttpSession session) {
-        HoaDon hoaDon = (HoaDon) session.getAttribute("hoaDon");
-        List<GioHangUserResponse> listHoaDonChiTiet = hoaDonChiTietService.getListByIdHoaDon(idHoaDon);
-        String tongTien = (String) session.getAttribute("tongTien");
-        model.addAttribute("hoaDon", hoaDon);
-        model.addAttribute("listHoaDonChiTiet", listHoaDonChiTiet);
-        model.addAttribute("tongTien", tongTien);
-
-        return "/billPdf";
-
-    }
-
 
     @PostMapping("/tao-don-hang/{idHoaDon}")
     public String taoDonHang(@PathVariable("idHoaDon") UUID idHoaDon,
@@ -303,7 +292,6 @@ public class BanHangController {
             hoaDonService.updateHoaDonAnh(hoaDon, idHoaDon, anh);
             session.setAttribute("successMessage", "Tạo đơn hàng thành công");
         }
-
         return "redirect:/admin/ban-hang";
     }
 
