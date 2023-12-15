@@ -134,7 +134,7 @@
         <form action="/ap-dung-voucher" method="post">
             <div class="row">
                 <div class="col-3">
-                    <input type="text" name="ma" class="form-control" placeholder="Mã khuyến mại">
+                    <input type="text" name="ma" class="form-control" placeholder="Mã khuyến mãi">
                 </div>
                 <div class="col-3">
                     <button id="ap-dung-btn" type="submit" class="btn btn-dark">Áp dụng</button>

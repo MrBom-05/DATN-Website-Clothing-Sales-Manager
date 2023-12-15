@@ -31,6 +31,7 @@
             <div class="tab-pane fade show active" id="login" role="tabpanel"
                  aria-labelledby="login-tab">
 
+                <%--@elvariable id="dangNhap" type="java"--%>
                 <form:form modelAttribute="dangNhap" action="/dang-nhap" method="post">
                     <div class="row">
                         <div class="col-6">
@@ -46,18 +47,13 @@
                     <c:if test="${not empty loginError}">
                         <div class="alert alert-danger">${loginError}</div>
                     </c:if>
-                    <div class="row mt-3">
-                        <div class="col-9">
-                        </div>
-                        <div class="col-3">
-                            <a class="link-dark" style="text-decoration: none">Quên mật khẩu</a>
-                        </div>
-                    </div>
+
                     <button type="submit" class="btn btn-dark mt-5">Đăng Nhập</button>
                 </form:form>
             </div>
             <div class="tab-pane fade" id="register" role="tabpanel"
                  aria-labelledby="register-tab">
+                <%--@elvariable id="dangKy" type="java"--%>
                 <form:form id="registrationForm" modelAttribute="dangKy" action="/dang-ky" method="post">
                     <div class="row">
                         <div class="col-6">
