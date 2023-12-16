@@ -168,6 +168,13 @@ public class TrangChuController {
                 model.addAttribute("thongBaoGiamGia", "");
             }
         }
+
+        String thongBaoGiamGia = (String) session.getAttribute("thongBaoGiamGia");
+        if (thongBaoGiamGia != null) {
+            model.addAttribute("thongBaoGiamGia", thongBaoGiamGia);
+            session.removeAttribute("thongBaoGiamGia");
+        }
+
         model.addAttribute("viewContent", "/views/user/gio-hang.jsp");
         return "user/layout";
     }
@@ -198,10 +205,19 @@ public class TrangChuController {
 
     // add voucher
     @PostMapping("/ap-dung-voucher")
-    public String apDungVoucher(@RequestParam("ma") String ma, RedirectAttributes redirectAttributes) {
+    public String apDungVoucher(@RequestParam("ma") String ma, HttpSession session) {
         GiamGiaResponse giamGiaResponse = giamGiaService.findByMa(ma);
         session.setAttribute("giamGia", giamGiaResponse);
-        redirectAttributes.addFlashAttribute("thongBaoGiamGia", "Đã áp dụng mã giảm giá.");
+
+        String thongBaoGiamGia = "";
+        if (giamGiaResponse == null) {
+            thongBaoGiamGia = "Mã giảm giá không tồn tại.";
+        } else {
+            thongBaoGiamGia = "Đã áp dụng mã giảm giá.";
+        }
+
+        session.setAttribute("thongBaoGiamGia", thongBaoGiamGia);
+
         return "redirect:/gio-hang";
     }
 
