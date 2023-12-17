@@ -51,23 +51,42 @@
            <c:if test="${hoaDon.trangThai == 6}">
                <span class="text-secondary">Đã xác nhận</span>
            </c:if>
+            <c:if test="${hoaDon.trangThai == 7}">
+                <span class="text-secondary">Khách delay giao hàng lần 1</span>
+            </c:if>
+            <c:if test="${hoaDon.trangThai == 8}">
+                            <span class="text-secondary">Khách delay giao hàng lần 2</span>
+           </c:if>
+            <c:if test="${hoaDon.trangThai == 9}">
+                            <span class="text-secondary">Khách delay giao hàng lần 3</span>
+            </c:if>
+            <c:if test="${hoaDon.trangThai == 10}">
+                <span class="text-secondary">Đã huỷ/Chờ hoàn tiền</span>
+            </c:if>
        </span>
     </div>
 
     <div class="row mt-2">
         <div>
             <div class="float-start">
-                <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3 || hoaDon.trangThai == 6}">
+                <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3 || hoaDon.trangThai == 9 || hoaDon.trangThai == 10 || hoaDon.trangThai == 6}">
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHuy">
                         Huỷ đơn hàng
                     </button>
                 </c:if>
                 <c:if test="${hoaDon.trangThai !=4}">
                     <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3 || hoaDon.trangThai == 6}">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalXacNhan">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modalXacNhan">
                             Xác nhận
                         </button>
                     </c:if>
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 4 || hoaDon.trangThai == 7 || hoaDon.trangThai == 8 }">
+                    <button type="button" class="btn btn-danger me-5 " data-bs-toggle="modal"
+                            data-bs-target="#ModalDelay">
+                        Khách delay
+                    </button>
                 </c:if>
                 <c:if test="${hoaDon.trangThai == 4}">
                     <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
@@ -163,6 +182,19 @@
                         <c:if test="${hoaDon.trangThai == 6}">
                             <span class="text-secondary">Đã xác nhận</span>
                         </c:if>
+                        <c:if test="${hoaDon.trangThai == 7}">
+                            <span class="text-secondary">Khách delay giao hàng lần 1</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 8}">
+                            <span class="text-secondary">Khách delay giao hàng lần 2</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 9}">
+                            <span class="text-secondary">Khách delay giao hàng lần 3</span>
+                        </c:if>
+                        <c:if test="${hoaDon.trangThai == 10}">
+                            <span class="text-secondary">Đã huỷ/Chờ hoàn tiền</span>
+                        </c:if>
+
                     </p>
                     <p>Ngày thanh toán:
                         <%--format ngày tạo--%>
@@ -195,70 +227,74 @@
         </div>
     </div>
 
-<%--    <div class="card mt-4">--%>
-<%--        <div class="card-header">--%>
-<%--            <p class="fw-bold text-uppercase float-start">Lịch sử thanh toán</p>--%>
-<%--            <c:if test="${hoaDon.trangThai == 1}">--%>
-<%--                <p class="fw-bold text-success float-end">Đơn hàng đã được thanh toán</p>--%>
-<%--            </c:if>--%>
-<%--        </div>--%>
-<%--        <div class="card-body">--%>
-<%--            <c:if test="${hoaDon.trangThai == 1}">--%>
-<%--                <div class="">--%>
-<%--                    <table class="table text-center">--%>
-<%--                        <thead>--%>
-<%--                        <tr>--%>
-<%--                            <th scope="col">#</th>--%>
-<%--                            <th scope="col">Số tiền</th>--%>
-<%--                            <th scope="col">Phương thức thanh toán</th>--%>
-<%--                            <th scope="col">Nhân viên xác nhận</th>--%>
-<%--                            <th scope="col">Ghi chú</th>--%>
-<%--                        </tr>--%>
-<%--                        </thead>--%>
-<%--                        <tbody>--%>
-<%--                        <tr>--%>
-<%--                            <td>1</td>--%>
-<%--                            <td id="tong_tien_2">${tongTien}VND</td>--%>
-<%--                            <script>--%>
-<%--                                // format giá--%>
-<%--                                document.addEventListener('DOMContentLoaded', function () {--%>
-<%--                                    var giaElement = document.getElementById('tong_tien_2');--%>
-<%--                                    // Lấy giá trị không định dạng từ thẻ p--%>
-<%--                                    var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;--%>
-<%--                                    // Định dạng lại giá trị và gán lại vào thẻ p--%>
-<%--                                    giaElement.textContent = giaValue.toLocaleString('en-US');--%>
+    <%--    <div class="card mt-4">--%>
+    <%--        <div class="card-header">--%>
+    <%--            <p class="fw-bold text-uppercase float-start">Lịch sử thanh toán</p>--%>
+    <%--            <c:if test="${hoaDon.trangThai == 1}">--%>
+    <%--                <p class="fw-bold text-success float-end">Đơn hàng đã được thanh toán</p>--%>
+    <%--            </c:if>--%>
+    <%--        </div>--%>
+    <%--        <div class="card-body">--%>
+    <%--            <c:if test="${hoaDon.trangThai == 1}">--%>
+    <%--                <div class="">--%>
+    <%--                    <table class="table text-center">--%>
+    <%--                        <thead>--%>
+    <%--                        <tr>--%>
+    <%--                            <th scope="col">#</th>--%>
+    <%--                            <th scope="col">Số tiền</th>--%>
+    <%--                            <th scope="col">Phương thức thanh toán</th>--%>
+    <%--                            <th scope="col">Nhân viên xác nhận</th>--%>
+    <%--                            <th scope="col">Ghi chú</th>--%>
+    <%--                        </tr>--%>
+    <%--                        </thead>--%>
+    <%--                        <tbody>--%>
+    <%--                        <tr>--%>
+    <%--                            <td>1</td>--%>
+    <%--                            <td id="tong_tien_2">${tongTien}VND</td>--%>
+    <%--                            <script>--%>
+    <%--                                // format giá--%>
+    <%--                                document.addEventListener('DOMContentLoaded', function () {--%>
+    <%--                                    var giaElement = document.getElementById('tong_tien_2');--%>
+    <%--                                    // Lấy giá trị không định dạng từ thẻ p--%>
+    <%--                                    var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;--%>
+    <%--                                    // Định dạng lại giá trị và gán lại vào thẻ p--%>
+    <%--                                    giaElement.textContent = giaValue.toLocaleString('en-US');--%>
 
-<%--                                });--%>
-<%--                            </script>--%>
-<%--                            <td>--%>
-<%--                                <c:if test="${hoaDon.loaiHoaDon == 2}">--%>
-<%--                                    <span class="text-success">Đã thanh toán trước</span>--%>
-<%--                                </c:if>--%>
-<%--                                <c:if test="${hoaDon.loaiHoaDon != 2}">--%>
-<%--                                    <c:if test="${hoaDon.hinhThucThanhToan == 1}">--%>
-<%--                                        Tiền mặt--%>
-<%--                                    </c:if>--%>
-<%--                                    <c:if test="${hoaDon.hinhThucThanhToan == 0}">--%>
-<%--                                        Chuyển khoản--%>
-<%--                                    </c:if>--%>
-<%--                                    <c:if test="${hoaDon.hinhThucThanhToan == 2}">--%>
-<%--                                        Thanh toán VNPay--%>
-<%--                                    </c:if>--%>
-<%--                                </c:if>--%>
-<%--                            </td>--%>
-<%--                            <td>${hoaDon.idNhanVien.hoVaTen}</td>--%>
-<%--                            <td>${hoaDon.ghiChu}</td>--%>
-<%--                        </tr>--%>
-<%--                        </tbody>--%>
-<%--                    </table>--%>
-<%--                </div>--%>
-<%--            </c:if>--%>
-<%--        </div>--%>
-<%--    </div>--%>
+    <%--                                });--%>
+    <%--                            </script>--%>
+    <%--                            <td>--%>
+    <%--                                <c:if test="${hoaDon.loaiHoaDon == 2}">--%>
+    <%--                                    <span class="text-success">Đã thanh toán trước</span>--%>
+    <%--                                </c:if>--%>
+    <%--                                <c:if test="${hoaDon.loaiHoaDon != 2}">--%>
+    <%--                                    <c:if test="${hoaDon.hinhThucThanhToan == 1}">--%>
+    <%--                                        Tiền mặt--%>
+    <%--                                    </c:if>--%>
+    <%--                                    <c:if test="${hoaDon.hinhThucThanhToan == 0}">--%>
+    <%--                                        Chuyển khoản--%>
+    <%--                                    </c:if>--%>
+    <%--                                    <c:if test="${hoaDon.hinhThucThanhToan == 2}">--%>
+    <%--                                        Thanh toán VNPay--%>
+    <%--                                    </c:if>--%>
+    <%--                                </c:if>--%>
+    <%--                            </td>--%>
+    <%--                            <td>${hoaDon.idNhanVien.hoVaTen}</td>--%>
+    <%--                            <td>${hoaDon.ghiChu}</td>--%>
+    <%--                        </tr>--%>
+    <%--                        </tbody>--%>
+    <%--                    </table>--%>
+    <%--                </div>--%>
+    <%--            </c:if>--%>
+    <%--        </div>--%>
+    <%--    </div>--%>
 
     <div class="card mt-4 mb-4">
         <div class="card-header">
-            <p class="fw-bold text-uppercase">Sản phẩm</p>
+            <p class="fw-bold text-uppercase">Sản phẩm -  <span>
+                   <c:if test="${hoaDon.trangThai == 5}">
+                       <span class="text-success">Đã hoàn lại kho </span>
+                   </c:if>
+            </span></p>
         </div>
         <div class="card-body">
             <div class="">
@@ -314,7 +350,6 @@
                                     // Định dạng lại giá trị và gán lại vào thẻ p
                                     giaElement.textContent = giaValue.toLocaleString('en-US');
                                 });
-
 
 
                             </script>
@@ -446,7 +481,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
-                <input type="hidden" name="trangThai" value="5">
+                <c:if test="${hoaDon.trangThai == 2 && hoaDon.loaiHoaDon == 1}">
+                    <input type="hidden" name="trangThai" value="5">
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 3}">
+                    <input type="hidden" name="trangThai" value="10">
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 6}">
+                    <input type="hidden" name="trangThai" value="10">
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 9}">
+                    <input type="hidden" name="trangThai" value="10">
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 10}">
+                    <input type="hidden" name="trangThai" value="5">
+                </c:if>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Ghi chú </label>
@@ -457,6 +506,39 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                     <button type="submit" class="btn btn-danger">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%--modal delay giao hàng--%>
+<div class="modal fade" id="ModalDelay" tabindex="-1" aria-labelledby="ModalDelay" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delay giao hàng</h1>
+                <button type="button" class="btn-Đóng" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+                <c:if test="${hoaDon.trangThai == 4}">
+                    <input type="hidden" name="trangThai" value="7">
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 7}">
+                    <input type="hidden" name="trangThai" value="8">
+                </c:if>
+                <c:if test="${hoaDon.trangThai == 8}">
+                    <input type="hidden" name="trangThai" value="9">
+                </c:if>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú </label>
+                        <textarea class="form-control" name="ghiChu" rows="3"
+                                  placeholder="Ghi chú"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
                 </div>
             </form>
         </div>
