@@ -83,7 +83,6 @@ public class NhanVienService {
     public void update(NhanVienRequest nhanVienRequest, UUID id) {
         NhanVien nhanVien = nhanVienRepository.findById(id).orElse(null);
         if (nhanVien != null) {
-            nhanVien.setMa(nhanVienRequest.getMa());
             nhanVien.setHoVaTen(nhanVienRequest.getHoVaTen());
             nhanVien.setEmail(nhanVienRequest.getEmail());
             nhanVien.setSoDienThoai(nhanVienRequest.getSoDienThoai());

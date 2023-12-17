@@ -102,7 +102,6 @@ public class SanPhamChiTietService {
     public void update(SanPhamChiTietRequest sanPhamChiTietRequest, UUID id) {
         SanPhamChiTiet sanPhamChiTiet = sanPhamChiTietRepository.findById(id).orElse(null);
         if (sanPhamChiTiet != null) {
-            sanPhamChiTiet.setMaSanPham(sanPhamChiTietRequest.getMaSanPham());
             sanPhamChiTiet.setGia(sanPhamChiTietRequest.getGia());
             sanPhamChiTiet.setSoLuong(sanPhamChiTietRequest.getSoLuong());
             sanPhamChiTiet.setMoTa(sanPhamChiTietRequest.getMoTa());
