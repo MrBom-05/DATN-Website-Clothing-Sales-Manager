@@ -49,9 +49,9 @@
                     <div class="row mt-3">
                         <div class="col-9">
                         </div>
-                        <div class="col-3">
-                            <a class="link-dark" style="text-decoration: none">Quên mật khẩu</a>
-                        </div>
+<%--                        <div class="col-3">--%>
+<%--                            <a class="link-dark" style="text-decoration: none">Quên mật khẩu</a>--%>
+<%--                        </div>--%>
                     </div>
                     <button type="submit" class="btn btn-dark mt-5">Đăng Nhập</button>
                 </form:form>

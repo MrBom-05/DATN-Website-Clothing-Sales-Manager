@@ -4,7 +4,7 @@
 
 
 <%--@elvariable id="formThanhToan" type="java"--%>
-<form:form modelAttribute="formThanhToan" action="/thanh-toan" method="post">
+<form:form modelAttribute="formThanhToan" id="myForm" action="/thanh-toan" method="post">
     <div class="row col-10 container offset-1 mt-1">
         <div class="col-6">
             <div class="text-center py-3 fw-bold  text-xl-center text-uppercase">
@@ -21,7 +21,8 @@
                 <br>
                 <label class="ms-5">Số điện thoại: ${khachHang.soDienThoai}</label>
                 <br>
-                <label class="ms-5">Địa chỉ: ${khachHang.diaChi}/${khachHang.xaPhuong}/${khachHang.quanHuyen}/${khachHang.tinhThanhPho}</label>
+                <label class="ms-5">Địa
+                    chỉ: ${khachHang.diaChi}/${khachHang.xaPhuong}/${khachHang.quanHuyen}/${khachHang.tinhThanhPho}</label>
                 <script>
                     function updateCheckboxValue(checkbox) {
                         if (checkbox.checked) {
@@ -193,21 +194,52 @@
                 <label>Dữ liệu cá nhân của bạn sẽ được sử dụng để
                     xử lý đơn đặt hàng, hỗ trợ trải nghiệm của
                     bạn trên toàn bộ trang web này và cho các
-                    mục đích khác được mô tả trong <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a> và <a
-                            href="/chinh-sach-doi-tra">Chính sách đổi
-                        trả</a>.
+                    mục đích khác được mô tả trong <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a>
+<%--                    và <a--%>
+<%--                            href="/chinh-sach-doi-tra">Chính sách đổi--%>
+<%--                        trả</a>.--%>
                 </label>
             </div>
             <div class="mt-3 bg-light">
                 <label class="form-check-label">
-                    <input class="" type="checkbox" name="" id="" checked>
+                    <input type="checkbox" name="termsAndConditions" id="termsCheckbox" checked>
                     Tôi đã đọc và đồng ý với các điều khoản và điều kiện của trang web *
                 </label>
             </div>
             <div class="mt-3">
-                <button type="submit" class="mb-3 w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG
+                <button type="submit" id="submitButton" class="mb-3 w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG
                 </button>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('myForm');
+                    const checkbox = document.getElementById('termsCheckbox');
+                    const textarea = document.getElementById('ghiChu');
+                    const submitButton = document.getElementById('submitButton');
+
+                    form.addEventListener('submit', function(event) {
+                        if (!checkbox.checked) {
+                            event.preventDefault();
+                            alert('Vui lòng đồng ý với các điều khoản và điều kiện.');
+                        }
+                    });
+
+                    textarea.addEventListener('input', function() {
+                        if (textarea.value.trim() !== '') {
+                            submitButton.removeAttribute('disabled');
+                        } else {
+                            submitButton.setAttribute('disabled', 'disabled');
+                        }
+                    });
+
+                    form.addEventListener('submit', function(event) {
+                        if (textarea.value.trim() === '') {
+                            event.preventDefault();
+                        }
+                    });
+                });
+
+            </script>
         </div>
     </div>
 </form:form>
