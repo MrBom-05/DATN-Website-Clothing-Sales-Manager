@@ -37,6 +37,7 @@ public class SanPhamChiTietService {
     public List<BanHangTaiQuayResponse> findAllCtsp() {
         return sanPhamChiTietRepository.findAllCtsp();
     }
+
     // mã sp tự tăng :
     public String maSPCount() {
         String code = "";
@@ -191,5 +192,9 @@ public class SanPhamChiTietService {
 
     public SanPhamChiTiet findByMaSanPham(String maSanPham) {
         return sanPhamChiTietRepository.findByMaSanPham(maSanPham);
+    }
+
+    public Integer getSoLuongSanPham(UUID idSanPham, Integer idMauSac, Integer idKichCo) {
+        return sanPhamChiTietRepository.getSoLuongSanPham(idSanPham, idMauSac, idKichCo);
     }
 }

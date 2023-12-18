@@ -61,7 +61,7 @@
                                             <span class="text-secondary">Chờ thanh toán</span>
                                         </c:if>
                                         <c:if test="${hoaDon.trangThai == 1}">
-                                            <span class="text-success">Đã thanh toán</span>
+                                            <span class="text-success">Đã hoàn thành</span>
                                         </c:if>
                                         <c:if test="${hoaDon.trangThai == 2}">
                                             <span class="text-secondary">Chờ xác nhận</span>
@@ -76,7 +76,19 @@
                                             <span class="text-danger">Đã huỷ</span>
                                         </c:if>
                                         <c:if test="${hoaDon.trangThai == 6}">
-                                            <span class="text-secondary">Đã xác nhận</span>
+                                            <span class="text-secondary">Đã xác nhận</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 7}">
+                                            <span class="text-secondary">Khách delay giao hàng lần 1</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 8}">
+                                            <span class="text-secondary">Khách delay giao hàng lần 2</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 9}">
+                                            <span class="text-secondary">Khách delay giao hàng lần 3</span>
+                                        </c:if>
+                                        <c:if test="${hoaDon.trangThai == 10}">
+                                            <span class="text-secondary">Đã huỷ/Chờ hoàn tiền</span>
                                         </c:if>
                                     </p>
                                 </div>
