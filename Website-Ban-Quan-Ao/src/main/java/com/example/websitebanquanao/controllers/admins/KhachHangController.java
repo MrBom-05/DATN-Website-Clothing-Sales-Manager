@@ -74,11 +74,6 @@ public class KhachHangController {
             return "admin/layout";
         }
 
-        if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Email đã tồn tại.");
-            return redirect;
-        }
-
         khachHangService.add(khachHangRequest);
         redirectAttributes.addFlashAttribute("successMessage", "Thêm khách hàng thành công");
         return redirect;
@@ -90,22 +85,9 @@ public class KhachHangController {
             redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại không đúng định dạng.");
             return redirect;
         }
-
-        if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Cập nhật thất bại, Email đã tồn tại.");
-            return redirect;
-        }
-
-        if (result.hasErrors()) {
-            model.addAttribute("view", "/views/admin/khach-hang/index.jsp");
-            return "admin/layout";
-        }
-
-
-
         khachHangService.update(khachHangRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khách hàng thành công");
-        return redirect;
+        return "redirect:/admin/khach-hang/index";
     }
 
     @GetMapping("get/{id}")

@@ -57,11 +57,11 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String logout() {
-//        xoá session
-        session.removeAttribute("admin");
-        session.removeAttribute("nhan_vien");
+//        xoá toàn bộ session
+        session.invalidate();
 
-        return "admin/login/login";
+
+        return "redirect:/login-admin";
     }
 
 }

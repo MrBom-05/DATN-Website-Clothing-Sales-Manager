@@ -75,7 +75,7 @@
                     </button>
                 </c:if>
                 <c:if test="${hoaDon.trangThai !=4}">
-                    <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3 || hoaDon.trangThai == 6}">
+                    <c:if test="${hoaDon.trangThai == 0 || hoaDon.trangThai == 2 || hoaDon.trangThai == 3 || hoaDon.trangThai == 6 || hoaDon.trangThai == 7 || hoaDon.trangThai == 8 || hoaDon.trangThai == 9}">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#modalXacNhan">
                             Xác nhận

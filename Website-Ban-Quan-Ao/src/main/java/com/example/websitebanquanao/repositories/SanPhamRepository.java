@@ -47,6 +47,21 @@ public interface SanPhamRepository extends JpaRepository<SanPham, UUID> {
     // user
     @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, min(spct.gia), min(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms where spct.trangThai = 1 group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListTrangChu();
+    @Query(value = "SELECT TOP 5 s.id, s.ten, s.anh, MIN(spct.gia), MIN(ms.id), s.ngay_tao " +
+            "FROM san_pham s " +
+            "JOIN san_pham_chi_tiet spct ON s.id = spct.id_san_pham " +
+            "JOIN mau_sac ms ON spct.id_mau_sac = ms.id " +
+            "JOIN hoa_don_chi_tiet hdct ON spct.id = hdct.id_san_pham_chi_tiet " +
+            "JOIN hoa_don hd ON hdct.id_hoa_don = hd.id " +
+            "WHERE spct.trang_thai = 1 " +
+            "GROUP BY s.id, s.ten, s.anh, s.ngay_tao " +
+            "ORDER BY COUNT(hdct.id) DESC", nativeQuery = true)
+    public List<Object[]> getTop5BestSellingProducts();
+
+
+
+
+
 
     @Query("select new com.example.websitebanquanao.infrastructures.responses.TrangChuResponse(s.id, s.ten, s.anh, MIN(spct.gia), MIN(ms.id), s.ngayTao) from SanPham s join s.sanPhamChiTiets spct join spct.idMauSac ms join spct.khuyenMaiChiTiets kmct join kmct.idKhuyenMai km where km.ngayBatDau <= CURRENT_DATE and km.ngayKetThuc >= CURRENT_DATE and spct.trangThai = 1 group by s.id, s.ten, s.anh, s.ngayTao order by s.ngayTao desc")
     public List<TrangChuResponse> getListSale();

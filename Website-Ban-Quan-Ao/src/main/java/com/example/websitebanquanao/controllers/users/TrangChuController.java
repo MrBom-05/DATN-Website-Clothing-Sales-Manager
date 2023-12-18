@@ -80,6 +80,7 @@ public class TrangChuController {
     @GetMapping("")
     public String trangChu(Model model) {
         model.addAttribute("listTrangChu", sanPhamService.getListTrangChu(""));
+        model.addAttribute("listBanChay", sanPhamService.getListBanChay(""));
         model.addAttribute("viewBanner", "/views/user/banner.jsp");
         model.addAttribute("viewContent", "/views/user/trang-chu.jsp");
         return "user/layout";
