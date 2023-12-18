@@ -50,4 +50,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
 
     @Query("select s from SanPhamChiTiet s where s.maSanPham = :maSanPham")
     SanPhamChiTiet findByMaSanPham(@Param("maSanPham") String maSanPham);
+
+    @Query("select s.soLuong from SanPhamChiTiet s where s.idSanPham.id = :idSanPham and s.idMauSac.id = :idMauSac and s.idKichCo.id = :idKichCo")
+    public Integer getSoLuongSanPham(@Param("idSanPham") UUID idSanPham, @Param("idMauSac") Integer idMauSac, @Param("idKichCo") Integer idKichCo);
 }

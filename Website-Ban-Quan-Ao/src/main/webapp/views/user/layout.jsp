@@ -110,12 +110,12 @@
                         <a href="/chinh-sach-bao-mat" class="text-decoration-none text-dark">Chính sách bảo mật</a>
                     </div>
                 </div>
-                <div class="d-flex mb-2">
-                    <i class="fas fa-caret-down fa-rotate-270"></i>
-                    <div class="text-sm">
-                        <a href="/chinh-sach-doi-tra" class="text-decoration-none text-dark">Chính sách đổi trả</a>
-                    </div>
-                </div>
+<%--                <div class="d-flex mb-2">--%>
+<%--                    <i class="fas fa-caret-down fa-rotate-270"></i>--%>
+<%--                    <div class="text-sm">--%>
+<%--                        <a href="/chinh-sach-doi-tra" class="text-decoration-none text-dark">Chính sách đổi trả</a>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
             </div>
             <div class="col-md-5 col-12">
                 <div class="d-flex mb-2">
