@@ -125,7 +125,11 @@
                     function increment_${gioHang.maSanPham}() {
                         var quantityInput = document.getElementById("quantity_${gioHang.maSanPham}");
                         var currentValue = parseInt(quantityInput.value);
-                        quantityInput.value = currentValue + 1;
+                        var maxValue = parseInt(quantityInput.getAttribute('max'));
+
+                        if (currentValue < maxValue) {
+                            quantityInput.value = currentValue + 1;
+                        }
                     }
                 </script>
             </c:forEach>
@@ -192,7 +196,8 @@
                 </div>
             </div>
             <div class="mt-3 mb-3 text-center">
-                <a id="thanh-toan-link" href="/thanh-toan" class="bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG</a>
+                <a id="thanh-toan-link" href="/thanh-toan" class="bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN
+                    ĐẶT HÀNG</a>
             </div>
             <script>
                 var thanhToanLink = document.getElementById('thanh-toan-link');
