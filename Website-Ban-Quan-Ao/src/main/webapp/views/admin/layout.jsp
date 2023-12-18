@@ -166,10 +166,17 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Đăng xuất
+                            </a>
+                        </li>
                         <li class="nav-item active"><a class="nav-link" href="/admin/ban-hang">
                             <i class="fas fa-cart-plus"></i>
                             Bán hàng tại quầy
-                        </a></li>
+                        </a>
+                        </li>
                         <li class="nav-item active"><a class="nav-link" href="/admin/hoa-don">
                             <i class="fas fa-file-invoice"></i>
                             Hoá đơn

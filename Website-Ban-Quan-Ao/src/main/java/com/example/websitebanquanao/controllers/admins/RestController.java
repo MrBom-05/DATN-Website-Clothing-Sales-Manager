@@ -1,12 +1,9 @@
 package com.example.websitebanquanao.controllers.admins;
 
-import com.example.websitebanquanao.entities.SanPhamChiTiet;
 import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +23,8 @@ public class RestController {
     private SanPhamChiTietService sanPhamChiTietService;
     @Autowired
     private KhuyenMaiChiTietService khuyenMaiChiTietService;
-
+    @Autowired
+    private EmailService emailService;
     // getlist sản phẩm by id giỏ hàng
     @GetMapping("/view/spct/view/{id}")
     public List<GioHangResponse> viewHoaDon(@PathVariable("id") UUID id) {
@@ -75,5 +73,23 @@ public class RestController {
     public List<Object> top5SanPhamBanCham() {
         return hoaDonChiTietService.top5SanPhamBanCham();
     }
+
+
+    @PostMapping("/send")
+    public String sendEmail(
+            @RequestParam(name = "to", defaultValue = "nonamelink334@gmail.com") String to,
+            @RequestParam(name = "subject", defaultValue = "Cảm ơn bạn đã mua hàng") String subject,
+            @RequestParam(name = "body", defaultValue = "Đây là hóa đơn của bạn") String body,
+            @RequestParam(name = "maHD", defaultValue = "HD0001") String maHD) {
+        try {
+            emailService.sendEmail(to, subject, body, maHD);
+            return "Email sent successfully!";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error sending email: " + e.getMessage();
+        }
+    }
+
+
 }
 

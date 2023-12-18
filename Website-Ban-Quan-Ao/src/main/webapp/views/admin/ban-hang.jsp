@@ -373,7 +373,7 @@
                     <div class="mb-3">
                         <p class="fw-bold">Thông tin khách hàng</p>
                         <p class="text-center" id="tenKhachHang">Tên khách hàng: Khách Lẻ</p>
-                        <p class="text-center" id="emailKhachHang">Email: </p>
+                        <p class="text-center" id="emailKhachHang"></p>
                         <p class="text-center" id="soDienThoaiKhachHang">Số điện thoại: </p>
                         <p class="text-center" id="diaChiKhachHang">Địa chỉ: </p>
                     </div>
@@ -963,12 +963,11 @@
     //
     function fillCustomerData(customer) {
         $('#tenKhachHang').text('Tên khách hàng: ' + customer.hoVaTen);
-        $('#emailKhachHang').text('Email: ' + customer.email);
+        $('#emailKhachHang').text(customer.email);
         $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (customer.soDienThoai ? customer.soDienThoai : 'N/A'));
         $('#diaChiKhachHang').text('Địa chỉ: ' + (customer.diaChi ? customer.diaChi : 'N/A'));
     }
 
-    // khách hàng
     $(document).ready(function () {
         // Lấy dữ liệu khách hàng từ API
         $.get('http://localhost:8080/view/thong-tin-khach-hang', function (data) {
@@ -982,7 +981,7 @@
                 });
                 // Cập nhật thông tin khách hàng trên giao diện
                 $('#tenKhachHang').text('Tên khách hàng: ' + selectedCustomer.hoVaTen);
-                $('#emailKhachHang').text('Email: ' + (selectedCustomer.email ? selectedCustomer.email : ''));
+                $('#emailKhachHang').text((selectedCustomer.email ? selectedCustomer.email : ''));
                 $('#soDienThoaiKhachHang').text('Số điện thoại: ' + (selectedCustomer.soDienThoai ? selectedCustomer.soDienThoai : ''));
                 $('#diaChiKhachHang').text('Địa chỉ: ' + (selectedCustomer.diaChi ? selectedCustomer.diaChi : ''));
 
@@ -996,8 +995,11 @@
             // Hàm lọc và cập nhật danh sách khách hàng dựa trên từ khóa tìm kiếm
             function filterCustomers(searchTerm) {
                 var filteredCustomers = customerData.filter(function (customer) {
-                    // Tìm kiếm không phân biệt chữ hoa, chữ thường trong tên khách hàng
-                    return customer.hoVaTen.toLowerCase().includes(searchTerm.toLowerCase());
+                    // Tìm kiếm không phân biệt chữ hoa, chữ thường trong tên khách hàng và số điện thoại
+                    return (
+                        customer.hoVaTen.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (customer.soDienThoai && customer.soDienThoai.includes(searchTerm))
+                    );
                 });
 
                 // Xóa các lựa chọn hiện tại trong danh sách kết quả
@@ -1009,7 +1011,8 @@
                 } else {
                     // Thêm khách hàng đã lọc vào danh sách kết quả
                     filteredCustomers.forEach(function (customer) {
-                        $('#searchResults').append('<li class="result-item" data-id="' + customer.id + '">' + customer.hoVaTen + '</li>');
+                        var displayText = customer.hoVaTen + (customer.soDienThoai ? ' - ' + customer.soDienThoai : '');
+                        $('#searchResults').append('<li class="result-item" data-id="' + customer.id + '">' + displayText + '</li>');
                     });
                 }
             }
@@ -1038,6 +1041,7 @@
         });
 
     });
+
 
     // api ghn
     $(document).ready(function () {
@@ -1320,8 +1324,30 @@
         var totalInput = document.getElementById('total');
         totalInput.value = tongTienValue;
     });
-
-
+    // send email
+    function sendEmail() {
+        // gửi đến email khách hàng
+        const emailKhachHang = $('#emailKhachHang').text();
+        var to = emailKhachHang;
+        var maHoaDon = '${hoaDon.ma}';
+        $.ajax({
+            type: "POST",
+            url: "/send",
+            data: {to: to , maHD: maHoaDon},
+            success: function (response) {
+                alert(response);
+            },
+            error: function (error) {
+                alert("Lỗi: " + error.responseText)
+            }
+        });
+    }
+    // click thanh toán sẽ gửi email
+    $("#thanh_toan").click(function () {
+        sendEmail();
+    });
+    const emailKhachHang = $('#emailKhachHang').text();
+    console.log(emailKhachHang);
 </script>
 </body>
 

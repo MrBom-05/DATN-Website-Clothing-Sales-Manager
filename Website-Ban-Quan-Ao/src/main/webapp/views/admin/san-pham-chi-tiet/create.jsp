@@ -218,8 +218,7 @@
 <!-- Modal -->
 <c:if test="${sanPhamChiTiet.id == null}">
     <%--mau sac--%>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
@@ -242,8 +241,7 @@
     </div>
 
     <%--kich co--%>
-    <div class="modal fade" id="modalKichCo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="modalKichCo"  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
@@ -260,9 +258,8 @@
         </div>
     </div>
     <%--san pham--%>
-    <div class="modal fade" id="modalSanPham" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal fade" id="modalSanPham" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
                     <form:form id="edit-form" modelAttribute="sp" method="post" action="/admin/san-pham/them-nhanh"
