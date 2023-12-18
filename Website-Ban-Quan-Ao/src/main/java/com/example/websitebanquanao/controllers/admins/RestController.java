@@ -25,6 +25,7 @@ public class RestController {
     private KhuyenMaiChiTietService khuyenMaiChiTietService;
     @Autowired
     private EmailService emailService;
+
     // getlist sản phẩm by id giỏ hàng
     @GetMapping("/view/spct/view/{id}")
     public List<GioHangResponse> viewHoaDon(@PathVariable("id") UUID id) {
@@ -57,13 +58,10 @@ public class RestController {
 
     // filter theo size hoặc color hoặc search term
     @GetMapping("/filter-products")
-    public List<BanHangTaiQuayResponse> filterProducts(
-            @RequestParam(name = "size", required = false) String size,
-            @RequestParam(name = "color", required = false) String color,
-            @RequestParam(name = "searchTerm", required = false) String searchTerm
-    ) {
+    public List<BanHangTaiQuayResponse> filterProducts(@RequestParam(name = "size", required = false) String size, @RequestParam(name = "color", required = false) String color, @RequestParam(name = "searchTerm", required = false) String searchTerm) {
         return sanPhamChiTietService.filterProducts(size, color, searchTerm);
     }
+
     @GetMapping("/topbanchay")
     public List<Object> top5SanPhamBanChay() {
         return hoaDonChiTietService.top5SanPhamBanChay();
@@ -76,11 +74,7 @@ public class RestController {
 
 
     @PostMapping("/send")
-    public String sendEmail(
-            @RequestParam(name = "to", defaultValue = "nonamelink334@gmail.com") String to,
-            @RequestParam(name = "subject", defaultValue = "Cảm ơn bạn đã mua hàng") String subject,
-            @RequestParam(name = "body", defaultValue = "Đây là hóa đơn của bạn") String body,
-            @RequestParam(name = "maHD", defaultValue = "HD0001") String maHD) {
+    public String sendEmail(@RequestParam(name = "to", defaultValue = "nonamelink334@gmail.com") String to, @RequestParam(name = "subject", defaultValue = "Cảm ơn bạn đã mua hàng") String subject, @RequestParam(name = "body", defaultValue = "Đây là hóa đơn của bạn") String body, @RequestParam(name = "maHD", defaultValue = "HD0001") String maHD) {
         try {
             emailService.sendEmail(to, subject, body, maHD);
             return "Email sent successfully!";
@@ -90,6 +84,9 @@ public class RestController {
         }
     }
 
-
+    @GetMapping("/so-luong-san-pham/{idSanPham}/{idMauSac}/{idKichCo}")
+    public ResponseEntity<Integer> getSoLuongSanPham(@PathVariable("idSanPham") UUID idSanPham, @PathVariable("idMauSac") Integer idMauSac, @PathVariable("idKichCo") Integer idKichCo) {
+        return ResponseEntity.ok(sanPhamChiTietService.getSoLuongSanPham(idSanPham, idMauSac, idKichCo));
+    }
 }
 

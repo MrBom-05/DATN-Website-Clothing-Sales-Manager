@@ -139,7 +139,8 @@
                         <div class="title">
                             <p>Kích cỡ:</p>
                         </div>
-                        <form:select path="idKichCo" class="form-select w-75" aria-label="Size Select" id="kichCoSelect">
+                        <form:select path="idKichCo" class="form-select w-75" aria-label="Size Select"
+                                     id="kichCoSelect">
                             <option selected>Chọn</option>
                             <c:forEach items="${listKichCo}" var="kichCo">
                                 <option value="${kichCo.id}">${kichCo.ten}</option>
@@ -166,6 +167,7 @@
                                 function decrement() {
                                     var quantityInput = document.getElementById("quantity");
                                     var currentValue = parseInt(quantityInput.value);
+                                    var max = parseInt(quantityInput.getAttribute('max'));
                                     if (currentValue > 1) {
                                         quantityInput.value = currentValue - 1;
                                     }
@@ -174,20 +176,61 @@
                                 function increment() {
                                     var quantityInput = document.getElementById("quantity");
                                     var currentValue = parseInt(quantityInput.value);
-                                    quantityInput.value = currentValue + 1;
+                                    var max = parseInt(quantityInput.getAttribute('max'));
+                                    if (currentValue < max) {
+                                        quantityInput.value = currentValue + 1;
+                                    }
                                 }
+
                             </script>
                         </div>
                     </div>
+                    <div id="soLuongSanPham" class="mt-3"></div>
+
+                    <script>
+                        const mauSacSelect = document.getElementById('mauSacSelect');
+                        const kichCoSelect = document.getElementById('kichCoSelect');
+                        const soLuongSanPhamDiv = document.getElementById('soLuongSanPham');
+
+                        mauSacSelect.addEventListener('change', fetchData);
+                        kichCoSelect.addEventListener('change', fetchData);
+
+                        function fetchData() {
+                            const idMauSac = mauSacSelect.value;
+                            const idKichCo = kichCoSelect.value;
+
+                            fetch(`/so-luong-san-pham/${sanPham.id}/` + idMauSac + `/` + idKichCo)
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    soLuongSanPhamDiv.innerText = `Số lượng sản phẩm: ` + data;
+                                    const quantityInput = document.getElementById('quantity');
+                                    quantityInput.setAttribute('max', data);
+
+                                    quantityInput.value = 1;
+                                })
+                                .catch(error => {
+                                    console.error('There was a problem with the fetch operation:', error);
+                                });
+                        }
+
+                    </script>
                 </div>
 
                 <div class="mt-5">
                     <div class="justify-content-between">
                         <c:if test="${khachHang != null}">
                             <button type="submit" id="btnThemVaoGioHang"
-                                    class="btn btn-outline-dark btn-lg">Thêm vào giỏ hàng</button>
-                            <p class="text-danger ms-3 mt-2" id="textKichCo" style="display: none">Bạn cần chọn kích cỡ</p>
-                            <p class="text-danger ms-3 mt-2" id="textMauSac" style="display: none">Bạn cần chọn màu sắc</p>
+                                    class="btn btn-outline-dark btn-lg">Thêm vào giỏ hàng
+                            </button>
+                            <p class="text-danger ms-3 mt-2" id="textKichCo" style="display: none">Bạn cần chọn kích
+                                cỡ</p>
+                            <p class="text-danger ms-3 mt-2" id="textMauSac" style="display: none">Bạn cần chọn màu
+                                sắc</p>
                         </c:if>
                         <c:if test="${khachHang == null}">
                             <a href="/dang-nhap" class="btn btn-outline-dark btn-lg">Bạn cần đăng nhập để mua hàng</a>
@@ -201,7 +244,7 @@
 
 </div>
 <script>
-// nếu khi ấn nút thêm vào giỏ hàng mà chưa chọn kích cỡ thì yêu cầu chọn kích cỡ
+    // nếu khi ấn nút thêm vào giỏ hàng mà chưa chọn kích cỡ thì yêu cầu chọn kích cỡ
     $(document).ready(function () {
         $("#btnThemVaoGioHang").click(function () {
             var kichCo = $("#kichCoSelect").val();
@@ -211,13 +254,13 @@
             }
         });
     });
-//    nếu đã chọn kích cỡ thì ẩn thông báo
+    //    nếu đã chọn kích cỡ thì ẩn thông báo
     $(document).ready(function () {
         $("#kichCoSelect").change(function () {
             $("#textKichCo").hide();
         });
     });
-// không cho phép click vào option "chọn" ở màu sắc. disable option "chọn" ở màu sắc, không được phép chọn
+    // không cho phép click vào option "chọn" ở màu sắc. disable option "chọn" ở màu sắc, không được phép chọn
     $(document).ready(function () {
         $("#mauSacSelect").change(function () {
             $("#mauSacSelect option[value='']").attr("disabled", "disabled");
