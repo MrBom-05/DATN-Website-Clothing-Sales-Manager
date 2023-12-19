@@ -11,13 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
@@ -54,18 +48,23 @@ public class KhachHangController {
 
     @PostMapping("store")
     public String store(@Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        if(khachHangRequest.validNull()){
+        if (khachHangRequest.validNull()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
             return redirect;
         }
 
-        if(!khachHangService.isSoDienThoai(khachHangRequest.getSoDienThoai())){
+        if (!khachHangService.isSoDienThoai(khachHangRequest.getSoDienThoai())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại không đúng định dạng.");
             return redirect;
         }
 
         if (!khachHangService.isPasswordValid(khachHangRequest.getMatKhau())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu phải có ít nhất 6 ký tự và chứa ít nhất một chữ và một số");
+            return redirect;
+        }
+
+        if (khachHangRequest.getHoVaTen().trim().length() == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Họ và tên không được để trống.");
             return redirect;
         }
 
@@ -81,8 +80,18 @@ public class KhachHangController {
 
     @PostMapping("update/{id}")
     public String update(@PathVariable("id") UUID id, @Valid @ModelAttribute("kh") KhachHangRequest khachHangRequest, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-        if(!khachHangService.isSoDienThoai(khachHangRequest.getSoDienThoai())){
+        if (khachHangRequest.validNull()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng điền đầy đủ thông tin.");
+            return redirect;
+        }
+
+        if (!khachHangService.isSoDienThoai(khachHangRequest.getSoDienThoai())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Số điện thoại không đúng định dạng.");
+            return redirect;
+        }
+
+        if (khachHangRequest.getHoVaTen().trim().length() == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Họ và tên không được để trống.");
             return redirect;
         }
         khachHangService.update(khachHangRequest, id);
