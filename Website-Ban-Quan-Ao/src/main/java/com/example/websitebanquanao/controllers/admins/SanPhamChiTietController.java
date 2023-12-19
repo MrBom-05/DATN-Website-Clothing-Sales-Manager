@@ -4,6 +4,7 @@ import com.example.websitebanquanao.entities.SanPhamChiTiet;
 import com.example.websitebanquanao.infrastructures.requests.*;
 import com.example.websitebanquanao.infrastructures.responses.SanPhamChiTietResponse;
 import com.example.websitebanquanao.services.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -42,6 +43,8 @@ public class SanPhamChiTietController {
     private LoaiService loaiService;
     @Autowired
     private SanPhamRequest sanPhamRequest;
+    @Autowired
+    HttpSession session;
     @GetMapping("/index")
     public String index(Model model) {
         model.addAttribute("list", sanPhamChiTietService.getAll());
@@ -156,4 +159,34 @@ public class SanPhamChiTietController {
         model.addAttribute("view", "/views/admin/san-pham-chi-tiet/index.jsp");
         return "admin/layout";
     }
+    @PostMapping("/tra-hang-vao-kho")
+    public String traHangVaoKho(@RequestParam("idHoaDon") UUID idHoaDon,
+                                @RequestParam("idSanPhamChiTiet") UUID idSanPhamChiTiet,
+                                @RequestParam("soLuongTraHang") int soLuongTraHang,
+                                Model model) {
+        try {
+            // Kiểm tra trạng thái đã hoàn từ session trước khi thực hiện
+            String sessionKey = "daHoan_" + idSanPhamChiTiet + "_" + idHoaDon;
+            if (session.getAttribute(sessionKey) != null) {
+                session.setAttribute("errorMessage", "Sản phẩm này đã được hoàn trước đó.");
+                // Nếu đã hoàn thì không thực hiện trả hàng vào kho nữa
+                throw new Exception("Sản phẩm này đã được hoàn trước đó.");
+            }
+
+            // Thực hiện trả hàng vào kho
+            sanPhamChiTietService.xuLyTraHangVaoKho(idSanPhamChiTiet, soLuongTraHang);
+
+            // Lưu trạng thái đã hoàn vào session
+            session.setAttribute(sessionKey, true);
+
+            // Trả về view với thông điệp hoặc dữ liệu cần thiết
+            session.setAttribute("successMessage", "Trả hàng vào kho thành công.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Lỗi khi trả hàng vào kho: " + e.getMessage());
+        }
+
+        return "redirect:/admin/hoa-don/" + idHoaDon;
+    }
+
 }

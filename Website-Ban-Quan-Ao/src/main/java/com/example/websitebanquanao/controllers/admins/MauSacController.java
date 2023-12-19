@@ -63,7 +63,7 @@ public class MauSacController {
         }
 
         if (mauSacRepository.existsByTen(mauSacRequest.getTen())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Thêm màu thất bại");
+            redirectAttributes.addFlashAttribute("errorMessage", "Màu sắc đã tồn tại");
             return redirect;
         }
 

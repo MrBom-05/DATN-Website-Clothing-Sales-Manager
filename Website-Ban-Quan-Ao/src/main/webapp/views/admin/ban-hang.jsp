@@ -1335,10 +1335,9 @@
             url: "/send",
             data: {to: to , maHD: maHoaDon},
             success: function (response) {
-                alert(response);
+                console.log(response);
             },
             error: function (error) {
-                alert("Lỗi: " + error.responseText)
             }
         });
     }

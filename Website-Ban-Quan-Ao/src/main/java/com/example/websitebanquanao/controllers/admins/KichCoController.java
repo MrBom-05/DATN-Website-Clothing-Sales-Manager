@@ -65,7 +65,7 @@ public class KichCoController {
         }
 
         if (kichCoRepository.existsByTen(kichCoRequest.getTen())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Thêm kích cỡ thất bại");
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên kích cỡ đã tồn tại");
             return redirect;
         }
 
