@@ -71,12 +71,14 @@
                                    rows="3"></form:textarea>
                 </div>
                 <div class="px-md-5 px-3 py-2 form-group">
-                    <div class="form-label ">Số điện thoại (*)</div>
-                    <form:input path="soDienThoai" class="w-100 form-control" type="text" placeholder="..."/>
+                    <div class="form-label">Số điện thoại (*)</div>
+                    <form:input path="soDienThoai" class="w-100 form-control" type="tel" placeholder="..."
+                                oninput="validatePhoneNumber(this)"/>
                 </div>
+
                 <div class="px-md-5 px-3 py-2 form-group">
                     <div class="form-label ">Email (*)</div>
-                    <form:input path="email" class="w-100 form-control" type="text" placeholder="..."/>
+                    <form:input path="email" class="w-100 form-control" type="email" placeholder="..."/>
                 </div>
             </div>
 
@@ -212,6 +214,16 @@
                 </button>
             </div>
             <script>
+                function validatePhoneNumber(input) {
+                    const phoneNumber = input.value.replace(/\D/g, '');
+
+                    if (phoneNumber.length === 10) {
+                        input.setCustomValidity('');
+                    } else {
+                        input.setCustomValidity('Số điện thoại phải có đúng 10 số.');
+                    }
+                }
+
                 document.addEventListener('DOMContentLoaded', function () {
                     const form = document.getElementById('myForm');
                     const checkbox = document.getElementById('termsCheckbox');
@@ -224,6 +236,7 @@
                     const provinceSelect = document.getElementById('provinceSelect');
                     const districtSelect = document.getElementById('districtSelect');
                     const wardSelect = document.getElementById('wardSelect');
+                    const hideInfoCheckbox = document.getElementById('hideInfoCheckbox');
 
                     form.addEventListener('submit', function (event) {
                         if (!checkbox.checked) {
@@ -231,17 +244,20 @@
                             alert('Vui lòng đồng ý với các điều khoản và điều kiện.');
                         }
 
-                        if (
-                            hoTenInput.value.trim() === '' ||
-                            diaChiTextarea.value.trim() === '' ||
-                            soDienThoaiInput.value.trim() === '' ||
-                            emailInput.value.trim() === '' ||
-                            provinceSelect.value === '' ||
-                            districtSelect.value === '' ||
-                            wardSelect.value === ''
-                        ) {
-                            event.preventDefault();
-                            alert('Vui lòng điền đầy đủ thông tin.');
+                        if (!hideInfoCheckbox.checked) {
+                            // Check other conditions only if hideInfoCheckbox is not checked
+                            if (
+                                hoTenInput.value.trim() === '' ||
+                                diaChiTextarea.value.trim() === '' ||
+                                soDienThoaiInput.value.trim() === '' ||
+                                emailInput.value.trim() === '' ||
+                                provinceSelect.value === '' ||
+                                districtSelect.value === '' ||
+                                wardSelect.value === ''
+                            ) {
+                                event.preventDefault();
+                                alert('Vui lòng điền đầy đủ thông tin.');
+                            }
                         }
                     });
 
@@ -253,6 +269,7 @@
                         }
                     });
                 });
+
             </script>
         </div>
     </div>

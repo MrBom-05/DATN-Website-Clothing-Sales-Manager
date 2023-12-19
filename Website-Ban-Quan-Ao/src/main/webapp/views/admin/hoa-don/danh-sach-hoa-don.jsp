@@ -55,10 +55,10 @@
                 <span class="text-secondary">Khách delay giao hàng lần 1</span>
             </c:if>
             <c:if test="${hoaDon.trangThai == 8}">
-                            <span class="text-secondary">Khách delay giao hàng lần 2</span>
-           </c:if>
+                <span class="text-secondary">Khách delay giao hàng lần 2</span>
+            </c:if>
             <c:if test="${hoaDon.trangThai == 9}">
-                            <span class="text-secondary">Khách delay giao hàng lần 3</span>
+                <span class="text-secondary">Khách delay giao hàng lần 3</span>
             </c:if>
             <c:if test="${hoaDon.trangThai == 10}">
                 <span class="text-secondary">Đã huỷ/Chờ hoàn tiền</span>
@@ -290,7 +290,7 @@
 
     <div class="card mt-4 mb-4">
         <div class="card-header">
-            <p class="fw-bold text-uppercase">Sản phẩm -  <span>
+            <p class="fw-bold text-uppercase">Sản phẩm - <span>
                    <c:if test="${hoaDon.trangThai == 5}">
                        <span class="text-success">Đã hoàn lại kho </span>
                    </c:if>
@@ -429,7 +429,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <c:if test="${hoaDon.trangThai != 2 && hoaDon.trangThai != 6}">
-                <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+                <form id="form" action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
                     <input type="hidden" name="trangThai" value="" id="trang-thai">
                     <div class="modal-body">
                         <div class="mb-3">
@@ -443,28 +443,46 @@
                         <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const form = document.getElementById('form');
+
+                        form.addEventListener('submit', function (event) {
+                            // Validate the form fields
+                            const ghiChu = document.querySelector('#form textarea[name="ghiChu"]');
+
+                            if (ghiChu.value.trim() === '') {
+                                event.preventDefault();
+                                alert('Vui lòng điền đầy đủ thông tin.');
+                            }
+                        });
+                    });
+                </script>
+
             </c:if>
             <c:if test="${hoaDon.trangThai == 2 || hoaDon.trangThai == 6}">
-                <form action="/admin/hoa-don/update-trang-thai-online/${hoaDon.id}" method="post">
+                <form id="form1" action="/admin/hoa-don/update-trang-thai-online/${hoaDon.id}" method="post">
                     <input type="hidden" name="trangThai" value="" id="trang-thai">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Ghi chú </label>
-                            <textarea class="form-control" name="ghiChu" rows="3"
+                            <textarea id="ghiChu" class="form-control" name="ghiChu" rows="3"
                                       placeholder="Ghi chú"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mã vận đơn </label>
-                            <input type="text" class="form-control" name="maVanChuyen" placeholder="Mã vận đơn">
+                            <input type="text" id="maVanChuyen" class="form-control" name="maVanChuyen"
+                                   placeholder="Mã vận đơn">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Đơn vị vận chuyển </label>
-                            <input type="text" class="form-control" name="tenDonViVanChuyen"
+                            <input type="text" id="tenDonVi" class="form-control" name="tenDonViVanChuyen"
                                    placeholder="Đơn vị vận chuyển">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Phí vận chuyển </label>
-                            <input type="number" class="form-control" name="phiVanChuyen" placeholder="Phí vận chuyển">
+                            <input type="number" id="phiVanChuyen" class="form-control" name="phiVanChuyen"
+                                   placeholder="Phí vận chuyển">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -472,6 +490,29 @@
                         <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const form = document.getElementById('form1');
+
+                        form.addEventListener('submit', function (event) {
+                            // Validate the form fields
+                            const ghiChu = document.getElementById('ghiChu');
+                            const maVanChuyen = document.getElementById('maVanChuyen');
+                            const tenDonViVanChuyen = document.getElementById('tenDonVi');
+                            const phiVanChuyen = document.getElementById('phiVanChuyen');
+
+                            if (
+                                ghiChu.value.trim() === '' ||
+                                maVanChuyen.value.trim() === '' ||
+                                tenDonViVanChuyen.value.trim() === '' ||
+                                phiVanChuyen.value.trim() === ''
+                            ) {
+                                event.preventDefault();
+                                alert('Vui lòng điền đầy đủ thông tin.');
+                            }
+                        });
+                    });
+                </script>
             </c:if>
         </div>
     </div>
@@ -480,7 +521,7 @@
 <div class="modal fade" id="modalHuy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+            <form id="form2" action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
                 <c:if test="${hoaDon.trangThai == 2 && hoaDon.loaiHoaDon == 1}">
                     <input type="hidden" name="trangThai" value="5">
                 </c:if>
@@ -508,6 +549,22 @@
                     <button type="submit" class="btn btn-danger">Lưu</button>
                 </div>
             </form>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('form2');
+
+                    form.addEventListener('submit', function (event) {
+                        // Validate the form fields
+                        const ghiChu = document.querySelector('#form2 textarea[name="ghiChu"]');
+
+                        if (ghiChu.value.trim() === '') {
+                            event.preventDefault();
+                            alert('Vui lòng điền đầy đủ thông tin.');
+                        }
+                    });
+                });
+            </script>
+
         </div>
     </div>
 </div>
@@ -519,7 +576,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Delay giao hàng</h1>
                 <button type="button" class="btn-Đóng" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
-            <form action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
+            <form id="form3" action="/admin/hoa-don/update-trang-thai/${hoaDon.id}" method="post">
                 <c:if test="${hoaDon.trangThai == 4}">
                     <input type="hidden" name="trangThai" value="7">
                 </c:if>
@@ -541,6 +598,22 @@
                     <button type="submit" class="btn btn-primary">Lưu</button>
                 </div>
             </form>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.getElementById('form3');
+
+                    form.addEventListener('submit', function (event) {
+                        // Validate the form fields
+                        const ghiChu = document.querySelector('#form3 textarea[name="ghiChu"]');
+
+                        if (ghiChu.value.trim() === '') {
+                            event.preventDefault();
+                            alert('Vui lòng điền đầy đủ thông tin.');
+                        }
+                    });
+                });
+            </script>
+
         </div>
     </div>
 </div>

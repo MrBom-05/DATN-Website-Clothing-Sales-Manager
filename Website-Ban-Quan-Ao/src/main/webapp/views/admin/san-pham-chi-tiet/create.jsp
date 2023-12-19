@@ -125,7 +125,7 @@
     <div class="row mt-3">
         <div class="col-12">
             <form:form action="${action}"
-                       method="post" modelAttribute="sanPhamChiTiet">
+                       method="post" modelAttribute="sanPhamChiTiet" id="formSP">
                 <div class="row">
                     <div class="col-4">
                         <label for="idSanPham" class="form-label">Sản Phẩm</label>
@@ -211,6 +211,70 @@
                 </div>
             </form:form>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('formSP');
+                    const idSanPhamSelect = document.getElementById('idSanPham');
+                    const idMauSacSelect = document.getElementById('idMauSac');
+                    const idKichCoSelect = document.getElementById('idKichCo');
+                    const giaInput = document.getElementById('gia');
+                    const soLuongInput = document.getElementById('soLuong');
+                    const moTaTextarea = document.getElementById('moTa');
+
+                    form.addEventListener('submit', function(event) {
+                        // Check if the "Sản Phẩm" select is not selected
+                        if (idSanPhamSelect.value === '') {
+                            event.preventDefault();
+                            alert('Vui lòng chọn Sản Phẩm.');
+                            return;
+                        }
+
+                        // Check if the "Màu Sắc" select is not selected
+                        if (idMauSacSelect.value === '') {
+                            event.preventDefault();
+                            alert('Vui lòng chọn Màu Sắc.');
+                            return;
+                        }
+
+                        // Check if the "Kích Cỡ" select is not selected
+                        if (idKichCoSelect.value === '') {
+                            event.preventDefault();
+                            alert('Vui lòng chọn Kích Cỡ.');
+                            return;
+                        }
+
+                        // Check if the "Giá Bán" input is empty
+                        if (giaInput.value.trim() === '') {
+                            event.preventDefault();
+                            alert('Vui lòng nhập Giá Bán.');
+                            return;
+                        }
+
+                        // Check if the "Số lượng" input is empty
+                        if (soLuongInput.value.trim() === '') {
+                            event.preventDefault();
+                            alert('Vui lòng nhập Số lượng.');
+                            return;
+                        }
+
+                        // Check if the "Mô tả" textarea is empty
+                        if (moTaTextarea.value.trim() === '') {
+                            event.preventDefault();
+                            alert('Vui lòng nhập Mô tả.');
+                            return;
+                        }
+
+                        <%--for (let i = 0; i < 2; i++) {--%>
+                        <%--    const fileInput = document.getElementById(`base64Images${i}`);--%>
+                        <%--    if (!fileInput.files || fileInput.files.length === 0) {--%>
+                        <%--        event.preventDefault();--%>
+                        <%--        alert(`Vui lòng chọn ảnh.`);--%>
+                        <%--        return;--%>
+                        <%--    }--%>
+                        <%--}--%>
+                    });
+                });
+            </script>
         </div>
     </div>
 </div>

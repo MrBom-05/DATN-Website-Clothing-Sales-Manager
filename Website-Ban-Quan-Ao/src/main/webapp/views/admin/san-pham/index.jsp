@@ -143,6 +143,38 @@
 
                         <button type="submit" class="btn btn-success mt-3 col-2 offset-5">Lưu</button>
                     </form:form>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const form = document.getElementById('edit-form');
+                            const tenInput = document.getElementById('ten');
+                            const idLoaiSelect = document.getElementById('idLoai');
+                            const imageInput = document.getElementById('imageInput');
+
+                            form.addEventListener('submit', function(event) {
+                                // Check if the "Tên Sản Phẩm" input is empty
+                                if (tenInput.value.trim() === '') {
+                                    event.preventDefault();
+                                    alert('Vui lòng nhập Tên Sản Phẩm.');
+                                    return;
+                                }
+
+                                // Check if the "Loại" select is not selected
+                                if (idLoaiSelect.value === '') {
+                                    event.preventDefault();
+                                    alert('Vui lòng chọn Loại.');
+                                    return;
+                                }
+
+                                // Check if the "Ảnh sản phẩm" input is empty (optional, based on your requirements)
+                                if (imageInput.value.trim() === '') {
+                                    event.preventDefault();
+                                    alert('Vui lòng chọn Ảnh sản phẩm.');
+                                    return;
+                                }
+                            });
+                        });
+                    </script>
+
                 </div>
             </div>
         </div>
