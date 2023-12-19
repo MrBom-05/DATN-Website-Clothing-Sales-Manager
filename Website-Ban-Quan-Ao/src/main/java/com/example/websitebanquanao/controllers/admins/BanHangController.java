@@ -289,6 +289,7 @@ public class BanHangController {
             hoaDon.setPhiVanChuyen(phiVanChuyen);
             hoaDon.setMaVanChuyen(maVanChuyen);
             hoaDon.setTenDonViVanChuyen(tenDonViVanChuyen);
+            createPDF.exportPDFBill(hoaDon, hoaDonChiTietService.getListByIdHoaDon(hoaDon.getId()), hoaDonService.sumTongTienByIdHoaDon(hoaDon.getId()).toString());
             hoaDonService.updateHoaDonAnh(hoaDon, idHoaDon, anh);
             session.setAttribute("successMessage", "Tạo đơn hàng thành công");
         }

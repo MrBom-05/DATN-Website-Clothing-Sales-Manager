@@ -5,10 +5,7 @@ import com.example.websitebanquanao.infrastructures.requests.DangNhapUserRequest
 import com.example.websitebanquanao.infrastructures.requests.FormThanhToan;
 import com.example.websitebanquanao.infrastructures.requests.GioHangUserRequest;
 import com.example.websitebanquanao.infrastructures.requests.KhachHangRequest;
-import com.example.websitebanquanao.infrastructures.responses.GiamGiaResponse;
-import com.example.websitebanquanao.infrastructures.responses.GioHangUserResponse;
-import com.example.websitebanquanao.infrastructures.responses.HoaDonChiTietUserResponse;
-import com.example.websitebanquanao.infrastructures.responses.KhachHangResponse;
+import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.services.AnhSanPhamService;
 import com.example.websitebanquanao.services.GiamGiaService;
 import com.example.websitebanquanao.services.GioHangChiTietService;
@@ -79,7 +76,11 @@ public class TrangChuController {
     // trang chủ
     @GetMapping("")
     public String trangChu(Model model) {
-        model.addAttribute("listTrangChu", sanPhamService.getListTrangChu(""));
+        List<TrangChuResponse> productList = sanPhamService.getListTrangChu("");
+
+        List<TrangChuResponse> firstEightProducts = productList.subList(0, Math.min(productList.size(), 8));
+        model.addAttribute("listTrangChu", firstEightProducts);
+        model.addAttribute("listBanChay", sanPhamService.getListBanChay(""));
         model.addAttribute("viewBanner", "/views/user/banner.jsp");
         model.addAttribute("viewContent", "/views/user/trang-chu.jsp");
         return "user/layout";
