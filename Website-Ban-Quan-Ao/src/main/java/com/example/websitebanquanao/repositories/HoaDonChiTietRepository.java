@@ -33,8 +33,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, UU
     public List<HoaDonUserResponse> findListHoaDonByKhachHang(@Param("idKhachHang") UUID idKhachHang);
 
 
-
-
     // thống kê
     @Query("SELECT SUM(hdct.gia * hdct.soLuong) FROM HoaDonChiTiet hdct " +
             "WHERE hdct.idHoaDon.trangThai = 1")
