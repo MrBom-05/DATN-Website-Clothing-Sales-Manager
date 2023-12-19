@@ -71,12 +71,14 @@
                                    rows="3"></form:textarea>
                 </div>
                 <div class="px-md-5 px-3 py-2 form-group">
-                    <div class="form-label ">Số điện thoại (*)</div>
-                    <form:input path="soDienThoai" class="w-100 form-control" type="text" placeholder="..."/>
+                    <div class="form-label">Số điện thoại (*)</div>
+                    <form:input path="soDienThoai" class="w-100 form-control" type="tel" placeholder="..."
+                                oninput="validatePhoneNumber(this)"/>
                 </div>
+
                 <div class="px-md-5 px-3 py-2 form-group">
                     <div class="form-label ">Email (*)</div>
-                    <form:input path="email" class="w-100 form-control" type="text" placeholder="..."/>
+                    <form:input path="email" class="w-100 form-control" type="email" placeholder="..."/>
                 </div>
             </div>
 
@@ -104,7 +106,7 @@
                     <form:radiobutton path="hinhThucThanhToan" value="2" name="payment_method" checked="true"/>
                     THANH TOÁN QUA VNPay
                 </label>
-                <label class="mt-2">Lưu ý: Với thanh toán bằng VNPay quý khách sẽ thanh toán đơn hàng và phí ship sẽ trả
+                <label class="mt-2">Lưu ý: Với thanh toán bằng VnPay quý khách sẽ thanh toán đơn hàng và phí ship sẽ trả
                     khi nhận hàng.</label>
             </div>
 
@@ -195,9 +197,9 @@
                     xử lý đơn đặt hàng, hỗ trợ trải nghiệm của
                     bạn trên toàn bộ trang web này và cho các
                     mục đích khác được mô tả trong <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a>
-<%--                    và <a--%>
-<%--                            href="/chinh-sach-doi-tra">Chính sách đổi--%>
-<%--                        trả</a>.--%>
+                        <%--                    và <a--%>
+                        <%--                            href="/chinh-sach-doi-tra">Chính sách đổi--%>
+                        <%--                        trả</a>.--%>
                 </label>
             </div>
             <div class="mt-3 bg-light">
@@ -207,34 +209,63 @@
                 </label>
             </div>
             <div class="mt-3">
-                <button type="submit" id="submitButton" class="mb-3 w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC NHẬN ĐẶT HÀNG
+                <button type="submit" id="submitButton" class="mb-3 w-100 bg-dark text-bg-dark fw-bold btn btn-dark">XÁC
+                    NHẬN ĐẶT HÀNG
                 </button>
             </div>
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
+                function validatePhoneNumber(input) {
+                    const phoneNumber = input.value.replace(/\D/g, '');
+
+                    if (phoneNumber.length === 10) {
+                        input.setCustomValidity('');
+                    } else {
+                        input.setCustomValidity('Số điện thoại phải có đúng 10 số.');
+                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', function () {
                     const form = document.getElementById('myForm');
                     const checkbox = document.getElementById('termsCheckbox');
                     const textarea = document.getElementById('ghiChu');
                     const submitButton = document.getElementById('submitButton');
+                    const hoTenInput = document.getElementById('hoTen');
+                    const diaChiTextarea = document.getElementById('diaChi');
+                    const soDienThoaiInput = document.getElementById('soDienThoai');
+                    const emailInput = document.getElementById('email');
+                    const provinceSelect = document.getElementById('provinceSelect');
+                    const districtSelect = document.getElementById('districtSelect');
+                    const wardSelect = document.getElementById('wardSelect');
+                    const hideInfoCheckbox = document.getElementById('hideInfoCheckbox');
 
-                    form.addEventListener('submit', function(event) {
+                    form.addEventListener('submit', function (event) {
                         if (!checkbox.checked) {
                             event.preventDefault();
                             alert('Vui lòng đồng ý với các điều khoản và điều kiện.');
                         }
+
+                        if (!hideInfoCheckbox.checked) {
+                            // Check other conditions only if hideInfoCheckbox is not checked
+                            if (
+                                hoTenInput.value.trim() === '' ||
+                                diaChiTextarea.value.trim() === '' ||
+                                soDienThoaiInput.value.trim() === '' ||
+                                emailInput.value.trim() === '' ||
+                                provinceSelect.value === '' ||
+                                districtSelect.value === '' ||
+                                wardSelect.value === ''
+                            ) {
+                                event.preventDefault();
+                                alert('Vui lòng điền đầy đủ thông tin.');
+                            }
+                        }
                     });
 
-                    textarea.addEventListener('input', function() {
+                    textarea.addEventListener('input', function () {
                         if (textarea.value.trim() !== '') {
                             submitButton.removeAttribute('disabled');
                         } else {
                             submitButton.setAttribute('disabled', 'disabled');
-                        }
-                    });
-
-                    form.addEventListener('submit', function(event) {
-                        if (textarea.value.trim() === '') {
-                            event.preventDefault();
                         }
                     });
                 });

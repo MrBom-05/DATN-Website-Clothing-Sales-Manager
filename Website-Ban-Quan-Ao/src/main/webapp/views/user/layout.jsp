@@ -78,7 +78,7 @@
                           <ul class="dropdown-menu">
                               <c:choose>
                                   <c:when test="${not empty sessionScope.khachHang}">
-                                      <li><a class="dropdown-item" href="/hoa-don">Hoá đơn của tôi</a></li>
+                                      <li><a class="dropdown-item" href="/hoa-don">Đơn hàng của tôi</a></li>
                                       <li><a class="dropdown-item" href="/dang-xuat">Đăng xuất</a></li>
                                   </c:when>
                                   <c:otherwise>

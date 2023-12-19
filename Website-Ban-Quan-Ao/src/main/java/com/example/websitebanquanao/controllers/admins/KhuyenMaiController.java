@@ -64,6 +64,14 @@ public class KhuyenMaiController {
             return "admin/layout";
         }
 
+        if (khuyenMaiRequest.getMa().trim().length() == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập mã.");
+            return redirect;
+        }
+        if (khuyenMaiRequest.getTen().trim().length() == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập tên.");
+            return redirect;
+        }
         // Kiểm tra xem mã giảm giá đã tồn tại
         if (khuyenMaiRepository.existsByMa(khuyenMaiRequest.getMa())) {
             redirectAttributes.addFlashAttribute("errorMessage", "Thêm khuyến mãi thất bại");
@@ -100,10 +108,22 @@ public class KhuyenMaiController {
             return redirect;
         }
 
+        if (khuyenMaiRequest.getMa().trim().length() == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập mã.");
+            return redirect;
+        }
+
+        if (khuyenMaiRequest.getTen().trim().length() == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng nhập tên.");
+            return redirect;
+        }
+
         if (khuyenMaiRequest.getSoPhanTramGiam() < 1 || khuyenMaiRequest.getSoPhanTramGiam() > 100) {
             redirectAttributes.addFlashAttribute("errorMessage", "Phần trăm giảm không hợp lệ");
             return redirect;
         }
+
+
 
         khuyenMaiService.update(khuyenMaiRequest, id);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật khuyến mãi thành công");
