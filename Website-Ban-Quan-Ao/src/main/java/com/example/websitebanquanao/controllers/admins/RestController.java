@@ -2,6 +2,7 @@ package com.example.websitebanquanao.controllers.admins;
 
 import com.example.websitebanquanao.infrastructures.responses.*;
 import com.example.websitebanquanao.services.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,8 @@ public class RestController {
     private KhuyenMaiChiTietService khuyenMaiChiTietService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    HttpSession session;
 
     // getlist sản phẩm by id giỏ hàng
     @GetMapping("/view/spct/view/{id}")
@@ -88,5 +91,18 @@ public class RestController {
     public ResponseEntity<Integer> getSoLuongSanPham(@PathVariable("idSanPham") UUID idSanPham, @PathVariable("idMauSac") Integer idMauSac, @PathVariable("idKichCo") Integer idKichCo) {
         return ResponseEntity.ok(sanPhamChiTietService.getSoLuongSanPham(idSanPham, idMauSac, idKichCo));
     }
+
+    @GetMapping("/soLuong/{idSanPhamChiTiet}")
+    public ResponseEntity<Integer> getSoLuongTrongKho(@PathVariable UUID idSanPhamChiTiet) {
+        try {
+            Integer soLuong = sanPhamChiTietService.getSoLuongSanPhamChiTietByIdSanPham(idSanPhamChiTiet);
+            session.setAttribute("daHoan_" + idSanPhamChiTiet, true);
+            return ResponseEntity.ok(soLuong);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(0);
+    }
+
 }
 

@@ -65,7 +65,7 @@ public class LoaiController {
         }
 
         if (loaiRepository.existsByTen(loaiRequest.getTen())) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Thêm Loại thất bại");
+            redirectAttributes.addFlashAttribute("errorMessage", "Tên loại đã tồn tại");
             return redirect;
         }
 

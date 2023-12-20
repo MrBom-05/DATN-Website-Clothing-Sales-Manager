@@ -41,6 +41,9 @@ public interface SanPhamChiTietRepository extends JpaRepository<SanPhamChiTiet, 
     @Query("UPDATE SanPhamChiTiet ctsp SET ctsp.soLuong = :currentSoLuong WHERE ctsp.id = :idSanPhamChiTiet")
     public void updateSoLuongAfterDelete(@Param("idSanPhamChiTiet") UUID idSanPhamChiTiet, @Param("currentSoLuong") int currentSoLuong);
 
+    // get số lượng sản phẩm chi tiết theo id sản phẩm
+    @Query("select s.soLuong from SanPhamChiTiet s where s.id = :idSanPham")
+    public Integer getSoLuongSanPhamChiTietByIdSanPham(@Param("idSanPham") UUID idSanPham);
     // user
     @Query("select s from SanPhamChiTiet s where s.idSanPham.id = :idSanPham and s.idMauSac.id = :idMauSac and s.idKichCo.id = :idKichCo")
     public SanPhamChiTiet getByIdSanPhamAndIdMauSacAndIdKichCo(@Param("idSanPham") UUID idSanPham, @Param("idMauSac") Integer idMauSac, @Param("idKichCo") Integer idKichCo);

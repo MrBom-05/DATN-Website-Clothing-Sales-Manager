@@ -14,7 +14,28 @@
 
 
 <body>
-
+<c:if test="${not empty sessionScope.successMessage}">
+    <div class="alert alert-success" role="alert">
+            ${sessionScope.successMessage}
+    </div>
+    <script>
+        setTimeout(function () {
+            $('.alert').alert('close');
+        }, 3000);
+    </script>
+    <% session.removeAttribute("successMessage"); %>
+</c:if>
+<c:if test="${not empty sessionScope.errorMessage}">
+    <div class="alert alert-danger" role="alert">
+            ${sessionScope.errorMessage}
+    </div>
+    <% session.removeAttribute("errorMessage"); %>
+    <script>
+        setTimeout(function () {
+            $('.alert').alert('close');
+        }, 3000);
+    </script>
+</c:if>
 <c:set var="tongTien" value="0"/>
 <c:forEach items="${listSanPhamTrongGioHang}" var="sp" varStatus="status">
     <c:set var="tongTien" value="${tongTien + (sp.soLuong * sp.gia)}"/>
@@ -291,10 +312,7 @@
     <div class="card mt-4 mb-4">
         <div class="card-header">
             <p class="fw-bold text-uppercase">Sản phẩm - <span>
-                   <c:if test="${hoaDon.trangThai == 5}">
-                       <span class="text-success">Đã hoàn lại kho </span>
-                   </c:if>
-            </span></p>
+        </span></p>
         </div>
         <div class="card-body">
             <div class="">
@@ -307,6 +325,7 @@
                         <th scope="col">Giá</th>
                         <th scope="col">Số lượng</th>
                         <th scope="col">Tổng tiền</th>
+                        <th scope="col">Thao tác</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -334,63 +353,82 @@
                             <td id="gia_sp_${sp.idSanPhamChiTiet}">${sp.gia}</td>
                             <td>${sp.soLuong}</td>
                             <td id="tong_tien_${sp.idSanPhamChiTiet}">
-                                    ${sp.soLuong * sp.gia}</td>
+                                    ${sp.soLuong * sp.gia}
+                            </td>
+                            <td>
+                                <form id="returnForm_${sp.idSanPhamChiTiet}" action="/admin/san-pham-chi-tiet/tra-hang-vao-kho" method="post" display="none">
+                                    <input type="hidden" name="idSanPhamChiTiet" value="${sp.idSanPhamChiTiet}">
+                                    <input type="hidden" name="soLuongTraHang" value="${sp.soLuong}">
+                                    <input type="hidden" name="idHoaDon" value="${hoaDon.id}">
+                                    <c:if test="${hoaDon.trangThai == 5}">
+                                        <button type="submit" class="btn btn-success" style="display: inline-block">Hoàn lại kho</button>
+                                    </c:if>
+                                </form>
+                            </td>
+                            <c:if test="${hoaDon.trangThai == 5}">
+                                <!-- Thêm script để tự động submit form nếu chưa hoàn -->
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            </c:if>
                             <script>
                                 // format tổng tiền
                                 document.addEventListener('DOMContentLoaded', function () {
                                     var giaElement = document.getElementById('tong_tien_${sp.idSanPhamChiTiet}');
-                                    // Lấy giá trị không định dạng từ thẻ p
                                     var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
-                                    // Định dạng lại giá trị và gán lại vào thẻ p
                                     giaElement.textContent = giaValue.toLocaleString('en-US');
-                                    // format giá
+
                                     var giaElement = document.getElementById('gia_sp_${sp.idSanPhamChiTiet}');
-                                    // Lấy giá trị không định dạng từ thẻ p
                                     var giaValue = parseFloat(giaElement.textContent.replace(/[^\d.]/g, '')) || 0;
-                                    // Định dạng lại giá trị và gán lại vào thẻ p
                                     giaElement.textContent = giaValue.toLocaleString('en-US');
                                 });
+                            </script>
+                            <script>
+                                // get ảnh sản phẩm
+                                $(document).ready(function () {
+                                    var idSanPham = '${sp.idSanPhamChiTiet}';
+                                    $.ajax({
+                                        url: '/api/kho/soLuong/' + idSanPham,
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        success: function (soLuong) {
+                                            console.log('Số lượng trong kho:', soLuong);
+                                        },
+                                        error: function () {
+                                            console.log('Lỗi khi lấy số lượng trong kho');
+                                        }
+                                    });
 
+                                    // get ảnh sản phẩm
+                                    $.ajax({
+                                        url: '/get-anh-san-pham/' + idSanPham,
+                                        type: 'GET',
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            var listAnhSanPham = data;
+                                            var carouselInner = $('#carouselExampleSlidesOnly_${sp.idSanPhamChiTiet} .carousel-inner');
+                                            carouselInner.empty();
 
+                                            $.each(listAnhSanPham, function (index, anhSanPham) {
+                                                var isActive = index === 0 ? 'active' : '';
+                                                var carouselItem = '<div class="carousel-item ' + isActive + '">'
+                                                    + '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">'
+                                                    + '</div>';
+                                                carouselInner.append(carouselItem);
+                                            });
+                                        },
+                                        error: function () {
+                                            console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
+                                        }
+                                    });
+                                });
                             </script>
                         </tr>
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script>
-
-                            // get Anh sp
-                            $(document).ready(function () {
-                                var idSanPham = '${sp.idSanPhamChiTiet}';
-                                $.ajax({
-                                    url: '/get-anh-san-pham/' + idSanPham,
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        // Xử lý phản hồi từ máy chủ và cập nhật danh sách ảnh
-                                        var listAnhSanPham = data;
-                                        var carouselInner = $('#carouselExampleSlidesOnly_${sp.idSanPhamChiTiet} .carousel-inner');
-                                        carouselInner.empty();
-
-                                        $.each(listAnhSanPham, function (index, anhSanPham) {
-                                            var isActive = index === 0 ? 'active' : '';
-                                            var carouselItem = '<div class="carousel-item ' + isActive + '">'
-                                                + '<img src="' + anhSanPham.duongDan + '" class="d-block" id="custom-anh" style="width: 150px; height: 150px">'
-                                                + '</div>';
-                                            carouselInner.append(carouselItem);
-                                        });
-                                    },
-                                    error: function () {
-                                        console.log('Lỗi khi lấy danh sách ảnh sản phẩm');
-                                    }
-                                });
-                            });
-                        </script>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
+
 </div>
 <!--modal xác nhận thanh toán-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -446,11 +484,9 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         const form = document.getElementById('form');
-
                         form.addEventListener('submit', function (event) {
                             // Validate the form fields
                             const ghiChu = document.querySelector('#form textarea[name="ghiChu"]');
-
                             if (ghiChu.value.trim() === '') {
                                 event.preventDefault();
                                 alert('Vui lòng điền đầy đủ thông tin.');
@@ -458,7 +494,6 @@
                         });
                     });
                 </script>
-
             </c:if>
             <c:if test="${hoaDon.trangThai == 2 || hoaDon.trangThai == 6}">
                 <form id="form1" action="/admin/hoa-don/update-trang-thai-online/${hoaDon.id}" method="post">
@@ -471,18 +506,16 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mã vận đơn </label>
-                            <input type="text" id="maVanChuyen" class="form-control" name="maVanChuyen"
-                                   placeholder="Mã vận đơn">
+                            <input id="maVanChuyen" type="text" class="form-control" name="maVanChuyen" placeholder="Mã vận đơn">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Đơn vị vận chuyển </label>
-                            <input type="text" id="tenDonVi" class="form-control" name="tenDonViVanChuyen"
+                            <input id="tenDonVi" type="text" class="form-control" name="tenDonViVanChuyen"
                                    placeholder="Đơn vị vận chuyển">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Phí vận chuyển </label>
-                            <input type="number" id="phiVanChuyen" class="form-control" name="phiVanChuyen"
-                                   placeholder="Phí vận chuyển">
+                            <label id="phiVanChuyen" class="form-label">Phí vận chuyển </label>
+                            <input type="number" class="form-control" name="phiVanChuyen" placeholder="Phí vận chuyển">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -493,14 +526,12 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
                         const form = document.getElementById('form1');
-
                         form.addEventListener('submit', function (event) {
                             // Validate the form fields
                             const ghiChu = document.getElementById('ghiChu');
                             const maVanChuyen = document.getElementById('maVanChuyen');
                             const tenDonViVanChuyen = document.getElementById('tenDonVi');
                             const phiVanChuyen = document.getElementById('phiVanChuyen');
-
                             if (
                                 ghiChu.value.trim() === '' ||
                                 maVanChuyen.value.trim() === '' ||
@@ -549,14 +580,13 @@
                     <button type="submit" class="btn btn-danger">Lưu</button>
                 </div>
             </form>
+
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const form = document.getElementById('form2');
-
                     form.addEventListener('submit', function (event) {
                         // Validate the form fields
                         const ghiChu = document.querySelector('#form2 textarea[name="ghiChu"]');
-
                         if (ghiChu.value.trim() === '') {
                             event.preventDefault();
                             alert('Vui lòng điền đầy đủ thông tin.');
@@ -564,7 +594,6 @@
                     });
                 });
             </script>
-
         </div>
     </div>
 </div>
@@ -601,11 +630,9 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const form = document.getElementById('form3');
-
                     form.addEventListener('submit', function (event) {
                         // Validate the form fields
                         const ghiChu = document.querySelector('#form3 textarea[name="ghiChu"]');
-
                         if (ghiChu.value.trim() === '') {
                             event.preventDefault();
                             alert('Vui lòng điền đầy đủ thông tin.');
@@ -613,7 +640,6 @@
                     });
                 });
             </script>
-
         </div>
     </div>
 </div>

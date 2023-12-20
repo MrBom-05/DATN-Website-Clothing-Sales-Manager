@@ -60,7 +60,7 @@
                 <div class="col">
                     <a href="/san-pham/${sanPham.id}/${sanPham.idMauSac}" class="text-decoration-none text-dark">
                         <div class="card border-0">
-                            <img src="${sanPham.anh}" class="card-img-top" alt="${sanPham.ten}">
+                            <img src="${sanPham.anh}" class="card-img-top" alt="${sanPham.ten}"style="width: 19rem; height: 19rem;">
                             <span class="discount-percentage" id="so-phan-tram-giam_${sanPham.id}"></span>
                             <div class="card-body text-center">
                                 <p class="text-uppercase">${sanPham.ten}</p>

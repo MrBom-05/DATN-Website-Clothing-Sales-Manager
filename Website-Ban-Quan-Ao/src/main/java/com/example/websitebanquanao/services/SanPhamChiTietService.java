@@ -189,6 +189,19 @@ public class SanPhamChiTietService {
         List<BanHangTaiQuayResponse> filteredProducts = sanPhamChiTietRepository.filterProducts(size, color, searchTerm);
         return filteredProducts;
     }
+    @Transactional
+    public void xuLyTraHangVaoKho(UUID idSanPhamChiTiet, int soLuongTraHang) {
+        // Lấy số lượng hiện tại trong kho
+        Integer soLuongHienTai = sanPhamChiTietRepository.getSoLuongSanPhamChiTietByIdSanPham(idSanPhamChiTiet);
+
+        // Cập nhật số lượng trong kho (cộng thêm số lượng trả hàng)
+        int soLuongDaCapNhat = soLuongHienTai + soLuongTraHang;
+        sanPhamChiTietRepository.updateSoLuongAfterDelete(idSanPhamChiTiet, soLuongDaCapNhat);
+    }
+
+    public Integer getSoLuongSanPhamChiTietByIdSanPham(UUID idSanPham) {
+        return sanPhamChiTietRepository.getSoLuongSanPhamChiTietByIdSanPham(idSanPham);
+    }
 
     public SanPhamChiTiet findByMaSanPham(String maSanPham) {
         return sanPhamChiTietRepository.findByMaSanPham(maSanPham);
